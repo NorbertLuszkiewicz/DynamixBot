@@ -1,4 +1,5 @@
 dependencies:
+  comfy.js: 1.1.10
   fastify: 3.14.2
   fastify-formbody: 5.0.0
   fastify-static: 4.0.1
@@ -61,6 +62,13 @@ packages:
     dev: false
     resolution:
       integrity: sha512-iCuPHDFgrHX7H2vEI/5xpz07zSHB00TpugqhmYtVmMO6518mCuRMoOYFldEBl0g187ufozdaHgWKcYFb61qGiA==
+  /comfy.js/1.1.10:
+    dependencies:
+      node-fetch: 2.6.1
+      tmi.js: 1.8.3
+    dev: false
+    resolution:
+      integrity: sha512-SFQ5viFY71MwcByDS/Aew+yJjcis6UT4zwiJdKmqbvp6vwNABRDtBaYGReDt+fGk0RN8+iOEU4zwXrH/4v+NJg==
   /concat-map/0.0.1:
     dev: false
     resolution:
@@ -363,6 +371,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==
+  /node-fetch/2.6.1:
+    dev: false
+    engines:
+      node: 4.x || >=6.0.0
+    resolution:
+      integrity: sha512-V4aYg89jEoVRxRb2fJdAg8FHvI7cEyYdVAh94HH0UIK8oJxUfkjlDQN9RbMx+bEjP7+ggMiFRprSti032Oipxw==
   /on-finished/2.3.0:
     dependencies:
       ee-first: 1.1.1
@@ -547,6 +561,15 @@ packages:
       node: '>=6'
     resolution:
       integrity: sha512-zNYO0Kvgn5rXzWpL0y3RS09sMK67eGaQj9805jlK9G6pSadfriTczzLHFXa/xcW4mIRfmlB9HyQ/+SgL0V1uow==
+  /tmi.js/1.8.3:
+    dependencies:
+      node-fetch: 2.6.1
+      ws: 7.4.5
+    dev: false
+    engines:
+      node: '>=10.0.0'
+    resolution:
+      integrity: sha512-1YAO3hwnkpAbUfVlpxcqOHP4Nun/+TqxWE/e/ZKMB6p40ZKczhI03oZW2Qx3pppqWjXz5kSjHdT/vTTfi2gCGQ==
   /toidentifier/1.0.0:
     dev: false
     engines:
@@ -579,6 +602,15 @@ packages:
     dev: false
     resolution:
       integrity: sha1-tSQ9jz7BqjXxNkYFvA0QNuMKtp8=
+  /ws/7.4.5:
+    dev: false
+    engines:
+      node: '>=8.3.0'
+    peerDependencies:
+      bufferutil: ^4.0.1
+      utf-8-validate: ^5.0.2
+    resolution:
+      integrity: sha512-xzyu3hFvomRfXKH8vOFMU3OguG6oOvhXMo3xsGy3xWExqaM2dxBbVxuD99O7m3ZUFMvvscsZDqxfgMaRr/Nr1g==
   /yallist/4.0.0:
     dev: false
     resolution:
@@ -587,6 +619,7 @@ registry: 'https://registry.npmjs.org/'
 shrinkwrapMinorVersion: 9
 shrinkwrapVersion: 3
 specifiers:
+  comfy.js: ^1.1.10
   fastify: ^3.14.1
   fastify-formbody: ^5.0.0
   fastify-static: ^4.0.0
