@@ -63,7 +63,7 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   }
   message === "srbottest" && ComfyJS.Say("Bot works!");
 
-  console.log(extra.customRewardId);
+  extra.customRewardId && console.log(extra.customRewardId);
 };
 
 ComfyJS.Init(TWITCHUSER, OAUTH, TWITCHCHANNELS);
