@@ -46,7 +46,29 @@ fastify.get("/", function(request, reply) {
   reply.view("/src/pages/index.hbs", params);
 });
 
-// A POST route to handle and react to form submissions 
+const ComfyJS = require("comfy.js");
+const TWITCHUSER = "dynam1x__";
+const TWITCHCHANNELS = "kezman22";
+const OAUTH = process.env.OAUTH;
+const addSongId = "";
+const skipSongId = "";
+
+ComfyJS.onChat = (user, message, flags, self, extra) => {
+  if (flags.customReward && extra.customRewardId === addSongId) {
+    ComfyJS.Say("!sr " + message);
+  }
+
+  if (flags.customReward && extra.customRewardId === skipSongId) {
+    ComfyJS.Say("!skip");
+  }
+  message === "srbottest" && ComfyJS.Say("Bot works!");
+
+  console.log(extra.customRewardId);
+};
+
+ComfyJS.Init(TWITCHUSER, OAUTH, TWITCHCHANNELS);
+
+// A POST route to handle and react to form submissions
 fastify.post("/", function(request, reply) {
   let params = { seo: seo };
   // the request.body.color is posted with a form submission
