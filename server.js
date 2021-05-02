@@ -68,7 +68,7 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
 
 ComfyJS.Init(TWITCHUSER, OAUTH, TWITCHCHANNELS);
 
-
+console.log(`https://${process.env.PROJECT_DOMAIN}.glitch.me`)
 setInterval(() => { fastify.get('/'); }, 280000);
 
 // A POST route to handle and react to form submissions
