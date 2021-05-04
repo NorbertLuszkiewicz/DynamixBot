@@ -51,7 +51,7 @@ const TWITCHUSER = "dynam1x__";
 const TWITCHCHANNELS = "kezman22";
 const OAUTH = process.env.OAUTH;
 const addSongId = "3d0baf73-3272-4ed5-8b06-dc12ad764dc6";
-const skipSongId = "";
+const skipSongId = "0feec3ff-0f07-4e6c-8113-70e1eb6a8dec";
 
 ComfyJS.onChat = (user, message, flags, self, extra) => {
   if (flags.customReward && extra.customRewardId === addSongId) {
