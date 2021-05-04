@@ -50,7 +50,7 @@ const ComfyJS = require("comfy.js");
 const TWITCHUSER = "dynam1x__";
 const TWITCHCHANNELS = "kezman22";
 const OAUTH = process.env.OAUTH;
-const addSongId = "";
+const addSongId = "3d0baf73-3272-4ed5-8b06-dc12ad764dc6";
 const skipSongId = "";
 
 ComfyJS.onChat = (user, message, flags, self, extra) => {
