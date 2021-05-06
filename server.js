@@ -60,12 +60,12 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
     ComfyJS.Say("!sr " + message, extra.channel);
   }
 
-  if (flags.customReward && (extra.customRewardId === skipSongId )|| (extra.customRewardId === addSongIdWojt)) {
+  if (flags.customReward && (extra.customRewardId === skipSongId ) || (extra.customRewardId === skipSongIdWojt)) {
     ComfyJS.Say("!skip", extra.channel);
   }
-  message === "srbottest" && ComfyJS.Say("Bot works!");
+  message === "srbottest" && ComfyJS.Say("Bot works!", extra.channel);
 
-  extra.customRewardId && console.log(extra.customRewardId);
+  extra.customRewardId && console.log(extra.customRewardId, extra.channel);
 };
 
 ComfyJS.Init(TWITCHUSER, OAUTH, TWITCHCHANNELS);
