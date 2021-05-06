@@ -48,18 +48,20 @@ fastify.get("/", function(request, reply) {
 
 const ComfyJS = require("comfy.js");
 const TWITCHUSER = "dynam1x__";
-const TWITCHCHANNELS = "kezman22";
+const TWITCHCHANNELS = ["kezman22", "simplywojtek"];
 const OAUTH = process.env.OAUTH;
 const addSongId = "3d0baf73-3272-4ed5-8b06-dc12ad764dc6";
 const skipSongId = "0feec3ff-0f07-4e6c-8113-70e1eb6a8dec";
+const addSongIdWojt = "3d0baf73-3272-4ed5-8b06-dc12ad764dc6";
+const skipSongIdWojt= "0feec3ff-0f07-4e6c-8113-70e1eb6a8dec";
 
 ComfyJS.onChat = (user, message, flags, self, extra) => {
-  if (flags.customReward && extra.customRewardId === addSongId) {
-    ComfyJS.Say("!sr " + message);
+  if (flags.customReward && (extra.customRewardId === addSongId) || (extra.customRewardId === addSongIdWojt) ) {
+    ComfyJS.Say("!sr " + message, extra.channel);
   }
 
-  if (flags.customReward && extra.customRewardId === skipSongId) {
-    ComfyJS.Say("!skip");
+  if (flags.customReward && (extra.customRewardId === skipSongId )|| (extra.customRewardId === addSongIdWojt)) {
+    ComfyJS.Say("!skip", extra.channel);
   }
   message === "srbottest" && ComfyJS.Say("Bot works!");
 
