@@ -69,7 +69,7 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
       ComfyJS.Say("kezmanJAM", extra.channel);
       ComfyJS.Say("kezmanJAM kezmanJAM ", extra.channel);
       ComfyJS.Say("kezmanJAM kezmanJAM kezmanJAM", extra.channel);
-      ComfyJS.Say("kezmanJAM kezmanJAM kezmanJAM", extra.channel);
+      ComfyJS.Say("kezmanJAM kezmanJAM kezmanJAM kezmanJAM", extra.channel);
       ComfyJS.Say("kezmanJAM kezmanJAM kezmanJAM", extra.channel);
       ComfyJS.Say("kezmanJAM kezmanJAM ", extra.channel);
       ComfyJS.Say("kezmanJAM", extra.channel);
