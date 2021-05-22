@@ -65,7 +65,7 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   }
   message === "srbottest" && ComfyJS.Say("Bot works!", extra.channel);
   
-    if (message == "piramidka" || user == "dynam1x__") {
+    if (message == "piramidka" && user == "dynam1x__") {
       ComfyJS.Say("kezmanJAM", extra.channel);
       ComfyJS.Say("kezmanJAM kezmanJAM ", extra.channel);
       ComfyJS.Say("kezmanJAM kezmanJAM kezmanJAM", extra.channel);
