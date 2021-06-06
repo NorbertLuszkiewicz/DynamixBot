@@ -65,6 +65,8 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   }
   message === "srbottest" && ComfyJS.Say("Bot works!", extra.channel);
   
+  console.log(user, message, flags, self, extra)
+  
     if (message == "piramidka" && user == "DynaM1X__") {
       ComfyJS.Say("kezmanJAM", extra.channel);
       ComfyJS.Say("kezmanJAM kezmanJAM ", extra.channel);
@@ -77,6 +79,10 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
 
   extra.customRewardId && console.log(extra.customRewardId, extra.channel);
 };
+
+ComfyJS.onSub( user, message, subTierInfo, extra ){
+  ComfyJS.Say("kezmanJAM", extra.channel);
+}
 
 ComfyJS.Init(TWITCHUSER, OAUTH, TWITCHCHANNELS);
 
