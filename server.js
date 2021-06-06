@@ -65,7 +65,6 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   }
   message === "srbottest" && ComfyJS.Say("Bot works!", extra.channel);
   
-  console.log(user, message, flags, self, extra)
   
     if (message == "piramidka" && user == "DynaM1X__") {
       ComfyJS.Say("kezmanJAM", extra.channel);
@@ -80,9 +79,27 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   extra.customRewardId && console.log(extra.customRewardId, extra.channel);
 };
 
-ComfyJS.onSub( user, message, subTierInfo, extra ){
-  ComfyJS.Say("kezmanJAM", extra.channel);
+ComfyJS.onRaid= ( user, message, subTierInfo, extra ) =>{
+  ComfyJS.Say("@"+user+"dzięki za raida peepoLove ", extra.channel);
+  console.log(user, message, subTierInfo, extra, "gift" )
 }
+
+ComfyJS.onHosted = ( user, message, subTierInfo, extra ) =>{
+  ComfyJS.Say("@"+user+"dzięki za hosta peepoLove ", extra.channel);
+  console.log(user, message, subTierInfo, extra, "sub" )
+}
+
+ComfyJS.onSubGift= ( user, message, subTierInfo, extra ) =>{
+  ComfyJS.Say("@"+user+" peepoLove ", extra.channel);
+  console.log(user, message, subTierInfo, extra, "gift" )
+}
+
+ComfyJS.onSub = ( user, message, subTierInfo, extra ) =>{
+  ComfyJS.Say("@"+user+" peepoLove ", extra.channel);
+  console.log(user, message, subTierInfo, extra, "sub" )
+}
+
+
 
 ComfyJS.Init(TWITCHUSER, OAUTH, TWITCHCHANNELS);
 
