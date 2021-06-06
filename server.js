@@ -94,10 +94,17 @@ ComfyJS.onSubGift= ( user, message, subTierInfo, extra ) =>{
   console.log(user, message, subTierInfo, extra, "gift" )
 }
 
+ComfyJS.onResub = ( user, message, streamMonths, cumulativeMonths, subTierInfo, extra )=>{
+  ComfyJS.Say("@"+user+" dzięki za "+streamMonths+" miesięcy suba peepoLove ", extra.channel);
+  console.log(user, message, subTierInfo, extra, "sub" )
+}
+
 ComfyJS.onSub = ( user, message, subTierInfo, extra ) =>{
   ComfyJS.Say("@"+user+" peepoLove ", extra.channel);
   console.log(user, message, subTierInfo, extra, "sub" )
 }
+
+
 
 
 
