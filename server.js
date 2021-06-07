@@ -81,19 +81,21 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
 
 
 
-ComfyJS.onRaid= ( user, message, subTierInfo, extra ) =>{
-  ComfyJS.Say("/chant @"+user+"dzięki za raida peepoLove ", extra.channel);
-  console.log(user, message, subTierInfo, extra, "gift" )
+ComfyJS.onRaid= ( user, viewers, extra ) =>{
+  viewers > 10 && ComfyJS.Say("/chant @"+user+"dzięki za raida peepoLove ", extra.channel);
+  console.log(user, viewers, extra, "gift" )
 }
 
-ComfyJS.onHosted = ( user, message, subTierInfo, extra ) =>{
+ComfyJS.onHosted = ( user, viewers, autohost, extra ) =>{
   ComfyJS.Say("/chant @"+user+"dzięki za hosta peepoLove ", extra.channel);
-  console.log(user, message, subTierInfo, extra, "sub" )
+  console.log(user, viewers, autohost, extra, "sub" )
 }
 
-ComfyJS.onSubGift= ( user, message, subTierInfo, extra ) =>{
-  ComfyJS.Say("/chant @"+user+" dzięki za gifta peepoLove ", extra.channel);
-  console.log(user, message, subTierInfo, extra, "gift" )
+ComfyJS.onSubGift= ( gifterUser, streakMonths, recipientUser, senderCount, subTierInfo, extra ) =>{
+  ComfyJS.Say("gratuluje suba " + recipientUser, extra.channel);
+  ComfyJS.Say("/chant @"+gifterUser+" dzięki za gifta peepoLove ", extra.channel);
+  
+  console.log(gifterUser, streakMonths, recipientUser, senderCount, subTierInfo, extra, "gift" )
 }
 
 ComfyJS.onResub = ( user, message, streamMonths, cumulativeMonths, subTierInfo, extra )=>{
