@@ -66,9 +66,8 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   if (flags.customReward && (extra.customRewardId === skipSongId ) || (extra.customRewardId === skipSongIdWojt)) {
     ComfyJS.Say("!skip", extra.channel);
   }
-  message === "srbottest" && ComfyJS.Say("Bot works!", extra.channel);
-  message === "chanttest" && ComfyJS.Say("/chant EZ", extra.channel);
   
+  message === "srbottest" && ComfyJS.Say("Bot works!", extra.channel);
   
     if (message == "piramidka" && user == "DynaM1X__") {
       ComfyJS.Say("kezmanJAM", extra.channel);
