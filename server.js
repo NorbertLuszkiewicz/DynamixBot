@@ -79,6 +79,8 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   extra.customRewardId && console.log(extra.customRewardId, extra.channel);
 };
 
+
+
 ComfyJS.onRaid= ( user, message, subTierInfo, extra ) =>{
   ComfyJS.Say("/chant @"+user+"dzięki za raida peepoLove ", extra.channel);
   console.log(user, message, subTierInfo, extra, "gift" )
