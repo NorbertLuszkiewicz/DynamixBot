@@ -46,6 +46,9 @@ fastify.get("/", function(request, reply) {
   reply.view("/src/pages/index.hbs", params);
 });
 
+
+//Start Twitch bot
+
 const ComfyJS = require("comfy.js");
 const TWITCHUSER = "dynam1x__";
 const TWITCHCHANNELS = ["kezman22", "simplywojtek"];
@@ -80,7 +83,7 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   extra.customRewardId && console.log(extra.customRewardId, extra.channel);
 };
 
-
+//Chant
 
 ComfyJS.onRaid= ( user, viewers, extra ) =>{
   viewers > 10 && ComfyJS.Say("/chant @"+user+"dzięki za raida peepoLove ", extra.channel);
@@ -109,11 +112,9 @@ ComfyJS.onSub = ( user, message, subTierInfo, extra ) =>{
   console.log(user, message, subTierInfo, extra, "sub" )
 }
 
-
-
-
-
 ComfyJS.Init(TWITCHUSER, OAUTH, TWITCHCHANNELS);
+
+//End Twitch bot
 
 console.log(`https://${process.env.PROJECT_DOMAIN}.glitch.me`)
 setInterval(() => { fastify.get('/'); }, 280000);
