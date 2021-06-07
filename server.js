@@ -80,27 +80,27 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
 };
 
 ComfyJS.onRaid= ( user, message, subTierInfo, extra ) =>{
-  ComfyJS.Say("@"+user+"dzięki za raida peepoLove ", extra.channel);
+  ComfyJS.Say("/chant @"+user+"dzięki za raida peepoLove ", extra.channel);
   console.log(user, message, subTierInfo, extra, "gift" )
 }
 
 ComfyJS.onHosted = ( user, message, subTierInfo, extra ) =>{
-  ComfyJS.Say("@"+user+"dzięki za hosta peepoLove ", extra.channel);
+  ComfyJS.Say("/chant @"+user+"dzięki za hosta peepoLove ", extra.channel);
   console.log(user, message, subTierInfo, extra, "sub" )
 }
 
 ComfyJS.onSubGift= ( user, message, subTierInfo, extra ) =>{
-  ComfyJS.Say("@"+user+" peepoLove ", extra.channel);
+  ComfyJS.Say("/chant @"+user+" dzięki za gifta peepoLove ", extra.channel);
   console.log(user, message, subTierInfo, extra, "gift" )
 }
 
 ComfyJS.onResub = ( user, message, streamMonths, cumulativeMonths, subTierInfo, extra )=>{
-  ComfyJS.Say("@"+user+" dzięki za "+streamMonths+" miesięcy suba peepoLove ", extra.channel);
-  console.log(user, message, subTierInfo, extra, "sub" )
+  ComfyJS.Say("/chant @"+user+" dzięki za suba peepoLove ", extra.channel);
+  console.log(user, message, streamMonths, cumulativeMonths, subTierInfo, extra, "resub" )
 }
 
 ComfyJS.onSub = ( user, message, subTierInfo, extra ) =>{
-  ComfyJS.Say("@"+user+" peepoLove ", extra.channel);
+  ComfyJS.Say("/chant @"+user+" dzięki za suba peepoLove ", extra.channel);
   console.log(user, message, subTierInfo, extra, "sub" )
 }
 
