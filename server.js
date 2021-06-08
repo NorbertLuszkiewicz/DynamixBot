@@ -80,7 +80,12 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   }
 
   extra.customRewardId && console.log(extra.customRewardId, extra.channel);
+  
 };
+
+ComfyJS.onReward = ( user, reward, cost, message, extra ) => {
+  console.log( user, reward, cost, message, extra, "reward");
+}
 
 //Chant
 
