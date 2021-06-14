@@ -67,9 +67,9 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
     ComfyJS.Say("!skip", extra.channel);
   }
   
-  message === "srbottest" && ComfyJS.Say("Bot works!", extra.channel);
+  (message === "srbottest" && flags.mod) && ComfyJS.Say("Bot works!", extra.channel);
   
-    if (message == "piramidka" && user == "DynaM1X__" || message == "piramidka" && user == "makwis4") {
+    if (message == "piramidka" && flags.mod) {
       ComfyJS.Say("kezmanJAM", extra.channel);
       ComfyJS.Say("kezmanJAM kezmanJAM ", extra.channel);
       ComfyJS.Say("kezmanJAM kezmanJAM kezmanJAM", extra.channel);
@@ -80,7 +80,6 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   }
 
   extra.customRewardId && console.log(extra.customRewardId, extra.channel);
-  
 };
 
 ComfyJS.onReward = ( user, reward, cost, message, extra ) => {
