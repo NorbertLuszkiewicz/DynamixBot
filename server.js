@@ -70,13 +70,13 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   (message === "srbottest" && flags.mod) && ComfyJS.Say("Bot works!", extra.channel);
   
     if (message == "piramidka" && flags.mod) {
-      ComfyJS.Say("kezmanJAM", extra.channel);
-      ComfyJS.Say("kezmanJAM kezmanJAM ", extra.channel);
-      ComfyJS.Say("kezmanJAM kezmanJAM kezmanJAM", extra.channel);
-      ComfyJS.Say("kezmanJAM kezmanJAM kezmanJAM kezmanJAM", extra.channel);
-      ComfyJS.Say("kezmanJAM kezmanJAM kezmanJAM", extra.channel);
-      ComfyJS.Say("kezmanJAM kezmanJAM ", extra.channel);
-      ComfyJS.Say("kezmanJAM", extra.channel);
+      ComfyJS.Say("kezmanD", extra.channel);
+      ComfyJS.Say("kezmanD kezmanD ", extra.channel);
+      ComfyJS.Say("kezmanD kezmanD kezmanD", extra.channel);
+      ComfyJS.Say("kezmanD kezmanD kezmanD kezmanD", extra.channel);
+      ComfyJS.Say("kezmanD kezmanD kezmanD", extra.channel);
+      ComfyJS.Say("kezmanD kezmanD ", extra.channel);
+      ComfyJS.Say("kezmanD", extra.channel);
   }
 
   extra.customRewardId && console.log(extra.customRewardId, extra.channel);
