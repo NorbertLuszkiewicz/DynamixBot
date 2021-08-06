@@ -81,16 +81,18 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
       ComfyJS.Say("kezmanD", extra.channel);
   }
    const isPriamidka = message.lastIndexOf("piramidka")
-   const emote = message.substr(9)("piramidka")
+   const emote = message.substr(9)
+   
+   console.log(isPriamidka == 0 && message.length < 30 && (flags.mod || flags.broadcaster))
    
       if (isPriamidka == 0 && message.length < 30 && (flags.mod || flags.broadcaster)) {
       ComfyJS.Say(emote + " ", extra.channel);
       ComfyJS.Say(emote + " " + emote + " ", extra.channel);
       ComfyJS.Say(emote + " " + emote + " "+ emote + " ", extra.channel);
       ComfyJS.Say(emote + " " + emote + " " + emote + " " + emote + " ", extra.channel);
-      ComfyJS.Say("kezmanD kezmanD kezmanD", extra.channel);
-      ComfyJS.Say("kezmanD kezmanD ", extra.channel);
-      ComfyJS.Say("kezmanD", extra.channel);
+      ComfyJS.Say(emote + " " + emote + " "+ emote + " ", extra.channel);
+      ComfyJS.Say(emote + " " + emote + " ", extra.channel);
+      ComfyJS.Say(emote + " ", extra.channel);
   }
 
   extra.customRewardId && console.log(extra.customRewardId, extra.channel);
