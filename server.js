@@ -51,23 +51,27 @@ fastify.get("/", function(request, reply) {
 
 const ComfyJS = require("comfy.js");
 const TWITCHUSER = "dynam1x__";
-const TWITCHCHANNELS = ["kezman22", "simplywojtek"];
+const TWITCHCHANNELS = ["kezman22", "simplywojtek", "og1ii"];
 const OAUTH = process.env.OAUTH;
 const addSongId = "3d0baf73-3272-4ed5-8b06-dc12ad764dc6";
 const skipSongId = "0feec3ff-0f07-4e6c-8113-70e1eb6a8dec";
 const commercialId = ""
 const addSongIdWojt = "11bcc229-5d3f-4a14-aca7-3b00ace01d7a";
 const skipSongIdWojt= "9150d1d4-51fb-4219-a3ff-92398614029c";
+const addSongIdOgiii = "11bcc229-5d3f-4a14-aca7-3b00ace01d7a";
+const skipSongIdOgiii= "9150d1d4-51fb-4219-a3ff-92398614029c";
 
 
 ComfyJS.onChat = (user, message, flags, self, extra) => {
-  if (flags.customReward && (extra.customRewardId === addSongId) || (extra.customRewardId === addSongIdWojt) ) {
+  if (flags.customReward && (extra.customRewardId === addSongId) || (extra.customRewardId === addSongIdWojt) || (extra.customRewardId === addSongIdOgiii)) {
     ComfyJS.Say("!sr " + message, extra.channel);
   }
 
-  if (flags.customReward && (extra.customRewardId === skipSongId ) || (extra.customRewardId === skipSongIdWojt)) {
+  if (flags.customReward && (extra.customRewardId === skipSongId ) || (extra.customRewardId === skipSongIdWojt) || (extra.customRewardId === skipSongIdOgiii)) {
     ComfyJS.Say("!skip", extra.channel);
   }
+  
+  console.log(extra.customRewardId, "test", extra.channel)
   
   (message === "srbottest" && (flags.mod || flags.broadcaster)) && ComfyJS.Say("Bot works!", extra.channel);
   
