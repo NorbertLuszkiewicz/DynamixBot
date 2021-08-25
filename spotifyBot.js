@@ -28,19 +28,8 @@ let currentPlaylist = {og1ii: "",kezman22: "", simplywojtek: ""}
 
 const runApi = () => {};
 const startSong = (streamer) => {
-
-  
-  let playlist_id = document.getElementById("playlists").value;
-  let trackindex = document.getElementById("tracks").value;
-  let album = document.getElementById("album").value;
   let body = {};
-  if (album.length > 0) {
-    body.context_uri = album;
-  } else {
-    body.context_uri = "spotify:playlist:" + playlist_id;
-  }
-  body.offset = {};
-  body.offset.position = trackindex.length > 0 ? Number(trackindex) : 0;
+
   body.offset.position_ms = positionMs;
   body.position_ms = positionMs;
 
@@ -70,7 +59,7 @@ function fetchAccessToken() {
 }
 
 function refreshAccessToken() {
-  refreshToken = localStorage.getItem("refresh_token");
+
   let body = "grant_type=refresh_token";
   body += "&refresh_token=" + refreshToken;
   body += "&client_id=" + clientId;
@@ -83,7 +72,7 @@ function callAuthorizationApi(body) {
   xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
   xhr.setRequestHeader(
     "Authorization",
-    "Basic " + btoa(clientId + ":" + clientSecret)
+    "Basic " + Buffer.from(clientId + ":" + clientSecret).toString('base64')
   );
   xhr.send(body);
   xhr.onload = handleAuthorizationResponse;
