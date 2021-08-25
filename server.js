@@ -57,7 +57,7 @@ fastify.get("/", function(request, reply) {
 
 //Start Twitch bot
 
-setInterval(refreshAccessToken, 3500);
+setInterval(refreshAccessToken, 35000);
 
 const ComfyJS = require("comfy.js");
 const TWITCHUSER = "dynam1x1";
