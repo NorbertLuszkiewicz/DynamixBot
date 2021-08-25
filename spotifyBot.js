@@ -28,8 +28,8 @@ let currentPlaylist = {og1ii: "",kezman22: "", simplywojtek: ""}
 
 const runApi = () => {};
 
-const startSong = (streamer) => {
-  refreshAccessToken()
+const startSong = async (streamer) => {
+  await refreshAccessToken()
   
   let body = {};
   body.position_ms = positionMs;
@@ -43,8 +43,8 @@ const startSong = (streamer) => {
 };
 
 
-const pauseSong = (streamer) => {
-  refreshAccessToken()
+const pauseSong = async (streamer) => {
+  await refreshAccessToken()
   
   callApi("PUT", PAUSE + "?device_id=" + device[streamer], null, handleApiResponse)
   
