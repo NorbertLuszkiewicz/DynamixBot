@@ -46,7 +46,6 @@ fastify.get("/", function(request, reply) {
   reply.view("/src/pages/index.hbs", params);
 });
 
-
 //Start Twitch bot
 
 const ComfyJS = require("comfy.js");
@@ -54,92 +53,159 @@ const TWITCHUSER = "dynam1x__";
 const TWITCHCHANNELS = ["kezman22", "simplywojtek", "og1ii"];
 const OAUTH = process.env.OAUTH;
 const addSongId = "3d0baf73-3272-4ed5-8b06-dc12ad764dc6";
-const skipSongId = "0feec3ff-0f07-4e6c-8113-70e1eb6a8dec";
-const commercialId = ""
+const skipSongId = "09150d1d4-51fb-4219-a3ff-92398614029c";
 const addSongIdWojt = "11bcc229-5d3f-4a14-aca7-3b00ace01d7a";
-const skipSongIdWojt= "9150d1d4-51fb-4219-a3ff-92398614029c";
+const skipSongIdWojt = "9150d1d4-51fb-4219-a3ff-92398614029c";
 const addSongIdOgiii = "4834784f-eb24-4559-8c00-ea474897c3e6";
-const skipSongIdOgiii= "dc293b9a-8278-401e-aa23-e715e3f6b4bc";
+const skipSongIdOgiii = "dc293b9a-8278-401e-aa23-e715e3f6b4bc";
 
+const addSongIdList = [
+  { name: "kezman22", id: "3d0baf73-3272-4ed5-8b06-dc12ad764dc6" },
+  { name: "simplywojtek", id: "11bcc229-5d3f-4a14-aca7-3b00ace01d7a" },
+  { name: "og1ii", id: "4834784f-eb24-4559-8c00-ea474897c3e6" }
+];
+
+const skipSongIdList = [
+  { name: "kezman22", id: "09150d1d4-51fb-4219-a3ff-92398614029c" },
+  { name: "simplywojtek", id: "9150d1d4-51fb-4219-a3ff-92398614029c" },
+  { name: "og1ii", id: "dc293b9a-8278-401e-aa23-e715e3f6b4bc" }
+];
 
 ComfyJS.onChat = (user, message, flags, self, extra) => {
-  if (flags.customReward && (extra.customRewardId === addSongId) || (extra.customRewardId === addSongIdWojt) || (extra.customRewardId === addSongIdOgiii)) {
+  if (
+    (flags.customReward && extra.customRewardId === addSongId) ||
+    extra.customRewardId === addSongIdWojt ||
+    extra.customRewardId === addSongIdOgiii
+  ) {
     ComfyJS.Say("!sr " + message, extra.channel);
   }
 
-  if (flags.customReward && (extra.customRewardId === skipSongId ) || (extra.customRewardId === skipSongIdWojt) || (extra.customRewardId === skipSongIdOgiii)) {
+  if (
+    (flags.customReward && extra.customRewardId === skipSongId) ||
+    extra.customRewardId === skipSongIdWojt ||
+    extra.customRewardId === skipSongIdOgiii
+  ) {
     ComfyJS.Say("!skip", extra.channel);
   }
 
-  
-  (message === "srbottest" && (flags.mod || flags.broadcaster)) && ComfyJS.Say("Bot works!", extra.channel);
-  
-    if (message == "piramidka" && (flags.mod || flags.broadcaster)) {
-      ComfyJS.Say("kezmanD", extra.channel);
-      ComfyJS.Say("kezmanD kezmanD ", extra.channel);
-      ComfyJS.Say("kezmanD kezmanD kezmanD", extra.channel);
-      ComfyJS.Say("kezmanD kezmanD kezmanD kezmanD", extra.channel);
-      ComfyJS.Say("kezmanD kezmanD kezmanD", extra.channel);
-      ComfyJS.Say("kezmanD kezmanD ", extra.channel);
-      ComfyJS.Say("kezmanD", extra.channel);
+  message === "srbottest" &&
+    (flags.mod || flags.broadcaster) &&
+    ComfyJS.Say("Bot works!", extra.channel);
+
+  if (message == "piramidka" && (flags.mod || flags.broadcaster)) {
+    ComfyJS.Say("kezmanD", extra.channel);
+    ComfyJS.Say("kezmanD kezmanD ", extra.channel);
+    ComfyJS.Say("kezmanD kezmanD kezmanD", extra.channel);
+    ComfyJS.Say("kezmanD kezmanD kezmanD kezmanD", extra.channel);
+    ComfyJS.Say("kezmanD kezmanD kezmanD", extra.channel);
+    ComfyJS.Say("kezmanD kezmanD ", extra.channel);
+    ComfyJS.Say("kezmanD", extra.channel);
   }
-   const isPriamidka = message.lastIndexOf("piramidka")
-   const emote = message.substr(9)
-   
-   console.log(isPriamidka == 0 && message.length < 30 && (flags.mod || flags.broadcaster))
-   
-      if (isPriamidka == 0 && message.length < 30 && (flags.mod || flags.broadcaster)) {
-      ComfyJS.Say(emote + " ", extra.channel);
-      ComfyJS.Say(emote + " " + emote + " ", extra.channel);
-      ComfyJS.Say(emote + " " + emote + " "+ emote + " ", extra.channel);
-      ComfyJS.Say(emote + " " + emote + " " + emote + " " + emote + " ", extra.channel);
-      ComfyJS.Say(emote + " " + emote + " "+ emote + " ", extra.channel);
-      ComfyJS.Say(emote + " " + emote + " ", extra.channel);
-      ComfyJS.Say(emote + " ", extra.channel);
+  const isPriamidka = message.lastIndexOf("piramidka");
+  const emote = message.substr(9);
+
+  console.log(
+    isPriamidka == 0 && message.length < 30 && (flags.mod || flags.broadcaster)
+  );
+
+  if (
+    isPriamidka == 0 &&
+    message.length < 30 &&
+    (flags.mod || flags.broadcaster)
+  ) {
+    ComfyJS.Say(emote + " ", extra.channel);
+    ComfyJS.Say(emote + " " + emote + " ", extra.channel);
+    ComfyJS.Say(emote + " " + emote + " " + emote + " ", extra.channel);
+    ComfyJS.Say(
+      emote + " " + emote + " " + emote + " " + emote + " ",
+      extra.channel
+    );
+    ComfyJS.Say(emote + " " + emote + " " + emote + " ", extra.channel);
+    ComfyJS.Say(emote + " " + emote + " ", extra.channel);
+    ComfyJS.Say(emote + " ", extra.channel);
   }
 
   extra.customRewardId && console.log(extra.customRewardId, extra.channel);
 };
 
-ComfyJS.onReward = ( user, reward, cost, message, extra ) => {
-  console.log( user, reward, cost, message, extra, "reward");
-}
+ComfyJS.onReward = (user, reward, cost, message, extra) => {
+  console.log(user, reward, cost, message, extra, "reward");
+};
 
 //Chant
 
-ComfyJS.onRaid= ( user, viewers, extra ) =>{
-  viewers > 10 && ComfyJS.Say("/chant @"+user+"dzięki za raida peepoLove ", extra.channel);
-  console.log(user, viewers, extra, "gift" )
-}
+ComfyJS.onRaid = (user, viewers, extra) => {
+  viewers > 10 &&
+    ComfyJS.Say(
+      "/chant @" + user + "dzięki za raida peepoLove ",
+      extra.channel
+    );
+  console.log(user, viewers, extra, "gift");
+};
 
-ComfyJS.onHosted = ( user, viewers, autohost, extra ) =>{
-  ComfyJS.Say("/chant @"+user+"dzięki za hosta peepoLove ", extra.channel);
-  console.log(user, viewers, autohost, extra, "sub" )
-}
+ComfyJS.onHosted = (user, viewers, autohost, extra) => {
+  ComfyJS.Say("/chant @" + user + "dzięki za hosta peepoLove ", extra.channel);
+  console.log(user, viewers, autohost, extra, "sub");
+};
 
-ComfyJS.onSubGift= ( gifterUser, streakMonths, recipientUser, senderCount, subTierInfo, extra ) =>{
+ComfyJS.onSubGift = (
+  gifterUser,
+  streakMonths,
+  recipientUser,
+  senderCount,
+  subTierInfo,
+  extra
+) => {
   ComfyJS.Say("gratuluje suba " + recipientUser, extra.channel);
-  ComfyJS.Say("/chant @"+gifterUser+" dzięki za gifta peepoLove ", extra.channel);
-  
-  console.log(gifterUser, streakMonths, recipientUser, senderCount, subTierInfo, extra, "gift" )
-}
+  ComfyJS.Say(
+    "/chant @" + gifterUser + " dzięki za gifta peepoLove ",
+    extra.channel
+  );
 
-ComfyJS.onResub = ( user, message, streamMonths, cumulativeMonths, subTierInfo, extra )=>{
-  ComfyJS.Say("/chant @"+user+" dzięki za suba peepoLove ", extra.channel);
-  console.log(user, message, streamMonths, cumulativeMonths, subTierInfo, extra, "resub" )
-}
+  console.log(
+    gifterUser,
+    streakMonths,
+    recipientUser,
+    senderCount,
+    subTierInfo,
+    extra,
+    "gift"
+  );
+};
 
-ComfyJS.onSub = ( user, message, subTierInfo, extra ) =>{
-  ComfyJS.Say("/chant @"+user+" dzięki za suba peepoLove ", extra.channel);
-  console.log(user, message, subTierInfo, extra, "sub" )
-}
+ComfyJS.onResub = (
+  user,
+  message,
+  streamMonths,
+  cumulativeMonths,
+  subTierInfo,
+  extra
+) => {
+  ComfyJS.Say("/chant @" + user + " dzięki za suba peepoLove ", extra.channel);
+  console.log(
+    user,
+    message,
+    streamMonths,
+    cumulativeMonths,
+    subTierInfo,
+    extra,
+    "resub"
+  );
+};
+
+ComfyJS.onSub = (user, message, subTierInfo, extra) => {
+  ComfyJS.Say("/chant @" + user + " dzięki za suba peepoLove ", extra.channel);
+  console.log(user, message, subTierInfo, extra, "sub");
+};
 
 ComfyJS.Init(TWITCHUSER, OAUTH, TWITCHCHANNELS);
 
 //End Twitch bot
 
-console.log(`https://${process.env.PROJECT_DOMAIN}.glitch.me`)
-setInterval(() => { fastify.get('/'); }, 280000);
+console.log(`https://${process.env.PROJECT_DOMAIN}.glitch.me`);
+setInterval(() => {
+  fastify.get("/");
+}, 280000);
 
 // A POST route to handle and react to form submissions
 fastify.post("/", function(request, reply) {
