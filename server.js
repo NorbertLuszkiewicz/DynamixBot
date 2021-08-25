@@ -1,4 +1,4 @@
-const { runApi,pauseSong,startSong } = require("./spotifyBot");
+const { runApi,pauseSong,startSong, refreshAccessToken } = require("./spotifyBot");
 
 runApi()
 

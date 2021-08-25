@@ -37,7 +37,7 @@ const startSong = (streamer) => {
     "PUT",
     PLAY + "?device_id=" + device[streamer],
     JSON.stringify(body),
-    handleApiResponse
+    refreshAccessToken
   );
 };
 
@@ -106,9 +106,9 @@ function handleApiResponse() {
   if (this.status == 200) {
     console.log(this.responseText, "response");
 
-    setTimeout(currentlyPlaying, 500);
+    setTimeout(currentlyPlaying, 1000);
   } else if (this.status == 204) {
-    setTimeout(currentlyPlaying, 500);
+    setTimeout(currentlyPlaying, 1000);
   } else if (this.status == 401) {
     refreshAccessToken();
   } else {
@@ -119,7 +119,6 @@ function handleApiResponse() {
 function handleCurrentlyPlayingResponse(streamer) {
   if (this.status == 200) {
     const data = JSON.parse(this.responseText);
-    console.log(data, "dataaaa")
     
     if (data.device) {
       device[streamer] = data.device.id;
@@ -152,4 +151,4 @@ function currentlyPlaying() {
 }
 
 
-module.exports = { pauseSong, startSong, runApi };
+module.exports = { pauseSong, startSong, runApi, refreshAccessToken };
