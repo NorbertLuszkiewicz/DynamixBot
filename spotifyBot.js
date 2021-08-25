@@ -29,24 +29,25 @@ let currentPlaylist = {og1ii: "",kezman22: "", simplywojtek: ""}
 const runApi = () => {};
 
 const startSong = async (streamer) => {
-  await refreshAccessToken()
+  await refreshAccessToken
   
   let body = {};
   body.position_ms = positionMs;
 
-  callApi(
+  setTimeout(callApi(
     "PUT",
     PLAY + "?device_id=" + device[streamer],
     JSON.stringify(body),
-    refreshAccessToken
-  );
+    handleApiResponse
+  ), 1100)
+
 };
 
 
 const pauseSong = async (streamer) => {
-  await refreshAccessToken()
+  await refreshAccessToken
+  setTimeout(() => { callApi("PUT", PAUSE + "?device_id=" + device[streamer], null, handleApiResponse); console.log("pause")}, 1100)
   
-  callApi("PUT", PAUSE + "?device_id=" + device[streamer], null, handleApiResponse)
   
   console.log("pausesong")
 };
@@ -113,6 +114,7 @@ function handleApiResponse() {
   } else if (this.status == 204) {
     setTimeout(currentlyPlaying, 1000);
   } else if (this.status == 401) {
+    console.log("stary token")
     refreshAccessToken();
   } else {
     console.log(this.responseText);
@@ -150,6 +152,7 @@ function handleCurrentlyPlayingResponse(streamer) {
 }
 
 function currentlyPlaying() {
+  console.log("sco gra")
   callApi("GET", PLAYER + "?market=US", null, handleCurrentlyPlayingResponse);
 }
 
