@@ -45,13 +45,13 @@ let currentPlaylist = { og1ii: "", kezman22: "", simplywojtek: "" };
 
 const runApi = () => {};
 
-const startSong = streamer => {
-  refreshAccessToken();
+const startSong = async (streamer) => {
+  await refreshAccessToken();
 
   let body = {};
   body.position_ms = positionMs;
 
-  callApi(
+  await callApi(
     "PUT",
     PLAY + "?device_id=" + device[streamer],
     JSON.stringify(body),
