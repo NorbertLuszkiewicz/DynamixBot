@@ -114,11 +114,11 @@ function handleAuthorizationResponse() {
     }
     
     if(action === "pause"){
-      
+        pauseSong      
     }
         
     if(action === "start"){
-      
+      startSong
     }
     
   } else {
@@ -139,7 +139,7 @@ function handleApiResponse() {
   console.log("stop albo start");
   if (this.status == 200) {
     console.log(this.responseText, "response");
-
+    action = ""
     setTimeout(currentlyPlaying, 1000);
   } else if (this.status == 204) {
     setTimeout(currentlyPlaying, 1000);

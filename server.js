@@ -57,6 +57,8 @@ fastify.get("/", function(request, reply) {
 
 //Start Twitch bot
 
+setInterval(refreshAccessToken, 3500);
+
 const ComfyJS = require("comfy.js");
 const TWITCHUSER = "dynam1x1";
 const TWITCHCHANNELS = ["kezman22", "simplywojtek", "og1ii"];
@@ -87,10 +89,10 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   });
 
   if (message === "pause") {
-    pauseSong(extra.channel)
+    pauseSong(extra.channel);
   }
   if (message === "start") {
-    startSong(extra.channel)
+    startSong(extra.channel);
   }
 
   message === "srbottest" &&
