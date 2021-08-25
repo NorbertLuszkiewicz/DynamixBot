@@ -1,6 +1,11 @@
-const { runApi,pauseSong,startSong, refreshAccessToken } = require("./spotifyBot");
+const {
+  runApi,
+  pauseSong,
+  startSong,
+  refreshAccessToken
+} = require("./spotifyBot");
 
-runApi()
+runApi();
 
 const path = require("path");
 
@@ -80,12 +85,15 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
       ComfyJS.Say("!skip", extra.channel);
     }
   });
-  
-  
-  message === "pause" && pauseSong(extra.channel)
-  message === "start" && startSong(extra.channel)
-  
-  
+
+  if (message === "pause") {
+    refreshAccessToken();
+    setTimeout(pauseSong(extra.channel), 1000);
+  }
+  if (message === "start") {
+    refreshAccessToken();
+    setTimeout(startSong(extra.channel), 1000);
+  }
 
   message === "srbottest" &&
     (flags.mod || flags.broadcaster) &&
@@ -150,7 +158,6 @@ ComfyJS.onSubGift = (
     "/chant @" + gifterUser + " dzięki za gifta peepoLove ",
     extra.channel
   );
-
 };
 
 ComfyJS.onResub = (
@@ -162,7 +169,6 @@ ComfyJS.onResub = (
   extra
 ) => {
   ComfyJS.Say("/chant @" + user + " dzięki za suba peepoLove ", extra.channel);
-  
 };
 
 ComfyJS.onSub = (user, message, subTierInfo, extra) => {
@@ -173,7 +179,7 @@ ComfyJS.Init(TWITCHUSER, OAUTH, TWITCHCHANNELS);
 
 //End Twitch bot
 
-console.log(`https://${process.env.PROJECT_DOMAIN}.glitch.me`); 
+console.log(`https://${process.env.PROJECT_DOMAIN}.glitch.me`);
 
 // A POST route to handle and react to form submissions
 fastify.post("/", function(request, reply) {
