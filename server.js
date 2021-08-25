@@ -83,7 +83,7 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   
   
   message === "pause" && pauseSong(extra.channel)
-  message === "start" && pauseSong(extra.channel)
+  message === "start" && startSong(extra.channel)
   
   
 

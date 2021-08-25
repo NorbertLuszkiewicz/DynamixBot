@@ -31,7 +31,6 @@ const runApi = () => {};
 const startSong = (streamer) => {
   let body = {};
 
-  body.offset.position_ms = positionMs;
   body.position_ms = positionMs;
 
   callApi(
