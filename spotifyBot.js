@@ -1,3 +1,5 @@
+var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+
 const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
 const clientIdList = [{name:"dynam1x1", id: process.env.CLIENT_ID},{name:"og1ii", id: process.env.CLIENT_ID}]
@@ -122,7 +124,6 @@ function handleApiResponse() {
     refreshAccessToken();
   } else {
     console.log(this.responseText);
-    alert(this.responseText);
   }
 }
 
