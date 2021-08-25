@@ -4,7 +4,7 @@ const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
 const clientIdList = [{name:"dynam1x1", id: process.env.CLIENT_ID},{name:"og1ii", id: process.env.CLIENT_ID}]
 const clientSecretList = [{name:"dynam1x1", id: process.env.CLIENT_SECRET},{name:"og1ii", id: process.env.CLIENT_SECRET}]
-const accessToken = "BQAJ4xsBe8xP9tRyUkDlDC5zmgxK6y2HvUqW_fjXQ3e7RphcC-DIvex6DlA09PamCBmiArNikMiIBcu8jhQifHTJ5zEOlTXpn32L_s0gOZhT_WV-YIwZebkxtn25xV8bl88oo-wMq5GkBRzjqAVfCLtTTKgZqTaILDuMiHThXoUJUMnreFnWetIaFuPh9LeBV5pXo3mQlFc_QyO3wGwNa725Rg";
+let accessToken = "BQAJ4xsBe8xP9tRyUkDlDC5zmgxK6y2HvUqW_fjXQ3e7RphcC-DIvex6DlA09PamCBmiArNikMiIBcu8jhQifHTJ5zEOlTXpn32L_s0gOZhT_WV-YIwZebkxtn25xV8bl88oo-wMq5GkBRzjqAVfCLtTTKgZqTaILDuMiHThXoUJUMnreFnWetIaFuPh9LeBV5pXo3mQlFc_QyO3wGwNa725Rg";
 const redirectUri = `https://${process.env.PROJECT_DOMAIN}.glitch.me`;
 const AUTHORIZE = "https://accounts.spotify.com/authorize";
 const TOKEN = "https://accounts.spotify.com/api/token";
@@ -27,11 +27,11 @@ let code = {og1ii: "",kezman22: "AQCsHkGOlwiOVXAhKyZcmtcaFgIcRUgL5iGALcRI6foJV4u
 let currentPlaylist = {og1ii: "",kezman22: "", simplywojtek: ""}
 
 const runApi = () => {};
+
 const startSong = (streamer) => {
   let body = {};
 
-  body.offset.position_ms = positionMs;
-  body.position_ms = positionMs;
+
 
   callApi(
     "PUT",
@@ -81,14 +81,12 @@ function callAuthorizationApi(body) {
 function handleAuthorizationResponse() {
   if (this.status == 200) {
     let data = JSON.parse(this.responseText);
-    console.log(data);
+    console.log(data, "tocken");
     if (data.access_token != undefined) {
       accessToken = data.access_token;
-      localStorage.setItem("access_token", accessToken);
     }
     if (data.refresh_token != undefined) {
       refreshToken = data.refresh_token;
-      localStorage.setItem("refresh_token", refreshToken);
     }
   } else {
     console.log(this.responseText);
