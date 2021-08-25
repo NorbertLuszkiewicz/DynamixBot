@@ -1,3 +1,7 @@
+const { runApi } = require("./spotifyBot");
+
+runApi()
+
 const path = require("path");
 
 // Require the fastify framework and instantiate it
