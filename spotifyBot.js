@@ -29,8 +29,9 @@ let currentPlaylist = {og1ii: "",kezman22: "", simplywojtek: ""}
 const runApi = () => {};
 
 const startSong = (streamer) => {
+  refreshAccessToken()
+  
   let body = {};
-
   body.position_ms = positionMs;
 
   callApi(
@@ -43,7 +44,8 @@ const startSong = (streamer) => {
 
 
 const pauseSong = (streamer) => {
-  currentlyPlaying()
+  refreshAccessToken()
+  
   callApi("PUT", PAUSE + "?device_id=" + device[streamer], null, handleApiResponse)
   
   console.log("pausesong")
@@ -59,7 +61,7 @@ function fetchAccessToken() {
 }
 
 function refreshAccessToken() {
-
+console.log("refresh ti")
   let body = "grant_type=refresh_token";
   body += "&refresh_token=" + refreshToken;
   body += "&client_id=" + clientId;
@@ -81,7 +83,7 @@ function callAuthorizationApi(body) {
 function handleAuthorizationResponse() {
   if (this.status == 200) {
     let data = JSON.parse(this.responseText);
-    console.log(data, "tocken");
+
     if (data.access_token != undefined) {
       accessToken = data.access_token;
     }
@@ -103,6 +105,7 @@ function callApi(method, url, body, callback) {
 }
 
 function handleApiResponse() {
+  console.log("stop albo start")
   if (this.status == 200) {
     console.log(this.responseText, "response");
 
