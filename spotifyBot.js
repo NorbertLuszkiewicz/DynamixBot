@@ -19,11 +19,14 @@ let url = `${AUTHORIZE}?client_id=${clientId}&response_type=code&redirect_uri=${
   redirectUri
 )}&show_dialog=true&scope=user-read-private user-read-email user-modify-playback-state user-read-playback-position user-library-read streaming user-read-playback-state user-read-recently-played playlist-read-private`;
 
-let refreshToken
+let refreshToken = ""
+
 
 const runApi = () => {};
 const startSong = (streamer) => {
-   let playlist_id = document.getElementById("playlists").value;
+
+  
+  let playlist_id = document.getElementById("playlists").value;
   let trackindex = document.getElementById("tracks").value;
   let album = document.getElementById("album").value;
   let body = {};
@@ -44,9 +47,13 @@ const startSong = (streamer) => {
     handleApiResponse
   );
 };
-const pauseSong = () => {};
+const pauseSong = (streamer) => {
+  callApi("PUT", PAUSE + "?device_id=" + device[streamer], null, handleApiResponse)
+  
+  
+};
 
-function fetchAccessToken(code) {
+function fetchAccessToken() {
   let body = "grant_type=authorization_code";
   body += "&code=" + code;
   body += "&redirect_uri=" + encodeURI(redirectUri);
@@ -104,9 +111,7 @@ function callApi(method, url, body, callback) {
 function handleApiResponse() {
   if (this.status == 200) {
     console.log(this.responseText, "response");
-    if (this.responseText.timestamp) {
-      this.position_ms = this.responseText.progress_ms;
-    }
+
     setTimeout(currentlyPlaying, 500);
   } else if (this.status == 204) {
     setTimeout(currentlyPlaying, 500);
@@ -120,21 +125,15 @@ function handleApiResponse() {
 
 function handleCurrentlyPlayingResponse() {
   if (this.status == 200) {
-    var data = JSON.parse(this.responseText);
+    const data = JSON.parse(this.responseText);
     positionMs = data.progress_ms;
 
-    if (data.item != null) {
-      document.getElementById("albumImage").src = data.item.album.images[0].url;
-      document.getElementById("trackTitle").innerHTML = data.item.name;
-      document.getElementById("trackArtist").innerHTML =
-        data.item.artists[0].name;
-    }
 
   } else if (this.status == 204) {
   } else if (this.status == 401) {
     refreshAccessToken();
   } else {
-    console.log(this.responseText);
+    console.log(this.responseText, "error");
     alert(this.responseText);
   }
 }
