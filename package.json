@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "comfy.js": "^1.1.10",
+    "express": "^4.17.1",
     "fastify": "^3.14.1",
     "fastify-formbody": "^5.0.0",
     "fastify-static": "^4.0.0",

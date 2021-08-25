@@ -113,10 +113,6 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   extra.customRewardId && console.log(extra.customRewardId, extra.channel);
 };
 
-ComfyJS.onReward = (user, reward, cost, message, extra) => {
-  console.log(user, reward, cost, message, extra, "reward");
-};
-
 //Chant
 
 ComfyJS.onRaid = (user, viewers, extra) => {
@@ -125,12 +121,10 @@ ComfyJS.onRaid = (user, viewers, extra) => {
       "/chant @" + user + "dzięki za raida peepoLove ",
       extra.channel
     );
-  console.log(user, viewers, extra, "gift");
 };
 
 ComfyJS.onHosted = (user, viewers, autohost, extra) => {
   ComfyJS.Say("/chant @" + user + "dzięki za hosta peepoLove ", extra.channel);
-  console.log(user, viewers, autohost, extra, "sub");
 };
 
 ComfyJS.onSubGift = (
@@ -147,15 +141,6 @@ ComfyJS.onSubGift = (
     extra.channel
   );
 
-  console.log(
-    gifterUser,
-    streakMonths,
-    recipientUser,
-    senderCount,
-    subTierInfo,
-    extra,
-    "gift"
-  );
 };
 
 ComfyJS.onResub = (
@@ -167,20 +152,11 @@ ComfyJS.onResub = (
   extra
 ) => {
   ComfyJS.Say("/chant @" + user + " dzięki za suba peepoLove ", extra.channel);
-  console.log(
-    user,
-    message,
-    streamMonths,
-    cumulativeMonths,
-    subTierInfo,
-    extra,
-    "resub"
-  );
+  
 };
 
 ComfyJS.onSub = (user, message, subTierInfo, extra) => {
   ComfyJS.Say("/chant @" + user + " dzięki za suba peepoLove ", extra.channel);
-  console.log(user, message, subTierInfo, extra, "sub");
 };
 
 ComfyJS.Init(TWITCHUSER, OAUTH, TWITCHCHANNELS);
