@@ -173,9 +173,6 @@ ComfyJS.Init(TWITCHUSER, OAUTH, TWITCHCHANNELS);
 //End Twitch bot
 
 console.log(`https://${process.env.PROJECT_DOMAIN}.glitch.me`); 
-setInterval(() => {
-  fastify.get("/");
-}, 280000);
 
 // A POST route to handle and react to form submissions
 fastify.post("/", function(request, reply) {
