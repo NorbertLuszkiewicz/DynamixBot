@@ -2,7 +2,7 @@ const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
 const clientIdList = [{name:"dynam1x1", id: process.env.CLIENT_ID},{name:"og1ii", id: process.env.CLIENT_ID}]
 const clientSecretList = [{name:"dynam1x1", id: process.env.CLIENT_SECRET},{name:"og1ii", id: process.env.CLIENT_SECRET}]
-const accessToken = "";
+const accessToken = "BQAJ4xsBe8xP9tRyUkDlDC5zmgxK6y2HvUqW_fjXQ3e7RphcC-DIvex6DlA09PamCBmiArNikMiIBcu8jhQifHTJ5zEOlTXpn32L_s0gOZhT_WV-YIwZebkxtn25xV8bl88oo-wMq5GkBRzjqAVfCLtTTKgZqTaILDuMiHThXoUJUMnreFnWetIaFuPh9LeBV5pXo3mQlFc_QyO3wGwNa725Rg";
 const redirectUri = `https://${process.env.PROJECT_DOMAIN}.glitch.me`;
 const AUTHORIZE = "https://accounts.spotify.com/authorize";
 const TOKEN = "https://accounts.spotify.com/api/token";
@@ -19,8 +19,9 @@ let url = `${AUTHORIZE}?client_id=${clientId}&response_type=code&redirect_uri=${
   redirectUri
 )}&show_dialog=true&scope=user-read-private user-read-email user-modify-playback-state user-read-playback-position user-library-read streaming user-read-playback-state user-read-recently-played playlist-read-private`;
 
-let refreshToken = ""
+let refreshToken = "AQCg9rcXt-DPSVtz9rEqE3fA1x78NqvV6nysu5T9O1EZ1wFWmMJw3yO2budF5OknAiKM5geXUKPXk0Z2RnHm9DMD294V_WdcHJ9Wq4Meg3oRA7YYopjM0sSfpMC1qjQu-w8"
 
+let code = {og1ii: "",kezman22: "AQCsHkGOlwiOVXAhKyZcmtcaFgIcRUgL5iGALcRI6foJV4uIHNK_uIdgIMWfKFcrF5dYedaCldmFq8v7I2hpLksID9P_XOgwRHkwnz_ciJ1MXhCOAabYJMOcAurI6Cskxr97sH9k4p6SObCHiom6--5D69VvZv_egq_03tvbpM6UZETOAy1JwTzEcdyx5II032TPY1XywOEoVGTcPY-kOiMofbifXKPoAVRTl7HBZxrSk_kZFJaoEN9I6zfh8e9cDL9vdYCIJkHCKVZG0AQWCEOsH3hnPgKGEq8f6iLfEY-FBLwsX_V9etrNqc9TWGlJION0OBXp5BFzUYLyazKJFUwxkLKB_W39pDiQvruEX4Tyk8Re2avk_NRjRrCQiHf9vQXmbMqQRHKN8WZwF3ZWCxUazcixlZ80rqlGBanpZVVoBffLxxzwYbObsA", simplywojtek: ""}
 
 const runApi = () => {};
 const startSong = (streamer) => {
@@ -47,10 +48,12 @@ const startSong = (streamer) => {
     handleApiResponse
   );
 };
+
+
 const pauseSong = (streamer) => {
   callApi("PUT", PAUSE + "?device_id=" + device[streamer], null, handleApiResponse)
   
-  
+  console.log("pausesong")
 };
 
 function fetchAccessToken() {

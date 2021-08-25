@@ -1,4 +1,4 @@
-const { runApi } = require("./spotifyBot");
+const { runApi,pauseSong } = require("./spotifyBot");
 
 runApi()
 
@@ -80,6 +80,11 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
       ComfyJS.Say("!skip", extra.channel);
     }
   });
+  
+  
+  message === "pause" && pauseSong(extra.channel)
+  
+  
 
   message === "srbottest" &&
     (flags.mod || flags.broadcaster) &&
