@@ -2,9 +2,16 @@ var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
-const clientIdList = [{name:"dynam1x1", id: process.env.CLIENT_ID},{name:"og1ii", id: process.env.CLIENT_ID}]
-const clientSecretList = [{name:"dynam1x1", id: process.env.CLIENT_SECRET},{name:"og1ii", id: process.env.CLIENT_SECRET}]
-let accessToken = "BQAJ4xsBe8xP9tRyUkDlDC5zmgxK6y2HvUqW_fjXQ3e7RphcC-DIvex6DlA09PamCBmiArNikMiIBcu8jhQifHTJ5zEOlTXpn32L_s0gOZhT_WV-YIwZebkxtn25xV8bl88oo-wMq5GkBRzjqAVfCLtTTKgZqTaILDuMiHThXoUJUMnreFnWetIaFuPh9LeBV5pXo3mQlFc_QyO3wGwNa725Rg";
+const clientIdList = [
+  { name: "dynam1x1", id: process.env.CLIENT_ID },
+  { name: "og1ii", id: process.env.CLIENT_ID }
+];
+const clientSecretList = [
+  { name: "dynam1x1", id: process.env.CLIENT_SECRET },
+  { name: "og1ii", id: process.env.CLIENT_SECRET }
+];
+let accessToken =
+  "BQAJ4xsBe8xP9tRyUkDlDC5zmgxK6y2HvUqW_fjXQ3e7RphcC-DIvex6DlA09PamCBmiArNikMiIBcu8jhQifHTJ5zEOlTXpn32L_s0gOZhT_WV-YIwZebkxtn25xV8bl88oo-wMq5GkBRzjqAVfCLtTTKgZqTaILDuMiHThXoUJUMnreFnWetIaFuPh9LeBV5pXo3mQlFc_QyO3wGwNa725Rg";
 const redirectUri = `https://${process.env.PROJECT_DOMAIN}.glitch.me`;
 const AUTHORIZE = "https://accounts.spotify.com/authorize";
 const TOKEN = "https://accounts.spotify.com/api/token";
@@ -15,41 +22,54 @@ const PLAYER = "https://api.spotify.com/v1/me/player";
 const CURRENTLYPLAYING =
   "https://api.spotify.com/v1/me/player/currently-playing";
 let positionMs = 0;
-let device = {og1ii: "",kezman22: "c3e9e9038e921489b7106d098ca11128b330ae36", simplywojtek: ""};
+let device = {
+  og1ii: "",
+  kezman22: "c3e9e9038e921489b7106d098ca11128b330ae36",
+  simplywojtek: ""
+};
 
 let url = `${AUTHORIZE}?client_id=${clientId}&response_type=code&redirect_uri=${encodeURI(
   redirectUri
 )}&show_dialog=true&scope=user-read-private user-read-email user-modify-playback-state user-read-playback-position user-library-read streaming user-read-playback-state user-read-recently-played playlist-read-private`;
 
-let refreshToken = "AQCg9rcXt-DPSVtz9rEqE3fA1x78NqvV6nysu5T9O1EZ1wFWmMJw3yO2budF5OknAiKM5geXUKPXk0Z2RnHm9DMD294V_WdcHJ9Wq4Meg3oRA7YYopjM0sSfpMC1qjQu-w8"
+let refreshToken =
+  "AQCg9rcXt-DPSVtz9rEqE3fA1x78NqvV6nysu5T9O1EZ1wFWmMJw3yO2budF5OknAiKM5geXUKPXk0Z2RnHm9DMD294V_WdcHJ9Wq4Meg3oRA7YYopjM0sSfpMC1qjQu-w8";
 
-let code = {og1ii: "",kezman22: "AQCsHkGOlwiOVXAhKyZcmtcaFgIcRUgL5iGALcRI6foJV4uIHNK_uIdgIMWfKFcrF5dYedaCldmFq8v7I2hpLksID9P_XOgwRHkwnz_ciJ1MXhCOAabYJMOcAurI6Cskxr97sH9k4p6SObCHiom6--5D69VvZv_egq_03tvbpM6UZETOAy1JwTzEcdyx5II032TPY1XywOEoVGTcPY-kOiMofbifXKPoAVRTl7HBZxrSk_kZFJaoEN9I6zfh8e9cDL9vdYCIJkHCKVZG0AQWCEOsH3hnPgKGEq8f6iLfEY-FBLwsX_V9etrNqc9TWGlJION0OBXp5BFzUYLyazKJFUwxkLKB_W39pDiQvruEX4Tyk8Re2avk_NRjRrCQiHf9vQXmbMqQRHKN8WZwF3ZWCxUazcixlZ80rqlGBanpZVVoBffLxxzwYbObsA", simplywojtek: ""}
-let currentPlaylist = {og1ii: "",kezman22: "", simplywojtek: ""}
+let code = {
+  og1ii: "",
+  kezman22:
+    "AQCsHkGOlwiOVXAhKyZcmtcaFgIcRUgL5iGALcRI6foJV4uIHNK_uIdgIMWfKFcrF5dYedaCldmFq8v7I2hpLksID9P_XOgwRHkwnz_ciJ1MXhCOAabYJMOcAurI6Cskxr97sH9k4p6SObCHiom6--5D69VvZv_egq_03tvbpM6UZETOAy1JwTzEcdyx5II032TPY1XywOEoVGTcPY-kOiMofbifXKPoAVRTl7HBZxrSk_kZFJaoEN9I6zfh8e9cDL9vdYCIJkHCKVZG0AQWCEOsH3hnPgKGEq8f6iLfEY-FBLwsX_V9etrNqc9TWGlJION0OBXp5BFzUYLyazKJFUwxkLKB_W39pDiQvruEX4Tyk8Re2avk_NRjRrCQiHf9vQXmbMqQRHKN8WZwF3ZWCxUazcixlZ80rqlGBanpZVVoBffLxxzwYbObsA",
+  simplywojtek: ""
+};
+let currentPlaylist = { og1ii: "", kezman22: "", simplywojtek: "" };
 
 const runApi = () => {};
 
-const startSong = (streamer) => {
-  refreshAccessToken
-  
+const startSong = streamer => {
+  refreshAccessToken();
+
   let body = {};
   body.position_ms = positionMs;
 
-  setTimeout(callApi(
+  callApi(
     "PUT",
     PLAY + "?device_id=" + device[streamer],
     JSON.stringify(body),
     handleApiResponse
-  ), 3100)
-
+  );
 };
 
+const pauseSong = async (streamer) => {
+  await refreshAccessToken()
+  await callApi(
+    "PUT",
+    PAUSE + "?device_id=" + device[streamer],
+    null,
+    handleApiResponse
+  );
+  
 
-const pauseSong = (streamer) => {
-   refreshAccessToken
-   callApi("PUT", PAUSE + "?device_id=" + device[streamer], null, handleApiResponse)
-  
-  
-  console.log("pausesong")
+  console.log("pausesong");
 };
 
 function fetchAccessToken() {
@@ -62,7 +82,7 @@ function fetchAccessToken() {
 }
 
 function refreshAccessToken() {
-console.log("refresh ti")
+  console.log("refresh ti");
   let body = "grant_type=refresh_token";
   body += "&refresh_token=" + refreshToken;
   body += "&client_id=" + clientId;
@@ -75,7 +95,7 @@ function callAuthorizationApi(body) {
   xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
   xhr.setRequestHeader(
     "Authorization",
-    "Basic " + Buffer.from(clientId + ":" + clientSecret).toString('base64')
+    "Basic " + Buffer.from(clientId + ":" + clientSecret).toString("base64")
   );
   xhr.send(body);
   xhr.onload = handleAuthorizationResponse;
@@ -106,7 +126,7 @@ function callApi(method, url, body, callback) {
 }
 
 function handleApiResponse() {
-  console.log("stop albo start")
+  console.log("stop albo start");
   if (this.status == 200) {
     console.log(this.responseText, "response");
 
@@ -114,7 +134,7 @@ function handleApiResponse() {
   } else if (this.status == 204) {
     setTimeout(currentlyPlaying, 1000);
   } else if (this.status == 401) {
-    console.log("stary token")
+    console.log("stary token");
     refreshAccessToken();
   } else {
     console.log(this.responseText);
@@ -124,12 +144,11 @@ function handleApiResponse() {
 function handleCurrentlyPlayingResponse(streamer) {
   if (this.status == 200) {
     const data = JSON.parse(this.responseText);
-    
+
     if (data.device) {
       device[streamer] = data.device.id;
     }
     positionMs = data.progress_ms;
-
 
     if (data.context != null) {
       // select playlist
@@ -138,10 +157,7 @@ function handleCurrentlyPlayingResponse(streamer) {
         currentPlaylist[streamer].lastIndexOf(":") + 1,
         currentPlaylist[streamer].length
       );
-
     }
-
-
   } else if (this.status == 204) {
   } else if (this.status == 401) {
     refreshAccessToken();
@@ -152,9 +168,8 @@ function handleCurrentlyPlayingResponse(streamer) {
 }
 
 function currentlyPlaying() {
-  console.log("sco gra")
+  console.log("sco gra");
   callApi("GET", PLAYER + "?market=US", null, handleCurrentlyPlayingResponse);
 }
-
 
 module.exports = { pauseSong, startSong, runApi, refreshAccessToken };
