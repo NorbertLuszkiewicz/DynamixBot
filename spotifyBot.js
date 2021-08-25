@@ -15,7 +15,7 @@ const PLAYER = "https://api.spotify.com/v1/me/player";
 const CURRENTLYPLAYING =
   "https://api.spotify.com/v1/me/player/currently-playing";
 let positionMs = 0;
-let device = {og1ii: "",kezman22: "", simplywojtek: ""};
+let device = {og1ii: "",kezman22: "c3e9e9038e921489b7106d098ca11128b330ae36", simplywojtek: ""};
 
 let url = `${AUTHORIZE}?client_id=${clientId}&response_type=code&redirect_uri=${encodeURI(
   redirectUri
@@ -53,6 +53,7 @@ const startSong = (streamer) => {
 
 
 const pauseSong = (streamer) => {
+  currentlyPlaying()
   callApi("PUT", PAUSE + "?device_id=" + device[streamer], null, handleApiResponse)
   
   console.log("pausesong")
@@ -127,9 +128,16 @@ function handleApiResponse() {
   }
 }
 
-function handleCurrentlyPlayingResponse() {
+function handleCurrentlyPlayingResponse(streamer) {
   if (this.status == 200) {
     const data = JSON.parse(this.responseText);
+    console.log(data, "dataaaa")
+    
+    if (data.device) {
+      device[streamer] = data.device.id;
+    }
+    
+    
     positionMs = data.progress_ms;
 
 
