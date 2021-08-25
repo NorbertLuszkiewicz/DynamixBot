@@ -13,6 +13,7 @@ const PLAYER = "https://api.spotify.com/v1/me/player";
 const CURRENTLYPLAYING =
   "https://api.spotify.com/v1/me/player/currently-playing";
 let positionMs = 0;
+let device = {og1ii: "",kezman22: "", simplywojtek: ""};
 
 let url = `${AUTHORIZE}?client_id=${clientId}&response_type=code&redirect_uri=${encodeURI(
   redirectUri
@@ -21,7 +22,7 @@ let url = `${AUTHORIZE}?client_id=${clientId}&response_type=code&redirect_uri=${
 let refreshToken
 
 const runApi = () => {};
-const startSong = () => {
+const startSong = (streamer) => {
    let playlist_id = document.getElementById("playlists").value;
   let trackindex = document.getElementById("tracks").value;
   let album = document.getElementById("album").value;
@@ -38,7 +39,7 @@ const startSong = () => {
 
   callApi(
     "PUT",
-    PLAY + "?device_id=" + deviceId(),
+    PLAY + "?device_id=" + device[streamer],
     JSON.stringify(body),
     handleApiResponse
   );
