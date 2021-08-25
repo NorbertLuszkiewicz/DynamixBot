@@ -42,6 +42,7 @@ let code = {
   simplywojtek: ""
 };
 let currentPlaylist = { og1ii: "", kezman22: "", simplywojtek: "" };
+let action = "";
 
 const runApi = () => {};
 
@@ -111,6 +112,15 @@ function handleAuthorizationResponse() {
     if (data.refresh_token != undefined) {
       refreshToken = data.refresh_token;
     }
+    
+    if(action === "pause"){
+      
+    }
+        
+    if(action === "start"){
+      
+    }
+    
   } else {
     console.log(this.responseText);
   }

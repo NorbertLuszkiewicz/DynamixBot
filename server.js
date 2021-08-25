@@ -87,12 +87,10 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   });
 
   if (message === "pause") {
-    refreshAccessToken();
-    setTimeout(pauseSong(extra.channel), 1000);
+    pauseSong(extra.channel)
   }
   if (message === "start") {
-    refreshAccessToken();
-    setTimeout(startSong(extra.channel), 1000);
+    startSong(extra.channel)
   }
 
   message === "srbottest" &&
