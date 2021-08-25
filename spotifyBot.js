@@ -39,14 +39,14 @@ const startSong = async (streamer) => {
     PLAY + "?device_id=" + device[streamer],
     JSON.stringify(body),
     handleApiResponse
-  ), 1100)
+  ), 3100)
 
 };
 
 
 const pauseSong = async (streamer) => {
   await refreshAccessToken
-  setTimeout(() => { callApi("PUT", PAUSE + "?device_id=" + device[streamer], null, handleApiResponse); console.log("pause")}, 1100)
+  setTimeout(() => { callApi("PUT", PAUSE + "?device_id=" + device[streamer], null, handleApiResponse); console.log("pause")}, 3100)
   
   
   console.log("pausesong")
