@@ -49,15 +49,9 @@ fastify.get("/", function(request, reply) {
 //Start Twitch bot
 
 const ComfyJS = require("comfy.js");
-const TWITCHUSER = "dynam1x__";
+const TWITCHUSER = "dynam1x1";
 const TWITCHCHANNELS = ["kezman22", "simplywojtek", "og1ii"];
 const OAUTH = process.env.OAUTH;
-const addSongId = "3d0baf73-3272-4ed5-8b06-dc12ad764dc6";
-const skipSongId = "09150d1d4-51fb-4219-a3ff-92398614029c";
-const addSongIdWojt = "11bcc229-5d3f-4a14-aca7-3b00ace01d7a";
-const skipSongIdWojt = "9150d1d4-51fb-4219-a3ff-92398614029c";
-const addSongIdOgiii = "4834784f-eb24-4559-8c00-ea474897c3e6";
-const skipSongIdOgiii = "dc293b9a-8278-401e-aa23-e715e3f6b4bc";
 
 const addSongIdList = [
   { name: "kezman22", id: "3d0baf73-3272-4ed5-8b06-dc12ad764dc6" },
@@ -72,21 +66,16 @@ const skipSongIdList = [
 ];
 
 ComfyJS.onChat = (user, message, flags, self, extra) => {
-  if (
-    (flags.customReward && extra.customRewardId === addSongId) ||
-    extra.customRewardId === addSongIdWojt ||
-    extra.customRewardId === addSongIdOgiii
-  ) {
-    ComfyJS.Say("!sr " + message, extra.channel);
-  }
-
-  if (
-    (flags.customReward && extra.customRewardId === skipSongId) ||
-    extra.customRewardId === skipSongIdWojt ||
-    extra.customRewardId === skipSongIdOgiii
-  ) {
-    ComfyJS.Say("!skip", extra.channel);
-  }
+  addSongIdList.forEach(({ id }) => {
+    if (flags.customReward && extra.customRewardId === id) {
+      ComfyJS.Say("!sr " + message, extra.channel);
+    }
+  });
+  skipSongIdList.forEach(({ id }) => {
+    if (flags.customReward && extra.customRewardId === id) {
+      ComfyJS.Say("!skip", extra.channel);
+    }
+  });
 
   message === "srbottest" &&
     (flags.mod || flags.broadcaster) &&
@@ -103,10 +92,6 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   }
   const isPriamidka = message.lastIndexOf("piramidka");
   const emote = message.substr(9);
-
-  console.log(
-    isPriamidka == 0 && message.length < 30 && (flags.mod || flags.broadcaster)
-  );
 
   if (
     isPriamidka == 0 &&
