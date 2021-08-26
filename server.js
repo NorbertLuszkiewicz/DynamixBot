@@ -2,7 +2,8 @@ const {
   runApi,
   pauseSong,
   startSong,
-  refreshAccessToken
+  refreshAccessToken,
+  refreshDevices
 } = require("./spotifyBot");
 
 runApi();
@@ -96,6 +97,8 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   }
   if (message === "start") {
     startSong(extra.channel);
+  }  if (message === "device") {
+    refreshDevices();
   }
 
   message === "srbottest" &&
