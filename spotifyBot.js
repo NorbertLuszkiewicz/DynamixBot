@@ -46,13 +46,13 @@ let action = "";
 
 const runApi = () => {};
 
-const startSong = async (streamer) => {
-  await refreshAccessToken();
+const startSong = (streamer) => {
+  refreshAccessToken();
 
   let body = {};
   body.position_ms = positionMs;
 
-  await callApi(
+  callApi(
     "PUT",
     PLAY + "?device_id=" + device[streamer],
     JSON.stringify(body),
@@ -60,14 +60,15 @@ const startSong = async (streamer) => {
   );
 };
 
-const pauseSong = async (streamer) => {
-  await refreshAccessToken()
-  await callApi(
+const pauseSong = (streamer) => {
+  refreshAccessToken()
+  callApi(
     "PUT",
     PAUSE + "?device_id=" + device[streamer],
     null,
     handleApiResponse
   );
+
   
 
   console.log("pausesong");
