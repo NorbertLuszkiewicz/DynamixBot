@@ -23,8 +23,8 @@ const CURRENTLYPLAYING =
   "https://api.spotify.com/v1/me/player/currently-playing";
 let positionMs = 0;
 let device = {
-  og1ii: "",
-  kezman22: "c3e9e9038e921489b7106d098ca11128b330ae36",
+  og1ii: "a00eb394fa4f0ec58111f49101d974acc67b2157",
+  kezman22: "a00eb394fa4f0ec58111f49101d974acc67b2157",
   simplywojtek: ""
 };
 
@@ -84,7 +84,7 @@ function fetchAccessToken() {
 }
 
 function refreshAccessToken() {
-  console.log("refresh ti");
+  console.log("refresh spotify token");
   let body = "grant_type=refresh_token";
   body += "&refresh_token=" + refreshToken;
   body += "&client_id=" + clientId;
@@ -112,14 +112,6 @@ function handleAuthorizationResponse() {
     }
     if (data.refresh_token != undefined) {
       refreshToken = data.refresh_token;
-    }
-    
-    if(action === "pause"){
-        pauseSong      
-    }
-        
-    if(action === "start"){
-      startSong
     }
     
   } else {
@@ -179,7 +171,7 @@ function handleCurrentlyPlayingResponse(streamer) {
 }
 
 function currentlyPlaying() {
-  console.log("sco gra");
+  console.log("co gra");
   callApi("GET", PLAYER + "?market=US", null, handleCurrentlyPlayingResponse);
 }
 
