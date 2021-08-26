@@ -63,9 +63,8 @@ const TWITCHCHANNELS = ["kezman22", "simplywojteksimplywojtek", "og1ii"];
 const OAUTH = process.env.OAUTH;
 
 
-  setInterval(refreshAccessToken("kezman22"), 35000)
-  setInterval(refreshAccessToken("og1ii"), 35000)
-  setInterval(refreshAccessToken("simplywojtek"), 35000)
+  setInterval(refreshAccessToken, 35000)
+
 
 
 const addSongIdList = [
