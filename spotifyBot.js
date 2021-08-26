@@ -3,17 +3,15 @@ var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
 const clientIdList = [
-  { name: "dynam1x1", id: process.env.CLIENT_ID },
+  { name: "kezman22", id: process.env.CLIENT_ID },
   { name: "og1ii", id: process.env.CLIENT_ID }
 ];
 const clientSecretList = [
-  { name: "dynam1x1", id: process.env.CLIENT_SECRET },
+  { name: "kezman22", id: process.env.CLIENT_SECRET },
   { name: "og1ii", id: process.env.CLIENT_SECRET }
 ];
-let accessToken =
-  "BQAJ4xsBe8xP9tRyUkDlDC5zmgxK6y2HvUqW_fjXQ3e7RphcC-DIvex6DlA09PamCBmiArNikMiIBcu8jhQifHTJ5zEOlTXpn32L_s0gOZhT_WV-YIwZebkxtn25xV8bl88oo-wMq5GkBRzjqAVfCLtTTKgZqTaILDuMiHThXoUJUMnreFnWetIaFuPh9LeBV5pXo3mQlFc_QyO3wGwNa725Rg";
-const redirectUri = `https://${process.env.PROJECT_DOMAIN}.glitch.me`;
 
+const redirectUri = `https://${process.env.PROJECT_DOMAIN}.glitch.me`;
 const AUTHORIZE = "https://accounts.spotify.com/authorize";
 const TOKEN = "https://accounts.spotify.com/api/token";
 const PLAY = "https://api.spotify.com/v1/me/player/play";
@@ -30,12 +28,16 @@ let device = {
   simplywojtek: ""
 };
 
+
+let refreshToken = {og1ii: "",kezman22:"AQCg9rcXt-DPSVtz9rEqE3fA1x78NqvV6nysu5T9O1EZ1wFWmMJw3yO2budF5OknAiKM5geXUKPXk0Z2RnHm9DMD294V_WdcHJ9Wq4Meg3oRA7YYopjM0sSfpMC1qjQu-w8" , simplywojtek: ""}
+let accessToken = {og1ii: "",kezman22:"BQAJ4xsBe8xP9tRyUkDlDC5zmgxK6y2HvUqW_fjXQ3e7RphcC-DIvex6DlA09PamCBmiArNikMiIBcu8jhQifHTJ5zEOlTXpn32L_s0gOZhT_WV-YIwZebkxtn25xV8bl88oo-wMq5GkBRzjqAVfCLtTTKgZqTaILDuMiHThXoUJUMnreFnWetIaFuPh9LeBV5pXo3mQlFc_QyO3wGwNa725Rg" , simplywojtek: ""}
+  ;
+
+
 let url = `${AUTHORIZE}?client_id=${clientId}&response_type=code&redirect_uri=${encodeURI(
   redirectUri
 )}&show_dialog=true&scope=user-read-private user-read-email user-modify-playback-state user-read-playback-position user-library-read streaming user-read-playback-state user-read-recently-played playlist-read-private`;
 
-let refreshToken =
-  "AQCg9rcXt-DPSVtz9rEqE3fA1x78NqvV6nysu5T9O1EZ1wFWmMJw3yO2budF5OknAiKM5geXUKPXk0Z2RnHm9DMD294V_WdcHJ9Wq4Meg3oRA7YYopjM0sSfpMC1qjQu-w8";
 
 let code = {
   og1ii: "",
@@ -43,6 +45,8 @@ let code = {
     "AQCsHkGOlwiOVXAhKyZcmtcaFgIcRUgL5iGALcRI6foJV4uIHNK_uIdgIMWfKFcrF5dYedaCldmFq8v7I2hpLksID9P_XOgwRHkwnz_ciJ1MXhCOAabYJMOcAurI6Cskxr97sH9k4p6SObCHiom6--5D69VvZv_egq_03tvbpM6UZETOAy1JwTzEcdyx5II032TPY1XywOEoVGTcPY-kOiMofbifXKPoAVRTl7HBZxrSk_kZFJaoEN9I6zfh8e9cDL9vdYCIJkHCKVZG0AQWCEOsH3hnPgKGEq8f6iLfEY-FBLwsX_V9etrNqc9TWGlJION0OBXp5BFzUYLyazKJFUwxkLKB_W39pDiQvruEX4Tyk8Re2avk_NRjRrCQiHf9vQXmbMqQRHKN8WZwF3ZWCxUazcixlZ80rqlGBanpZVVoBffLxxzwYbObsA",
   simplywojtek: ""
 };
+
+
 let currentPlaylist = { og1ii: "", kezman22: "", simplywojtek: "" };
 let action = "";
 
@@ -58,7 +62,7 @@ const startSong = async (streamer) => {
     "PUT",
     PLAY + "?device_id=" + device[streamer],
     JSON.stringify(body),
-    handleApiResponse
+    handleApiResponse(streamer)
   );
 };
 
@@ -68,7 +72,7 @@ const pauseSong = async (streamer) => {
     "PUT",
     PAUSE + "?device_id=" + device[streamer],
     null,
-    handleApiResponse
+    handleApiResponse(streamer)
   );
   
 
@@ -84,15 +88,15 @@ function fetchAccessToken() {
   callAuthorizationApi(body);
 }
 
-function refreshAccessToken() {
+function refreshAccessToken(streamer) {
   console.log("refresh ti");
   let body = "grant_type=refresh_token";
-  body += "&refresh_token=" + refreshToken;
+  body += "&refresh_token=" + refreshToken[streamer];
   body += "&client_id=" + clientId;
-  callAuthorizationApi(body);
+  callAuthorizationApi(body, streamer);
 }
 
-function callAuthorizationApi(body) {
+function callAuthorizationApi(body, streamer) {
   let xhr = new XMLHttpRequest();
   xhr.open("POST", TOKEN, true);
   xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -101,26 +105,18 @@ function callAuthorizationApi(body) {
     "Basic " + Buffer.from(clientId + ":" + clientSecret).toString("base64")
   );
   xhr.send(body);
-  xhr.onload = handleAuthorizationResponse;
+  xhr.onload = handleAuthorizationResponse(streamer);
 }
 
-function handleAuthorizationResponse() {
+function handleAuthorizationResponse(streamer) {
   if (this.status == 200) {
     let data = JSON.parse(this.responseText);
 
     if (data.access_token != undefined) {
-      accessToken = data.access_token;
+      accessToken[streamer] = data.access_token;
     }
     if (data.refresh_token != undefined) {
-      refreshToken = data.refresh_token;
-    }
-    
-    if(action === "pause"){
-        pauseSong      
-    }
-        
-    if(action === "start"){
-      startSong
+      refreshToken[streamer] = data.refresh_token;
     }
     
   } else {
@@ -128,26 +124,26 @@ function handleAuthorizationResponse() {
   }
 }
 
-function callApi(method, url, body, callback) {
+function callApi(method, url, body, callback, streamer) {
   let xhr = new XMLHttpRequest();
   xhr.open(method, url, true);
   xhr.setRequestHeader("Content-Type", "application/json");
-  xhr.setRequestHeader("Authorization", "Bearer " + accessToken);
+  xhr.setRequestHeader("Authorization", "Bearer " + accessToken[streamer]);
   xhr.send(body);
   xhr.onload = callback;
 }
 
-function handleApiResponse() {
+function handleApiResponse(streamer) {
   console.log("stop albo start");
   if (this.status == 200) {
     console.log(this.responseText, "response");
     action = ""
-    setTimeout(currentlyPlaying, 1000);
+    setTimeout(currentlyPlaying(streamer), 1000);
   } else if (this.status == 204) {
-    setTimeout(currentlyPlaying, 1000);
+    setTimeout(currentlyPlaying(streamer), 1000);
   } else if (this.status == 401) {
     console.log("stary token");
-    refreshAccessToken();
+    refreshAccessToken(streamer);
   } else {
     console.log(this.responseText);
   }
@@ -172,16 +168,16 @@ function handleCurrentlyPlayingResponse(streamer) {
     }
   } else if (this.status == 204) {
   } else if (this.status == 401) {
-    refreshAccessToken();
+    refreshAccessToken(streamer);
   } else {
     console.log(this.responseText, "error");
     alert(this.responseText);
   }
 }
 
-function currentlyPlaying() {
+function currentlyPlaying(streamer) {
   console.log("sco gra");
-  callApi("GET", PLAYER + "?market=US", null, handleCurrentlyPlayingResponse);
+  callApi("GET", PLAYER + "?market=US", null, handleCurrentlyPlayingResponse(streamer));
 }
 
 module.exports = { pauseSong, startSong, runApi, refreshAccessToken };
