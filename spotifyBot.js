@@ -52,27 +52,27 @@ let action = "";
 
 const runApi = () => {};
 
-const startSong = async (streamer) => {
-  await refreshAccessToken();
+const startSong = (streamer) => {
 
   let body = {};
   body.position_ms = positionMs;
 
-  await callApi(
+ callApi(
     "PUT",
     PLAY + "?device_id=" + device[streamer],
     JSON.stringify(body),
-    handleApiResponse(streamer)
+    handleApiResponse(streamer),
+    streamer
   );
 };
 
 const pauseSong = async (streamer) => {
-  await refreshAccessToken()
-  await callApi(
+ callApi(
     "PUT",
     PAUSE + "?device_id=" + device[streamer],
     null,
-    handleApiResponse(streamer)
+    handleApiResponse(streamer),
+    streamer
   );
   
 
@@ -89,7 +89,7 @@ function fetchAccessToken() {
 }
 
 function refreshAccessToken(streamer) {
-  console.log("refresh ti");
+  console.log("refresh token");
   let body = "grant_type=refresh_token";
   body += "&refresh_token=" + refreshToken[streamer];
   body += "&client_id=" + clientId;
@@ -109,6 +109,7 @@ function callAuthorizationApi(body, streamer) {
 }
 
 function handleAuthorizationResponse(streamer) {
+  
   if (this.status == 200) {
     let data = JSON.parse(this.responseText);
 
@@ -143,7 +144,7 @@ function handleApiResponse(streamer) {
     setTimeout(currentlyPlaying(streamer), 1000);
   } else if (this.status == 401) {
     console.log("stary token");
-    refreshAccessToken(streamer);
+    refreshAccessToken();
   } else {
     console.log(this.responseText);
   }
@@ -168,7 +169,7 @@ function handleCurrentlyPlayingResponse(streamer) {
     }
   } else if (this.status == 204) {
   } else if (this.status == 401) {
-    refreshAccessToken(streamer);
+    refreshAccessToken();
   } else {
     console.log(this.responseText, "error");
     alert(this.responseText);
@@ -177,7 +178,7 @@ function handleCurrentlyPlayingResponse(streamer) {
 
 function currentlyPlaying(streamer) {
   console.log("sco gra");
-  callApi("GET", PLAYER + "?market=US", null, handleCurrentlyPlayingResponse(streamer));
+  callApi("GET", PLAYER + "?market=US", null, handleCurrentlyPlayingResponse(streamer), streamer);
 }
 
 module.exports = { pauseSong, startSong, runApi, refreshAccessToken };
