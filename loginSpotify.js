@@ -82,8 +82,4 @@ var spotifyApi = new SpotifyWebApi({
       });
   });
 
-  app.listen(process.env.PORT, () =>
-    console.log(
-      'HTTP Server up. Now go to http://localhost:8888/login in your browser.'
-    )
   );
