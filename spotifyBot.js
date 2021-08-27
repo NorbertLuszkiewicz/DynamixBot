@@ -82,7 +82,7 @@ function fetchAccessToken() {
 }
 
 function refreshAccessToken() {
-  console.log("refresh ti");
+  console.log("refresh token");
   let body = "grant_type=refresh_token";
   body += "&refresh_token=" + refreshToken;
   body += "&client_id=" + clientId;
