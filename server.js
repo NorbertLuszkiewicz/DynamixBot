@@ -16,9 +16,7 @@ const {
   changeVolumeOgi
 } = require("./spotifyBotOgi");
 
-const {
-currentSong
-} = require("./streamElements");
+const { currentSong } = require("./streamElements");
 
 const path = require("path");
 
@@ -110,22 +108,27 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   }
   if (message === "next" && user === "DynaM1X1") {
     nextSong(extra.channel);
-  }  
+  }
   if (message === "volume" && user === "DynaM1X1") {
     changeVolume(extra.channel);
   }
   if (message === "stop" && user === "DynaM1X1") {
     pauseSongOgi(extra.channel);
-  }  
+  }
   if (message === "device" && user === "DynaM1X1") {
     refreshDevicesOgi(extra.channel);
   }
   if (message === "start2" && user === "DynaM1X1") {
     startSongOgi(extra.channel);
-  }  
+  }
   if (message === "song" && user === "DynaM1X1") {
-    console.log(currentSong(extra.channel), "aaaa")
-    currentSong(extra.channel);
+    console.log(currentSong(extra.channel), "aaaa");
+    currentSong(extra.channel, function(err, datums) {
+      if (err) {
+        throw err;
+      }
+      console.log(datums, "aaaa");
+    });
   }
 
   message === "srbottest" &&

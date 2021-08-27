@@ -9,23 +9,30 @@ const clientSecret = {
   og1ii: process.env.SR_CLIENT_SECRET_OGI
 };
 const url = "https://api.streamelements.com/kappa/v2/";
-let isPlaying = false;
 
-const currentSong = streamer => {
+const currentSong = (streamer, done )=> {
   let xhr = new XMLHttpRequest();
   xhr.open("GET", `${url}songrequest/${clientId[streamer]}/player`, true);
   xhr.setRequestHeader("Content-Type", "application/json");
   xhr.setRequestHeader("Authorization", "Bearer " + clientSecret[streamer]);
   xhr.send(null);
-  xhr.onload = handleApiResponse;
+  xhr.onload = function () {
+    done(null, this.responseText == '{"state":"playing"}');
+  };
   
-  return isPlaying
+fetch(`${url}songrequest/${clientId[streamer]}/player`, { 
+   method: 'get', 
+   headers: new Headers({
+     'Authorization': 'Bearer ' + clientSecret[streamer], 
+     'Content-Type': 'application/json'
+   }), 
+ })
+  .then(response => response.json())
+  .then(data => console.log(data, "aassss"));
 };
 
 function handleApiResponse() {
   if (this.status == 200) {
-    
-    isPlaying = this.responseText == '{"state":"playing"}'
 
   } else {
     console.log(this.responseText, "ERROR SR currentSong ERROR");
