@@ -12,7 +12,7 @@ const url = "https://api.streamelements.com/kappa/v2/";
 
 const currentSong = streamer => {
   let xhr = new XMLHttpRequest();
-  xhr.open("Get", `${url}/songrequest/${clientId[streamer]}/player`, true);
+  xhr.open("GET", `${url}songrequest/${clientId[streamer]}/player`, true);
   xhr.setRequestHeader("Content-Type", "application/json");
   xhr.setRequestHeader("Authorization", "Bearer " + clientSecret[streamer]);
   xhr.send(null);
@@ -21,8 +21,13 @@ const currentSong = streamer => {
 
 function handleApiResponse() {
   if (this.status == 200) {
-    console.log(this.responseText, "SR currentSong");
+    console.log(this.responseText == "playing");
+    return this.responseText == "playing";
   } else {
     console.log(this.responseText, "ERROR SR currentSong ERROR");
   }
 }
+
+module.exports = {
+  currentSong
+};

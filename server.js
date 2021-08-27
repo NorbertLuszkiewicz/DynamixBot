@@ -16,6 +16,10 @@ const {
   changeVolumeOgi
 } = require("./spotifyBotOgi");
 
+const {
+currentSong
+} = require("./streamElements");
+
 const path = require("path");
 
 // Require the fastify framework and instantiate it
@@ -118,6 +122,9 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   }
   if (message === "start2" && user === "DynaM1X1") {
     startSongOgi(extra.channel);
+  }  
+  if (message === "song" && user === "DynaM1X1") {
+    currentSong(extra.channel);
   }
 
   message === "srbottest" &&
