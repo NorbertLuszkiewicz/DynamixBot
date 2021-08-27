@@ -38,7 +38,9 @@ let code = {
 let currentPlaylist = { og1ii: "", kezman22: "", simplywojtek: "" };
 let action = "";
 
-const runApiOgi = () => {};
+const nextSongOgi = (streamer) =>{
+    callApi( "POST", NEXT + "?device_id=" + device[streamer], null, handleApiResponse );
+}
 
 const startSongOgi = (streamer) => {
   refreshAccessTokenOgi();
@@ -190,7 +192,7 @@ function handleDevicesResponse() {
 module.exports = {
   pauseSongOgi,
   startSongOgi,
-  runApiOgi,
+  nextSongOgi,
   refreshAccessTokenOgi,
   refreshDevices,
 };

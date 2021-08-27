@@ -44,7 +44,6 @@ let code = {
 let currentPlaylist = { og1ii: "", kezman22: "", simplywojtek: "" };
 let action = "";
 
-const runApi = () => {};
 
 const startSong = async (streamer) => {
   await refreshAccessToken();
@@ -59,6 +58,11 @@ const startSong = async (streamer) => {
     handleApiResponse
   );
 };
+
+const nextSong = (streamer) =>{
+    callApi( "POST", NEXT + "?device_id=" + device[streamer], null, handleApiResponse );
+}
+
 
 const pauseSong = async (streamer) => {
   await refreshAccessToken();
@@ -204,7 +208,7 @@ function handleDevicesResponse() {
 module.exports = {
   pauseSong,
   startSong,
-  runApi,
+  nextSong,
   refreshAccessToken,
   refreshDevices,
 };

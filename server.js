@@ -1,5 +1,5 @@
 const {
-  runApi,
+  nextSong,
   pauseSong,
   startSong,
   refreshAccessToken,
@@ -7,13 +7,12 @@ const {
 } = require("./spotifyBot");
 
 const {
+  nextSongOgi,
   pauseSongOgi,
   startSongOgi,
   refreshAccessTokenOgi,
   refreshDevicesOgi
 } = require("./spotifyBotOgi");
-
-runApi();
 
 const path = require("path");
 
@@ -103,8 +102,8 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   if (message === "start" && user === "DynaM1X1") {
     startSong(extra.channel);
   }
-  if (message === "device" && user === "DynaM1X1") {
-    refreshDevices();
+  if (message === "next" && user === "DynaM1X1") {
+    nextSong(extra.channel);
   }
   if (message === "stop" && user === "DynaM1X1") {
     pauseSongOgi(extra.channel);
