@@ -72,8 +72,8 @@ const nextSong = streamer => {
 const changeVolume = streamer => {
   callApi(
     "PUT",
-    VOLUME + "?device_id=" + device[streamer],
-    100,
+    `${VOLUME}?volume_percent=${20}?device_id=${device[streamer]}`,
+    null,
     handleApiResponse
   );
   let now = Date();
@@ -91,8 +91,8 @@ const changeVolume = streamer => {
   timeMaxVolume = setTimeout(
     callApi(
       "PUT",
-      VOLUME + "?device_id=" + device[streamer],
-      20,
+      `${VOLUME}?volume_percent=${20}?device_id=${device[streamer]}`,
+      null,
       handleApiResponse
     ),
     maxVolumeDate
