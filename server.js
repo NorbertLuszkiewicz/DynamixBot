@@ -6,6 +6,13 @@ const {
   refreshDevices
 } = require("./spotifyBot");
 
+const {
+  pauseSongOgi,
+  startSongOgi,
+  refreshAccessTokenOgi,
+  refreshDevicesOgi
+} = require("./spotifyBotOgi");
+
 runApi();
 
 const path = require("path");
@@ -65,6 +72,7 @@ const OAUTH = process.env.OAUTH;
 
 
   setInterval(refreshAccessToken, 35000)
+  setInterval(refreshAccessTokenOgi, 35000)
 
 
 
