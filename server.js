@@ -70,11 +70,8 @@ const TWITCHUSER = "dynam1x1";
 const TWITCHCHANNELS = ["kezman22", "simplywojteksimplywojtek", "og1ii"];
 const OAUTH = process.env.OAUTH;
 
-
-  setInterval(refreshAccessToken, 35000)
-  setInterval(refreshAccessTokenOgi, 35000)
-
-
+setInterval(refreshAccessToken, 35000);
+setInterval(refreshAccessTokenOgi, 35000);
 
 const addSongIdList = [
   { name: "kezman22", id: "3d0baf73-3272-4ed5-8b06-dc12ad764dc6" },
@@ -100,13 +97,20 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
     }
   });
 
-  if (message === "pause") {
+  if (message === "pause" && user === "DynaM1X1") {
     pauseSong(extra.channel);
   }
-  if (message === "start") {
+  if (message === "start" && user === "DynaM1X1") {
     startSong(extra.channel);
-  }  if (message === "device") {
+  }
+  if (message === "device" && user === "DynaM1X1") {
     refreshDevices();
+  }
+  if (message === "stop" && user === "DynaM1X1") {
+    pauseSongOgi(extra.channel);
+  }
+  if (message === "start2" && user === "DynaM1X1") {
+    startSongOgi(extra.channel);
   }
 
   message === "srbottest" &&
@@ -225,116 +229,88 @@ fastify.post("/", function(request, reply) {
   reply.view("/src/pages/index.hbs", params);
 });
 
-
-
-
-
-
-
-
-
-
-
-
-var SpotifyWebApi = require('spotify-web-api-node');
-const express = require('express')
+var SpotifyWebApi = require("spotify-web-api-node");
+const express = require("express");
 
 // This file is copied from: https://github.com/thelinmichael/spotify-web-api-node/blob/master/examples/tutorial/00-get-access-token.js
 
 const scopes = [
-    'ugc-image-upload',
-    'user-read-playback-state',
-    'user-modify-playback-state',
-    'user-read-currently-playing',
-    'streaming',
-    'app-remote-control',
-    'user-read-email',
-    'user-read-private',
-    'playlist-read-collaborative',
-    'playlist-modify-public',
-    'playlist-read-private',
-    'playlist-modify-private',
-    'user-library-modify',
-    'user-library-read',
-    'user-top-read',
-    'user-read-playback-position',
-    'user-read-recently-played',
-    'user-follow-read',
-    'user-follow-modify'
-  ];
+  "ugc-image-upload",
+  "user-read-playback-state",
+  "user-modify-playback-state",
+  "user-read-currently-playing",
+  "streaming",
+  "app-remote-control",
+  "user-read-email",
+  "user-read-private",
+  "playlist-read-collaborative",
+  "playlist-modify-public",
+  "playlist-read-private",
+  "playlist-modify-private",
+  "user-library-modify",
+  "user-library-read",
+  "user-top-read",
+  "user-read-playback-position",
+  "user-read-recently-played",
+  "user-follow-read",
+  "user-follow-modify"
+];
 // credentials are optional
 var spotifyApi = new SpotifyWebApi({
-    clientId: process.env.CLIENT_ID,
-    clientSecret: process.env.CLIENT_SECRET,
-    redirectUri: 'https://dynamix-bot.glitch.me/callback'
-  });
-  
-  const app = express();
-  
-  fastify.get('/login', (req, res) => {
-    res.redirect(spotifyApi.createAuthorizeURL(scopes));
-  });
-  
-  fastify.get('/callback', (req, res) => {
-    const error = req.query.error;
-    const code = req.query.code;
-    const state = req.query.state;
-  
-    if (error) {
-      console.error('Callback Error:', error);
-      res.send(`Callback Error: ${error}`);
-      return;
-    }
-  
-    spotifyApi
-      .authorizationCodeGrant(code)
-      .then(data => {
-        const access_token = data.body['access_token'];
-        const refresh_token = data.body['refresh_token'];
-        const expires_in = data.body['expires_in'];
-  
+  clientId: process.env.CLIENT_ID,
+  clientSecret: process.env.CLIENT_SECRET,
+  redirectUri: "https://dynamix-bot.glitch.me/callback"
+});
+
+const app = express();
+
+fastify.get("/login", (req, res) => {
+  res.redirect(spotifyApi.createAuthorizeURL(scopes));
+});
+
+fastify.get("/callback", (req, res) => {
+  const error = req.query.error;
+  const code = req.query.code;
+  const state = req.query.state;
+
+  if (error) {
+    console.error("Callback Error:", error);
+    res.send(`Callback Error: ${error}`);
+    return;
+  }
+
+  spotifyApi
+    .authorizationCodeGrant(code)
+    .then(data => {
+      const access_token = data.body["access_token"];
+      const refresh_token = data.body["refresh_token"];
+      const expires_in = data.body["expires_in"];
+
+      spotifyApi.setAccessToken(access_token);
+      spotifyApi.setRefreshToken(refresh_token);
+
+      console.log("access_token:", access_token);
+      console.log("refresh_token:", refresh_token);
+
+      console.log(
+        `Sucessfully retreived access token. Expires in ${expires_in} s.`
+      );
+      res.send("Success! You can now close the window.");
+
+      setInterval(async () => {
+        const data = await spotifyApi.refreshAccessToken();
+        const access_token = data.body["access_token"];
+
+        console.log("The access token has been refreshed!");
+        console.log("access_token:", access_token);
         spotifyApi.setAccessToken(access_token);
-        spotifyApi.setRefreshToken(refresh_token);
-  
-        console.log('access_token:', access_token);
-        console.log('refresh_token:', refresh_token);
-  
-        console.log(
-          `Sucessfully retreived access token. Expires in ${expires_in} s.`
-        );
-        res.send('Success! You can now close the window.');
-  
-        setInterval(async () => {
-          const data = await spotifyApi.refreshAccessToken();
-          const access_token = data.body['access_token'];
-  
-          console.log('The access token has been refreshed!');
-          console.log('access_token:', access_token);
-          spotifyApi.setAccessToken(access_token);
-        }, expires_in / 2 * 1000);
-      })
-      .catch(error => {
-        console.error('Error getting Tokens:', error);
-        res.send(`Error getting Tokens: ${error}`);
-      });
-  });
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+      }, (expires_in / 2) * 1000);
+    })
+    .catch(error => {
+      console.error("Error getting Tokens:", error);
+      res.send(`Error getting Tokens: ${error}`);
+    });
+});
 
 // Run the server and report out to the logs
 fastify.listen(process.env.PORT, function(err, address) {

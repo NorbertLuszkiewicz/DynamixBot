@@ -41,7 +41,7 @@ let action = "";
 const runApiOgi = () => {};
 
 const startSongOgi = (streamer) => {
-  refreshAccessToken();
+  refreshAccessTokenOgi();
 
   let body = {};
   body.position_ms = positionMs;
@@ -55,7 +55,7 @@ const startSongOgi = (streamer) => {
 };
 
 const pauseSongOgi = (streamer) => {
-  refreshAccessToken();
+  refreshAccessTokenOgi();
   callApi(
     "PUT",
     PAUSE + "?device_id=" + device[streamer],
@@ -75,8 +75,8 @@ function fetchAccessToken() {
   callAuthorizationApi(body);
 }
 
-function refreshAccessToken() {
-  console.log("refresh spotify token");
+function refreshAccessTokenOgi() {
+  console.log("refresh spotify token Ogi");
   let body = "grant_type=refresh_token";
   body += "&refresh_token=" + refreshToken;
   body += "&client_id=" + clientId;
@@ -129,7 +129,7 @@ function handleApiResponse() {
     setTimeout(currentlyPlaying, 1000);
   } else if (this.status == 401) {
     console.log("stary token");
-    refreshAccessToken();
+    refreshAccessTokenOgi();
   } else {
     console.log(this.responseText);
   }
@@ -154,7 +154,7 @@ function handleCurrentlyPlayingResponse(streamer) {
     }
   } else if (this.status == 204) {
   } else if (this.status == 401) {
-    refreshAccessToken();
+    refreshAccessTokenOgi();
   } else {
     console.log(this.responseText, "error");
     alert(this.responseText);
@@ -179,18 +179,18 @@ function handleDevicesResponse() {
   if (this.status == 200) {
     const data = JSON.parse(this.responseText);
     console.log(data, "handleDevicesResponse");
-    console.log(data.devices, "deeeeee");
+    console.log(data.devices, "devices");
   } else if (this.status == 401) {
-    refreshAccessToken();
+    refreshAccessTokenOgi();
   } else {
     console.log(this.responseText);
   }
 }
 
 module.exports = {
-  pauseSong,
-  startSong,
-  runApi,
-  refreshAccessToken,
+  pauseSongOgi,
+  startSongOgi,
+  runApiOgi,
+  refreshAccessTokenOgi,
   refreshDevices,
 };
