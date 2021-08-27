@@ -18,6 +18,7 @@ const TOKEN = "https://accounts.spotify.com/api/token";
 const PLAY = "https://api.spotify.com/v1/me/player/play";
 const PAUSE = "https://api.spotify.com/v1/me/player/pause";
 const NEXT = "https://api.spotify.com/v1/me/player/next";
+const VOLUME = "https://api.spotify.com/v1/me/player/volume";
 const PLAYER = "https://api.spotify.com/v1/me/player";
 const CURRENTLYPLAYING =
   "https://api.spotify.com/v1/me/player/currently-playing";
@@ -43,6 +44,7 @@ let code = {
 };
 let currentPlaylist = { og1ii: "", kezman22: "", simplywojtek: "" };
 let action = "";
+let maxVolumeDate = null;
 
 
 const startSong = async (streamer) => {
@@ -61,6 +63,18 @@ const startSong = async (streamer) => {
 
 const nextSong = (streamer) =>{
     callApi( "POST", NEXT + "?device_id=" + device[streamer], null, handleApiResponse );
+}
+const changeVolume = (streamer) =>{
+  let now = Date()
+  console.log(now)
+  
+    if(maxVolumeDate > now){
+      maxVolumeDate += 30000
+    }
+  
+  
+    callApi( "PUT", VOLUME + "?device_id=" + device[streamer], 100, handleApiResponse );
+    callApi( "PUT", VOLUME + "?device_id=" + device[streamer], 20, handleApiResponse );
 }
 
 

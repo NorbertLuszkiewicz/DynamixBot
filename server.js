@@ -107,6 +107,9 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   }
   if (message === "stop" && user === "DynaM1X1") {
     pauseSongOgi(extra.channel);
+  }  
+  if (message === "device" && user === "DynaM1X1") {
+    refreshDevicesOgi(extra.channel);
   }
   if (message === "start2" && user === "DynaM1X1") {
     startSongOgi(extra.channel);

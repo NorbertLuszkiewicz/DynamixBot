@@ -168,7 +168,7 @@ function currentlyPlaying() {
   callApi("GET", PLAYER + "?market=US", null, handleCurrentlyPlayingResponse);
 }
 
-function refreshDevices() {
+function refreshDevicesOgi() {
   callApi(
     "GET",
     "https://api.spotify.com/v1/me/player/devices",
@@ -194,5 +194,5 @@ module.exports = {
   startSongOgi,
   nextSongOgi,
   refreshAccessTokenOgi,
-  refreshDevices,
+  refreshDevicesOgi,
 };
