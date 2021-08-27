@@ -72,11 +72,11 @@ const nextSong = streamer => {
 const changeVolume = streamer => {
   callApi(
     "PUT",
-    `${VOLUME}?volume_percent=${20}?device_id=${device[streamer]}`,
+    `${VOLUME}?volume_percent=${100}&device_id=${device[streamer]}`,
     null,
     handleApiResponse
   );
-  let now = Date();
+  let now = new Date.now();
   console.log(now);
 
   if (maxVolumeDate > now) {
@@ -88,15 +88,16 @@ const changeVolume = streamer => {
   }
 
   clearTimeout(timeMaxVolume);
-  timeMaxVolume = setTimeout(
+  timeMaxVolume = setTimeout(() => {
     callApi(
       "PUT",
-      `${VOLUME}?volume_percent=${20}?device_id=${device[streamer]}`,
+      `${VOLUME}?volume_percent=${20}&device_id=${device[streamer]}`,
       null,
       handleApiResponse
-    ),
-    maxVolumeDate
+    )},
+    maxVolumeDate - now
   );
+  
 };
 
 const pauseSong = async streamer => {
