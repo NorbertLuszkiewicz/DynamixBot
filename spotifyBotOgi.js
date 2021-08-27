@@ -8,6 +8,7 @@ const TOKEN = "https://accounts.spotify.com/api/token";
 const PLAY = "https://api.spotify.com/v1/me/player/play";
 const PAUSE = "https://api.spotify.com/v1/me/player/pause";
 const NEXT = "https://api.spotify.com/v1/me/player/next";
+const VOLUME = "https://api.spotify.com/v1/me/player/volume";
 const PLAYER = "https://api.spotify.com/v1/me/player";
 const CURRENTLYPLAYING =
   "https://api.spotify.com/v1/me/player/currently-playing";
@@ -37,6 +38,8 @@ let code = {
 };
 let currentPlaylist = { og1ii: "", kezman22: "", simplywojtek: "" };
 let action = "";
+let maxVolumeDate = null;
+let timeMaxVolume = null;
 
 const nextSongOgi = (streamer) =>{
     callApi( "POST", NEXT + "?device_id=" + device[streamer], null, handleApiResponse );
@@ -66,6 +69,35 @@ const pauseSongOgi = (streamer) => {
   );
 
   console.log("pausesong");
+};
+
+const changeVolumeOgi = streamer => {
+  callApi(
+    "PUT",
+    `${VOLUME}?volume_percent=${100}&device_id=${device[streamer]}`,
+    null,
+    handleApiResponse
+  );
+  let now = Date.now();
+  console.log(now);
+
+  if (maxVolumeDate > now) {
+    maxVolumeDate += 5000;
+  }
+
+  if (!maxVolumeDate || maxVolumeDate < now) {
+    maxVolumeDate = now + 5000;
+  }
+
+  clearTimeout(timeMaxVolume);
+  timeMaxVolume = setTimeout(() => {
+    callApi(
+      "PUT",
+      `${VOLUME}?volume_percent=${20}&device_id=${device[streamer]}`,
+      null,
+      handleApiResponse
+    );
+  }, maxVolumeDate - now);
 };
 
 function fetchAccessToken() {
@@ -195,4 +227,5 @@ module.exports = {
   nextSongOgi,
   refreshAccessTokenOgi,
   refreshDevicesOgi,
+  changeVolumeOgi
 };

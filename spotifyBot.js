@@ -76,7 +76,7 @@ const changeVolume = streamer => {
     null,
     handleApiResponse
   );
-  let now = new Date.now();
+  let now = Date.now();
   console.log(now);
 
   if (maxVolumeDate > now) {
@@ -94,10 +94,8 @@ const changeVolume = streamer => {
       `${VOLUME}?volume_percent=${20}&device_id=${device[streamer]}`,
       null,
       handleApiResponse
-    )},
-    maxVolumeDate - now
-  );
-  
+    );
+  }, maxVolumeDate - now);
 };
 
 const pauseSong = async streamer => {

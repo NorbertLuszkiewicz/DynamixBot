@@ -12,7 +12,8 @@ const {
   pauseSongOgi,
   startSongOgi,
   refreshAccessTokenOgi,
-  refreshDevicesOgi
+  refreshDevicesOgi,
+  changeVolumeOgi
 } = require("./spotifyBotOgi");
 
 const path = require("path");
