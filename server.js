@@ -16,6 +16,8 @@ const {
   changeVolumeOgi
 } = require("./spotifyBotOgi");
 
+const skipSong = { og1ii: nextSongOgi("kezman22"), kezman22: nextSong("kezman22"), simplywojtek: "" }
+
 const { currentSong } = require("./streamElements");
 
 const path = require("path");
@@ -97,8 +99,7 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   skipSongIdList.forEach(({ id }) => {
     if (flags.customReward && extra.customRewardId === id) {
       currentSong(extra.channel, function(err, playingInSr) {
-        if()
-      playingInSr ? ComfyJS.Say("!skip", extra.channel) : nextSong(extra.channel);
+      playingInSr ? ComfyJS.Say("!skip", extra.channel) : skipSong[extra.channel];
     });
       
     }
@@ -129,7 +130,7 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   }
   if (message === "song" && user === "DynaM1X1") {
     currentSong(extra.channel, function(err, playingInSr) {
-      playingInSr
+      playingInSr ? ComfyJS.Say("!skip", extra.channel) : nextSong(extra.channel);
     });
   }
 
