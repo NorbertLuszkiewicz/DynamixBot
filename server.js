@@ -3,7 +3,8 @@ const {
   pauseSong,
   startSong,
   refreshAccessToken,
-  refreshDevices
+  refreshDevices,
+  changeVolume
 } = require("./spotifyBot");
 
 const {
@@ -104,6 +105,9 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   }
   if (message === "next" && user === "DynaM1X1") {
     nextSong(extra.channel);
+  }  
+  if (message === "volume" && user === "DynaM1X1") {
+    changeVolume(extra.channel);
   }
   if (message === "stop" && user === "DynaM1X1") {
     pauseSongOgi(extra.channel);

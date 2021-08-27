@@ -4,11 +4,11 @@ const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
 const clientIdList = [
   { name: "dynam1x1", id: process.env.CLIENT_ID },
-  { name: "og1ii", id: process.env.CLIENT_ID },
+  { name: "og1ii", id: process.env.CLIENT_ID }
 ];
 const clientSecretList = [
   { name: "dynam1x1", id: process.env.CLIENT_SECRET },
-  { name: "og1ii", id: process.env.CLIENT_SECRET },
+  { name: "og1ii", id: process.env.CLIENT_SECRET }
 ];
 let accessToken =
   "BQAJ4xsBe8xP9tRyUkDlDC5zmgxK6y2HvUqW_fjXQ3e7RphcC-DIvex6DlA09PamCBmiArNikMiIBcu8jhQifHTJ5zEOlTXpn32L_s0gOZhT_WV-YIwZebkxtn25xV8bl88oo-wMq5GkBRzjqAVfCLtTTKgZqTaILDuMiHThXoUJUMnreFnWetIaFuPh9LeBV5pXo3mQlFc_QyO3wGwNa725Rg";
@@ -26,7 +26,7 @@ let positionMs = 0;
 let device = {
   og1ii: "",
   kezman22: "c3e9e9038e921489b7106d098ca11128b330ae36",
-  simplywojtek: "",
+  simplywojtek: ""
 };
 
 let url = `${AUTHORIZE}?client_id=${clientId}&response_type=code&redirect_uri=${encodeURI(
@@ -40,14 +40,14 @@ let code = {
   og1ii: "",
   kezman22:
     "AQCsHkGOlwiOVXAhKyZcmtcaFgIcRUgL5iGALcRI6foJV4uIHNK_uIdgIMWfKFcrF5dYedaCldmFq8v7I2hpLksID9P_XOgwRHkwnz_ciJ1MXhCOAabYJMOcAurI6Cskxr97sH9k4p6SObCHiom6--5D69VvZv_egq_03tvbpM6UZETOAy1JwTzEcdyx5II032TPY1XywOEoVGTcPY-kOiMofbifXKPoAVRTl7HBZxrSk_kZFJaoEN9I6zfh8e9cDL9vdYCIJkHCKVZG0AQWCEOsH3hnPgKGEq8f6iLfEY-FBLwsX_V9etrNqc9TWGlJION0OBXp5BFzUYLyazKJFUwxkLKB_W39pDiQvruEX4Tyk8Re2avk_NRjRrCQiHf9vQXmbMqQRHKN8WZwF3ZWCxUazcixlZ80rqlGBanpZVVoBffLxxzwYbObsA",
-  simplywojtek: "",
+  simplywojtek: ""
 };
 let currentPlaylist = { og1ii: "", kezman22: "", simplywojtek: "" };
 let action = "";
 let maxVolumeDate = null;
+let timeMaxVolume = null;
 
-
-const startSong = async (streamer) => {
+const startSong = async streamer => {
   await refreshAccessToken();
 
   let body = {};
@@ -61,24 +61,45 @@ const startSong = async (streamer) => {
   );
 };
 
-const nextSong = (streamer) =>{
-    callApi( "POST", NEXT + "?device_id=" + device[streamer], null, handleApiResponse );
-}
-const changeVolume = (streamer) =>{
-  let now = Date()
-  console.log(now)
-  
-    if(maxVolumeDate > now){
-      maxVolumeDate += 30000
-    }
-  
-  
-    callApi( "PUT", VOLUME + "?device_id=" + device[streamer], 100, handleApiResponse );
-    callApi( "PUT", VOLUME + "?device_id=" + device[streamer], 20, handleApiResponse );
-}
+const nextSong = streamer => {
+  callApi(
+    "POST",
+    NEXT + "?device_id=" + device[streamer],
+    null,
+    handleApiResponse
+  );
+};
+const changeVolume = streamer => {
+  callApi(
+    "PUT",
+    VOLUME + "?device_id=" + device[streamer],
+    100,
+    handleApiResponse
+  );
+  let now = Date();
+  console.log(now);
 
+  if (maxVolumeDate > now) {
+    maxVolumeDate += 5000;
+  }
 
-const pauseSong = async (streamer) => {
+  if (!maxVolumeDate || maxVolumeDate < now) {
+    maxVolumeDate = now + 5000;
+  }
+
+  clearTimeout(timeMaxVolume);
+  timeMaxVolume = setTimeout(
+    callApi(
+      "PUT",
+      VOLUME + "?device_id=" + device[streamer],
+      20,
+      handleApiResponse
+    ),
+    maxVolumeDate
+  );
+};
+
+const pauseSong = async streamer => {
   await refreshAccessToken();
   await callApi(
     "PUT",
@@ -225,4 +246,5 @@ module.exports = {
   nextSong,
   refreshAccessToken,
   refreshDevices,
+  changeVolume
 };
