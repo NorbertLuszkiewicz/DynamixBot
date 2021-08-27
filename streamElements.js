@@ -1,4 +1,4 @@
-var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 const clientId = {
   kezman22: process.env.SR_CLIENT_ID_KEZMAN,
@@ -20,15 +20,6 @@ const currentSong = (streamer, done )=> {
     done(null, this.responseText == '{"state":"playing"}');
   };
   
-fetch(`${url}songrequest/${clientId[streamer]}/player`, { 
-   method: 'get', 
-   headers: new Headers({
-     'Authorization': 'Bearer ' + clientSecret[streamer], 
-     'Content-Type': 'application/json'
-   }), 
- })
-  .then(response => response.json())
-  .then(data => console.log(data, "aassss"));
 };
 
 function handleApiResponse() {

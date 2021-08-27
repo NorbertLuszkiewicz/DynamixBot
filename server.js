@@ -96,10 +96,16 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   });
   skipSongIdList.forEach(({ id }) => {
     if (flags.customReward && extra.customRewardId === id) {
-      ComfyJS.Say("!skip", extra.channel);
+      currentSong(extra.channel, function(err, playingInSr) {
+        if()
+      playingInSr ? ComfyJS.Say("!skip", extra.channel) : nextSong(extra.channel);
+    });
+      
     }
   });
 
+  
+  
   if (message === "pause" && user === "DynaM1X1") {
     pauseSong(extra.channel);
   }
@@ -122,12 +128,8 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
     startSongOgi(extra.channel);
   }
   if (message === "song" && user === "DynaM1X1") {
-    console.log(currentSong(extra.channel), "aaaa");
-    currentSong(extra.channel, function(err, datums) {
-      if (err) {
-        throw err;
-      }
-      console.log(datums, "aaaa");
+    currentSong(extra.channel, function(err, playingInSr) {
+      playingInSr
     });
   }
 
