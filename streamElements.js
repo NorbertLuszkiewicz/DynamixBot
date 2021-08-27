@@ -21,8 +21,8 @@ const currentSong = streamer => {
 
 function handleApiResponse() {
   if (this.status == 200) {
-    console.log(this.responseText == "playing");
-    return this.responseText == "playing";
+    
+    return this.responseText == '{"state":"playing"}';
   } else {
     console.log(this.responseText, "ERROR SR currentSong ERROR");
   }

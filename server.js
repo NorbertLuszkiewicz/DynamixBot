@@ -124,6 +124,7 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
     startSongOgi(extra.channel);
   }  
   if (message === "song" && user === "DynaM1X1") {
+    console.log(currentSong(extra.channel), "aaaa")
     currentSong(extra.channel);
   }
 
