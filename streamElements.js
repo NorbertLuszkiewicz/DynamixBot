@@ -94,6 +94,7 @@ const timeRequest = (streamer, action) => {
 
     setTimeout(() => {
       startSong(streamer);
+      endTime = null
     }, endTime - now);
 
   });
