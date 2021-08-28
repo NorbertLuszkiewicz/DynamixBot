@@ -196,7 +196,7 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
     });
   }
 
-  const isVolumeCommand = message.lastIndexOf("!volume");
+  const isVolumeCommand = message.lastIndexOf("volume");
   const volumeValue = message.substr(6);
 
   if (isVolumeCommand == 0 && (flags.mod || flags.broadcaster)) {

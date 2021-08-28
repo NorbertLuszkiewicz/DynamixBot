@@ -70,6 +70,10 @@ const timeRequest = (streamer, action, returnData) => {
           : (endTime = (endTime + parseInt(data.queue[-1].duration)) * 1000);
       }
     }
+    if (action == "add") {
+      
+    }
+    
 
     data.queue.length == 0 ? (endTime = data.playing.duration) : endTime;
 
