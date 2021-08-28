@@ -9,6 +9,7 @@ const clientSecret = {
   og1ii: process.env.SR_CLIENT_SECRET_OGI
 };
 const url = "https://api.streamelements.com/kappa/v2/";
+const timeToReturnSpotify = 0;
 const SONG_STATUS = "/player";
 const SONG_QUEUE = "/queue";
 const SONG_CURRENT = "/playing";
@@ -45,10 +46,39 @@ const songPlayingNow = (streamer, done) => {
     xhr2.send(null);
     xhr2.onload = function() {
       const data2 = JSON.parse(this.responseText);
-      console.log(data, data2, "daty");
       done(data.state == "playing" && data2 != null);
     };
   };
+};
+
+const returnSpotify = (streamer, returnSongFunction) => {
+   let xhr = new XMLHttpRequest();
+  xhr.open("GET", `${url}songrequest/${clientId[streamer]}/playing`, true);
+  xhr.setRequestHeader("Content-Type", "application/json");
+  xhr.setRequestHeader("Authorization", "Bearer " + clientSecret[streamer]);
+  xhr.send(null);
+  xhr.onload = function() {
+    const data = JSON.parse(this.responseText);
+    
+    data.duration
+    
+    returnSongFunction(data.duration);
+  };
+  
+};
+
+
+const playing = (streamer, returnSongFunction) => {
+   let xhr = new XMLHttpRequest();
+  xhr.open("GET", `${url}songrequest/${clientId[streamer]}/playing`, true);
+  xhr.setRequestHeader("Content-Type", "application/json");
+  xhr.setRequestHeader("Authorization", "Bearer " + clientSecret[streamer]);
+  xhr.send(null);
+  xhr.onload = function() {
+    const data = JSON.parse(this.responseText);   
+    returnSongFunction(data);
+  };
+  
 };
 
 module.exports = {
