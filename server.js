@@ -102,15 +102,14 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
     startSong(extra.channel);
   }
   if (message === "next" && user === "DynaM1X1") {
-    currentSong(extra.channel, function(err, playingInSr) {
-      songList(extra.channel, function(err, isBlankSrList) {
-        console.log(playingInSr && !isBlankSrList);
-        console.log(playingInSr, isBlankSrList);
-        playingInSr && !isBlankSrList
+
+      songList(extra.channel, function(songPlaying) {
+        console.log(songPlaying, "playSongInSr")
+        songPlaying
           ? ComfyJS.Say("!skip", extra.channel)
           : nextSong(extra.channel);
       });
-    });
+  
   }
   if (message === "volume" && user === "DynaM1X1") {
     changeVolume(extra.channel);

@@ -11,39 +11,45 @@ const clientSecret = {
 const url = "https://api.streamelements.com/kappa/v2/";
 const SONG_STATUS = "/player";
 const SONG_QUEUE = "/queue";
+const SONG_CURRENT = "/playing";
 
-
-const callApi = (streamer, parameter ,done) => {
-    let xhr = new XMLHttpRequest();
+const callApi = (streamer, parameter, done) => {
+  let xhr = new XMLHttpRequest();
   xhr.open("GET", `${url}songrequest/${clientId[streamer]}${parameter}`, true);
   xhr.setRequestHeader("Content-Type", "application/json");
   xhr.setRequestHeader("Authorization", "Bearer " + clientSecret[streamer]);
   xhr.send(null);
-  xhr.onload = function () {
-    const data = JSON.parse(this.responseText)
+  xhr.onload = function() {
+    const data = JSON.parse(this.responseText);
     done(data.state == "playing");
   };
-}
-
-const currentSong = (streamer, isPlaying,  )=> {
-    
-callApi(streamer, SONG_STATUS, done )
-callApi(streamer, SONG_QUEUE, done )
-  
 };
 
-const songList = (streamer, done)  => {
-    let xhr = new XMLHttpRequest();
-  xhr.open("GET", `${url}songrequest/${clientId[streamer]}/queue`, true);
+const currentSong = (streamer, isPlaying, isSong) => {
+  callApi(streamer, SONG_STATUS, isPlaying);
+  callApi(streamer, SONG_CURRENT, isSong);
+};
+
+const songList = (streamer, done) => {
+  let xhr = new XMLHttpRequest();
+  xhr.open("GET", `${url}songrequest/${clientId[streamer]}/player`, true);
   xhr.setRequestHeader("Content-Type", "application/json");
   xhr.setRequestHeader("Authorization", "Bearer " + clientSecret[streamer]);
   xhr.send(null);
-  xhr.onload = function () {
-    const data = JSON.parse(this.responseText)
-    console.log(data);
-    done(null, data.length == 0);
+  xhr.onload = function() {
+    const data = JSON.parse(this.responseText);
+    let xhr2 = new XMLHttpRequest();
+    xhr2.open("GET", `${url}songrequest/${clientId[streamer]}/playing`, true);
+    xhr2.setRequestHeader("Content-Type", "application/json");
+    xhr2.setRequestHeader("Authorization", "Bearer " + clientSecret[streamer]);
+    xhr2.send(null);
+    xhr2.onload = function() {
+      const data2 = JSON.parse(this.responseText);
+      console.log(data, data2, "daty");
+      done(data.state == "playing" && data2);
+    };
   };
-}
+};
 
 module.exports = {
   currentSong,
