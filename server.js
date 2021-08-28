@@ -4,7 +4,8 @@ const {
   startSong,
   refreshAccessToken,
   refreshDevices,
-  changeVolume
+  changeVolumeOnTime,
+  setVolume
 } = require("./spotifyBot");
 
 const {
@@ -65,7 +66,12 @@ fastify.get("/", function(request, reply) {
 
 const ComfyJS = require("comfy.js");
 const TWITCHUSER = "dynam1x1";
-const TWITCHCHANNELS = ["kezman22", "simplywojteksimplywojtek", "og1ii", "l2plelouch"];
+const TWITCHCHANNELS = [
+  "kezman22",
+  "simplywojteksimplywojtek",
+  "og1ii",
+  "l2plelouch"
+];
 const OAUTH = process.env.OAUTH;
 let maxVolumeDate = 0;
 let timeMaxVolume = 0;
@@ -128,7 +134,7 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   maxVolumeList.forEach(({ id, min, max }) => {
     if (flags.customReward && extra.customRewardId === id) {
       ComfyJS.Say("!volume " + max, extra.channel);
-      changeVolume(extra.channel);
+      changeVolumeOnTime(extra.channel);
 
       let now = Date.now();
       console.log(now);
@@ -163,10 +169,9 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
     });
   }
   if (message === "volume" && user === "DynaM1X1") {
-      maxVolumeList.forEach(({ id, min, max }) => {
-    
+    maxVolumeList.forEach(({ id, min, max }) => {
       ComfyJS.Say("!volume " + max, extra.channel);
-      changeVolume(extra.channel);
+      changeVolumeOnTime(extra.channel);
 
       let now = Date.now();
       console.log(now);
@@ -183,17 +188,14 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
       timeMaxVolume = setTimeout(() => {
         ComfyJS.Say("!volume " + min, extra.channel);
       }, maxVolumeDate - now);
-    
-  });
+    });
   }
-  
+
   const isVolumeCommand = message.lastIndexOf("!volume");
   const volumeValue = message.substr(6);
 
   if (isVolumeCommand == 0 && (flags.mod || flags.broadcaster)) {
-    timeRequest(extra.channel, function(data) {
-      console.log(data, "song");
-    });
+    setVolume(extra.channel, volumeValue);
   }
 
   message === "srbottest" &&

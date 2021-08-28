@@ -72,7 +72,7 @@ const nextSong = streamer => {
     streamer
   );
 };
-const changeVolume = streamer => {
+const changeVolumeOnTime = streamer => {
   callApi(
     "PUT",
     `${VOLUME}?volume_percent=${100}&device_id=${device[streamer]}`,
@@ -103,6 +103,18 @@ const changeVolume = streamer => {
     );
     
   }, maxVolumeDate - now);
+};
+
+
+
+const setVolume = (streamer, value) => {
+  callApi(
+    "PUT",
+    `${VOLUME}?volume_percent=${value}&device_id=${device[streamer]}`,
+    null,
+    handleApiResponse,
+    streamer
+  );
 };
 
 function refreshAccessToken() {
@@ -228,5 +240,6 @@ module.exports = {
   nextSong,
   refreshAccessToken,
   refreshDevices,
-  changeVolume
+  changeVolumeOnTime,
+  setVolume
 };
