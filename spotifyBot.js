@@ -51,12 +51,12 @@ const startSong = streamer => {
   );
 };
 
-const pauseSong = streamer => {
+const pauseSong = (streamer, callback) => {
   callApi(
     "PUT",
     PAUSE + "?device_id=" + device[streamer],
     null,
-    handleApiResponse,
+    () => this.status == 403 ? callback("error") : callback("200"),
     streamer
   );
 

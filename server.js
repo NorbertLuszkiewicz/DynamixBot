@@ -116,15 +116,15 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   addSongIdList.forEach(({ id }) => {
     if (flags.customReward && extra.customRewardId === id) {
       ComfyJS.Say("!sr " + message, extra.channel);
-      pauseSong(extra.channel);
-      timeRequest(extra.channel, "add");
+      pauseSong(extra.channel, status => {
+        status == "200" && timeRequest(extra.channel, "add");
+      });
     }
   });
 
   skipSongIdList.forEach(({ id }) => {
     if (flags.customReward && extra.customRewardId === id) {
       songPlayingNow(extra.channel, function(songPlaying) {
-        console.log(songPlaying, "playSongInSr");
         if (songPlaying) {
           ComfyJS.Say("!skip", extra.channel);
           timeRequest(extra.channel, "skip");
@@ -159,8 +159,10 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   });
 
   if (message === "pause" && user === "DynaM1X1") {
-    pauseSong(extra.channel);
-    timeRequest(extra.channel, "skip");
+    pauseSong(extra.channel, status => {
+        status == "200" && timeRequest(extra.channel, "skip");
+      });
+    
   }
   if (message === "start" && user === "DynaM1X1") {
     startSong(extra.channel);
@@ -174,8 +176,7 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
     });
   }
   if (message === "time" && user === "DynaM1X1") {
-    timeRequest(extra.channel, "skip") 
-
+    timeRequest(extra.channel, "skip");
   }
   if (message === "volume" && user === "DynaM1X1") {
     maxVolumeList.forEach(({ id, min, max }) => {
