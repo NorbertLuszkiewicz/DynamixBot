@@ -1,5 +1,7 @@
 const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
+const { startSong } = require("./spotifyBot");
+
 const clientId = {
   kezman22: process.env.SR_CLIENT_ID_KEZMAN,
   og1ii: process.env.SR_CLIENT_ID_OGI
@@ -58,15 +60,16 @@ const timeRequest = (streamer, action, returnData) => {
     if (action == "add") {
       if (endTime && endTime < now) {
         data.queue.length == 0
-          ? (endTime = (parseInt(data.playing.duration) * 1000) + now)
+          ? (endTime = parseInt(data.playing.duration) * 1000 + now)
           : (endTime =
               (parseInt(data.playing.duration) +
                 parseInt(data.queue[-1].duration)) *
-              1000);
+                1000 +
+              now);
       }
       if (endTime > now) {
         data.queue.length == 0
-          ? (endTime = (parseInt(data.playing.duration) * 1000) + now)
+          ? (endTime = parseInt(data.playing.duration) * 1000 + now)
           : (endTime = (endTime + parseInt(data.queue[-1].duration)) * 1000);
       }
     }
@@ -79,15 +82,20 @@ const timeRequest = (streamer, action, returnData) => {
               allQueueTime += parseInt(item.duration);
             });
 
-            endTime = ((parseInt(data.playing.duration) + allQueueTime) * 1000) + now;
+            endTime =
+              (parseInt(data.playing.duration) + allQueueTime) * 1000 + now;
           } else {
-            endTime = (parseInt(data.playing.duration) * 1000) + now;
+            endTime = parseInt(data.playing.duration) * 1000 + now;
           }
         }
       }, 1000);
     }
     
-    setTimeout(()=>{}, endTime - now )
+    console.log(endTime - now)
+
+    setTimeout(() => {
+      startSong(streamer);
+    }, endTime - now);
 
     returnData("działa");
   });
