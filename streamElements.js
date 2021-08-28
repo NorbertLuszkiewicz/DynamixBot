@@ -17,8 +17,9 @@ const currentSong = (streamer, done )=> {
   xhr.setRequestHeader("Authorization", "Bearer " + clientSecret[streamer]);
   xhr.send(null);
   xhr.onload = function () {
-    console.log(this.responseText);
-    done(null, this.responseText == '{"state":"playing"}');
+    const data = JSON.parse(this.responseText)
+    console.log(data);
+    done(null, data.state == "playing");
   };
   
 };
@@ -30,13 +31,13 @@ const songList = (streamer, done)  => {
   xhr.setRequestHeader("Authorization", "Bearer " + clientSecret[streamer]);
   xhr.send(null);
   xhr.onload = function () {
-    console.log(this.responseText);
-    console.log(this.responseText == '[]');
-    console.log(this.responseText == []);
-    done(null, this.responseText == '[]');
+    const data = JSON.parse(this.responseText)
+    console.log(data);
+    done(null, data.length == 0);
   };
 }
 
 module.exports = {
-  currentSong
+  currentSong,
+  songList
 };

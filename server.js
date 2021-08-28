@@ -7,7 +7,7 @@ const {
   changeVolume
 } = require("./spotifyBot");
 
-const { currentSong } = require("./streamElements");
+const { currentSong, songList } = require("./streamElements");
 
 const path = require("path");
 
@@ -64,7 +64,7 @@ const TWITCHUSER = "dynam1x1";
 const TWITCHCHANNELS = ["kezman22", "simplywojteksimplywojtek", "og1ii"];
 const OAUTH = process.env.OAUTH;
 
-refreshAccessToken
+refreshAccessToken;
 setInterval(refreshAccessToken, 35000);
 
 const addSongIdList = [
@@ -88,14 +88,13 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   skipSongIdList.forEach(({ id }) => {
     if (flags.customReward && extra.customRewardId === id) {
       currentSong(extra.channel, function(err, playingInSr) {
-      playingInSr ? ComfyJS.Say("!skip", extra.channel) : nextSong(extra.channel);
-    });
-      
+        playingInSr
+          ? ComfyJS.Say("!skip", extra.channel)
+          : nextSong(extra.channel);
+      });
     }
   });
 
-  
-  
   if (message === "pause" && user === "DynaM1X1") {
     pauseSong(extra.channel);
   }
@@ -103,8 +102,14 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
     startSong(extra.channel);
   }
   if (message === "next" && user === "DynaM1X1") {
-          currentSong(extra.channel, function(err, playingInSr) {
-      playingInSr ? ComfyJS.Say("!skip", extra.channel) : nextSong(extra.channel);
+    currentSong(extra.channel, function(err, playingInSr) {
+      songList(extra.channel, function(err, isBlankSrList) {
+        console.log(playingInSr && !isBlankSrList);
+        console.log(playingInSr, isBlankSrList);
+        playingInSr && !isBlankSrList
+          ? ComfyJS.Say("!skip", extra.channel)
+          : nextSong(extra.channel);
+      });
     });
   }
   if (message === "volume" && user === "DynaM1X1") {
@@ -113,7 +118,9 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
 
   if (message === "song" && user === "DynaM1X1") {
     currentSong(extra.channel, function(err, playingInSr) {
-      playingInSr ? ComfyJS.Say("!skip", extra.channel) : nextSong(extra.channel);
+      playingInSr
+        ? ComfyJS.Say("!skip", extra.channel)
+        : nextSong(extra.channel);
     });
   }
 
