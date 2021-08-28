@@ -23,12 +23,18 @@ const currentSong = (streamer, done )=> {
   
 };
 
-function handleApiResponse() {
-  if (this.status == 200) {
-
-  } else {
-    console.log(this.responseText, "ERROR SR currentSong ERROR");
-  }
+const songList = (streamer, done)  => {
+    let xhr = new XMLHttpRequest();
+  xhr.open("GET", `${url}songrequest/${clientId[streamer]}/queue`, true);
+  xhr.setRequestHeader("Content-Type", "application/json");
+  xhr.setRequestHeader("Authorization", "Bearer " + clientSecret[streamer]);
+  xhr.send(null);
+  xhr.onload = function () {
+    console.log(this.responseText);
+    console.log(this.responseText == '[]');
+    console.log(this.responseText == []);
+    done(null, this.responseText == '[]');
+  };
 }
 
 module.exports = {
