@@ -19,19 +19,74 @@
 
     <!-- import the webpage's stylesheet -->
     <link rel="stylesheet" href="/style.css" />
-
-    <!-- this is a handlebars IF statement, checking for a custom "color" parameter set in server.js -->
-    {{#if color}} 
     <style>
-      .title {
-        color: {{color}};
+      p {
+        font-size: 16px;
       }
-    </style>
-    {{/if}}    
+      
+      .command {
+        color: #666;
+        text-align: center;
+        padding-bottom: 0;
+      }      
+      .item > p {
+         text-align: center;
+
+      }
+    </style>  
   </head>
   <body>
-    <div class="wrapper">
-      
-    </div> 
+<div class="wrapper">
+        <div>
+            <h1>Możliwości bota:</h1>
+        </div>
+        <div class="item-list">
+            <div class="item">
+                - stworzenie piramidki z wybranej emotki
+            </div>
+            <div class="item">
+                - automatyczne dodanie piosenki do SR przy wykupieniu piosenki za punkty kanału
+            </div>
+            <div class="item">
+                - automatyczne zatrzymanie spotify przy kupnie piosenki do SR za punkty kanału
+            </div>
+            <div class="item">
+                - automatyczne skipnięcie piosenki na SR jak i na spotify za punkty kanału
+            </div>
+            <div class="item">
+                - zgłośnienie spotify jak i SR na wybrany czas za punkty kanału
+            </div>
+        </div>
+        <div>
+            <h1>Lista komend:</h1>
+        </div>
+        <div class="item-list">
+            <div class="item">
+                <p class="command">piramidka [emote]</p>
+                <p>tworzy piramidke 4 stopnia z podanej emotki, bez podania emotki tworzy piramidke 4stopnia z kezmanJAM
+                </p>
+            </div>
+            <div class="item">
+                <p class="command">srbottest</p>
+                <p>sprawdza czy aktualnie bot działa powinno zwrócić "Bot Works!"</p>
+            </div>
+            <div class="item">
+                <p class="command">!volume [liczba od 1 do 100]</p>
+                <p>komenda do ustalania wybranej głosności SR jak i spotify </p>
+            </div>
+            <div class="item">
+                <p class="command">!next</p>
+                <p>skipuje piosenke na spotify [dostęp ma streamer i bot oraz wybrane osoby przez streamera]</p>
+            </div>
+
+            <div class="item">
+                <p class="command">volume [liczba od 1 do 100] [liczba sekund]</p>
+                <p>planowana komenda do ustalania wybranej głosności SR jak i spotify na wybraną ilość sekund </p>
+            </div>
+        </div>
+        <div>
+            <h3>Wsprawach ustawienia bota proszę pisać do DynaM1X1 na twitch albo na dc Dynamix #2137</h1>
+        </div>
+    </div>
   </body>
 </html>
