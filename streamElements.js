@@ -13,6 +13,7 @@ const timeToReturnSpotify = 0;
 const SONG_STATUS = "/player";
 const SONG_QUEUE = "/queue";
 const SONG_CURRENT = "/playing";
+let allData ;
 
 const callApi = (streamer, parameter, done) => {
   let xhr = new XMLHttpRequest();
@@ -52,23 +53,12 @@ const songPlayingNow = (streamer, done) => {
 };
 
 const returnSpotify = (streamer, returnSongFunction) => {
-   let xhr = new XMLHttpRequest();
-  xhr.open("GET", `${url}songrequest/${clientId[streamer]}/playing`, true);
-  xhr.setRequestHeader("Content-Type", "application/json");
-  xhr.setRequestHeader("Authorization", "Bearer " + clientSecret[streamer]);
-  xhr.send(null);
-  xhr.onload = function() {
-    const data = JSON.parse(this.responseText);
-    
-    data.duration
-    
-    returnSongFunction(data.duration);
-  };
-  
+playing(streamer, addAllData )
+  returnSongFunction(allData)
 };
 
 
-const playing = (streamer, returnSongFunction) => {
+const playing = (streamer, done) => {
    let xhr = new XMLHttpRequest();
   xhr.open("GET", `${url}songrequest/${clientId[streamer]}/playing`, true);
   xhr.setRequestHeader("Content-Type", "application/json");
@@ -76,12 +66,44 @@ const playing = (streamer, returnSongFunction) => {
   xhr.send(null);
   xhr.onload = function() {
     const data = JSON.parse(this.responseText);   
-    returnSongFunction(data);
+    done(data);
+  };
+  
+};
+const queue = (streamer, done) => {
+   let xhr = new XMLHttpRequest();
+  xhr.open("GET", `${url}songrequest/${clientId[streamer]}/queue`, true);
+  xhr.setRequestHeader("Content-Type", "application/json");
+  xhr.setRequestHeader("Authorization", "Bearer " + clientSecret[streamer]);
+  xhr.send(null);
+  xhr.onload = function() {
+    const data = JSON.parse(this.responseText);   
+    done(data);
   };
   
 };
 
+const player = (streamer, done) => {
+   let xhr = new XMLHttpRequest();
+  xhr.open("GET", `${url}songrequest/${clientId[streamer]}/player`, true);
+  xhr.setRequestHeader("Content-Type", "application/json");
+  xhr.setRequestHeader("Authorization", "Bearer " + clientSecret[streamer]);
+  xhr.send(null);
+  xhr.onload = function() {
+    const data = JSON.parse(this.responseText);   
+    done(data);
+  };
+  
+};
+
+
+const addAllData = (data) => {
+  console.log(data, "data")
+allData = {}
+}
+
+
 module.exports = {
-  currentSong,
+  returnSpotify,
   songPlayingNow
 };

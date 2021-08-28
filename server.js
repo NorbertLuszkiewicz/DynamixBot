@@ -7,7 +7,7 @@ const {
   changeVolume
 } = require("./spotifyBot");
 
-const { currentSong, songPlayingNow } = require("./streamElements");
+const { returnSpotify, songPlayingNow } = require("./streamElements");
 
 const path = require("path");
 
@@ -118,10 +118,8 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   }
 
   if (message === "song" && user === "DynaM1X1") {
-    currentSong(extra.channel, function(err, playingInSr) {
-      playingInSr
-        ? ComfyJS.Say("!skip", extra.channel)
-        : nextSong(extra.channel);
+    returnSpotify(extra.channel, function(err, playingInSr) {
+        console.log("song", playingInSr,"song")
     });
   }
 
