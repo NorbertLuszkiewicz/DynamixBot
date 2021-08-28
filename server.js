@@ -160,6 +160,7 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
 
   if (message === "pause" && user === "DynaM1X1") {
     pauseSong(extra.channel);
+    timeRequest(extra.channel, "add");
   }
   if (message === "start" && user === "DynaM1X1") {
     startSong(extra.channel);
@@ -173,9 +174,8 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
     });
   }
   if (message === "time" && user === "DynaM1X1") {
-    timeRequest(extra.channel, "skip", function(songPlaying) {
-      console.log(songPlaying);
-    });
+    timeRequest(extra.channel, "skip") 
+
   }
   if (message === "volume" && user === "DynaM1X1") {
     maxVolumeList.forEach(({ id, min, max }) => {
