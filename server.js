@@ -102,13 +102,13 @@ const maxVolumeList = [
     name: "simplywojtek",
     id: "9150d1d4-51fb-4219-a3ff-92398614029c",
     max: 100,
-    min: 20
+    min: 75
   },
   {
     name: "og1ii",
     id: "dc293b9a-8278-401e-aa23-e715e3f6b4bc",
     max: 100,
-    min: 20
+    min: 75
   }
 ];
 
