@@ -35,6 +35,7 @@ let accessTokenList = {
 let maxVolumeDate = null;
 let timeMaxVolume = null;
 let action =""
+let getStreamer = ""
 
 let currentPlaylist = { og1ii: "", kezman22: "", simplywojtek: "" };
 
@@ -113,7 +114,7 @@ function refreshAccessToken() {
 
 function callAuthorizationApi(body, streamer) {
   
-  console.log(body, streamer)
+  getStreamer = streamer
   let xhr = new XMLHttpRequest();
   xhr.open("POST", TOKEN, true);
   xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -128,13 +129,15 @@ function callAuthorizationApi(body, streamer) {
 function handleAuthorizationResponse() {
   if (this.status == 200) {
     let data = JSON.parse(this.responseText);
+    console.log("reset token sporify")
 
     if (data.access_token != undefined) {
-      accessTokenList[streamer] = data.access_token;
+      accessTokenList[getStreamer] = data.access_token;
     }
     if (data.refresh_token != undefined) {
-      refreshTokenList[streamer] = data.refresh_token;
+      refreshTokenList[getStreamer] = data.refresh_token;
     }
+    getStreamer = ""
   } else {
     console.log(this.responseText);
   }

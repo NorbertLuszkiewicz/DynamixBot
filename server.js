@@ -7,14 +7,6 @@ const {
   changeVolume
 } = require("./spotifyBot");
 
-const {
-  nextSongOgi,
-  pauseSongOgi,
-  startSongOgi,
-  refreshAccessTokenOgi,
-  refreshDevicesOgi,
-  changeVolumeOgi
-} = require("./spotifyBotOgi");
 
 const skipSong = { og1ii: nextSongOgi("kezman22"), kezman22: nextSong("kezman22"), simplywojtek: "" }
 
@@ -75,7 +67,9 @@ const TWITCHUSER = "dynam1x1";
 const TWITCHCHANNELS = ["kezman22", "simplywojteksimplywojtek", "og1ii"];
 const OAUTH = process.env.OAUTH;
 
+refreshAccessToken
 setInterval(refreshAccessToken, 35000);
+refreshAccessTokenOgi
 setInterval(refreshAccessTokenOgi, 35000);
 
 const addSongIdList = [
