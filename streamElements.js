@@ -70,13 +70,16 @@ const timeRequest = (streamer, action, returnData) => {
           : (endTime = (endTime + parseInt(data.queue[-1].duration)) * 1000);
       }
     }
-    if (action == "add") {
+    if (action == "skip") {
+      setTimeout(()=>{
+        if(data.playing){
+          data.queue.length != 0 ?
+        endTime = parseInt(data.playing.duration) + data.queue.forEach((item) => {item.duration}) : endTime = parseInt(data.playing.duration)
+      } 
+      } , 1000)
       
     }
-    
-
-    data.queue.length == 0 ? (endTime = data.playing.duration) : endTime;
-
+    console.log("aaaa", data.queue.forEach((item) => {item.duration}))
     returnData("działa");
   });
 };
