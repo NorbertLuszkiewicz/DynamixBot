@@ -79,13 +79,15 @@ const timeRequest = (streamer, action, returnData) => {
               allQueueTime += parseInt(item.duration);
             });
 
-            endTime = parseInt(data.playing.duration) + allQueueTime;
+            endTime = ((parseInt(data.playing.duration) + allQueueTime) * 1000) + now;
           } else {
-            endTime = parseInt(data.playing.duration);
+            endTime = (parseInt(data.playing.duration) * 1000) + now;
           }
         }
       }, 1000);
     }
+    
+    setTimeout(()=>{}, endTime - now )
 
     returnData("działa");
   });
