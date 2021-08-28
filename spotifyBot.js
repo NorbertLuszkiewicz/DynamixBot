@@ -96,9 +96,10 @@ const changeVolume = streamer => {
   timeMaxVolume = setTimeout(() => {
     callApi(
       "PUT",
-      `${VOLUME}?volume_percent=${20}&device_id=${device[streamer]}`,
+      `${VOLUME}?volume_percent=${30}&device_id=${device[streamer]}`,
       null,
-      handleApiResponse
+      handleApiResponse,
+      streamer
     );
     
   }, maxVolumeDate - now);

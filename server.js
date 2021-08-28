@@ -172,11 +172,11 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
       console.log(now);
 
       if (maxVolumeDate > now) {
-        maxVolumeDate += 3000;
+        maxVolumeDate += 30000;
       }
 
       if (!maxVolumeDate || maxVolumeDate < now) {
-        maxVolumeDate = now + 3000;
+        maxVolumeDate = now + 30000;
       }
 
       clearTimeout(timeMaxVolume);
