@@ -79,13 +79,21 @@ const skipSongIdList = [
   { name: "og1ii", id: "dc293b9a-8278-401e-aa23-e715e3f6b4bc" }
 ];
 
+const maxVolumeList = [
+  { name: "kezman22", id: "09150d1d4-51fb-4219-a3ff-92398614029c", max: 1-- },
+  { name: "simplywojtek", id: "9150d1d4-51fb-4219-a3ff-92398614029c" },
+  { name: "og1ii", id: "dc293b9a-8278-401e-aa23-e715e3f6b4bc" }
+];
+
 ComfyJS.onChat = (user, message, flags, self, extra) => {
+  
   addSongIdList.forEach(({ id }) => {
     if (flags.customReward && extra.customRewardId === id) {
       ComfyJS.Say("!sr " + message, extra.channel);
       pauseSong(extra.channel);
     }
   });
+  
   skipSongIdList.forEach(({ id }) => {
     if (flags.customReward && extra.customRewardId === id) {
       songPlayingNow(extra.channel, function(songPlaying) {
@@ -94,6 +102,30 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
           ? ComfyJS.Say("!skip", extra.channel)
           : nextSong(extra.channel);
       });
+    }
+  });
+  
+    maxVolumeList.forEach(({ id }) => {
+    if (flags.customReward && extra.customRewardId === id) {
+        ComfyJS.Say("!volume 100", extra.channel);
+        changeVolume(extra.channel);
+      
+        
+  let now = Date.now();
+  console.log(now);
+
+  if (maxVolumeDate > now) {
+    maxVolumeDate += 30000;
+  }
+
+  if (!maxVolumeDate || maxVolumeDate < now) {
+    maxVolumeDate = now + 30000;
+  }
+
+  clearTimeout(timeMaxVolume);
+  timeMaxVolume = setTimeout(() => {
+    ComfyJS.Say("!volume 20", extra.channel);
+  }, maxVolumeDate - now);
     }
   });
 

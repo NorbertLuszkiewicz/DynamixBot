@@ -80,15 +80,16 @@ const changeVolume = streamer => {
     handleApiResponse,
     streamer
   );
+  
   let now = Date.now();
   console.log(now);
 
   if (maxVolumeDate > now) {
-    maxVolumeDate += 5000;
+    maxVolumeDate += 30000;
   }
 
   if (!maxVolumeDate || maxVolumeDate < now) {
-    maxVolumeDate = now + 5000;
+    maxVolumeDate = now + 30000;
   }
 
   clearTimeout(timeMaxVolume);
@@ -99,6 +100,7 @@ const changeVolume = streamer => {
       null,
       handleApiResponse
     );
+    
   }, maxVolumeDate - now);
 };
 
