@@ -13,7 +13,7 @@ const timeToReturnSpotify = 0;
 const SONG_STATUS = "/player";
 const SONG_QUEUE = "/queue";
 const SONG_CURRENT = "/playing";
-let allData ;
+let allData = {};
 
 const callApi = (streamer, parameter, done) => {
   let xhr = new XMLHttpRequest();
@@ -52,56 +52,50 @@ const songPlayingNow = (streamer, done) => {
   };
 };
 
-const returnSpotify = (streamer, returnSongFunction) => {
-playing(streamer, addAllData )
-  returnSongFunction(allData)
+const returnSpotify = async (streamer, returnSongFunction) => {
+  playing(streamer, addAllData);
+  console.log(allData, "aaaaa");
+  setTimeout() returnSongFunction(allData);
 };
 
-
 const playing = (streamer, done) => {
-   let xhr = new XMLHttpRequest();
+  let xhr = new XMLHttpRequest();
   xhr.open("GET", `${url}songrequest/${clientId[streamer]}/playing`, true);
   xhr.setRequestHeader("Content-Type", "application/json");
   xhr.setRequestHeader("Authorization", "Bearer " + clientSecret[streamer]);
   xhr.send(null);
   xhr.onload = function() {
-    const data = JSON.parse(this.responseText);   
-    done(data);
+    const data = JSON.parse(this.responseText);
+    done(data, "playing");
   };
-  
 };
 const queue = (streamer, done) => {
-   let xhr = new XMLHttpRequest();
+  let xhr = new XMLHttpRequest();
   xhr.open("GET", `${url}songrequest/${clientId[streamer]}/queue`, true);
   xhr.setRequestHeader("Content-Type", "application/json");
   xhr.setRequestHeader("Authorization", "Bearer " + clientSecret[streamer]);
   xhr.send(null);
   xhr.onload = function() {
-    const data = JSON.parse(this.responseText);   
+    const data = JSON.parse(this.responseText);
     done(data);
   };
-  
 };
 
 const player = (streamer, done) => {
-   let xhr = new XMLHttpRequest();
+  let xhr = new XMLHttpRequest();
   xhr.open("GET", `${url}songrequest/${clientId[streamer]}/player`, true);
   xhr.setRequestHeader("Content-Type", "application/json");
   xhr.setRequestHeader("Authorization", "Bearer " + clientSecret[streamer]);
   xhr.send(null);
   xhr.onload = function() {
-    const data = JSON.parse(this.responseText);   
+    const data = JSON.parse(this.responseText);
     done(data);
   };
-  
 };
 
-
-const addAllData = (data) => {
-  console.log(data, "data")
-allData = {}
-}
-
+const addAllData = (data, name) => {
+  allData[name] = data;
+};
 
 module.exports = {
   returnSpotify,

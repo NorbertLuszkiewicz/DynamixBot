@@ -118,8 +118,8 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   }
 
   if (message === "song" && user === "DynaM1X1") {
-    returnSpotify(extra.channel, function(err, playingInSr) {
-        console.log("song", playingInSr,"song")
+    returnSpotify(extra.channel, function(data) {
+        console.log("song", data,"song")
     });
   }
 
