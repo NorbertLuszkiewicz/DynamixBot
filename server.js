@@ -164,9 +164,15 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
       });
     
   }
+  
   if (message === "start" && user === "DynaM1X1") {
     startSong(extra.channel);
   }
+  
+    if (message === "device" && user === "DynaM1X1") {
+    refreshDevices(extra.channel);
+  }
+  
   if (message === "next" && user === "DynaM1X1") {
     songPlayingNow(extra.channel, function(songPlaying) {
       console.log(songPlaying, "playSongInSr");

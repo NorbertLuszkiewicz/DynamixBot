@@ -211,12 +211,13 @@ function currentlyPlaying(streamer) {
   );
 }
 
-function refreshDevices() {
+function refreshDevices(streamer) {
   callApi(
     "GET",
     "https://api.spotify.com/v1/me/player/devices",
     null,
-    handleDevicesResponse
+    handleDevicesResponse,
+    streamer
   );
 }
 
