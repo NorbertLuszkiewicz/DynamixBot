@@ -58,7 +58,7 @@ const timeRequest = (streamer, action, returnData) => {
     if (action == "add") {
       if (endTime && endTime < now) {
         data.queue.length == 0
-          ? (endTime = parseInt(data.playing.duration) * 1000)
+          ? (endTime = (parseInt(data.playing.duration) * 1000) + now)
           : (endTime =
               (parseInt(data.playing.duration) +
                 parseInt(data.queue[-1].duration)) *
@@ -66,7 +66,7 @@ const timeRequest = (streamer, action, returnData) => {
       }
       if (endTime > now) {
         data.queue.length == 0
-          ? (endTime = parseInt(data.playing.duration) * 1000)
+          ? (endTime = (parseInt(data.playing.duration) * 1000) + now)
           : (endTime = (endTime + parseInt(data.queue[-1].duration)) * 1000);
       }
     }
