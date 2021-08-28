@@ -7,7 +7,11 @@ const {
   changeVolume
 } = require("./spotifyBot");
 
-const { returnSpotify, songPlayingNow, timeRequest } = require("./streamElements");
+const {
+  returnSpotify,
+  songPlayingNow,
+  timeRequest
+} = require("./streamElements");
 
 const path = require("path");
 
@@ -63,6 +67,8 @@ const ComfyJS = require("comfy.js");
 const TWITCHUSER = "dynam1x1";
 const TWITCHCHANNELS = ["kezman22", "simplywojteksimplywojtek", "og1ii"];
 const OAUTH = process.env.OAUTH;
+let maxVolumeDate = 0;
+let timeMaxVolume = 0;
 
 setTimeout(refreshAccessToken, 1000);
 setInterval(refreshAccessToken, 35000);
@@ -80,52 +86,65 @@ const skipSongIdList = [
 ];
 
 const maxVolumeList = [
-  { name: "kezman22", id: "09150d1d4-51fb-4219-a3ff-92398614029c", max: 1-- },
-  { name: "simplywojtek", id: "9150d1d4-51fb-4219-a3ff-92398614029c" },
-  { name: "og1ii", id: "dc293b9a-8278-401e-aa23-e715e3f6b4bc" }
+  {
+    name: "kezman22",
+    id: "09150d1d4-51fb-4219-a3ff-92398614029c",
+    max: 100,
+    min: 20
+  },
+  {
+    name: "simplywojtek",
+    id: "9150d1d4-51fb-4219-a3ff-92398614029c",
+    max: 100,
+    min: 20
+  },
+  {
+    name: "og1ii",
+    id: "dc293b9a-8278-401e-aa23-e715e3f6b4bc",
+    max: 100,
+    min: 20
+  }
 ];
 
 ComfyJS.onChat = (user, message, flags, self, extra) => {
-  
   addSongIdList.forEach(({ id }) => {
     if (flags.customReward && extra.customRewardId === id) {
       ComfyJS.Say("!sr " + message, extra.channel);
       pauseSong(extra.channel);
     }
   });
-  
+
   skipSongIdList.forEach(({ id }) => {
     if (flags.customReward && extra.customRewardId === id) {
       songPlayingNow(extra.channel, function(songPlaying) {
-        console.log(songPlaying, "playSongInSr")
+        console.log(songPlaying, "playSongInSr");
         songPlaying
           ? ComfyJS.Say("!skip", extra.channel)
           : nextSong(extra.channel);
       });
     }
   });
-  
-    maxVolumeList.forEach(({ id }) => {
+
+  maxVolumeList.forEach(({ id, min, max }) => {
     if (flags.customReward && extra.customRewardId === id) {
-        ComfyJS.Say("!volume 100", extra.channel);
-        changeVolume(extra.channel);
-      
-        
-  let now = Date.now();
-  console.log(now);
+      ComfyJS.Say("!volume " + max, extra.channel);
+      changeVolume(extra.channel);
 
-  if (maxVolumeDate > now) {
-    maxVolumeDate += 30000;
-  }
+      let now = Date.now();
+      console.log(now);
 
-  if (!maxVolumeDate || maxVolumeDate < now) {
-    maxVolumeDate = now + 30000;
-  }
+      if (maxVolumeDate > now) {
+        maxVolumeDate += 30000;
+      }
 
-  clearTimeout(timeMaxVolume);
-  timeMaxVolume = setTimeout(() => {
-    ComfyJS.Say("!volume 20", extra.channel);
-  }, maxVolumeDate - now);
+      if (!maxVolumeDate || maxVolumeDate < now) {
+        maxVolumeDate = now + 30000;
+      }
+
+      clearTimeout(timeMaxVolume);
+      timeMaxVolume = setTimeout(() => {
+        ComfyJS.Say("!volume " + min, extra.channel);
+      }, maxVolumeDate - now);
     }
   });
 
@@ -136,22 +155,41 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
     startSong(extra.channel);
   }
   if (message === "next" && user === "DynaM1X1") {
-
-      songPlayingNow(extra.channel, function(songPlaying) {
-        console.log(songPlaying, "playSongInSr")
-        songPlaying
-          ? ComfyJS.Say("!skip", extra.channel)
-          : nextSong(extra.channel);
-      });
-  
+    songPlayingNow(extra.channel, function(songPlaying) {
+      console.log(songPlaying, "playSongInSr");
+      songPlaying
+        ? ComfyJS.Say("!skip", extra.channel)
+        : nextSong(extra.channel);
+    });
   }
   if (message === "volume" && user === "DynaM1X1") {
-    changeVolume(extra.channel);
+      maxVolumeList.forEach(({ id, min, max }) => {
+    
+      ComfyJS.Say("!volume " + max, extra.channel);
+      changeVolume(extra.channel);
+
+      let now = Date.now();
+      console.log(now);
+
+      if (maxVolumeDate > now) {
+        maxVolumeDate += 30000;
+      }
+
+      if (!maxVolumeDate || maxVolumeDate < now) {
+        maxVolumeDate = now + 30000;
+      }
+
+      clearTimeout(timeMaxVolume);
+      timeMaxVolume = setTimeout(() => {
+        ComfyJS.Say("!volume " + min, extra.channel);
+      }, maxVolumeDate - now);
+    
+  });
   }
 
   if (message === "song" && user === "DynaM1X1") {
     timeRequest(extra.channel, function(data) {
-        console.log(data,"song")
+      console.log(data, "song");
     });
   }
 
