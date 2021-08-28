@@ -9,18 +9,26 @@ const clientSecret = {
   og1ii: process.env.SR_CLIENT_SECRET_OGI
 };
 const url = "https://api.streamelements.com/kappa/v2/";
+const SONG_STATUS = "/player";
+const SONG_QUEUE = "/queue";
 
-const currentSong = (streamer, done )=> {
-  let xhr = new XMLHttpRequest();
-  xhr.open("GET", `${url}songrequest/${clientId[streamer]}/player`, true);
+
+const callApi = (streamer, parameter ,done) => {
+    let xhr = new XMLHttpRequest();
+  xhr.open("GET", `${url}songrequest/${clientId[streamer]}${parameter}`, true);
   xhr.setRequestHeader("Content-Type", "application/json");
   xhr.setRequestHeader("Authorization", "Bearer " + clientSecret[streamer]);
   xhr.send(null);
   xhr.onload = function () {
     const data = JSON.parse(this.responseText)
-    console.log(data);
-    done(null, data.state == "playing");
+    done(data.state == "playing");
   };
+}
+
+const currentSong = (streamer, isPlaying,  )=> {
+    
+callApi(streamer, SONG_STATUS, done )
+callApi(streamer, SONG_QUEUE, done )
   
 };
 
