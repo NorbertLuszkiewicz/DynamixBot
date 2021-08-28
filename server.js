@@ -168,6 +168,11 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
         : nextSong(extra.channel);
     });
   }
+  if (message === "time" && user === "DynaM1X1") {
+    timeRequest(extra.channel, function(songPlaying) {
+      console.log(songPlaying);
+    });
+  }
   if (message === "volume" && user === "DynaM1X1") {
     maxVolumeList.forEach(({ id, min, max }) => {
       ComfyJS.Say("!volume " + max, extra.channel);

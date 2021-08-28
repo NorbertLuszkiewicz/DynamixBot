@@ -46,7 +46,7 @@ const returnSpotify = (streamer, returnSongFunction) => {
 
 const songPlayingNow = (streamer, done) => {
   returnSpotify(streamer, data => {
-    console.log(data);
+    
 
     done(data.player.state == "playing" && data.playing != null);
   });
@@ -54,9 +54,12 @@ const songPlayingNow = (streamer, done) => {
 
 const timeRequest = (streamer, returnData) => {
   returnSpotify(streamer, data => {
+     endTime = 
     console.log(data);
+    
+  data.queue.length == 0 ?"" :""
 
-    returnData("działa");
+    returnData("działa")
   });
 };
 
