@@ -17,6 +17,7 @@ const currentSong = (streamer, done )=> {
   xhr.setRequestHeader("Authorization", "Bearer " + clientSecret[streamer]);
   xhr.send(null);
   xhr.onload = function () {
+    console.log(this.responseText);
     done(null, this.responseText == '{"state":"playing"}');
   };
   

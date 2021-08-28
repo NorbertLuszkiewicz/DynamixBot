@@ -7,9 +7,6 @@ const {
   changeVolume
 } = require("./spotifyBot");
 
-
-const skipSong = { og1ii: nextSongOgi("kezman22"), kezman22: nextSong("kezman22"), simplywojtek: "" }
-
 const { currentSong } = require("./streamElements");
 
 const path = require("path");
@@ -69,8 +66,6 @@ const OAUTH = process.env.OAUTH;
 
 refreshAccessToken
 setInterval(refreshAccessToken, 35000);
-refreshAccessTokenOgi
-setInterval(refreshAccessTokenOgi, 35000);
 
 const addSongIdList = [
   { name: "kezman22", id: "3d0baf73-3272-4ed5-8b06-dc12ad764dc6" },
@@ -93,7 +88,7 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   skipSongIdList.forEach(({ id }) => {
     if (flags.customReward && extra.customRewardId === id) {
       currentSong(extra.channel, function(err, playingInSr) {
-      playingInSr ? ComfyJS.Say("!skip", extra.channel) : skipSong[extra.channel];
+      playingInSr ? ComfyJS.Say("!skip", extra.channel) : nextSong(extra.channel);
     });
       
     }
@@ -108,20 +103,14 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
     startSong(extra.channel);
   }
   if (message === "next" && user === "DynaM1X1") {
-    nextSong(extra.channel);
+          currentSong(extra.channel, function(err, playingInSr) {
+      playingInSr ? ComfyJS.Say("!skip", extra.channel) : nextSong(extra.channel);
+    });
   }
   if (message === "volume" && user === "DynaM1X1") {
     changeVolume(extra.channel);
   }
-  if (message === "stop" && user === "DynaM1X1") {
-    pauseSongOgi(extra.channel);
-  }
-  if (message === "device" && user === "DynaM1X1") {
-    refreshDevicesOgi(extra.channel);
-  }
-  if (message === "start2" && user === "DynaM1X1") {
-    startSongOgi(extra.channel);
-  }
+
   if (message === "song" && user === "DynaM1X1") {
     currentSong(extra.channel, function(err, playingInSr) {
       playingInSr ? ComfyJS.Say("!skip", extra.channel) : nextSong(extra.channel);
