@@ -82,7 +82,6 @@ const changeVolumeOnTime = streamer => {
   );
   
   let now = Date.now();
-  console.log(now);
 
   if (maxVolumeDate > now) {
     maxVolumeDate += 30000;

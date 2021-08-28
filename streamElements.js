@@ -12,8 +12,6 @@ const url = "https://api.streamelements.com/kappa/v2/";
 const timeToReturnSpotify = 0;
 let endTime = null;
 
-
-
 const returnSpotify = (streamer, returnSongFunction) => {
   let xhr = new XMLHttpRequest();
   xhr.open("GET", `${url}songrequest/${clientId[streamer]}/player`, true);
@@ -47,23 +45,35 @@ const returnSpotify = (streamer, returnSongFunction) => {
 
 const songPlayingNow = (streamer, done) => {
   returnSpotify(streamer, data => {
-  
     done(data.player.state == "playing" && data.playing != null);
   });
 };
 
 const timeRequest = (streamer, action, returnData) => {
   returnSpotify(streamer, data => {
-    endTime = null
+    let now = Date.now();
+    endTime = null;
     console.log(data);
-    
-  if(action == "add"){
-    data.queue.length == 0 ? endTime = data.playing.duration : endTime
-  }
-    
-  data.queue.length == 0 ? endTime = data.playing.duration : endTime
 
-    returnData("działa")
+    if (action == "add") {
+      if (endTime && endTime < now) {
+        data.queue.length == 0
+          ? (endTime = parseInt(data.playing.duration) * 1000)
+          : (endTime =
+              (parseInt(data.playing.duration) +
+                parseInt(data.queue[-1].duration)) *
+              1000);
+      }
+      if (endTime > now) {
+        data.queue.length == 0
+          ? (endTime = parseInt(data.playing.duration) * 1000)
+          : (endTime = (endTime + parseInt(data.queue[-1].duration)) * 1000);
+      }
+    }
+
+    data.queue.length == 0 ? (endTime = data.playing.duration) : endTime;
+
+    returnData("działa");
   });
 };
 
