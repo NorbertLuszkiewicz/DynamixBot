@@ -169,7 +169,7 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
     });
   }
   if (message === "time" && user === "DynaM1X1") {
-    timeRequest(extra.channel, function(songPlaying) {
+    timeRequest(extra.channel,"skip" , function(songPlaying) {
       console.log(songPlaying);
     });
   }

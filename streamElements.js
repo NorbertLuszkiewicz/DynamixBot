@@ -71,15 +71,22 @@ const timeRequest = (streamer, action, returnData) => {
       }
     }
     if (action == "skip") {
-      setTimeout(()=>{
-        if(data.playing){
-          data.queue.length != 0 ?
-        endTime = parseInt(data.playing.duration) + data.queue.forEach((item) => {item.duration}) : endTime = parseInt(data.playing.duration)
-      } 
-      } , 1000)
-      
+      setTimeout(() => {
+        if (data.playing) {
+          if (data.queue.length != 0) {
+            let allQueueTime = 0;
+            data.queue.forEach(item => {
+              allQueueTime += parseInt(item.duration);
+            });
+
+            endTime = parseInt(data.playing.duration) + allQueueTime;
+          } else {
+            endTime = parseInt(data.playing.duration);
+          }
+        }
+      }, 1000);
     }
-    console.log("aaaa", data.queue.forEach((item) => {item.duration}))
+
     returnData("działa");
   });
 };
