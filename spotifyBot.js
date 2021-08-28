@@ -14,7 +14,7 @@ let positionMs = 0;
 let device = {
   og1ii: "a00eb394fa4f0ec58111f49101d974acc67b2157",
   kezman22: "c3e9e9038e921489b7106d098ca11128b330ae36",
-  simplywojtek: "",
+  simplywojtek: ""
 };
 
 let refreshTokenList = {
@@ -22,7 +22,7 @@ let refreshTokenList = {
     "AQCYs0az-dh95MDuWB72JAruSc4rj821ERIEK4RpMsEvsQqp5pyzsaqu9kMbqUKsamCI2_gzqyNDkFEEIXE0pHvVX_3_1c3XjfyT-S2NXYKSPl7Ms3w1ZKxsq9ZInJZiezY",
   kezman22:
     "AQCg9rcXt-DPSVtz9rEqE3fA1x78NqvV6nysu5T9O1EZ1wFWmMJw3yO2budF5OknAiKM5geXUKPXk0Z2RnHm9DMD294V_WdcHJ9Wq4Meg3oRA7YYopjM0sSfpMC1qjQu-w8",
-  simplywojtek: "",
+  simplywojtek: ""
 };
 
 let accessTokenList = {
@@ -30,22 +30,19 @@ let accessTokenList = {
     "BQBujnjEobElD-6NrVgSYQrHbMzVKy8R8HnYOyZXwZMne-vmupE8wruoSWU58ytwsRtYEZKPpqNQ2ICdlTyC0IzGjJJsYusNyNCDDrmdFutUFn7mSjLIvkNpQyHfhsrx6aT0ysgc7_kDYPPx3A2LOjNsxQDksJG44W-hAb8MnHzkslxBZmmtXfBqZc2UYz1WYCY2txOgB4DVbgbiHphW9a7fAL3fnqRtC-ZrY20Ji_14GqNaEWSB4pmHel3FhD_XvdSY2PNKT3CFcXFDQZJsjQnDbz9Xv-rG",
   kezman22:
     "BQAJ4xsBe8xP9tRyUkDlDC5zmgxK6y2HvUqW_fjXQ3e7RphcC-DIvex6DlA09PamCBmiArNikMiIBcu8jhQifHTJ5zEOlTXpn32L_s0gOZhT_WV-YIwZebkxtn25xV8bl88oo-wMq5GkBRzjqAVfCLtTTKgZqTaILDuMiHThXoUJUMnreFnWetIaFuPh9LeBV5pXo3mQlFc_QyO3wGwNa725Rg",
-  simplywojtek: "",
+  simplywojtek: ""
 };
 let maxVolumeDate = null;
 let timeMaxVolume = null;
-let action =""
-let getStreamer = ""
+let action = "";
 
 let currentPlaylist = { og1ii: "", kezman22: "", simplywojtek: "" };
 
-const startSong = async (streamer) => {
-  await refreshAccessToken();
-
+const startSong = streamer => {
   let body = {};
   body.position_ms = positionMs;
 
-  await callApi(
+  callApi(
     "PUT",
     PLAY + "?device_id=" + device[streamer],
     JSON.stringify(body),
@@ -54,9 +51,8 @@ const startSong = async (streamer) => {
   );
 };
 
-const pauseSong = async (streamer) => {
-  await refreshAccessToken();
-  await callApi(
+const pauseSong = streamer => {
+  callApi(
     "PUT",
     PAUSE + "?device_id=" + device[streamer],
     null,
@@ -67,7 +63,7 @@ const pauseSong = async (streamer) => {
   console.log("pausesong");
 };
 
-const nextSong = (streamer) => {
+const nextSong = streamer => {
   callApi(
     "POST",
     NEXT + "?device_id=" + device[streamer],
@@ -75,7 +71,7 @@ const nextSong = (streamer) => {
     handleApiResponse
   );
 };
-const changeVolume = (streamer) => {
+const changeVolume = streamer => {
   callApi(
     "PUT",
     `${VOLUME}?volume_percent=${100}&device_id=${device[streamer]}`,
@@ -105,16 +101,14 @@ const changeVolume = (streamer) => {
 };
 
 function refreshAccessToken() {
-  let bodyOgi = `grant_type=refresh_token&refresh_token=${refreshTokenList.og1ii}&client_id=${clientId}`;
-  let bodyKezman = `grant_type=refresh_token&refresh_token=${refreshTokenList.kezman22}&client_id=${clientId}`;
+  const bodyOgi = `grant_type=refresh_token&refresh_token=${refreshTokenList.og1ii}&client_id=${clientId}`;
+  const bodyKezman = `grant_type=refresh_token&refresh_token=${refreshTokenList.kezman22}&client_id=${clientId}`;
 
   callAuthorizationApi(bodyOgi, "og1ii");
   callAuthorizationApi(bodyKezman, "kezman22");
 }
 
 function callAuthorizationApi(body, streamer) {
-  
-  getStreamer = streamer
   let xhr = new XMLHttpRequest();
   xhr.open("POST", TOKEN, true);
   xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -123,24 +117,21 @@ function callAuthorizationApi(body, streamer) {
     "Basic " + Buffer.from(clientId + ":" + clientSecret).toString("base64")
   );
   xhr.send(body);
-  xhr.onload = handleAuthorizationResponse;
-}
+  xhr.onload = function ()  {
+    if (this.status == 200) {
+      let data = JSON.parse(this.responseText);
+      console.log("reset token sporify");
 
-function handleAuthorizationResponse() {
-  if (this.status == 200) {
-    let data = JSON.parse(this.responseText);
-    console.log("reset token sporify")
-
-    if (data.access_token != undefined) {
-      accessTokenList[getStreamer] = data.access_token;
+      if (data.access_token != undefined) {
+        accessTokenList[streamer] = data.access_token;
+      }
+      if (data.refresh_token != undefined) {
+        refreshTokenList[streamer] = data.refresh_token;
+      }
+    } else {
+      console.log(this.responseText);
     }
-    if (data.refresh_token != undefined) {
-      refreshTokenList[getStreamer] = data.refresh_token;
-    }
-    getStreamer = ""
-  } else {
-    console.log(this.responseText);
-  }
+  };
 }
 
 function callApi(method, url, body, callback, streamer) {
@@ -226,10 +217,11 @@ function handleDevicesResponse() {
   }
 }
 
-
-module.exports = {   pauseSong,
+module.exports = {
+  pauseSong,
   startSong,
   nextSong,
   refreshAccessToken,
   refreshDevices,
-  changeVolume, };
+  changeVolume
+};
