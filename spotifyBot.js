@@ -12,7 +12,7 @@ const CURRENTLYPLAYING =
   "https://api.spotify.com/v1/me/player/currently-playing";
 let positionMs = 0;
 let device = {
-  og1ii: "a00eb394fa4f0ec58111f49101d974acc67b2157",
+  og1ii:process.env.CLIENT_SECRET "a00eb394fa4f0ec58111f49101d974acc67b2157",
   kezman22: "c3e9e9038e921489b7106d098ca11128b330ae36",
   simplywojtek: ""
 };

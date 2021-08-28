@@ -12,7 +12,7 @@ const clientSecret = {
 };
 const url = "https://api.streamelements.com/kappa/v2/";
 const timeToReturnSpotify = 0;
-let endTime 
+let endTime;
 
 const returnSpotify = (streamer, returnSongFunction) => {
   let xhr = new XMLHttpRequest();
@@ -65,8 +65,7 @@ const timeRequest = (streamer, action) => {
                 parseInt(data.queue[-1].duration)) *
                 1000 +
               now);
-      }
-      else if (endTime > now) {
+      } else if (endTime > now) {
         data.queue.length == 0
           ? (endTime = parseInt(data.playing.duration) * 1000 + now)
           : (endTime = (endTime + parseInt(data.queue[-1].duration)) * 1000);
@@ -89,14 +88,17 @@ const timeRequest = (streamer, action) => {
         }
       }, 1000);
     }
-    
-    console.log(endTime - now)
+
+    console.log(endTime - now);
 
     setTimeout(() => {
-      startSong(streamer);
-      endTime = null
+      returnSpotify(streamer, data => {
+        if (!data.playing) {
+          startSong(streamer);
+          endTime = null;
+        }
+      });
     }, endTime - now);
-
   });
 };
 
