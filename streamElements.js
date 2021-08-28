@@ -30,7 +30,7 @@ const currentSong = (streamer, isPlaying, isSong) => {
   callApi(streamer, SONG_CURRENT, isSong);
 };
 
-const songList = (streamer, done) => {
+const songPlayingNow = (streamer, done) => {
   let xhr = new XMLHttpRequest();
   xhr.open("GET", `${url}songrequest/${clientId[streamer]}/player`, true);
   xhr.setRequestHeader("Content-Type", "application/json");
@@ -46,12 +46,12 @@ const songList = (streamer, done) => {
     xhr2.onload = function() {
       const data2 = JSON.parse(this.responseText);
       console.log(data, data2, "daty");
-      done(data.state == "playing" && data2);
+      done(data.state == "playing" && data2 != null);
     };
   };
 };
 
 module.exports = {
   currentSong,
-  songList
+  songPlayingNow
 };

@@ -7,7 +7,7 @@ const {
   changeVolume
 } = require("./spotifyBot");
 
-const { currentSong, songList } = require("./streamElements");
+const { currentSong, songPlayingNow } = require("./streamElements");
 
 const path = require("path");
 
@@ -64,7 +64,7 @@ const TWITCHUSER = "dynam1x1";
 const TWITCHCHANNELS = ["kezman22", "simplywojteksimplywojtek", "og1ii"];
 const OAUTH = process.env.OAUTH;
 
-refreshAccessToken;
+setTimeout(refreshAccessToken, 1000);
 setInterval(refreshAccessToken, 35000);
 
 const addSongIdList = [
@@ -83,12 +83,14 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   addSongIdList.forEach(({ id }) => {
     if (flags.customReward && extra.customRewardId === id) {
       ComfyJS.Say("!sr " + message, extra.channel);
+      pauseSong(extra.channel);
     }
   });
   skipSongIdList.forEach(({ id }) => {
     if (flags.customReward && extra.customRewardId === id) {
-      currentSong(extra.channel, function(err, playingInSr) {
-        playingInSr
+      songPlayingNow(extra.channel, function(songPlaying) {
+        console.log(songPlaying, "playSongInSr")
+        songPlaying
           ? ComfyJS.Say("!skip", extra.channel)
           : nextSong(extra.channel);
       });
@@ -103,7 +105,7 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   }
   if (message === "next" && user === "DynaM1X1") {
 
-      songList(extra.channel, function(songPlaying) {
+      songPlayingNow(extra.channel, function(songPlaying) {
         console.log(songPlaying, "playSongInSr")
         songPlaying
           ? ComfyJS.Say("!skip", extra.channel)
