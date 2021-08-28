@@ -198,13 +198,13 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
     ComfyJS.Say("Bot works!", extra.channel);
 
   if (message == "piramidka" && (flags.mod || flags.broadcaster)) {
-    ComfyJS.Say("kezmanD", extra.channel);
-    ComfyJS.Say("kezmanD kezmanD ", extra.channel);
-    ComfyJS.Say("kezmanD kezmanD kezmanD", extra.channel);
-    ComfyJS.Say("kezmanD kezmanD kezmanD kezmanD", extra.channel);
-    ComfyJS.Say("kezmanD kezmanD kezmanD", extra.channel);
-    ComfyJS.Say("kezmanD kezmanD ", extra.channel);
-    ComfyJS.Say("kezmanD", extra.channel);
+    ComfyJS.Say("kezmanJAM ", extra.channel);
+    ComfyJS.Say("kezmanJAM  kezmanJAM  ", extra.channel);
+    ComfyJS.Say("kezmanJAM  kezmanJAM  kezmanJAM ", extra.channel);
+    ComfyJS.Say("kezmanJAM  kezmanJAM  kezmanJAM  kezmanJAM ", extra.channel);
+    ComfyJS.Say("kezmanJAM  kezmanJAM  kezmanJAM ", extra.channel);
+    ComfyJS.Say("kezmanJAM  kezmanJAM  ", extra.channel);
+    ComfyJS.Say("kezmanJAM ", extra.channel);
   }
   const isPriamidka = message.lastIndexOf("piramidka");
   const emote = message.substr(9);
