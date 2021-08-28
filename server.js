@@ -186,8 +186,11 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
     
   });
   }
+  
+  const isVolumeCommand = message.lastIndexOf("!volume");
+  const volumeValue = message.substr(6);
 
-  if (message === "song" && user === "DynaM1X1") {
+  if (isVolumeCommand == 0 && (flags.mod || flags.broadcaster)) {
     timeRequest(extra.channel, function(data) {
       console.log(data, "song");
     });
