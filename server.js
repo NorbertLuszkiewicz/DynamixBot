@@ -117,7 +117,7 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
     if (flags.customReward && extra.customRewardId === id) {
       ComfyJS.Say("!sr " + message, extra.channel);
       pauseSong(extra.channel, status => {
-        status == "200" && timeRequest(extra.channel, "add");
+        
       });
     }
   });
