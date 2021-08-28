@@ -65,7 +65,7 @@ fastify.get("/", function(request, reply) {
 
 const ComfyJS = require("comfy.js");
 const TWITCHUSER = "dynam1x1";
-const TWITCHCHANNELS = ["kezman22", "simplywojteksimplywojtek", "og1ii"];
+const TWITCHCHANNELS = ["kezman22", "simplywojteksimplywojtek", "og1ii", "l2plelouch"];
 const OAUTH = process.env.OAUTH;
 let maxVolumeDate = 0;
 let timeMaxVolume = 0;
