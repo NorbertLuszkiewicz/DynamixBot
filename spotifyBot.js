@@ -68,7 +68,8 @@ const nextSong = streamer => {
     "POST",
     NEXT + "?device_id=" + device[streamer],
     null,
-    handleApiResponse
+    handleApiResponse,
+    streamer
   );
 };
 const changeVolume = streamer => {
@@ -76,7 +77,8 @@ const changeVolume = streamer => {
     "PUT",
     `${VOLUME}?volume_percent=${100}&device_id=${device[streamer]}`,
     null,
-    handleApiResponse
+    handleApiResponse,
+    streamer
   );
   let now = Date.now();
   console.log(now);
