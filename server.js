@@ -117,6 +117,7 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
     if (flags.customReward && extra.customRewardId === id) {
       ComfyJS.Say("!sr " + message, extra.channel);
       pauseSong(extra.channel);
+      timeRequest(extra.channel, "add");
     }
   });
 
@@ -124,9 +125,12 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
     if (flags.customReward && extra.customRewardId === id) {
       songPlayingNow(extra.channel, function(songPlaying) {
         console.log(songPlaying, "playSongInSr");
-        songPlaying
-          ? ComfyJS.Say("!skip", extra.channel)
-          : nextSong(extra.channel);
+        if (songPlaying) {
+          ComfyJS.Say("!skip", extra.channel);
+          timeRequest(extra.channel, "skip");
+        } else {
+          nextSong(extra.channel);
+        }
       });
     }
   });
@@ -169,7 +173,7 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
     });
   }
   if (message === "time" && user === "DynaM1X1") {
-    timeRequest(extra.channel,"skip" , function(songPlaying) {
+    timeRequest(extra.channel, "skip", function(songPlaying) {
       console.log(songPlaying);
     });
   }

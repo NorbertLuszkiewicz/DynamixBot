@@ -51,7 +51,7 @@ const songPlayingNow = (streamer, done) => {
   });
 };
 
-const timeRequest = (streamer, action, returnData) => {
+const timeRequest = (streamer, action) => {
   returnSpotify(streamer, data => {
     let now = Date.now();
     endTime = null;
