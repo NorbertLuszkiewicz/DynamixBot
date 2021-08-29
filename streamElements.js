@@ -47,8 +47,8 @@ const returnSpotify = (streamer, returnSongFunction) => {
 
 const songPlayingNow = (streamer, done) => {
   returnSpotify(streamer, data => {
-    console.log(data.player.state, "data.player.state");
-    done(data.player.state == "playing" && data.playing != null);
+
+    done(data.player.state == "playing" && data.playing != null,);
   });
 };
 

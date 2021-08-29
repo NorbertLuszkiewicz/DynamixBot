@@ -219,20 +219,6 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
     });
   }
 
-  if (message === "!next" && (user === "DynaM1X1" || flags.broadcaster)) {
-    songPlayingNow(extra.channel, function(songPlaying) {
-      console.log(songPlaying, "songPlaying");
-      if (songPlaying) {
-        ComfyJS.Say("!skip", extra.channel);
-        timeRequest(extra.channel, "skip");
-      } else {
-        nextSong(extra.channel);
-      }
-    });
-  }
-  if (message === "time" && user === "DynaM1X1") {
-    timeRequest(extra.channel, "skip");
-  }
   if (message === "volumetest" && user === "DynaM1X1") {
     let { id, min, max, time } = maxVolumeList[2];
     ComfyJS.Say("!volume " + max, extra.channel);
@@ -303,12 +289,19 @@ ComfyJS.onCommand = (user, command, message, flags, extra) => {
   if (command == "song") {
     currentlyPlaying(extra.channel, data => {
       console.log(data);
-      let url = data.item.external_urls.spotify
-        ? data.item.external_urls.spotify
-        : "";
-      let name = data.item.name ? data.item.name : "nieznane";
+      songPlayingNow(extra.channel, function(songPlaying) {
+        if (songPlaying) {
+          
+        } else {
+          let url = data.item.external_urls.spotify
+            ? data.item.external_urls.spotify
+            : "";
+          let name = data.item.name ? data.item.name : "nieznane";
 
-      data && ComfyJS.Say("@" + user + " " + name + " " + url, extra.channel);
+          data &&
+            ComfyJS.Say("@" + user + " " + name + " " + url, extra.channel);
+        }
+      });
     });
   }
 
@@ -323,6 +316,18 @@ ComfyJS.onCommand = (user, command, message, flags, extra) => {
           "@" + user + " aktualnie leci ta playlista: " + url + " catJAM ",
           extra.channel
         );
+    });
+  }
+
+  if (command == "next" && (user === "DynaM1X1" || flags.broadcaster)) {
+    songPlayingNow(extra.channel, function(songPlaying) {
+      console.log(songPlaying, "songPlaying");
+      if (songPlaying) {
+        ComfyJS.Say("!skip", extra.channel);
+        timeRequest(extra.channel, "skip");
+      } else {
+        nextSong(extra.channel);
+      }
     });
   }
 };
