@@ -53,8 +53,7 @@
                 - automatyczne dodanie piosenki do SR przy wykupieniu piosenki za punkty kanału
             </div>
             <div class="item">
-                - automatyczne zatrzymanie spotify przy kupnie piosenki do SR za punkty kanału (jak i przy komendzie !sr) i włączenie spotify po zakończeniu SR *() 
-              (z powododu ze API StreamElements jest ubogir włączenie ponowne spotify działa tylko jeżeli w SR jest 1 piosenka)
+                - automatyczne zatrzymanie spotify przy kupnie piosenki do SR za punkty kanału (jak i przy komendzie !sr) i włączenie spotify po zakończeniu SR *(nie działa zawsze dokładne działanie niżej) 
             </div>
             <div class="item">
                 - automatyczne skipnięcie piosenki na SR jak i na spotify za punkty kanału
@@ -98,6 +97,18 @@
                 <p>Aby bot działał z nagrodami za punkty, owe nagrody muszą być z możliwością napisania czegoś w nich, aby bot mógł je wyłapać.
                   Potrzebuje też ID nagrody w tym celu muszę być aktywny przy jakimś odpaleniu nagrody abym mógł wyłapać jej ID (jednorazowa akcja przy kazdej nagordzie za pkt)
                 </p>
+            </div>
+            <div class="item">
+                <p>Aby bot mógł pisać na czacie (potrzebne przy puszczaniu SR za pkt, skipowaniu, zmianami w głosności SR/spotify) potrzebuje on być moderatorem na twitch</p>
+            </div>
+            <div class="item">
+                <p>Jeżli chcemy aby bot był połącony z Stream Element, spotify, potrzebuje do tego uprawnień i kluczy więcej informacji jak je dostać dodać do bota PW</p>
+            </div>
+        </div>
+  <div class="item-list">
+            <div class="item">
+                <p>Ponowne włączenie spotify nie działą zawsze z powododu ze API StreamElements jest ubogie włączenie ponowne spotify działa tylko jeżeli w SR jest 1 piosenka (jeżeli dodajemy i jest to jedyna piosenka) 
+              oraz kiedy użyto nagrody "skip"(która skipuje pisenke z SR) wtedy progrm wylicza za ile ma się włączyć spotify na podstawie trwana kolejki</p>
             </div>
             <div class="item">
                 <p>Aby bot mógł pisać na czacie (potrzebne przy puszczaniu SR za pkt, skipowaniu, zmianami w głosności SR/spotify) potrzebuje on być moderatorem na twitch</p>
