@@ -192,11 +192,13 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   if (message === "device" && user === "DynaM1X1") {
     refreshDevices(extra.channel);
   }
-const songLast = message.lastIndexOf("song")
-  if (message == =) {
+
+  if (message == "song") {
     currentlyPlaying(extra.channel, data => {
-      console.log(data)
-      let url = data.item.external_urls.spotify ? data.item.external_urls.spotify : "";
+      console.log(data);
+      let url = data.item.external_urls.spotify
+        ? data.item.external_urls.spotify
+        : "";
       let name = data.item.name ? data.item.name : "nieznane";
 
       data && ComfyJS.Say("@" + user + " " + name + " " + url, extra.channel);
@@ -205,15 +207,13 @@ const songLast = message.lastIndexOf("song")
 
   if (message == "playlista") {
     currentlyPlaying(extra.channel, data => {
-      let url = data.context.external_urls.spotify ? data.context.external_urls.spotify : "nieznane"
-      
+      let url = data.context.external_urls.spotify
+        ? data.context.external_urls.spotify
+        : "nieznane";
+
       data &&
         ComfyJS.Say(
-          "@" +
-            user +
-            " aktualnie leci ta playlista: " +
-            url +
-            " catJAM ",
+          "@" + user + " aktualnie leci ta playlista: " + url + " catJAM ",
           extra.channel
         );
     });
@@ -297,6 +297,34 @@ const songLast = message.lastIndexOf("song")
   }
 
   extra.customRewardId && console.log(extra.customRewardId, extra.channel);
+};
+
+ComfyJS.onCommand = (user, command, message, flags, extra) => {
+  if (command == "song") {
+    currentlyPlaying(extra.channel, data => {
+      console.log(data);
+      let url = data.item.external_urls.spotify
+        ? data.item.external_urls.spotify
+        : "";
+      let name = data.item.name ? data.item.name : "nieznane";
+
+      data && ComfyJS.Say("@" + user + " " + name + " " + url, extra.channel);
+    });
+  }
+
+  if (command == "playlist" || command == "playlista") {
+    currentlyPlaying(extra.channel, data => {
+      let url = data.context.external_urls.spotify
+        ? data.context.external_urls.spotify
+        : "nieznane";
+
+      data &&
+        ComfyJS.Say(
+          "@" + user + " aktualnie leci ta playlista: " + url + " catJAM ",
+          extra.channel
+        );
+    });
+  }
 };
 
 //Chant
