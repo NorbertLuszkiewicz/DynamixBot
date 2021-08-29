@@ -97,19 +97,29 @@ const maxVolumeList = [
     name: "kezman22",
     id: "09150d1d4-51fb-4219-a3ff-92398614029c",
     max: 100,
-    min: 20
+    min: 40,
+    time: 30000
   },
   {
     name: "simplywojtek",
     id: "9150d1d4-51fb-4219-a3ff-92398614029c",
     max: 100,
-    min: 75
+    min: 75,
+    time: 30000
+  },
+  {
+    name: "dynam1x1",
+    id: "09150d1d4-51fb-4219-a3ff-92398614029c",
+    max: 70,
+    min: 35,
+    time: 10000
   },
   {
     name: "og1ii",
     id: "dc293b9a-8278-401e-aa23-e715e3f6b4bc",
     max: 100,
-    min: 75
+    min: 75,
+    time: 30000
   }
 ];
 
@@ -139,20 +149,20 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
     }
   });
 
-  maxVolumeList.forEach(({ id, min, max }) => {
+  maxVolumeList.forEach(({ id, min, max, time }) => {
     if (flags.customReward && extra.customRewardId === id) {
       ComfyJS.Say("!volume " + max, extra.channel);
-      changeVolumeOnTime(extra.channel);
+      changeVolumeOnTime(extra.channel, min, max, time);
 
       let now = Date.now();
       console.log(now);
 
       if (maxVolumeDate > now) {
-        maxVolumeDate += 30000;
+        maxVolumeDate += time;
       }
 
       if (!maxVolumeDate || maxVolumeDate < now) {
-        maxVolumeDate = now + 30000;
+        maxVolumeDate = now + time;
       }
 
       clearTimeout(timeMaxVolume);
@@ -196,20 +206,20 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   if (message === "time" && user === "DynaM1X1") {
     timeRequest(extra.channel, "skip");
   }
-  if (message === "volume" && user === "DynaM1X1") {
-    maxVolumeList.forEach(({ id, min, max }) => {
+  if (message === "volumetest" && user === "DynaM1X1") {
+    maxVolumeList[2](({ id, min, max, time }) => {
       ComfyJS.Say("!volume " + max, extra.channel);
-      changeVolumeOnTime(extra.channel);
+      changeVolumeOnTime(extra.channel, min, max, time);
 
       let now = Date.now();
       console.log(now);
 
       if (maxVolumeDate > now) {
-        maxVolumeDate += 30000;
+        maxVolumeDate += time;
       }
 
       if (!maxVolumeDate || maxVolumeDate < now) {
-        maxVolumeDate = now + 30000;
+        maxVolumeDate = now + time;
       }
 
       clearTimeout(timeMaxVolume);

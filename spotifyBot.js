@@ -71,10 +71,10 @@ const nextSong = streamer => {
     streamer
   );
 };
-const changeVolumeOnTime = streamer => {
+const changeVolumeOnTime = (streamer, min, max, time) => {
   callApi(
     "PUT",
-    `${VOLUME}?volume_percent=${100}&device_id=${device[streamer]}`,
+    `${VOLUME}?volume_percent=${max}&device_id=${device[streamer]}`,
     null,
     handleApiResponse,
     streamer
@@ -83,18 +83,18 @@ const changeVolumeOnTime = streamer => {
   let now = Date.now();
 
   if (maxVolumeDate > now) {
-    maxVolumeDate += 30000;
+    maxVolumeDate += time;
   }
 
   if (!maxVolumeDate || maxVolumeDate < now) {
-    maxVolumeDate = now + 30000;
+    maxVolumeDate = now + time;
   }
 
   clearTimeout(timeMaxVolume);
   timeMaxVolume = setTimeout(() => {
     callApi(
       "PUT",
-      `${VOLUME}?volume_percent=${30}&device_id=${device[streamer]}`,
+      `${VOLUME}?volume_percent=${min}&device_id=${device[streamer]}`,
       null,
       handleApiResponse,
       streamer
