@@ -98,7 +98,7 @@ const maxVolumeList = [
     name: "kezman22",
     id: "8700497a-4653-4d41-9c21-4afa31836666",
     max: 100,
-    min: 62,
+    min: 55,
     time: 30000
   },
   {
@@ -192,9 +192,17 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   if (message === "device" && user === "DynaM1X1") {
     refreshDevices(extra.channel);
   }
-  
-  if (message === "song" && user === "DynaM1X1") {
-    currentlyPlaying(extra.channel, (data) => {console.log(data)});
+
+  if (message == "song") {
+    currentlyPlaying(extra.channel, data => {
+      console.log("dotarło tu", data)
+      data &&
+      ComfyJS.Say(
+        data.item.name,
+        extra.channel
+      );
+      console.log(data);
+    });
   }
 
   if (message === "!next" && (user === "DynaM1X1" || flags.broadcaster)) {
@@ -212,26 +220,25 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
     timeRequest(extra.channel, "skip");
   }
   if (message === "volumetest" && user === "DynaM1X1") {
-      let { id, min, max, time } = maxVolumeList[2]
-      ComfyJS.Say("!volume " + max, extra.channel);
-      changeVolumeOnTime(extra.channel, min, max, time);
+    let { id, min, max, time } = maxVolumeList[2];
+    ComfyJS.Say("!volume " + max, extra.channel);
+    changeVolumeOnTime(extra.channel, min, max, time);
 
-      let now = Date.now();
-      console.log(now);
+    let now = Date.now();
+    console.log(now);
 
-      if (maxVolumeDate > now) {
-        maxVolumeDate += time;
-      }
+    if (maxVolumeDate > now) {
+      maxVolumeDate += time;
+    }
 
-      if (!maxVolumeDate || maxVolumeDate < now) {
-        maxVolumeDate = now + time;
-      }
+    if (!maxVolumeDate || maxVolumeDate < now) {
+      maxVolumeDate = now + time;
+    }
 
-      clearTimeout(timeMaxVolume);
-      timeMaxVolume = setTimeout(() => {
-        ComfyJS.Say("!volume " + min, extra.channel);
-      }, maxVolumeDate - now);
-  
+    clearTimeout(timeMaxVolume);
+    timeMaxVolume = setTimeout(() => {
+      ComfyJS.Say("!volume " + min, extra.channel);
+    }, maxVolumeDate - now);
   }
 
   const isVolumeCommand = message.lastIndexOf("volume");
