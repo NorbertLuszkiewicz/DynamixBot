@@ -163,9 +163,9 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
     });
   }
 
-  if (message === "mem pezet" && user === "DynaM1X1") {
-     ComfyJS.Say("!sr " + message, extra.channel);
-      pauseSong(extra.channel, status => {});
+  if (message === "start" && user === "DynaM1X1") {
+     ComfyJS.Say("!sr https://www.youtube.com/watch?v=T3zsoUwyqnU&ab_channel=LANCA", extra.channel);
+      pauseSong(extra.channel, status => {status == "200" && timeRequest(extra.channel, "add")});
   }
 
   if (message === "device" && user === "DynaM1X1") {
