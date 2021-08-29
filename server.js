@@ -176,6 +176,7 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   
   if (message === "next" && user === "DynaM1X1") {
       songPlayingNow(extra.channel, function(songPlaying) {
+        console.log(songPlaying, "songPlaying")
         if (songPlaying) {
           ComfyJS.Say("!skip", extra.channel);
           timeRequest(extra.channel, "skip");

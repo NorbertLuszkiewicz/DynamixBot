@@ -3,11 +3,11 @@ const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 const { startSong } = require("./spotifyBot");
 
 const clientId = {
-  kezman22: process.env.SR_CLIENT_ID_KEZMAN,
+  dynam1x1: process.env.SR_CLIENT_ID_KEZMAN,
   og1ii: process.env.SR_CLIENT_ID_OGI
 };
 const clientSecret = {
-  kezman22: process.env.SR_CLIENT_SECRET_KEZMAN,
+  dynam1x1: process.env.SR_CLIENT_SECRET_KEZMAN,
   og1ii: process.env.SR_CLIENT_SECRET_OGI
 };
 const url = "https://api.streamelements.com/kappa/v2/";
@@ -47,6 +47,7 @@ const returnSpotify = (streamer, returnSongFunction) => {
 
 const songPlayingNow = (streamer, done) => {
   returnSpotify(streamer, data => {
+    console.log(data.player.state, "data.player.state")
     done(data.player.state == "playing" && data.playing != null);
   });
 };
