@@ -13,16 +13,17 @@ const CURRENTLYPLAYING =
 let positionMs = 0;
 let device = {
   og1ii: process.env.DEVICE_OGI ,
-  dynam1x1: process.env.DEVICE_KEZMAN ,
-  simplywojtek: ""
+  dynam1x1: process.env.DEVICE_DYNAMIX ,
+  kezman22: process.env.DEVICE_KEZMAN
 };
 
 let refreshTokenList = {
   og1ii:
     "AQCYs0az-dh95MDuWB72JAruSc4rj821ERIEK4RpMsEvsQqp5pyzsaqu9kMbqUKsamCI2_gzqyNDkFEEIXE0pHvVX_3_1c3XjfyT-S2NXYKSPl7Ms3w1ZKxsq9ZInJZiezY",
   dynam1x1:
-    "AQCg9rcXt-DPSVtz9rEqE3fA1x78NqvV6nysu5T9O1EZ1wFWmMJw3yO2budF5OknAiKM5geXUKPXk0Z2RnHm9DMD294V_WdcHJ9Wq4Meg3oRA7YYopjM0sSfpMC1qjQu-w8",  kezman22:
-    "AQCg9rcXt-DPSVtz9rEqE3fA1x78NqvV6nysu5T9O1EZ1wFWmMJw3yO2budF5OknAiKM5geXUKPXk0Z2RnHm9DMD294V_WdcHJ9Wq4Meg3oRA7YYopjM0sSfpMC1qjQu-w8",
+    "AQCg9rcXt-DPSVtz9rEqE3fA1x78NqvV6nysu5T9O1EZ1wFWmMJw3yO2budF5OknAiKM5geXUKPXk0Z2RnHm9DMD294V_WdcHJ9Wq4Meg3oRA7YYopjM0sSfpMC1qjQu-w8",  
+  kezman22:
+    "AQARUA5cDjZDt0Bv-5ZOPVOj9u3i_Mio7XvW61jBLGCMOKl5x1xFw_gqieiIN5P5kSsWMkqCEmXm4uMmCRk8QsujTEhjRhYx5NuyvgikcTc6C47j12dp-BRxYAEPSOZ4l3g",
   simplywojtek: "" 
 };
 
@@ -33,7 +34,7 @@ let accessTokenList = {
     "BQAJ4xsBe8xP9tRyUkDlDC5zmgxK6y2HvUqW_fjXQ3e7RphcC-DIvex6DlA09PamCBmiArNikMiIBcu8jhQifHTJ5zEOlTXpn32L_s0gOZhT_WV-YIwZebkxtn25xV8bl88oo-wMq5GkBRzjqAVfCLtTTKgZqTaILDuMiHThXoUJUMnreFnWetIaFuPh9LeBV5pXo3mQlFc_QyO3wGwNa725Rg",
   simplywojtek: "",
   kezman22:
-    "AQCg9rcXt-DPSVtz9rEqE3fA1x78NqvV6nysu5T9O1EZ1wFWmMJw3yO2budF5OknAiKM5geXUKPXk0Z2RnHm9DMD294V_WdcHJ9Wq4Meg3oRA7YYopjM0sSfpMC1qjQu-w8",
+    "BQBCwAtXVoIC_MmGrKGVtOBXWELImybf_lmm2W9Ccj8u6YCOCQSAX7jt9kVfWg1LztAApu9a6JKgBA7W4TqnytEeSDvIzWBbTOsFus-w9XHYnJvuzf_b7IGu8b0Ss2NZbzIY8VSaZYLEFF08X6kjCrGF5imyjDhimCNauJipt1T3ZBYc4GCOeXorqbKct4OGXWZRSeJxZfR-CkkACFvJeWxJ02jAVMKxCLKOg9I9pDzSkNPrTZpCWN0SYOlK2rRPVRjRx07UdhUfEZo7KvF9_mArzIvD",
 };
 let maxVolumeDate = null;
 let timeMaxVolume = null;
@@ -120,10 +121,10 @@ const setVolume = (streamer, value) => {
 
 function refreshAccessToken() {
   const bodyOgi = `grant_type=refresh_token&refresh_token=${refreshTokenList.og1ii}&client_id=${clientId}`;
-  const bodyKezman = `grant_type=refresh_token&refresh_token=${refreshTokenList.dynam1x1}&client_id=${clientId}`;
+  const bodyKezman = `grant_type=refresh_token&refresh_token=${refreshTokenList.kezman22}&client_id=${clientId}`;
 
   callAuthorizationApi(bodyOgi, "og1ii");
-  callAuthorizationApi(bodyKezman, "dynam1x1");
+  callAuthorizationApi(bodyKezman, "kezman22");
 }
 
 function callAuthorizationApi(body, streamer) {

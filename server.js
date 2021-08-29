@@ -97,7 +97,7 @@ const maxVolumeList = [
     name: "kezman22",
     id: "09150d1d4-51fb-4219-a3ff-92398614029c",
     max: 100,
-    min: 40,
+    min: 62,
     time: 30000
   },
   {
