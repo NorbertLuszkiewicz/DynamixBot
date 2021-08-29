@@ -71,7 +71,7 @@ const timeRequest = (streamer, action) => {
                   now);
           } else if (endTime > now) {
             data.queue.length == 0
-              ? (endTime = parseInt(data.playing.duration) * 1000 + now)
+              ? (endTime = parseInt(data.playing.duration) * 1000 + endTime)
               : (endTime =
                   endTime +
                   (parseInt(data.queue[data.queue.length - 1].duration) * 1000));
