@@ -117,9 +117,7 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   addSongIdList.forEach(({ id }) => {
     if (flags.customReward && extra.customRewardId === id) {
       ComfyJS.Say("!sr " + message, extra.channel);
-      pauseSong(extra.channel, status => {
-        
-      });
+      pauseSong(extra.channel, status => {});
     }
   });
 
@@ -161,29 +159,29 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
 
   if (message === "pause" && user === "DynaM1X1") {
     pauseSong(extra.channel, status => {
-        status == "200" && timeRequest(extra.channel, "skip");
-      });
-    
+      status == "200" && timeRequest(extra.channel, "skip");
+    });
   }
-  
-  if (message === "start" && user === "DynaM1X1") {
-    startSong(extra.channel);
+
+  if (message === "mem pezet" && user === "DynaM1X1") {
+     ComfyJS.Say("!sr " + message, extra.channel);
+      pauseSong(extra.channel, status => {});
   }
-  
-    if (message === "device" && user === "DynaM1X1") {
+
+  if (message === "device" && user === "DynaM1X1") {
     refreshDevices(extra.channel);
   }
-  
+
   if (message === "next" && user === "DynaM1X1") {
-      songPlayingNow(extra.channel, function(songPlaying) {
-        console.log(songPlaying, "songPlaying")
-        if (songPlaying) {
-          ComfyJS.Say("!skip", extra.channel);
-          timeRequest(extra.channel, "skip");
-        } else {
-          nextSong(extra.channel);
-        }
-      });
+    songPlayingNow(extra.channel, function(songPlaying) {
+      console.log(songPlaying, "songPlaying");
+      if (songPlaying) {
+        ComfyJS.Say("!skip", extra.channel);
+        timeRequest(extra.channel, "skip");
+      } else {
+        nextSong(extra.channel);
+      }
+    });
   }
   if (message === "time" && user === "DynaM1X1") {
     timeRequest(extra.channel, "skip");
@@ -215,7 +213,7 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   const volumeValue = message.substr(7);
 
   if (isVolumeCommand == 0 && (flags.mod || flags.broadcaster)) {
-    console.log(volumeValue, "tyle daje")
+    console.log(volumeValue, "tyle daje");
     setVolume(extra.channel, volumeValue);
   }
 
