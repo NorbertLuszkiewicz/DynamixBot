@@ -193,32 +193,6 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
     refreshDevices(extra.channel);
   }
 
-  if (message == "song") {
-    currentlyPlaying(extra.channel, data => {
-      console.log(data);
-      let url = data.item.external_urls.spotify
-        ? data.item.external_urls.spotify
-        : "";
-      let name = data.item.name ? data.item.name : "nieznane";
-
-      data && ComfyJS.Say("@" + user + " " + name + " " + url, extra.channel);
-    });
-  }
-
-  if (message == "playlista") {
-    currentlyPlaying(extra.channel, data => {
-      let url = data.context.external_urls.spotify
-        ? data.context.external_urls.spotify
-        : "nieznane";
-
-      data &&
-        ComfyJS.Say(
-          "@" + user + " aktualnie leci ta playlista: " + url + " catJAM ",
-          extra.channel
-        );
-    });
-  }
-
   if (message === "volumetest" && user === "DynaM1X1") {
     let { id, min, max, time } = maxVolumeList[2];
     ComfyJS.Say("!volume " + max, extra.channel);
@@ -289,9 +263,9 @@ ComfyJS.onCommand = (user, command, message, flags, extra) => {
   if (command == "song") {
     currentlyPlaying(extra.channel, data => {
       console.log(data);
-      songPlayingNow(extra.channel, function(songPlaying) {
+      songPlayingNow(extra.channel, function(songPlaying, title, url) {
         if (songPlaying) {
-          
+          ComfyJS.Say("@" + user + " " + title + " " + url, extra.channel);
         } else {
           let url = data.item.external_urls.spotify
             ? data.item.external_urls.spotify
