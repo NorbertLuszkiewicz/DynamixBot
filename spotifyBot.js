@@ -204,13 +204,30 @@ function handleCurrentlyPlayingResponse(streamer) {
   }
 }
 
-function currentlyPlaying(streamer) {
-  console.log("sco gra");
+function currentlyPlaying(streamer, callback) {
+  
   callApi(
     "GET",
     PLAYER + "?market=US",
     null,
-    handleCurrentlyPlayingResponse,
+    () => {if (this.status == 200) {
+      
+    const data = JSON.parse(this.responseText);
+    callback(data)
+    if (data.device) {
+      device[streamer] = data.device.id;
+    }
+    positionMs = data.progress_ms;
+
+    if (data.context != null) {
+      // select playlist
+      currentPlaylist[streamer] = data.context.uri;
+      currentPlaylist[streamer] = currentPlaylist[streamer].substring(
+        currentPlaylist[streamer].lastIndexOf(":") + 1,
+        currentPlaylist[streamer].length
+      );
+    }
+  }},
     streamer
   );
 }

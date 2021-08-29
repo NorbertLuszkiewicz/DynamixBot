@@ -5,7 +5,8 @@ const {
   refreshAccessToken,
   refreshDevices,
   changeVolumeOnTime,
-  setVolume
+  setVolume,
+  currentlyPlaying
 } = require("./spotifyBot");
 
 const {
