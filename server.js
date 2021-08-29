@@ -193,7 +193,7 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
     refreshDevices(extra.channel);
   }
 const songLast = message.lastIndexOf("song")
-  if (songLast == 1) {
+  if (message == =) {
     currentlyPlaying(extra.channel, data => {
       console.log(data)
       let url = data.item.external_urls.spotify ? data.item.external_urls.spotify : "";
