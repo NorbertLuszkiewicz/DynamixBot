@@ -54,22 +54,23 @@ const songPlayingNow = (streamer, done) => {
 
 const timeRequest = (streamer, action) => {
   returnSpotify(streamer, data => {
+    let now = Date.now();
     console.log(data, "data")
     setTimeout(()=> {
-      console.log(data, "data po 1s")
+      console.log(data, "data po 1s",data.queue[data.queue.length - 1] )
           if (action == "add") {
       if (!endTime || endTime < now) {
         data.queue.length == 0
           ? (endTime = parseInt(data.playing ? data.playing.duration : 0) * 1000 + now)
           : (endTime =
               (parseInt(data.playing ? data.playing.duration : 0) +
-                parseInt(data.queue[-1].duration)) *
+                parseInt(data.queue[data.queue.length - 1].duration)) *
                 1000 +
               now);
       } else if (endTime > now) {
         data.queue.length == 0
           ? (endTime = parseInt(data.playing.duration) * 1000 + now)
-          : (endTime = (endTime + parseInt(data.queue[-1].duration)) * 1000);
+          : (endTime = (endTime + (parseInt(data.queue[data.queue.length - 1].duration)) * 1000));
       }
     }
     if (action == "skip") {
@@ -90,7 +91,7 @@ const timeRequest = (streamer, action) => {
       }, 1000);
     }
     
-    let now = Date.now();
+    
     console.log(data);
 
 
@@ -99,12 +100,13 @@ const timeRequest = (streamer, action) => {
 
     setTimeout(() => {
       returnSpotify(streamer, data => {
+        console.log(data, "aaaaaa", endTime, now)
         if (!data.playing) {
           startSong(streamer);
           endTime = null;
         }
       });
-    }, endTime - now);
+    }, endTime - now + 2000);
   });
 }, 1000)};
 
