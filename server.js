@@ -70,7 +70,8 @@ const TWITCHCHANNELS = [
   "kezman22",
   "simplywojteksimplywojtek",
   "og1ii",
-  "l2plelouch"
+  "l2plelouch",
+  "dynam1x1"
 ];
 const OAUTH = process.env.OAUTH;
 let maxVolumeDate = 0;
