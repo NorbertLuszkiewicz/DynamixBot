@@ -95,7 +95,7 @@ const skipSongIdList = [
 const maxVolumeList = [
   {
     name: "kezman22",
-    id: "09150d1d4-51fb-4219-a3ff-92398614029c",
+    id: "8700497a-4653-4d41-9c21-4afa31836666",
     max: 100,
     min: 62,
     time: 30000
