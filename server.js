@@ -208,9 +208,10 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   }
 
   const isVolumeCommand = message.lastIndexOf("volume");
-  const volumeValue = message.substr(6);
+  const volumeValue = message.substr(7);
 
   if (isVolumeCommand == 0 && (flags.mod || flags.broadcaster)) {
+    console.log(volumeValue, "tyle daje")
     setVolume(extra.channel, volumeValue);
   }
 
