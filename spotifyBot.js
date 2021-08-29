@@ -117,10 +117,10 @@ const setVolume = (streamer, value) => {
 
 function refreshAccessToken() {
   const bodyOgi = `grant_type=refresh_token&refresh_token=${refreshTokenList.og1ii}&client_id=${clientId}`;
-  const bodyKezman = `grant_type=refresh_token&refresh_token=${refreshTokenList.kezman22}&client_id=${clientId}`;
+  const bodyKezman = `grant_type=refresh_token&refresh_token=${refreshTokenList.dynam1x1}&client_id=${clientId}`;
 
   callAuthorizationApi(bodyOgi, "og1ii");
-  callAuthorizationApi(bodyKezman, "kezman22");
+  callAuthorizationApi(bodyKezman, "dynam1x1");
 }
 
 function callAuthorizationApi(body, streamer) {
