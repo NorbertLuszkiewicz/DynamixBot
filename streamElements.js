@@ -54,13 +54,15 @@ const songPlayingNow = (streamer, done) => {
 
 const timeRequest = (streamer, action) => {
   returnSpotify(streamer, data => {
+    console.log(data, "data")
     setTimeout(()=> {
+      console.log(data, "data po 1s")
           if (action == "add") {
       if (!endTime || endTime < now) {
         data.queue.length == 0
-          ? (endTime = parseInt(data.playing.duration) * 1000 + now)
+          ? (endTime = parseInt(data.playing ? data.playing.duration : 0) * 1000 + now)
           : (endTime =
-              (parseInt(data.playing.duration) +
+              (parseInt(data.playing ? data.playing.duration : 0) +
                 parseInt(data.queue[-1].duration)) *
                 1000 +
               now);
@@ -87,7 +89,7 @@ const timeRequest = (streamer, action) => {
         }
       }, 1000);
     }
-    }, 1000)
+    
     let now = Date.now();
     console.log(data);
 
@@ -104,7 +106,7 @@ const timeRequest = (streamer, action) => {
       });
     }, endTime - now);
   });
-};
+}, 1000)};
 
 module.exports = {
   returnSpotify,
