@@ -48,7 +48,7 @@ const returnSpotify = (streamer, returnSongFunction) => {
 const songPlayingNow = (streamer, done) => {
   returnSpotify(streamer, data => {
 
-    done(data.player.state == "playing" && data.playing != null,);
+    done(data.player.state == "playing" && data.playing != null,data.playing.title);
   });
 };
 
@@ -101,7 +101,6 @@ const timeRequest = (streamer, action) => {
 
         setTimeout(() => {
           returnSpotify(streamer, data => {
-            console.log(data, "aaaaaa", endTime, now);
             if (!data.playing) {
               startSong(streamer);
               endTime = null;

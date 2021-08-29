@@ -78,7 +78,7 @@ const OAUTH = process.env.OAUTH;
 let maxVolumeDate = 0;
 let timeMaxVolume = 0;
 
-setTimeout(refreshAccessToken, 1000);
+setTimeout(refreshAccessToken, 5000);
 setInterval(refreshAccessToken, 35000);
 
 const addSongIdList = [
