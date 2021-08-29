@@ -192,6 +192,10 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   if (message === "device" && user === "DynaM1X1") {
     refreshDevices(extra.channel);
   }
+  
+  if (message === "song" && user === "DynaM1X1") {
+    currentlyPlaying(extra.channel, (data) => {console.log(data)});
+  }
 
   if (message === "!next" && (user === "DynaM1X1" || flags.broadcaster)) {
     songPlayingNow(extra.channel, function(songPlaying) {

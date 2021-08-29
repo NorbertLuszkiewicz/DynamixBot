@@ -167,9 +167,7 @@ function handleApiResponse() {
   if (this.status == 200) {
     console.log(this.responseText, "response");
     action = "";
-    setTimeout(currentlyPlaying, 1000);
-  } else if (this.status == 204) {
-    setTimeout(currentlyPlaying, 1000);
+
   } else if (this.status == 401) {
     console.log("stary token");
     refreshAccessToken();
@@ -210,9 +208,9 @@ function currentlyPlaying(streamer, callback) {
     "GET",
     PLAYER + "?market=US",
     null,
-    () => {if (this.status == 200) {
+    function() {
       
-    const data = JSON.parse(this.responseText);
+    let data = JSON.parse(this.responseText);
     callback(data)
     if (data.device) {
       device[streamer] = data.device.id;
@@ -227,7 +225,7 @@ function currentlyPlaying(streamer, callback) {
         currentPlaylist[streamer].length
       );
     }
-  }},
+  },
     streamer
   );
 }
@@ -261,5 +259,6 @@ module.exports = {
   refreshAccessToken,
   refreshDevices,
   changeVolumeOnTime,
-  setVolume
+  setVolume,
+  currentlyPlaying
 };
