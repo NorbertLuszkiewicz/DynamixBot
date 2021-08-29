@@ -87,7 +87,7 @@ const addSongIdList = [
 ];
 
 const skipSongIdList = [
-  { name: "kezman22", id: "09150d1d4-51fb-4219-a3ff-92398614029c" },
+  { name: "kezman22", id: "0feec3ff-0f07-4e6c-8113-70e1eb6a8dec" },
   { name: "simplywojtek", id: "9150d1d4-51fb-4219-a3ff-92398614029c" },
   { name: "og1ii", id: "dc293b9a-8278-401e-aa23-e715e3f6b4bc" }
 ];
