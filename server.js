@@ -192,7 +192,7 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
     refreshDevices(extra.channel);
   }
 
-  if (message === "next" && user === "DynaM1X1") {
+  if (message === "!next" && (user === "DynaM1X1" || flags.broadcaster)) {
     songPlayingNow(extra.channel, function(songPlaying) {
       console.log(songPlaying, "songPlaying");
       if (songPlaying) {
@@ -207,7 +207,7 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
     timeRequest(extra.channel, "skip");
   }
   if (message === "volumetest" && user === "DynaM1X1") {
-    maxVolumeList[2](({ id, min, max, time }) => {
+      let { id, min, max, time } = maxVolumeList[2]
       ComfyJS.Say("!volume " + max, extra.channel);
       changeVolumeOnTime(extra.channel, min, max, time);
 
@@ -226,7 +226,7 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
       timeMaxVolume = setTimeout(() => {
         ComfyJS.Say("!volume " + min, extra.channel);
       }, maxVolumeDate - now);
-    });
+  
   }
 
   const isVolumeCommand = message.lastIndexOf("volume");
