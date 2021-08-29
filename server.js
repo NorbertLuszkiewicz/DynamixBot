@@ -117,9 +117,14 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   addSongIdList.forEach(({ id }) => {
     if (flags.customReward && extra.customRewardId === id) {
       ComfyJS.Say("!sr " + message, extra.channel);
-      pauseSong(extra.channel, status => {status == "200" && timeRequest(extra.channel, "add")});
     }
   });
+
+  if (user == "StreamElements" && message.lastIndexOf("to the queue") != -1) {
+    pauseSong(extra.channel, status => {
+      status == "200" && timeRequest(extra.channel, "add");
+    });
+  }
 
   skipSongIdList.forEach(({ id }) => {
     if (flags.customReward && extra.customRewardId === id) {
@@ -164,8 +169,13 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   }
 
   if (message === "start" && user === "DynaM1X1") {
-     ComfyJS.Say("!sr https://www.youtube.com/watch?v=T3zsoUwyqnU&ab_channel=LANCA", extra.channel);
-      pauseSong(extra.channel, status => {status == "200" && timeRequest(extra.channel, "add")});
+    ComfyJS.Say(
+      "!sr https://www.youtube.com/watch?v=T3zsoUwyqnU&ab_channel=LANCA",
+      extra.channel
+    );
+    pauseSong(extra.channel, status => {
+      status == "200" && timeRequest(extra.channel, "add");
+    });
   }
 
   if (message === "device" && user === "DynaM1X1") {
