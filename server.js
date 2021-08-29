@@ -192,11 +192,11 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   if (message === "device" && user === "DynaM1X1") {
     refreshDevices(extra.channel);
   }
-
-  if (message == "song") {
+const songLast = message.lastIndexOf("song")
+  if (songLast == 1) {
     currentlyPlaying(extra.channel, data => {
       console.log(data)
-      let url = data.external_urls.spotify ? data.external_urls.spotify : "";
+      let url = data.item.external_urls.spotify ? data.item.external_urls.spotify : "";
       let name = data.item.name ? data.item.name : "nieznane";
 
       data && ComfyJS.Say("@" + user + " " + name + " " + url, extra.channel);
