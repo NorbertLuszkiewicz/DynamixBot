@@ -99,7 +99,7 @@ const maxVolumeList = [
     id: "8700497a-4653-4d41-9c21-4afa31836666",
     max: 100,
     min: 55,
-    time: 30000
+    time: 45000
   },
   {
     name: "simplywojtek",
@@ -113,7 +113,7 @@ const maxVolumeList = [
     id: "09150d1d4-51fb-4219-a3ff-92398614029c",
     max: 70,
     min: 35,
-    time: 10000
+    time: 30000
   },
   {
     name: "og1ii",

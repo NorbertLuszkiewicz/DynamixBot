@@ -47,8 +47,11 @@ const returnSpotify = (streamer, returnSongFunction) => {
 
 const songPlayingNow = (streamer, done) => {
   returnSpotify(streamer, data => {
-
-    done(data.player.state == "playing" && data.playing != null,data.playing.title);
+    done(
+      data.player.state == "playing" && data.playing != null,
+      data.playing.title,
+      "https://www.youtube.com/watch?v=" + data.playing.videoId
+    );
   });
 };
 
@@ -74,7 +77,7 @@ const timeRequest = (streamer, action) => {
               ? (endTime = parseInt(data.playing.duration) * 1000 + endTime)
               : (endTime =
                   endTime +
-                  (parseInt(data.queue[data.queue.length - 1].duration) * 1000));
+                  parseInt(data.queue[data.queue.length - 1].duration) * 1000);
           }
         }
         if (action == "skip") {
