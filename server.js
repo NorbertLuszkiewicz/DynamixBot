@@ -119,7 +119,7 @@ const maxVolumeList = [
     name: "og1ii",
     id: "dc293b9a-8278-401e-aa23-e715e3f6b4bc",
     max: 100,
-    min: 75,
+    min: 69,
     time: 30000
   }
 ];
