@@ -262,35 +262,31 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   
   //WOJTI SPAN NA IMIE
   
-    console.log(user,extra.channel)
   
-  let cooldownTravis = 0  
-    if (cooldownTravis < 1 && user == "traviscwat" && extra.channel == "simplywojtek") {
-      
-      
-      
+  let cooldownTravis = 0
+  
+    if (user == "traviscwat" && extra.channel == "simplywojtek") {
+         
     let now = Date.now();
       
-   
-      
-          clearTimeout(timeCooldownTravis);
-    timeCooldownTravis = setTimeout(() => {
-      ComfyJS.Say("Travis UPOUPO", extra.channel);
-    }, 0 - now);
+   if(cooldownTravis < now){
+     console.log(this.cooldownTravis, cooldownTravis,now)
+       ComfyJS.Say("Travis UPOUPO", extra.channel);
+      }
+      this.cooldownTravis = 10*60*1000 + now
       
   }
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+      if (user == "DynaM1X1" && extra.channel == "kezman22") {
+          
+    let now = Date.now();
+      console.log(this.cooldownTravis, now, cooldownTravis < now)
+   if(cooldownTravis < now){
+       ComfyJS.Say("Travis UPOUPO", extra.channel);
+      }s
+      this.cooldownTravis = 10*60*1000 + now
+      
+  }
   
   
   
