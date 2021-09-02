@@ -69,7 +69,7 @@ const ComfyJS = require("comfy.js");
 const TWITCHUSER = "dynam1x1";
 const TWITCHCHANNELS = [
   "kezman22",
-  "simplywojteksimplywojtek",
+  "simplywojtek",
   "og1ii",
   "l2plelouch",
   "dynam1x1"
@@ -77,6 +77,7 @@ const TWITCHCHANNELS = [
 const OAUTH = process.env.OAUTH;
 let maxVolumeDate = 0;
 let timeMaxVolume = 0;
+let timeCooldownTravis = 0;
 
 setTimeout(refreshAccessToken, 5000);
 setInterval(refreshAccessToken, 35000);
@@ -261,10 +262,22 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   
   //WOJTI SPAN NA IMIE
   
+    console.log(user,extra.channel)
   
-  
-    if (user === "traviscwat" && extra.channel === "simplywojtek") {
-      ComfyJS.Say("traviscwat ^ to denciak");
+  let cooldownTravis = 0  
+    if (cooldownTravis < 1 && user == "traviscwat" && extra.channel == "simplywojtek") {
+      
+      
+      
+    let now = Date.now();
+      
+   
+      
+          clearTimeout(timeCooldownTravis);
+    timeCooldownTravis = setTimeout(() => {
+      ComfyJS.Say("Travis UPOUPO", extra.channel);
+    }, 0 - now);
+      
   }
   
   
