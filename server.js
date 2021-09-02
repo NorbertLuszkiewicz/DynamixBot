@@ -257,6 +257,30 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   }
 
   extra.customRewardId && console.log(extra.customRewardId, extra.channel);
+  
+  
+  //WOJTI SPAN NA IMIE
+  
+  
+  
+    if (user === "traviscwat" && extra.channel === "simplywojtek") {
+      ComfyJS.Say("traviscwat ^ to denciak");
+  }
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 };
 
 ComfyJS.onCommand = (user, command, message, flags, extra) => {
