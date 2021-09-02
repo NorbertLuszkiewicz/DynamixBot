@@ -258,38 +258,30 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   }
 
   extra.customRewardId && console.log(extra.customRewardId, extra.channel);
-  
-  
+
   //WOJTI SPAN NA IMIE
-  
-  
-  let cooldownTravis = 0
-  
-    if (user == "traviscwat" && extra.channel == "simplywojtek") {
-         
+
+  ;
+
+  if (user == "traviscwat" && extra.channel == "simplywojtek") {
     let now = Date.now();
-      
-   if(cooldownTravis < now){
-     console.log(this.cooldownTravis, cooldownTravis,now)
-       ComfyJS.Say("Travis UPOUPO", extra.channel);
-      }
-      this.cooldownTravis = 10*60*1000 + now
-      
+    console.log(this.timeCooldownTravis, now, this.timeCooldownTravis < now);
+    if (this.timeCooldownTravis < now) {
+      ComfyJS.Say("Travis UPOUPO", extra.channel);
+      this.timeCooldownTravis = 10 * 60 * 1000 + now;
+    }
+    
   }
-  
-      if (user == "DynaM1X1" && extra.channel == "kezman22") {
-          
+
+  if (user == "DynaM1X1" && extra.channel == "kezman22") {
     let now = Date.now();
-      console.log(this.cooldownTravis, now, cooldownTravis < now)
-   if(cooldownTravis < now){
-       ComfyJS.Say("Travis UPOUPO", extra.channel);
-      }s
-      this.cooldownTravis = 10*60*1000 + now
-      
+    console.log(this.timeCooldownTravis, now, this.timeCooldownTravis < now);
+    if (this.timeCooldownTravis < now) {
+      ComfyJS.Say("Travis UPOUPO", extra.channel);
+      this.timeCooldownTravis = 10 * 60 * 1000 + now;
+    }
+    
   }
-  
-  
-  
 };
 
 ComfyJS.onCommand = (user, command, message, flags, extra) => {
