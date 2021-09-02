@@ -79,6 +79,8 @@ let maxVolumeDate = 0;
 let timeMaxVolume = 0;
 let timeCooldownTravis = 0;
 
+
+
 setTimeout(refreshAccessToken, 5000);
 setInterval(refreshAccessToken, 35000);
 
@@ -275,10 +277,10 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
 
   if (user == "DynaM1X1" && extra.channel == "kezman22") {
     let now = Date.now();
-    console.log(this.timeCooldownTravis, now, this.timeCooldownTravis < now);
-    if (this.timeCooldownTravis < now) {
+    console.log(timeCooldownTravis, now, timeCooldownTravis < now);
+    if (timeCooldownTravis < now) {
       ComfyJS.Say("Travis UPOUPO", extra.channel);
-      this.timeCooldownTravis = 10 * 60 * 1000 + now;
+      timeCooldownTravis = (10 * 60 * 1000) + now;
     }
     
   }
