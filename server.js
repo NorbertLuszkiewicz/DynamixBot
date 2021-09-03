@@ -340,7 +340,12 @@ ComfyJS.onSubGift = (
   subTierInfo,
   extra
 ) => {
-  ComfyJS.Say("gratuluje suba " + recipientUser, extra.channel);
+    if (extra.channel == "og1ii") {
+    ComfyJS.Say("og1iiBusiness Yoink", extra.channel);
+  } else {
+    ComfyJS.Say("gratuluje suba " + recipientUser, extra.channel);
+  }
+  
   ComfyJS.Say(
     "/chant @" + gifterUser + " dzięki za gifta peepoLove ",
     extra.channel
@@ -356,7 +361,7 @@ ComfyJS.onResub = (
   extra
 ) => {
   if (extra.channel == "og1ii") {
-    ComfyJS.Say(user + " og1iiBusiness Yoink", extra.channel);
+    ComfyJS.Say("og1iiBusiness Yoink", extra.channel);
   } else {
     ComfyJS.Say(user + " VisLaud", extra.channel);
   }
@@ -366,7 +371,7 @@ ComfyJS.onResub = (
 
 ComfyJS.onSub = (user, message, subTierInfo, extra) => {
   if (extra.channel == "og1ii") {
-    ComfyJS.Say(user + " og1iiBusiness Yoink", extra.channel);
+    ComfyJS.Say("og1iiBusiness Yoink", extra.channel);
   } else {
     ComfyJS.Say(user + " VisLaud", extra.channel);
   }
