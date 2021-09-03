@@ -355,6 +355,7 @@ ComfyJS.onResub = (
   subTierInfo,
   extra
 ) => {
+  if(extra.channel == "og1ii"){}else{}
   ComfyJS.Say( user+" VisLaud", extra.channel);
   ComfyJS.Say("/chant @" + user + " dzięki za suba peepoLove ", extra.channel);
 };
