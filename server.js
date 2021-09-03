@@ -134,7 +134,7 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
 
   if (user == "StreamElements" && message.lastIndexOf("to the queue") != -1) {
     pauseSong(extra.channel, status => {
-      status == "200" && timeRequest(extra.channel, "add");
+     // status == "200" && timeRequest(extra.channel, "add");
     });
   }
 
@@ -143,7 +143,7 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
       songPlayingNow(extra.channel, function(songPlaying) {
         if (songPlaying) {
           ComfyJS.Say("!skip", extra.channel);
-          timeRequest(extra.channel, "skip");
+          //timeRequest(extra.channel, "skip");
         } else {
           nextSong(extra.channel);
         }
@@ -355,13 +355,22 @@ ComfyJS.onResub = (
   subTierInfo,
   extra
 ) => {
-  if(extra.channel == "og1ii"){}else{}
-  ComfyJS.Say( user+" VisLaud", extra.channel);
+  if (extra.channel == "og1ii") {
+    ComfyJS.Say(user + " og1iiBusiness Yoink", extra.channel);
+  } else {
+    ComfyJS.Say(user + " VisLaud", extra.channel);
+  }
+
   ComfyJS.Say("/chant @" + user + " dzięki za suba peepoLove ", extra.channel);
 };
 
 ComfyJS.onSub = (user, message, subTierInfo, extra) => {
-  ComfyJS.Say( user+" VisLaud", extra.channel);
+  if (extra.channel == "og1ii") {
+    ComfyJS.Say(user + " og1iiBusiness Yoink", extra.channel);
+  } else {
+    ComfyJS.Say(user + " VisLaud", extra.channel);
+  }
+
   ComfyJS.Say("/chant @" + user + " dzięki za suba peepoLove ", extra.channel);
 };
 
