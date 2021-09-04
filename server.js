@@ -78,6 +78,7 @@ const OAUTH = process.env.OAUTH;
 let maxVolumeDate = 0;
 let timeMaxVolume = 0;
 let timeCooldownTravis = 0;
+let timeCooldownOgiii = 0;
 
 setTimeout(refreshAccessToken, 5000);
 setInterval(refreshAccessToken, 35000);
@@ -276,6 +277,14 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
     if (timeCooldownTravis < now) {
       timeCooldownTravis = 5 * 60 * 1000 + now;
       ComfyJS.Say("^ Denciak", extra.channel);
+    }
+  }  
+  if (user == "og1ii" && extra.channel == "l2plelouch") {
+    let now = Date.now();
+    console.log(timeCooldownOgiii, now, timeCooldownOgiii < now);
+    if (timeCooldownOgiii < now) {
+      timeCooldownOgiii = 3 * 60 * 1000 + now;
+      ComfyJS.Say("^ Dyktator", extra.channel);
     }
   }
 };
