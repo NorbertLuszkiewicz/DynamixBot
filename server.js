@@ -269,7 +269,18 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
       ComfyJS.Say("Travis UPOUPO", extra.channel);
     }
   }
+  
+  if (user == "traviscwat" && extra.channel == "l2plelouch") {
+    let now = Date.now();
+    console.log(timeCooldownTravis, now, timeCooldownTravis < now);
+    if (timeCooldownTravis < now) {
+      timeCooldownTravis = 5 * 60 * 1000 + now;
+      ComfyJS.Say("Denciak ^", extra.channel);
+    }
+  }
 };
+
+  //KOMENDYU
 
 ComfyJS.onCommand = (user, command, message, flags, extra) => {
   if (command == "song") {
