@@ -275,7 +275,7 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
     let now = Date.now();
     console.log(timeCooldownTravis, now, timeCooldownTravis < now);
     if (timeCooldownTravis < now) {
-      timeCooldownTravis = 5 * 60 * 1000 + now;
+      timeCooldownTravis = 3 * 60 * 1000 + now;
       ComfyJS.Say("^ Denciak", extra.channel);
     }
   }  
