@@ -101,6 +101,8 @@ const maxVolumeList = [
     id: "8700497a-4653-4d41-9c21-4afa31836666",
     max: 100,
     min: 55,
+    maxSR: 65,
+    minSR: 15,
     time: 45000
   },
   {
@@ -108,6 +110,8 @@ const maxVolumeList = [
     id: "9150d1d4-51fb-4219-a3ff-92398614029c",
     max: 100,
     min: 75,
+    maxSR: 65,
+    minSR: 15,
     time: 30000
   },
   {
@@ -115,6 +119,8 @@ const maxVolumeList = [
     id: "09150d1d4-51fb-4219-a3ff-92398614029c",
     max: 70,
     min: 35,
+    maxSR: 65,
+    minSR: 15,
     time: 30000
   },
   {
@@ -122,6 +128,8 @@ const maxVolumeList = [
     id: "dc293b9a-8278-401e-aa23-e715e3f6b4bc",
     max: 100,
     min: 69,
+    maxSR: 65,
+    minSR: 15,
     time: 30000
   }
 ];
@@ -135,7 +143,7 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
 
   if (user == "StreamElements" && message.lastIndexOf("to the queue") != -1) {
     pauseSong(extra.channel, status => {
-     status == "200" && timeRequest(extra.channel, "add");
+      status == "200" && timeRequest(extra.channel, "add");
     });
   }
 
@@ -152,9 +160,9 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
     }
   });
 
-  maxVolumeList.forEach(({ id, min, max, time }) => {
+  maxVolumeList.forEach(({ id, min, max, minSR, maxSR, time }) => {
     if (flags.customReward && extra.customRewardId === id) {
-      ComfyJS.Say("!volume " + max, extra.channel);
+      ComfyJS.Say("!volume " + maxSR, extra.channel);
       changeVolumeOnTime(extra.channel, min, max, time);
 
       let now = Date.now();
@@ -170,7 +178,7 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
 
       clearTimeout(timeMaxVolume);
       timeMaxVolume = setTimeout(() => {
-        ComfyJS.Say("!volume " + min, extra.channel);
+        ComfyJS.Say("!volume " + minSR, extra.channel);
       }, maxVolumeDate - now);
     }
   });
@@ -270,7 +278,7 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
       ComfyJS.Say("Travis UPOUPO", extra.channel);
     }
   }
-  
+
   if (user == "traviscwat" && extra.channel == "l2plelouch") {
     let now = Date.now();
     console.log(timeCooldownTravis, now, timeCooldownTravis < now);
@@ -278,7 +286,7 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
       timeCooldownTravis = 3 * 60 * 1000 + now;
       ComfyJS.Say("^ Denciak", extra.channel);
     }
-  }  
+  }
   if (user == "og1ii" && extra.channel == "l2plelouch") {
     let now = Date.now();
     console.log(timeCooldownOgiii, now, timeCooldownOgiii < now);
@@ -289,7 +297,7 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   }
 };
 
-  //KOMENDYU
+//KOMENDYU
 
 ComfyJS.onCommand = (user, command, message, flags, extra) => {
   if (command == "song") {
@@ -360,12 +368,12 @@ ComfyJS.onSubGift = (
   subTierInfo,
   extra
 ) => {
-    if (extra.channel == "og1ii") {
+  if (extra.channel == "og1ii") {
     ComfyJS.Say("og1iiBusiness Yoink", extra.channel);
   } else {
     ComfyJS.Say("gratuluje suba " + recipientUser, extra.channel);
   }
-  
+
   ComfyJS.Say(
     "/chant @" + gifterUser + " dzięki za gifta peepoLove ",
     extra.channel
