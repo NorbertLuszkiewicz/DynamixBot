@@ -15,6 +15,7 @@ const timeToReturnSpotify = 0;
 let endTime;
 
 const returnSpotify = (streamer, returnSongFunction) => {
+  console.log(streamer, clientId[streamer], "Bearer " + clientSecret[streamer] ,"aaaaa")
   let xhr = new XMLHttpRequest();
   xhr.open("GET", `${url}songrequest/${clientId[streamer]}/player`, true);
   xhr.setRequestHeader("Content-Type", "application/json");
