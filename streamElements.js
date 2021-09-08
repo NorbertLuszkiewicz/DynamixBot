@@ -51,8 +51,8 @@ const songPlayingNow = (streamer, done) => {
     console.log(data, data.player.state, data.playing)
     done(
       data.player.state == "playing" && data.playing != null,
-      data.playing.title,
-      "https://www.youtube.com/watch?v=" + data.playing.videoId
+      (data.playing ? data.playing.title : null),(data.playing ? "https://www.youtube.com/watch?v=" + data.playing.videoId : null)
+      
     );
   });
 };

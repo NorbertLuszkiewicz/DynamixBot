@@ -302,8 +302,9 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
 ComfyJS.onCommand = (user, command, message, flags, extra) => {
   if (command == "song") {
     currentlyPlaying(extra.channel, data => {
-      console.log(data);
+      console.log(data, "komenda !song");
       songPlayingNow(extra.channel, function(songPlaying, title, url) {
+        console.log(songPlaying, "songPlaying")
         if (songPlaying) {
           ComfyJS.Say("@" + user + " " + title + " " + url, extra.channel);
         } else {
