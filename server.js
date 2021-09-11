@@ -190,13 +190,7 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   }
 
   if (message === "start" && user === "DynaM1X1") {
-    ComfyJS.Say(
-      "!sr https://www.youtube.com/watch?v=T3zsoUwyqnU&ab_channel=LANCA",
-      extra.channel
-    );
-    pauseSong(extra.channel, status => {
-      status == "200" && timeRequest(extra.channel, "add");
-    });
+    startSong(extra.channel);
   }
 
   if (message === "device" && user === "DynaM1X1") {
@@ -307,19 +301,23 @@ ComfyJS.onCommand = (user, command, message, flags, extra) => {
         console.log(songPlaying, "songPlaying");
         if (songPlaying) {
           ComfyJS.Say("@" + user + " " + title + " " + url, extra.channel);
-        } else { 
+        } else {
           let url = data.item.external_urls.spotify
             ? data.item.external_urls.spotify
             : "";
           let title = data.item.name ? data.item.name : "nieznane";
           let autor = "";
-          if(data.item.artists.length < 4){
-            data.item.artists.forEach((artist)=> {autor += artist.name+ ", "})
+          if (data.item.artists.length < 4 && data.item.artists.length > 0 ) {
+            data.item.artists.forEach(artist => {
+              autor += artist.name + ", ";
+            });
           }
 
-
           data &&
-            ComfyJS.Say("@" + user + " " + title + " | "+ autor + " "+ url, extra.channel);
+            ComfyJS.Say(
+              "@" + user + " " + title + " | " + autor + " " + url,
+              extra.channel
+            );
         }
       });
     });
