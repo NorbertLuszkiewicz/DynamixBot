@@ -304,18 +304,22 @@ ComfyJS.onCommand = (user, command, message, flags, extra) => {
     currentlyPlaying(extra.channel, data => {
       console.log(data, "komenda !song");
       songPlayingNow(extra.channel, function(songPlaying, title, url) {
-        console.log(songPlaying, "songPlaying")
+        console.log(songPlaying, "songPlaying");
         if (songPlaying) {
           ComfyJS.Say("@" + user + " " + title + " " + url, extra.channel);
-        } else {
-          console.log(data.item)
+        } else { 
           let url = data.item.external_urls.spotify
-            ? data.item.external_urls.spotify+"| "+data.item.artists.name
+            ? data.item.external_urls.spotify
             : "";
-          let name = data.item.name ? data.item.name : "nieznane";
+          let title = data.item.name ? data.item.name : "nieznane";
+          let autor = "";
+          if(data.item.artists.length < 4){
+            data.item.artists.forEach((artist)=> {autor += artist.name+ ", "})
+          }
+
 
           data &&
-            ComfyJS.Say("@" + user + " " + name + " " + url, extra.channel);
+            ComfyJS.Say("@" + user + " " + title + " | "+ autor + " "+ url, extra.channel);
         }
       });
     });
