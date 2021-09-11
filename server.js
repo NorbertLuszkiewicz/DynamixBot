@@ -308,6 +308,7 @@ ComfyJS.onCommand = (user, command, message, flags, extra) => {
         if (songPlaying) {
           ComfyJS.Say("@" + user + " " + title + " " + url, extra.channel);
         } else {
+          console.log(data.item)
           let url = data.item.external_urls.spotify
             ? data.item.external_urls.spotify
             : "";
