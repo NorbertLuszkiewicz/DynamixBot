@@ -310,7 +310,7 @@ ComfyJS.onCommand = (user, command, message, flags, extra) => {
         } else {
           console.log(data.item)
           let url = data.item.external_urls.spotify
-            ? data.item.external_urls.spotify
+            ? data.item.external_urls.spotify+"| "+data.item.artists.name
             : "";
           let name = data.item.name ? data.item.name : "nieznane";
 
