@@ -107,7 +107,7 @@ const maxVolumeList = [
   },
   {
     name: "simplywojtek",
-    id: "9150d1d4-51fb-4219-a3ff-92398614029c",
+    id: "55550d1d4-51fb-4219-a3ff-92398614029c",
     max: 100,
     min: 75,
     maxSR: 65,
