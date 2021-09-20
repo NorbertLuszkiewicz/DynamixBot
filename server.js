@@ -197,27 +197,6 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
     refreshDevices(extra.channel);
   }
 
-  if (message === "volumetest" && user === "DynaM1X1") {
-    let { id, min, max, time } = maxVolumeList[2];
-    ComfyJS.Say("!volume " + max, extra.channel);
-    changeVolumeOnTime(extra.channel, min, max, time);
-
-    let now = Date.now();
-    console.log(now);
-
-    if (maxVolumeDate > now) {
-      maxVolumeDate += time;
-    }
-
-    if (!maxVolumeDate || maxVolumeDate < now) {
-      maxVolumeDate = now + time;
-    }
-
-    clearTimeout(timeMaxVolume);
-    timeMaxVolume = setTimeout(() => {
-      ComfyJS.Say("!volume " + min, extra.channel);
-    }, maxVolumeDate - now);
-  }
 
   const isVolumeCommand = message.lastIndexOf("volume");
   const volumeValue = message.substr(7);
