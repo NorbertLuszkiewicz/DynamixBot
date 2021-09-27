@@ -109,10 +109,10 @@ const maxVolumeList = [
     name: "simplywojtek",
     id: "55550d1d4-51fb-4219-a3ff-92398614029c",
     max: 100,
-    min: 75,
+    min: 55,
     maxSR: 65,
     minSR: 15,
-    time: 30000
+    time: 45000
   },
   {
     name: "dynam1x1",

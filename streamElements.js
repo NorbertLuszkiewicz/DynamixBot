@@ -4,11 +4,13 @@ const { startSong } = require("./spotifyBot");
 
 const clientId = {
   kezman22: process.env.SR_CLIENT_ID_KEZMAN,
-  og1ii: process.env.SR_CLIENT_ID_OGI
+  og1ii: process.env.SR_CLIENT_ID_OGI,
+  simplywojtek: process.env.SR_CLIENT_ID_WOJTEK
 };
 const clientSecret = {
   kezman22: process.env.SR_CLIENT_SECRET_KEZMAN,
-  og1ii: process.env.SR_CLIENT_SECRET_OGI
+  og1ii: process.env.SR_CLIENT_SECRET_OGI,
+  simplywojtek: process.env.SR_CLIENT_SECRET_WOJTEK
 };
 const url = "https://api.streamelements.com/kappa/v2/";
 const timeToReturnSpotify = 0;
