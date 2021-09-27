@@ -108,8 +108,8 @@ const maxVolumeList = [
   {
     name: "simplywojtek",
     id: "55550d1d4-51fb-4219-a3ff-92398614029c",
-    max: 100,
-    min: 55,
+    max: 70,
+    min: 30,
     maxSR: 65,
     minSR: 15,
     time: 45000
