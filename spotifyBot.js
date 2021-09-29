@@ -41,8 +41,6 @@ let maxVolumeDate = null;
 let timeMaxVolume = null;
 let action = "";
 
-let currentPlaylist = { og1ii: "", kezman22: "", simplywojtek: "" };
-
 const startSong = streamer => {
   let body = {};
   body.position_ms = positionMs;
@@ -179,31 +177,6 @@ function handleApiResponse() {
   }
 }
 
-function handleCurrentlyPlayingResponse(streamer) {
-  if (this.status == 200) {
-    const data = JSON.parse(this.responseText);
-
-    if (data.device) {
-      device[streamer] = data.device.id;
-    }
-    positionMs = data.progress_ms;
-
-    if (data.context != null) {
-      // select playlist
-      currentPlaylist[streamer] = data.context.uri;
-      currentPlaylist[streamer] = currentPlaylist[streamer].substring(
-        currentPlaylist[streamer].lastIndexOf(":") + 1,
-        currentPlaylist[streamer].length
-      );
-    }
-  } else if (this.status == 204) {
-  } else if (this.status == 401) {
-    refreshAccessToken();
-  } else {
-    console.log(this.responseText, "error");
-    alert(this.responseText);
-  }
-}
 
 function currentlyPlaying(streamer, callback) {
   console.log("sprawdza")
