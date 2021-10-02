@@ -50,7 +50,11 @@ const startSong = streamer => {
       "Content-Type": "application/json",
       Authorization: `Bearer ${accessTokenList[streamer]}`
     }
-  });
+  }).catch(({ response }) =>
+        console.log(
+          `Error while starting song (${response.status} ${response.statusText})`
+        )
+      );
 };
 
 const pauseSong = streamer => {
@@ -64,7 +68,7 @@ const pauseSong = streamer => {
     }
   ).catch(({ response }) =>
         console.log(
-          `Error while skipping song (${response.status} ${response.statusText})`
+          `Error while stopping song (${response.status} ${response.statusText})`
         )
       );
 };
