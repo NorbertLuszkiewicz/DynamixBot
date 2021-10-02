@@ -81,7 +81,7 @@ let timeCooldownTravis = 0;
 let timeCooldownOgiii = 0;
 
 setTimeout(refreshAccessToken, 5000);
-setInterval(refreshAccessToken, 1800*1000);
+setInterval( refreshAccessToken, 1800*1000);
 
 const addSongIdList = [
   { name: "kezman22", id: "3d0baf73-3272-4ed5-8b06-dc12ad764dc6" },
@@ -184,9 +184,11 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   });
 
   if (message === "pause" && user === "DynaM1X1") {
-    pauseSong(extra.channel, status => {
-      status == "200" && timeRequest(extra.channel, "skip");
-    });
+    // pauseSong(extra.channel, status => {
+    //   status == "200" && timeRequest(extra.channel, "skip");
+    // });
+    
+    changeVolumeOnTime(extra.channel, 30,45,5000)
   }
 
   if (message === "start" && user === "DynaM1X1") {
