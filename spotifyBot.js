@@ -43,12 +43,38 @@ let accessTokenList = {
 let maxVolumeDate = null;
 let timeMaxVolume = null;
 
-const addNewUser = (code) => {
+const addNewUser = () => {
+  const scopes = [
+    "ugc-image-upload",
+    "user-read-playback-state",
+    "user-modify-playback-state",
+    "user-read-currently-playing",
+    "streaming",
+    "app-remote-control",
+    "user-read-email",
+    "user-read-private",
+    "playlist-read-collaborative",
+    "playlist-modify-public",
+    "playlist-read-private",
+    "playlist-modify-private",
+    "user-library-modify",
+    "user-library-read",
+    "user-top-read",
+    "user-read-playback-position",
+    "user-read-recently-played",
+    "user-follow-read",
+    "user-follow-modify"
+  ];
+
   axios
     .get(
-      `${AUTHORIZE}?client_id=${clientId}&response_type=code&redirect_uri=https://dynamix-bot.glitch.me/callback`
+      `${AUTHORIZE}?response_type=code&client_id=${
+        process.env.CLIENT_ID
+      }&scope=${encodeURIComponent(scopes)}&redirect_uri=${encodeURIComponent(
+        "https://dynamix-bot.glitch.me/callback"
+      )}`
     )
-    .then((resp) => {
+    .then(resp => {
       console.log(resp);
     })
     .catch(({ response }) =>
@@ -61,64 +87,72 @@ const addNewUser = (code) => {
 const startSong = streamer => {
   let body = { position_ms: positionMs };
 
-  axios.put(`${PLAY}?device_id=${device[streamer]}`, JSON.stringify(body), {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessTokenList[streamer]}`
-    }
-  }).catch(({ response }) =>
-        console.log(
-          `Error while starting song (${response.status} ${response.statusText})`
-        )
-      );
+  axios
+    .put(`${PLAY}?device_id=${device[streamer]}`, JSON.stringify(body), {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessTokenList[streamer]}`
+      }
+    })
+    .catch(({ response }) =>
+      console.log(
+        `Error while starting song (${response.status} ${response.statusText})`
+      )
+    );
 };
 
 const pauseSong = streamer => {
-  axios.put(
-    `${PAUSE}?device_id=${device[streamer]}`,
-    {},
-    {
-      headers: {
-        Authorization: `Bearer ${accessTokenList[streamer]}`
+  axios
+    .put(
+      `${PAUSE}?device_id=${device[streamer]}`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessTokenList[streamer]}`
+        }
       }
-    }
-  ).catch(({ response }) =>
-        console.log(
-          `Error while stopping song (${response.status} ${response.statusText})`
-        )
-      );
+    )
+    .catch(({ response }) =>
+      console.log(
+        `Error while stopping song (${response.status} ${response.statusText})`
+      )
+    );
 };
 
 const nextSong = streamer => {
-  axios.post(
-    `${NEXT}?device_id=${device[streamer]}`,
-    {},
-    {
-      headers: {
-        Authorization: `Bearer ${accessTokenList[streamer]}`
+  axios
+    .post(
+      `${NEXT}?device_id=${device[streamer]}`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessTokenList[streamer]}`
+        }
       }
-    }
-  ).catch(({ response }) =>
-        console.log(
-          `Error while skipping song (${response.status} ${response.statusText})`
-        )
-      );
+    )
+    .catch(({ response }) =>
+      console.log(
+        `Error while skipping song (${response.status} ${response.statusText})`
+      )
+    );
 };
 
 const changeVolumeOnTime = (streamer, min, max, time) => {
-  axios.put(
-    `${VOLUME}?volume_percent=${max}&device_id=${device[streamer]}`,
-    {},
-    {
-      headers: {
-        Authorization: `Bearer ${accessTokenList[streamer]}`
+  axios
+    .put(
+      `${VOLUME}?volume_percent=${max}&device_id=${device[streamer]}`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessTokenList[streamer]}`
+        }
       }
-    }
-  ).catch(({ response }) =>
-        console.log(
-          `Error while volume changes to higher (${response.status} ${response.statusText})`
-        )
-      );
+    )
+    .catch(({ response }) =>
+      console.log(
+        `Error while volume changes to higher (${response.status} ${response.statusText})`
+      )
+    );
 
   let now = Date.now();
 
@@ -132,15 +166,17 @@ const changeVolumeOnTime = (streamer, min, max, time) => {
 
   clearTimeout(timeMaxVolume);
   timeMaxVolume = setTimeout(() => {
-    axios.put(
-      `${VOLUME}?volume_percent=${min}&device_id=${device[streamer]}`,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${accessTokenList[streamer]}`
+    axios
+      .put(
+        `${VOLUME}?volume_percent=${min}&device_id=${device[streamer]}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${accessTokenList[streamer]}`
+          }
         }
-      }
-    ).catch(({ response }) =>
+      )
+      .catch(({ response }) =>
         console.log(
           `Error while volume changes to lower (${response.status} ${response.statusText})`
         )
@@ -158,11 +194,12 @@ const setVolume = (streamer, value) => {
           Authorization: `Bearer ${accessTokenList[streamer]}`
         }
       }
-    ).catch(({ response }) =>
-        console.log(
-          `Error while volume changes (${response.status} ${response.statusText})`
-        )
-      );
+    )
+    .catch(({ response }) =>
+      console.log(
+        `Error while volume changes (${response.status} ${response.statusText})`
+      )
+    );
 };
 
 function refreshAccessToken() {
