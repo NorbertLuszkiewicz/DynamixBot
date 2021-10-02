@@ -8,9 +8,7 @@ setInterval(refreshAccessToken, 1800 * 1000);
 
 const { MongoClient } = require("mongodb");
 
-const uri =
-  "mongodb+srv://admin:admin@ashion.45xac.mongodb.net/streamers?retryWrites=true&w=majority"
-const client = new MongoClient(`mongodb+srv://${process.env.MONGODB}`, {
+const client = new MongoClient(`mongodb+srv://${process.env.MONGODB}&w=majority`, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
