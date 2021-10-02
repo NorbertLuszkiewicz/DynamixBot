@@ -42,18 +42,6 @@ const getSpotifyData = async (streamer, data) => {
   });
 };
 
-const test = async streamer => {
-  const player = await getSpotifyAreaData(streamer, "player");
-  const playing = await getSpotifyAreaData(streamer, "playing");
-  const queue = await getSpotifyAreaData(streamer, "queue");
-
-  return {
-    player,
-    playing,
-    queue
-  };
-};
-
 const songPlayingNow = (streamer, done) => {
   getSpotifyData(streamer, data => {
     done(
@@ -119,6 +107,5 @@ const timeRequest = (streamer, action) => {
 module.exports = {
   getSpotifyData,
   songPlayingNow,
-  timeRequest,
-  test
+  timeRequest
 };
