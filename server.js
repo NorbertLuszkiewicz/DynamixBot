@@ -94,7 +94,7 @@ fastify.get("/callback", (req, res) => {
   const params = { seo: seo, auth: "auth" };
 
   if (error) {
-    console.error("Callback Error:", error);
+    console.log("Callback Error:", error);
     res.send(`Callback Error: ${error}`);
     return;
   }
