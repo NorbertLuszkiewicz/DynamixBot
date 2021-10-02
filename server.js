@@ -497,8 +497,10 @@ fastify.get("/callback", (req, res) => {
     return;
   }
   
-  addNewUser(code);
-  res.view("/src/pages/index.hbs", params);
+  addNewUser(code, (callback)=>{
+    callback === "success" ? res.view("/src/pages/index.hbs", params);
+  });
+  // res.view("/src/pages/index.hbs", params);
 });
 
 // Run the server and report out to the logs
