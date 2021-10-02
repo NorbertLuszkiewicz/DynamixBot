@@ -5,9 +5,9 @@ const {
   refreshDevices,
   changeVolumeOnTime,
   setVolume
-} = require("./spotifyBot");
+} = require("../spotifyBot");
 
-const { songPlayingNow, timeRequest } = require("./streamElements");
+const { songPlayingNow, timeRequest } = require("../streamElements");
 
 const ComfyJS = require("comfy.js");
 

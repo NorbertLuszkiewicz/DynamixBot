@@ -1,7 +1,7 @@
 const ComfyJS = require("comfy.js");
-const { messages } = require("./message");
+const { messages } = require("./messages");
 const { events } = require("./events");
-const { commands } = require("./command");
+const { commands } = require("./commands");
 
 const twitchCommends = () => {
   messages();

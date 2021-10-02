@@ -1,6 +1,6 @@
 const ComfyJS = require("comfy.js");
-const { currentlyPlaying, nextSong } = require("../spotify");
-const { songPlayingNow, timeRequest } = require("./streamElements");
+const { currentlyPlaying, nextSong } = require("../spotifyBot");
+const { songPlayingNow, timeRequest } = require("../streamElements");
 
 const commands = (ComfyJS.onCommand = (
   user,
