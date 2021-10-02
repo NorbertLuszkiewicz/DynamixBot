@@ -7,36 +7,31 @@ const {
   changeVolumeOnTime,
   setVolume,
   currentlyPlaying,
-  addNewUser
+  addNewUser,
 } = require("./spotifyBot");
 
 const {
-  returnSpotify,
   songPlayingNow,
-  timeRequest
+  timeRequest,
 } = require("./streamElements");
 
 const path = require("path");
 
-// Require the fastify framework and instantiate it
 const fastify = require("fastify")({
-  logger: true
+  logger: true,
 });
 
-// Setup our static files
 fastify.register(require("fastify-static"), {
   root: path.join(__dirname, "public"),
-  prefix: "/" // optional: default '/'
+  prefix: "/",
 });
 
-// fastify-formbody lets us parse incoming forms
 fastify.register(require("fastify-formbody"));
 
-// point-of-view is a templating manager for fastify
 fastify.register(require("point-of-view"), {
   engine: {
-    handlebars: require("handlebars")
-  }
+    handlebars: require("handlebars"),
+  },
 });
 
 // load and parse SEO data
@@ -45,17 +40,9 @@ if (seo.url === "glitch-default") {
   seo.url = `https://${process.env.PROJECT_DOMAIN}.glitch.me`;
 }
 
-// Our home page route, this pulls from src/pages/index.hbs
-fastify.get("/", function(request, reply) {
-  // params is an object we'll pass to our handlebars template
+fastify.get("/", function (request, reply) {
   let params = { seo: seo, auth: "display-none" };
-  // check and see if someone asked for a random color
-  if (request.query.randomize) {
-    // we need to load our color data file, pick one at random, and add it to the params
-    const colors = require("./src/colors.json");
-    const allColors = Object.keys(colors);
-    let currentColor = allColors[(allColors.length * Math.random()) << 0];
-  }
+
   reply.view("/src/pages/index.hbs", params);
 });
 
@@ -68,7 +55,7 @@ const TWITCHCHANNELS = [
   "simplywojtek",
   "og1ii",
   "l2plelouch",
-  "dynam1x1"
+  "dynam1x1",
 ];
 const OAUTH = process.env.OAUTH;
 let maxVolumeDate = 0;
@@ -82,13 +69,13 @@ setInterval(refreshAccessToken, 1800 * 1000);
 const addSongIdList = [
   { name: "kezman22", id: "3d0baf73-3272-4ed5-8b06-dc12ad764dc6" },
   { name: "simplywojtek", id: "11bcc229-5d3f-4a14-aca7-3b00ace01d7a" },
-  { name: "og1ii", id: "4834784f-eb24-4559-8c00-ea474897c3e6" }
+  { name: "og1ii", id: "4834784f-eb24-4559-8c00-ea474897c3e6" },
 ];
 
 const skipSongIdList = [
   { name: "kezman22", id: "0feec3ff-0f07-4e6c-8113-70e1eb6a8dec" },
   { name: "simplywojtek", id: "9150d1d4-51fb-4219-a3ff-92398614029c" },
-  { name: "og1ii", id: "dc293b9a-8278-401e-aa23-e715e3f6b4bc" }
+  { name: "og1ii", id: "dc293b9a-8278-401e-aa23-e715e3f6b4bc" },
 ];
 
 const maxVolumeList = [
@@ -99,7 +86,7 @@ const maxVolumeList = [
     min: 55,
     maxSR: 65,
     minSR: 15,
-    time: 45000
+    time: 45000,
   },
   {
     name: "simplywojtek",
@@ -108,7 +95,7 @@ const maxVolumeList = [
     min: 30,
     maxSR: 65,
     minSR: 15,
-    time: 45000
+    time: 45000,
   },
   {
     name: "dynam1x1",
@@ -117,7 +104,7 @@ const maxVolumeList = [
     min: 35,
     maxSR: 65,
     minSR: 15,
-    time: 30000
+    time: 30000,
   },
   {
     name: "og1ii",
@@ -126,8 +113,8 @@ const maxVolumeList = [
     min: 69,
     maxSR: 65,
     minSR: 15,
-    time: 30000
-  }
+    time: 30000,
+  },
 ];
 
 ComfyJS.onChat = (user, message, flags, self, extra) => {
@@ -138,14 +125,14 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   });
 
   if (user == "StreamElements" && message.lastIndexOf("to the queue") != -1) {
-    pauseSong(extra.channel, status => {
+    pauseSong(extra.channel, (status) => {
       status == "200" && timeRequest(extra.channel, "add");
     });
   }
 
   skipSongIdList.forEach(({ id }) => {
     if (flags.customReward && extra.customRewardId === id) {
-      songPlayingNow(extra.channel, function(songPlaying) {
+      songPlayingNow(extra.channel, function (songPlaying) {
         if (songPlaying) {
           ComfyJS.Say("!skip", extra.channel);
           timeRequest(extra.channel, "skip");
@@ -234,7 +221,7 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
 
   extra.customRewardId && console.log(extra.customRewardId, extra.channel);
 
-  //WOJTI SPAN NA IMIE
+  //WOJTI SPAM NA IMIE
 
   if (user == "traviscwat" && extra.channel == "simplywojtek") {
     let now = Date.now();
@@ -263,13 +250,13 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   }
 };
 
-//KOMENDYU
+//KOMENDY
 
 ComfyJS.onCommand = (user, command, message, flags, extra) => {
   if (command == "song") {
-    currentlyPlaying(extra.channel, data => {
+    currentlyPlaying(extra.channel, (data) => {
       console.log(data, "komenda !song");
-      songPlayingNow(extra.channel, function(songPlaying, title, url) {
+      songPlayingNow(extra.channel, function (songPlaying, title, url) {
         console.log(songPlaying, "songPlaying");
         if (songPlaying) {
           ComfyJS.Say("@" + user + " " + title + " " + url, extra.channel);
@@ -280,7 +267,7 @@ ComfyJS.onCommand = (user, command, message, flags, extra) => {
           let title = data.item.name ? data.item.name : "nieznane";
           let autor = "";
           if (data.item.artists.length < 4 && data.item.artists.length > 0) {
-            data.item.artists.forEach(artist => {
+            data.item.artists.forEach((artist) => {
               autor += artist.name + ", ";
             });
           }
@@ -296,7 +283,7 @@ ComfyJS.onCommand = (user, command, message, flags, extra) => {
   }
 
   if (command == "playlist" || command == "playlista") {
-    currentlyPlaying(extra.channel, data => {
+    currentlyPlaying(extra.channel, (data) => {
       let url = data.context.external_urls.spotify
         ? data.context.external_urls.spotify
         : "nieznane";
@@ -310,7 +297,7 @@ ComfyJS.onCommand = (user, command, message, flags, extra) => {
   }
 
   if (command == "next" && (user === "DynaM1X1" || flags.broadcaster)) {
-    songPlayingNow(extra.channel, function(songPlaying) {
+    songPlayingNow(extra.channel, function (songPlaying) {
       console.log(songPlaying, "songPlaying");
       if (songPlaying) {
         ComfyJS.Say("!skip", extra.channel);
@@ -389,70 +376,12 @@ ComfyJS.Init(TWITCHUSER, OAUTH, TWITCHCHANNELS);
 
 console.log(`https://${process.env.PROJECT_DOMAIN}.glitch.me`);
 
-// A POST route to handle and react to form submissions
-fastify.post("/", function(request, reply) {
-  let params = { seo: seo };
-  // the request.body.color is posted with a form submission
-  let color = request.body.color;
-  // if it's not empty, let's try to find the color
-  if (color) {
-    // load our color data file
-    const colors = require("./src/colors.json");
-    // take our form submission, remove whitespace, and convert to lowercase
-    color = color.toLowerCase().replace(/\s/g, "");
-    // now we see if that color is a key in our colors object
-    if (colors[color]) {
-      // found one!
-      params = {
-        color: colors[color],
-        colorError: null,
-        seo: seo
-      };
-    } else {
-      // try again.
-      params = {
-        colorError: request.body.color,
-        seo: seo
-      };
-    }
-  }
+
+fastify.post("/", function (request, reply) {
+  let params = { seo: seo, auth: "display-none" };
+
   reply.view("/src/pages/index.hbs", params);
 });
-
-var SpotifyWebApi = require("spotify-web-api-node");
-const express = require("express");
-
-// This file is copied from: https://github.com/thelinmichael/spotify-web-api-node/blob/master/examples/tutorial/00-get-access-token.js
-
-const scopes = [
-  "ugc-image-upload",
-  "user-read-playback-state",
-  "user-modify-playback-state",
-  "user-read-currently-playing",
-  "streaming",
-  "app-remote-control",
-  "user-read-email",
-  "user-read-private",
-  "playlist-read-collaborative",
-  "playlist-modify-public",
-  "playlist-read-private",
-  "playlist-modify-private",
-  "user-library-modify",
-  "user-library-read",
-  "user-top-read",
-  "user-read-playback-position",
-  "user-read-recently-played",
-  "user-follow-read",
-  "user-follow-modify"
-];
-// credentials are optional
-var spotifyApi = new SpotifyWebApi({
-  clientId: process.env.CLIENT_ID,
-  clientSecret: process.env.CLIENT_SECRET,
-  redirectUri: "https://dynamix-bot.glitch.me/callback"
-});
-
-const app = express();
 
 fastify.get("/login", (req, res) => {
   const scopes = [
@@ -474,7 +403,7 @@ fastify.get("/login", (req, res) => {
     "user-read-playback-position",
     "user-read-recently-played",
     "user-follow-read",
-    "user-follow-modify"
+    "user-follow-modify",
   ];
 
   res.redirect(
@@ -497,15 +426,14 @@ fastify.get("/callback", (req, res) => {
     return;
   }
 
-  addNewUser(code, callback => {
+  addNewUser(code, (callback) => {
     callback == "success"
       ? res.view("/src/pages/index.hbs", params)
       : res.send("Something went wrong");
   });
 });
 
-// Run the server and report out to the logs
-fastify.listen(process.env.PORT, function(err, address) {
+fastify.listen(process.env.PORT, function (err, address) {
   if (err) {
     fastify.log.error(err);
     process.exit(1);
