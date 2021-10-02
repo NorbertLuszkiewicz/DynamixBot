@@ -55,11 +55,7 @@ fastify.get("/", function(request, reply) {
     const colors = require("./src/colors.json");
     const allColors = Object.keys(colors);
     let currentColor = allColors[(allColors.length * Math.random()) << 0];
-    params = {
-      color: colors[currentColor],
-      colorError: null,
-      seo: seo
-    };
+
   }
   reply.view("/src/pages/index.hbs", params);
 });
@@ -506,7 +502,7 @@ fastify.get("/callback", (req, res) => {
   }
   console.log(code);
   addNewUser(code)
-  res.view("/src/pages/callback.hbs", params);
+  res.view("/src/pages/index.hbs", params);
 });
 
 // Run the server and report out to the logs

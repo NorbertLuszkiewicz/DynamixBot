@@ -46,9 +46,10 @@ let timeMaxVolume = null;
 const addNewUser = (code) => {
   let accessToken
   let refreshToken
+  const body = `grant_type=authorization_code&code=${code}&credirect_uri=https://dynamix-bot.glitch.me/callback`
   
     axios
-      .post(`${TOKEN}`, code, {
+      .post(`${TOKEN}`, body, {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           Authorization: `Basic ${Buffer.from(
@@ -57,12 +58,13 @@ const addNewUser = (code) => {
         }
       })
       .then(({ data }) => { 
-        data.access_token && accessToken = data.access_token);
-        data.refresh_token && refreshToken = data.refresh_token);
+        data.access_token && (accessToken = data.access_token);
+        data.refresh_token && (refreshToken = data.refresh_token);
+      console.log("accessToken", data.access_token)
       })
       .catch(({ response }) =>
         console.log(
-          `Error while resetting Spotify token (${response.status} ${response.statusText})`
+          `Error while getting first token (${response.status} ${response.statusText})`
         )
       );
 
