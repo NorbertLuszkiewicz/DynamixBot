@@ -4,7 +4,7 @@ const { twitchCommends } = require("./twitch/index.js");
 twitchCommends();
 
 const { test } = require("./streamElements");
-console.log(test("kezman")) 
+console.log( test("kezman")) 
 
 setTimeout(refreshAccessToken, 5000);
 setInterval(refreshAccessToken, 1800 * 1000);
