@@ -48,14 +48,13 @@ if (seo.url === "glitch-default") {
 // Our home page route, this pulls from src/pages/index.hbs
 fastify.get("/", function(request, reply) {
   // params is an object we'll pass to our handlebars template
-  let params = { seo: seo };
+  let params = { seo: seo, auth: "display-none" };
   // check and see if someone asked for a random color
   if (request.query.randomize) {
     // we need to load our color data file, pick one at random, and add it to the params
     const colors = require("./src/colors.json");
     const allColors = Object.keys(colors);
     let currentColor = allColors[(allColors.length * Math.random()) << 0];
-
   }
   reply.view("/src/pages/index.hbs", params);
 });
@@ -78,7 +77,7 @@ let timeCooldownTravis = 0;
 let timeCooldownOgiii = 0;
 
 setTimeout(refreshAccessToken, 5000);
-setInterval( refreshAccessToken, 1800*1000);
+setInterval(refreshAccessToken, 1800 * 1000);
 
 const addSongIdList = [
   { name: "kezman22", id: "3d0baf73-3272-4ed5-8b06-dc12ad764dc6" },
@@ -182,7 +181,6 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
 
   if (message === "pause" && user === "DynaM1X1") {
     setVolume(extra.channel, 30);
-    
   }
 
   if (message === "start" && user === "DynaM1X1") {
@@ -192,7 +190,6 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   if (message === "device" && user === "DynaM1X1") {
     refreshDevices(extra.channel);
   }
-
 
   const isVolumeCommand = message.lastIndexOf("volume");
   const volumeValue = message.substr(7);
@@ -282,7 +279,7 @@ ComfyJS.onCommand = (user, command, message, flags, extra) => {
             : "";
           let title = data.item.name ? data.item.name : "nieznane";
           let autor = "";
-          if (data.item.artists.length < 4 && data.item.artists.length > 0 ) {
+          if (data.item.artists.length < 4 && data.item.artists.length > 0) {
             data.item.artists.forEach(artist => {
               autor += artist.name + ", ";
             });
@@ -458,7 +455,6 @@ var spotifyApi = new SpotifyWebApi({
 const app = express();
 
 fastify.get("/login", (req, res) => {
-  
   const scopes = [
     "ugc-image-upload",
     "user-read-playback-state",
@@ -478,7 +474,7 @@ fastify.get("/login", (req, res) => {
     "user-read-playback-position",
     "user-read-recently-played",
     "user-follow-read",
-    "user-follow-modify",
+    "user-follow-modify"
   ];
 
   res.redirect(
@@ -493,15 +489,15 @@ fastify.get("/login", (req, res) => {
 fastify.get("/callback", (req, res) => {
   const error = req.query.error;
   const code = req.query.code;
-  const params = {succes: code ? "true" : "false"}
+  const params = { seo: seo, auth: "auth" };
 
   if (error) {
     console.error("Callback Error:", error);
     res.send(`Callback Error: ${error}`);
     return;
   }
-  console.log(code);
-  addNewUser(code)
+  
+  addNewUser(code);
   res.view("/src/pages/index.hbs", params);
 });
 
