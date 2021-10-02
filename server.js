@@ -80,7 +80,7 @@ let timeMaxVolume = 0;
 let timeCooldownTravis = 0;
 let timeCooldownOgiii = 0;
 
-setTimeout(refreshAccessToken, 4000);
+setTimeout(refreshAccessToken, 5000);
 setInterval( refreshAccessToken, 1800*1000);
 
 const addSongIdList = [

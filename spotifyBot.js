@@ -15,7 +15,7 @@ let device = {
   og1ii: process.env.DEVICE_OGI,
   dynam1x1: "c3e9e9038e921489b7106d098ca11128b330ae36",
   kezman22: process.env.DEVICE_KEZMAN,
-  simplywojtek: process.env.DEVICE_WOJTEK,
+  simplywojtek: process.env.DEVICE_WOJTEK
 };
 
 let refreshTokenList = {
@@ -26,7 +26,7 @@ let refreshTokenList = {
   kezman22:
     "AQCwPwSguFEGHJzur_77FVLqMK3z1S5N05OpeM2iVSYT7IjhPZr1SwWouWJEB3gGe31ig9Jo3TBK8jWHr4sn7BWQ_5tnXqk_G3M_vamoFe0y1wBLVtrPIx9PJ9qRfrv2HGQ",
   simplywojtek:
-    "AQBhH6yBoKlt5nWUuJ0lkD5FUdN9OP_5PLtZozdWbHZ5Azfu1fz7moPnzEFeP2ClvD82CfNXkS504SLSwSJEmz-WFbxj8uviA8B927lkNlBgAS6CGKIp52YjuL5La-2fjpU",
+    "AQBhH6yBoKlt5nWUuJ0lkD5FUdN9OP_5PLtZozdWbHZ5Azfu1fz7moPnzEFeP2ClvD82CfNXkS504SLSwSJEmz-WFbxj8uviA8B927lkNlBgAS6CGKIp52YjuL5La-2fjpU"
 };
 
 let accessTokenList = {
@@ -37,44 +37,52 @@ let accessTokenList = {
   simplywojtek:
     "BQALo0dMXY0AgNIY14InjDAxX-OPVdYd0c2crRBRv-kSSS_srVlCGMNufH2AEeWmWXee8yWTNB2V3LTLwHged38ZyJKIh2x8imSE-MQmFTpRLO3EX8kvX2uSaCyzAnl-3Z0siDZQZ0shjYUmQolR7f4aq45DyzGUCaqGTBpGf9HRai0gj0gxqz2r2Vcarf7dmEeQJCrEP4mCMTOlLDJ3jXI2JCibdSn7D7YSUPCWWWS9GbPPY2yxDp3ZlRReswJZmjnwNzYw8s5L_WMn8rRhYbiixzAK9DFgMQoCmA",
   kezman22:
-    "BQBCwAtXVoIC_MmGrKGVtOBXWELImybf_lmm2W9Ccj8u6YCOCQSAX7jt9kVfWg1LztAApu9a6JKgBA7W4TqnytEeSDvIzWBbTOsFus-w9XHYnJvuzf_b7IGu8b0Ss2NZbzIY8VSaZYLEFF08X6kjCrGF5imyjDhimCNauJipt1T3ZBYc4GCOeXorqbKct4OGXWZRSeJxZfR-CkkACFvJeWxJ02jAVMKxCLKOg9I9pDzSkNPrTZpCWN0SYOlK2rRPVRjRx07UdhUfEZo7KvF9_mArzIvD",
+    "BQBCwAtXVoIC_MmGrKGVtOBXWELImybf_lmm2W9Ccj8u6YCOCQSAX7jt9kVfWg1LztAApu9a6JKgBA7W4TqnytEeSDvIzWBbTOsFus-w9XHYnJvuzf_b7IGu8b0Ss2NZbzIY8VSaZYLEFF08X6kjCrGF5imyjDhimCNauJipt1T3ZBYc4GCOeXorqbKct4OGXWZRSeJxZfR-CkkACFvJeWxJ02jAVMKxCLKOg9I9pDzSkNPrTZpCWN0SYOlK2rRPVRjRx07UdhUfEZo7KvF9_mArzIvD"
 };
 let maxVolumeDate = null;
 let timeMaxVolume = null;
 
-const startSong = (streamer) => {
+const startSong = streamer => {
   let body = { position_ms: positionMs };
 
   axios.put(`${PLAY}?device_id=${device[streamer]}`, JSON.stringify(body), {
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${accessTokenList[streamer]}`,
-    },
+      Authorization: `Bearer ${accessTokenList[streamer]}`
+    }
   });
 };
 
-const pauseSong = (streamer) => {
+const pauseSong = streamer => {
   axios.put(
     `${PAUSE}?device_id=${device[streamer]}`,
     {},
     {
       headers: {
-        Authorization: `Bearer ${accessTokenList[streamer]}`,
-      },
+        Authorization: `Bearer ${accessTokenList[streamer]}`
+      }
     }
-  );
+  ).catch(({ response }) =>
+        console.log(
+          `Error while skipping song (${response.status} ${response.statusText})`
+        )
+      );
 };
 
-const nextSong = (streamer) => {
+const nextSong = streamer => {
   axios.post(
     `${NEXT}?device_id=${device[streamer]}`,
     {},
     {
       headers: {
-        Authorization: `Bearer ${accessTokenList[streamer]}`,
-      },
+        Authorization: `Bearer ${accessTokenList[streamer]}`
+      }
     }
-  );
+  ).catch(({ response }) =>
+        console.log(
+          `Error while skipping song (${response.status} ${response.statusText})`
+        )
+      );
 };
 
 const changeVolumeOnTime = (streamer, min, max, time) => {
@@ -83,10 +91,14 @@ const changeVolumeOnTime = (streamer, min, max, time) => {
     {},
     {
       headers: {
-        Authorization: `Bearer ${accessTokenList[streamer]}`,
-      },
+        Authorization: `Bearer ${accessTokenList[streamer]}`
+      }
     }
-  );
+  ).catch(({ response }) =>
+        console.log(
+          `Error while volume changes to higher (${response.status} ${response.statusText})`
+        )
+      );
 
   let now = Date.now();
 
@@ -105,63 +117,66 @@ const changeVolumeOnTime = (streamer, min, max, time) => {
       {},
       {
         headers: {
-          Authorization: `Bearer ${accessTokenList[streamer]}`,
-        },
+          Authorization: `Bearer ${accessTokenList[streamer]}`
+        }
       }
-    );
+    ).catch(({ response }) =>
+        console.log(
+          `Error while volume changes to lower (${response.status} ${response.statusText})`
+        )
+      );
   }, maxVolumeDate - now);
 };
 
 const setVolume = (streamer, value) => {
-  axios.put(
-    `${VOLUME}?volume_percent=${value}&device_id=${device[streamer]}`,
-    {},
-    {
-      headers: {
-        Authorization: `Bearer ${accessTokenList[streamer]}`,
-      },
-    }
-  );
+  axios
+    .put(
+      `${VOLUME}?volume_percent=${value}&device_id=${device[streamer]}`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessTokenList[streamer]}`
+        }
+      }
+    ).catch(({ response }) =>
+        console.log(
+          `Error while volume changes (${response.status} ${response.statusText})`
+        )
+      );
 };
 
 function refreshAccessToken() {
+  Object.keys(accessTokenList).forEach(streamer => {
+    const body = `grant_type=refresh_token&refresh_token=${refreshTokenList[streamer]}&client_id=${clientId}`;
 
-  Object.keys(accessTokenList).forEach((streamer)=>{
-    
-  const body = `grant_type=refresh_token&refresh_token=${refreshTokenList[streamer]}&client_id=${clientId}`;
-    
-  axios
-    .post(`${TOKEN}`, body, {
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-        Authorization: `Basic ${Buffer.from(
-          clientId + ":" + clientSecret
-        ).toString("base64")}`,
-      },
-    })
-    .then(({ data }) => {
-      console.log("reset spotify token");
-      data.access_token && (accessTokenList[streamer] = data.access_token);
-      data.refresh_token && (refreshTokenList[streamer] = data.refresh_token);
-    })
-    .catch(({ response }) =>
-      console.log(
-        `Error while resetting Spotify token (${response.status} ${response.statusText})`
-      )
-    );
-    
-  })
-  
-  
-
+    axios
+      .post(`${TOKEN}`, body, {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Authorization: `Basic ${Buffer.from(
+            clientId + ":" + clientSecret
+          ).toString("base64")}`
+        }
+      })
+      .then(({ data }) => {
+        console.log("reset spotify token");
+        data.access_token && (accessTokenList[streamer] = data.access_token);
+        data.refresh_token && (refreshTokenList[streamer] = data.refresh_token);
+      })
+      .catch(({ response }) =>
+        console.log(
+          `Error while resetting Spotify token (${response.status} ${response.statusText})`
+        )
+      );
+  });
 }
 
 function currentlyPlaying(streamer, callback) {
   axios
     .get(`${PLAYER}?market=US`, {
       headers: {
-        Authorization: `Bearer ${accessTokenList[streamer]}`,
-      },
+        Authorization: `Bearer ${accessTokenList[streamer]}`
+      }
     })
     .then(({ data }) => {
       positionMs = data.progress_ms;
@@ -179,8 +194,8 @@ function refreshDevices(streamer) {
   axios
     .get(DEVICES, {
       headers: {
-        Authorization: `Bearer ${accessTokenList[streamer]}`,
-      },
+        Authorization: `Bearer ${accessTokenList[streamer]}`
+      }
     })
     .then(({ data }) => {
       console.log("devices", data);
@@ -200,5 +215,5 @@ module.exports = {
   refreshDevices,
   changeVolumeOnTime,
   setVolume,
-  currentlyPlaying,
+  currentlyPlaying
 };
