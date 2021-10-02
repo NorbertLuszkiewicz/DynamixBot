@@ -1,7 +1,7 @@
 const axios = require("axios");
 
-const clientId = "80399795137b4fc48c1b03d69d3a8276";
-const clientSecret = "6c259ad83b9541c1bdbaabdd4e464cdd";
+const clientId = process.env.CLIENT_ID;
+const clientSecret = process.env.CLIENT_SECRET;
 const TOKEN = "https://accounts.spotify.com/api/token";
 const PLAY = "https://api.spotify.com/v1/me/player/play";
 const PAUSE = "https://api.spotify.com/v1/me/player/pause";
