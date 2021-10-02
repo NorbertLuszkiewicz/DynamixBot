@@ -124,9 +124,12 @@ const setVolume = (streamer, value) => {
   );
 };
 
-function refreshAccessToken(streamer) {
-  const body = `grant_type=refresh_token&refresh_token=${refreshTokenList[streamer]}&client_id=${clientId}`;
+function refreshAccessToken() {
 
+  Object.keys(accessTokenList).forEach((streamer)=>{
+    
+  const body = `grant_type=refresh_token&refresh_token=${refreshTokenList[streamer]}&client_id=${clientId}`;
+    
   axios
     .post(`${TOKEN}`, body, {
       headers: {
@@ -146,6 +149,11 @@ function refreshAccessToken(streamer) {
         `Error while resetting Spotify token (${response.status} ${response.statusText})`
       )
     );
+    
+  })
+  
+  
+
 }
 
 function currentlyPlaying(streamer, callback) {
