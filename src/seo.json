@@ -1,7 +1,7 @@
 {
-  "glitch-help-instructions": "For a custom domain, change the 'url' parameter from 'glitch-default' to your domain _without_ a traling slash, like 'https://www.example.com'",
+  "glitch-help-instructions": "",
   "title": "Dynamix Bot!",
-  "description": "A simple Node site built with Glitch. Remix it to get your own.",
-  "url": "glitch-default",
-  "image": "https://cdn.glitch.com/605e2a51-d45f-4d87-a285-9410ad350515%2Fhello-node-social.png?v=1618161394375"
+  "description": "Simple bot created to help streamers :)",
+  "url": "https://dynamix-bot.glitch.me/",
+  "image": "https://static-cdn.jtvnw.net/emoticons/v2/emotesv2_384f2e58d03b43f79fc66a7e50af5656/default/dark/3.0"
 }
