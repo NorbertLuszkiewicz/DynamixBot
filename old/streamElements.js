@@ -1,5 +1,5 @@
 const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
-const axios = require("axios");
+
 const { startSong } = require("./spotifyBot");
 
 const clientId = {
@@ -13,73 +13,43 @@ const clientSecret = {
   simplywojtek: process.env.SR_CLIENT_SECRET_WOJTEK
 };
 const url = "https://api.streamelements.com/kappa/v2/";
+const timeToReturnSpotify = 0;
 let endTime;
 
-const getPlayer = async (streamer) => {
-  try {
-    const { data } = await axios.get(
-      `${url}songrequest/${clientId[streamer]}/player`,
-      {
-        headers: {
-          Authorization: `Bearer ${clientSecret[streamer]}`,
-        },
-      }
-    );
-    return data;
-  } catch ({ response }) {
-    console.log(
-      `Error while getting player (${response.status} ${response.statusText})`
-    );
-  }
-};
-
-const getPlaying = async (streamer) => {
-  try {
-    const { data } = await axios.get(
-      `${url}songrequest/${clientId[streamer]}/playing`,
-      {
-        headers: {
-          Authorization: `Bearer ${clientSecret[streamer]}`,
-        },
-      }
-    );
-    return data;
-  } catch ({ response }) {
-    console.log(
-      `Error while getting playing (${response.status} ${response.statusText})`
-    );
-  }
-};
-
-const getQueue = async (streamer) => {
-  try {
-    const { data } = await axios.get(
-      `${url}songrequest/${clientId[streamer]}/queue`,
-      {
-        headers: {
-          Authorization: `Bearer ${clientSecret[streamer]}`,
-        },
-      }
-    );
-    return data;
-  } catch ({ response }) {
-    console.log(
-      `Error while getting playing (${response.status} ${response.statusText})`
-    );
-  }
-};
-
-const returnSpotifyData = async (streamer, returnSongFunction) => {
-
-  returnSongFunction({
-    player: await getPlayer(streamer),
-    playing: await getPlaying(streamer),
-    queue: await getQueue(streamer),
-  });
+const returnSpotify = (streamer, returnSongFunction) => {
+  console.log(streamer, clientId[streamer], "Bearer " + clientSecret[streamer] ,"aaaaa")
+  let xhr = new XMLHttpRequest();
+  xhr.open("GET", `${url}songrequest/${clientId[streamer]}/player`, true);
+  xhr.setRequestHeader("Content-Type", "application/json");
+  xhr.setRequestHeader("Authorization", "Bearer " + clientSecret[streamer]);
+  xhr.send(null);
+  xhr.onload = function() {
+    const data = JSON.parse(this.responseText);
+    let xhr2 = new XMLHttpRequest();
+    xhr2.open("GET", `${url}songrequest/${clientId[streamer]}/playing`, true);
+    xhr2.setRequestHeader("Content-Type", "application/json");
+    xhr2.setRequestHeader("Authorization", "Bearer " + clientSecret[streamer]);
+    xhr2.send(null);
+    xhr2.onload = function() {
+      const data2 = JSON.parse(this.responseText);
+      let xhr3 = new XMLHttpRequest();
+      xhr3.open("GET", `${url}songrequest/${clientId[streamer]}/queue`, true);
+      xhr3.setRequestHeader("Content-Type", "application/json");
+      xhr3.setRequestHeader(
+        "Authorization",
+        "Bearer " + clientSecret[streamer]
+      );
+      xhr3.send(null);
+      xhr3.onload = function() {
+        const data3 = JSON.parse(this.responseText);
+        returnSongFunction({ player: data, playing: data2, queue: data3 });
+      };
+    };
+  };
 };
 
 const songPlayingNow = (streamer, done) => {
-  returnSpotifyData(streamer, data => {
+  returnSpotify(streamer, data => {
     console.log(data, data.player.state, data.playing)
     done(
       data.player.state == "playing" && data.playing != null,
@@ -90,7 +60,7 @@ const songPlayingNow = (streamer, done) => {
 };
 
 const timeRequest = (streamer, action) => {
-  returnSpotifyData(
+  returnSpotify(
     streamer,
     data => {
       let now = Date.now();
@@ -137,7 +107,7 @@ const timeRequest = (streamer, action) => {
         console.log(endTime - now);
 
         setTimeout(() => {
-          returnSpotifyData(streamer, data => {
+          returnSpotify(streamer, data => {
             if (!data.playing) {
               startSong(streamer);
               endTime = null;
@@ -151,7 +121,7 @@ const timeRequest = (streamer, action) => {
 };
 
 module.exports = {
-  returnSpotifyData,
+  returnSpotify,
   songPlayingNow,
   timeRequest
 };
