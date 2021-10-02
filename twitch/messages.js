@@ -67,129 +67,130 @@ const maxVolumeList = [
   }
 ];
 
-const messages = ()=> (ComfyJS.onChat = (user, message, flags, self, extra) => {
-  addSongIdList.forEach(({ id }) => {
-    if (flags.customReward && extra.customRewardId === id) {
-      ComfyJS.Say("!sr " + message, extra.channel);
-    }
-  });
-
-  if (user == "StreamElements" && message.lastIndexOf("to the queue") != -1) {
-    pauseSong(extra.channel, status => {
-      status == "200" && timeRequest(extra.channel, "add");
+const messages = () =>
+  (ComfyJS.onChat = (user, message, flags, self, extra) => {
+    addSongIdList.forEach(({ id }) => {
+      if (flags.customReward && extra.customRewardId === id) {
+        ComfyJS.Say("!sr " + message, extra.channel);
+      }
     });
-  }
 
-  skipSongIdList.forEach(({ id }) => {
-    if (flags.customReward && extra.customRewardId === id) {
-      songPlayingNow(extra.channel, function(songPlaying) {
-        if (songPlaying) {
-          ComfyJS.Say("!skip", extra.channel);
-          timeRequest(extra.channel, "skip");
-        } else {
-          nextSong(extra.channel);
-        }
+    if (user == "StreamElements" && message.lastIndexOf("to the queue") != -1) {
+      pauseSong(extra.channel, status => {
+        status == "200" && timeRequest(extra.channel, "add");
       });
     }
-  });
 
-  maxVolumeList.forEach(({ id, min, max, minSR, maxSR, time }) => {
-    if (flags.customReward && extra.customRewardId === id) {
-      ComfyJS.Say("!volume " + maxSR, extra.channel);
-      changeVolumeOnTime(extra.channel, min, max, time);
+    skipSongIdList.forEach(({ id }) => {
+      if (flags.customReward && extra.customRewardId === id) {
+        songPlayingNow(extra.channel, function(songPlaying) {
+          if (songPlaying) {
+            ComfyJS.Say("!skip", extra.channel);
+            timeRequest(extra.channel, "skip");
+          } else {
+            nextSong(extra.channel);
+          }
+        });
+      }
+    });
 
+    maxVolumeList.forEach(({ id, min, max, minSR, maxSR, time }) => {
+      if (flags.customReward && extra.customRewardId === id) {
+        ComfyJS.Say("!volume " + maxSR, extra.channel);
+        changeVolumeOnTime(extra.channel, min, max, time);
+
+        let now = Date.now();
+        console.log(now);
+
+        if (maxVolumeDate > now) {
+          maxVolumeDate += time;
+        }
+
+        if (!maxVolumeDate || maxVolumeDate < now) {
+          maxVolumeDate = now + time;
+        }
+
+        clearTimeout(timeMaxVolume);
+        timeMaxVolume = setTimeout(() => {
+          ComfyJS.Say("!volume " + minSR, extra.channel);
+        }, maxVolumeDate - now);
+      }
+    });
+
+    if (message === "pause" && user === "DynaM1X1") {
+      setVolume(extra.channel, 30);
+    }
+
+    if (message === "start" && user === "DynaM1X1") {
+      startSong(extra.channel);
+    }
+
+    if (message === "device" && user === "DynaM1X1") {
+      refreshDevices(extra.channel);
+    }
+
+    const isVolumeCommand = message.lastIndexOf("volume");
+    const volumeValue = message.substr(7);
+
+    if (isVolumeCommand == 0 && (flags.mod || flags.broadcaster)) {
+      setVolume(extra.channel, volumeValue);
+    }
+
+    message === "srbottest" &&
+      (flags.mod || flags.broadcaster) &&
+      ComfyJS.Say("Bot works!", extra.channel);
+
+    const isPriamidka = message.lastIndexOf("piramidka");
+    let emote = message.substr(9);
+    !emote && (emote = "catJAM ");
+    if (
+      isPriamidka == 0 &&
+      message.length < 30 &&
+      (flags.mod || flags.broadcaster)
+    ) {
+      ComfyJS.Say(emote + " ", extra.channel);
+      ComfyJS.Say(emote + " " + emote + " ", extra.channel);
+      ComfyJS.Say(emote + " " + emote + " " + emote + " ", extra.channel);
+      ComfyJS.Say(
+        emote + " " + emote + " " + emote + " " + emote + " ",
+        extra.channel
+      );
+      ComfyJS.Say(emote + " " + emote + " " + emote + " ", extra.channel);
+      ComfyJS.Say(emote + " " + emote + " ", extra.channel);
+      ComfyJS.Say(emote + " ", extra.channel);
+    }
+
+    extra.customRewardId && console.log(extra.customRewardId, extra.channel);
+
+    //WOJTI SPAM NA IMIE
+
+    if (user == "traviscwat" && extra.channel == "simplywojtek") {
       let now = Date.now();
-      console.log(now);
-
-      if (maxVolumeDate > now) {
-        maxVolumeDate += time;
+      console.log(timeCooldownTravis, now, timeCooldownTravis < now);
+      if (timeCooldownTravis < now) {
+        timeCooldownTravis = 10 * 60 * 1000 + now;
+        ComfyJS.Say("Travis UPOUPO", extra.channel);
       }
+    }
 
-      if (!maxVolumeDate || maxVolumeDate < now) {
-        maxVolumeDate = now + time;
+    if (user == "traviscwat" && extra.channel == "l2plelouch") {
+      let now = Date.now();
+      console.log(timeCooldownTravis, now, timeCooldownTravis < now);
+      if (timeCooldownTravis < now) {
+        timeCooldownTravis = 3 * 60 * 1000 + now;
+        ComfyJS.Say("^ Denciak", extra.channel);
       }
+    }
 
-      clearTimeout(timeMaxVolume);
-      timeMaxVolume = setTimeout(() => {
-        ComfyJS.Say("!volume " + minSR, extra.channel);
-      }, maxVolumeDate - now);
+    if (user == "og1ii" && extra.channel == "l2plelouch") {
+      let now = Date.now();
+      console.log(timeCooldownOgiii, now, timeCooldownOgiii < now);
+      if (timeCooldownOgiii < now) {
+        timeCooldownOgiii = 3 * 60 * 1000 + now;
+        ComfyJS.Say("^ Dyktator", extra.channel);
+      }
     }
   });
-
-  if (message === "pause" && user === "DynaM1X1") {
-    setVolume(extra.channel, 30);
-  }
-
-  if (message === "start" && user === "DynaM1X1") {
-    startSong(extra.channel);
-  }
-
-  if (message === "device" && user === "DynaM1X1") {
-    refreshDevices(extra.channel);
-  }
-
-  const isVolumeCommand = message.lastIndexOf("volume");
-  const volumeValue = message.substr(7);
-
-  if (isVolumeCommand == 0 && (flags.mod || flags.broadcaster)) {
-    setVolume(extra.channel, volumeValue);
-  }
-
-  message === "srbottest" &&
-    (flags.mod || flags.broadcaster) &&
-    ComfyJS.Say("Bot works!", extra.channel);
-
-  const isPriamidka = message.lastIndexOf("piramidka");
-  let emote = message.substr(9);
-  !emote && (emote = "catJAM ");
-  if (
-    isPriamidka == 0 &&
-    message.length < 30 &&
-    (flags.mod || flags.broadcaster)
-  ) {
-    ComfyJS.Say(emote + " ", extra.channel);
-    ComfyJS.Say(emote + " " + emote + " ", extra.channel);
-    ComfyJS.Say(emote + " " + emote + " " + emote + " ", extra.channel);
-    ComfyJS.Say(
-      emote + " " + emote + " " + emote + " " + emote + " ",
-      extra.channel
-    );
-    ComfyJS.Say(emote + " " + emote + " " + emote + " ", extra.channel);
-    ComfyJS.Say(emote + " " + emote + " ", extra.channel);
-    ComfyJS.Say(emote + " ", extra.channel);
-  }
-
-  extra.customRewardId && console.log(extra.customRewardId, extra.channel);
-
-  //WOJTI SPAM NA IMIE
-
-  if (user == "traviscwat" && extra.channel == "simplywojtek") {
-    let now = Date.now();
-    console.log(timeCooldownTravis, now, timeCooldownTravis < now);
-    if (timeCooldownTravis < now) {
-      timeCooldownTravis = 10 * 60 * 1000 + now;
-      ComfyJS.Say("Travis UPOUPO", extra.channel);
-    }
-  }
-
-  if (user == "traviscwat" && extra.channel == "l2plelouch") {
-    let now = Date.now();
-    console.log(timeCooldownTravis, now, timeCooldownTravis < now);
-    if (timeCooldownTravis < now) {
-      timeCooldownTravis = 3 * 60 * 1000 + now;
-      ComfyJS.Say("^ Denciak", extra.channel);
-    }
-  }
-
-  if (user == "og1ii" && extra.channel == "l2plelouch") {
-    let now = Date.now();
-    console.log(timeCooldownOgiii, now, timeCooldownOgiii < now);
-    if (timeCooldownOgiii < now) {
-      timeCooldownOgiii = 3 * 60 * 1000 + now;
-      ComfyJS.Say("^ Dyktator", extra.channel);
-    }
-  }
-});
 
 module.exports = {
   messages

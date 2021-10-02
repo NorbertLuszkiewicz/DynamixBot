@@ -3,41 +3,44 @@ const path = require("path");
 const { twitchCommends } = require("./twitch/index.js");
 twitchCommends();
 
-const { returnSpotifyData } = require("./streamElements.js");
-const data = returnSpotifyData("kezman22", (data)=>{
-  console.log(data)
-})
+const { getSpotifyData } = require("./streamElements.js");
+getSpotifyData("kezman22", data => {
+  console.log(data);
+});
 
 setTimeout(refreshAccessToken, 5000);
 setInterval(refreshAccessToken, 1800 * 1000);
 
 const { MongoClient } = require("mongodb");
 
-const client = new MongoClient(`mongodb+srv://${process.env.MONGODB}&w=majority`, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+const client = new MongoClient(
+  `mongodb+srv://${process.env.MONGODB}&w=majority`,
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  }
+);
 
-client.connect((err) => {
+client.connect(err => {
   err
     ? console.log("Error with connect to database")
     : console.log("Database connected!");
 });
 
 const fastify = require("fastify")({
-  logger: true,
+  logger: true
 });
 
 fastify.register(require("fastify-static"), {
   root: path.join(__dirname, "public"),
-  prefix: "/",
+  prefix: "/"
 });
 
 fastify.register(require("fastify-formbody"));
 fastify.register(require("point-of-view"), {
   engine: {
-    handlebars: require("handlebars"),
-  },
+    handlebars: require("handlebars")
+  }
 });
 
 // load and parse SEO data
@@ -46,13 +49,13 @@ if (seo.url === "glitch-default") {
   seo.url = `https://${process.env.PROJECT_DOMAIN}.glitch.me`;
 }
 
-fastify.get("/", function (request, reply) {
+fastify.get("/", function(request, reply) {
   let params = { seo: seo, auth: "display-none" };
 
   reply.view("/src/pages/index.hbs", params);
 });
 
-fastify.post("/", function (request, reply) {
+fastify.post("/", function(request, reply) {
   let params = { seo: seo, auth: "display-none" };
 
   reply.view("/src/pages/index.hbs", params);
@@ -78,7 +81,7 @@ fastify.get("/login", (req, res) => {
     "user-read-playback-position",
     "user-read-recently-played",
     "user-follow-read",
-    "user-follow-modify",
+    "user-follow-modify"
   ];
 
   res.redirect(
@@ -101,14 +104,14 @@ fastify.get("/callback", (req, res) => {
     return;
   }
 
-  addNewUser(code, (callback) => {
+  addNewUser(code, callback => {
     callback == "success"
       ? res.view("/src/pages/index.hbs", params)
       : res.send("Something went wrong");
   });
 });
 
-fastify.listen(process.env.PORT, function (err, address) {
+fastify.listen(process.env.PORT, function(err, address) {
   if (err) {
     fastify.log.error(err);
     process.exit(1);

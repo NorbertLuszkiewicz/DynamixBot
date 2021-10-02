@@ -15,144 +15,97 @@ const clientSecret = {
 const url = "https://api.streamelements.com/kappa/v2/";
 let endTime;
 
-const getPlayer = async (streamer) => {
+const getSpotifyAreaData = async (streamer, area) => {
   try {
     const { data } = await axios.get(
-      `${url}songrequest/${clientId[streamer]}/player`,
+      `${url}songrequest/${clientId[streamer]}/${area}`,
       {
         headers: {
-          Authorization: `Bearer ${clientSecret[streamer]}`,
-        },
+          Authorization: `Bearer ${clientSecret[streamer]}`
+        }
       }
     );
 
     return data;
   } catch ({ response }) {
     console.log(
-      `Error while getting player (${response.status} ${response.statusText})`
+      `Error while getting ${area} (${response.status} ${response.statusText})`
     );
   }
 };
 
-const getPlaying = async (streamer) => {
-  try {
-    const { data } = await axios.get(
-      `${url}songrequest/${clientId[streamer]}/playing`,
-      {
-        headers: {
-          Authorization: `Bearer ${clientSecret[streamer]}`,
-        },
-      }
-    );
-    return data;
-  } catch ({ response }) {
-    console.log(
-      `Error while getting playing (${response.status} ${response.statusText})`
-    );
-  }
-};
-
-const getQueue = async (streamer) => {
-  try {
-    const { data } = await axios.get(
-      `${url}songrequest/${clientId[streamer]}/queue`,
-      {
-        headers: {
-          Authorization: `Bearer ${clientSecret[streamer]}`,
-        },
-      }
-    );
-    return data;
-  } catch ({ response }) {
-    console.log(
-      `Error while getting playing (${response.status} ${response.statusText})`
-    );
-  }
-};
-
-const returnSpotifyData = async (streamer, returnSongFunction) => {
-
-  returnSongFunction({
-    player: await getPlayer(streamer),
-    playing: await getPlaying(streamer),
-    queue: await getQueue(streamer),
+const getSpotifyData = async (streamer, data) => {
+  data({
+    player: await getSpotifyAreaData(streamer, "player"),
+    playing: await getSpotifyAreaData(streamer, "playing"),
+    queue: await getSpotifyAreaData(streamer, "queue")
   });
 };
 
 const songPlayingNow = (streamer, done) => {
-  returnSpotifyData(streamer, data => {
-    console.log(data, data.player.state, data.playing)
+  getSpotifyData(streamer, data => {
     done(
       data.player.state == "playing" && data.playing != null,
-      (data.playing ? data.playing.title : null),(data.playing ? "https://www.youtube.com/watch?v=" + data.playing.videoId : null)
-      
+      data.playing && data.playing.title,
+      data.playing && `https://www.youtube.com/watch?v=${data.playing.videoId}`
     );
   });
 };
 
 const timeRequest = (streamer, action) => {
-  returnSpotifyData(
-    streamer,
-    data => {
-      let now = Date.now();
-      console.log(data, "data");
-      setTimeout(() => {
-        console.log(data, "data po 1s", data.queue[data.queue.length - 1]);
-        if (action == "add") {
-          if (!endTime || endTime < now) {
-            data.queue.length == 0
-              ? (endTime =
-                  parseInt(data.playing ? data.playing.duration : 0) * 1000 +
-                  now)
-              : (endTime =
-                  parseInt(data.queue[data.queue.length - 1].duration) * 1000 +
-                  now);
-          } else if (endTime > now) {
-            data.queue.length == 0
-              ? (endTime = parseInt(data.playing.duration) * 1000 + endTime)
-              : (endTime =
-                  endTime +
-                  parseInt(data.queue[data.queue.length - 1].duration) * 1000);
-          }
+  getSpotifyData(streamer, data => {
+    let now = Date.now();
+
+    setTimeout(() => {
+      console.log(data, "data po 1s", data.queue[data.queue.length - 1]);
+      if (action == "add") {
+        if (!endTime || endTime < now) {
+          data.queue.length == 0
+            ? (endTime =
+                parseInt(data.playing ? data.playing.duration : 0) * 1000 + now)
+            : (endTime =
+                parseInt(data.queue[data.queue.length - 1].duration) * 1000 +
+                now);
+        } else if (endTime > now) {
+          data.queue.length == 0
+            ? (endTime = parseInt(data.playing.duration) * 1000 + endTime)
+            : (endTime =
+                endTime +
+                parseInt(data.queue[data.queue.length - 1].duration) * 1000);
         }
-        if (action == "skip") {
-          setTimeout(() => {
-            if (data.playing) {
-              if (data.queue.length != 0) {
-                let allQueueTime = 0;
-                data.queue.forEach(item => {
-                  allQueueTime += parseInt(item.duration);
-                });
-
-                endTime =
-                  (parseInt(data.playing.duration) + allQueueTime) * 1000 + now;
-              } else {
-                endTime = parseInt(data.playing.duration) * 1000 + now;
-              }
-            }
-          }, 1000);
-        }
-
-        console.log(data);
-
-        console.log(endTime - now);
-
+      }
+      if (action == "skip") {
         setTimeout(() => {
-          returnSpotifyData(streamer, data => {
-            if (!data.playing) {
-              startSong(streamer);
-              endTime = null;
+          if (data.playing) {
+            if (data.queue.length != 0) {
+              let allQueueTime = 0;
+              data.queue.forEach(item => {
+                allQueueTime += parseInt(item.duration);
+              });
+
+              endTime =
+                (parseInt(data.playing.duration) + allQueueTime) * 1000 + now;
+            } else {
+              endTime = parseInt(data.playing.duration) * 1000 + now;
             }
-          });
-        }, endTime - now + 2000);
-      });
-    },
-    1000
-  );
+          }
+        }, 1000);
+      }
+
+      setTimeout(() => {
+        getSpotifyData(streamer, data => {
+          if (!data.playing) {
+            startSong(streamer);
+            endTime = null;
+          }
+        });
+      }, endTime - now + 2000);
+    });
+  });
 };
 
 module.exports = {
-  returnSpotifyData,
+  getSpotifyData,
   songPlayingNow,
   timeRequest
 };
