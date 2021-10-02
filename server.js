@@ -3,11 +3,6 @@ const path = require("path");
 const { twitchCommends } = require("./twitch/index.js");
 twitchCommends();
 
-const { getSpotifyData } = require("./streamElements.js");
-getSpotifyData("kezman22", data => {
-  console.log(data);
-});
-
 setTimeout(refreshAccessToken, 5000);
 setInterval(refreshAccessToken, 1800 * 1000);
 

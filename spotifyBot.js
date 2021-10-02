@@ -226,7 +226,6 @@ function currentlyPlaying(streamer, callback) {
     .then(({ data }) => {
       positionMs = data.progress_ms;
       callback = data;
-      console.log(positionMs);
     })
     .catch(({ response }) =>
       console.log(

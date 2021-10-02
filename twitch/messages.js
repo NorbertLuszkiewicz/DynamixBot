@@ -100,7 +100,6 @@ const messages = () =>
         changeVolumeOnTime(extra.channel, min, max, time);
 
         let now = Date.now();
-        console.log(now);
 
         if (maxVolumeDate > now) {
           maxVolumeDate += time;
@@ -166,7 +165,7 @@ const messages = () =>
 
     if (user == "traviscwat" && extra.channel == "simplywojtek") {
       let now = Date.now();
-      console.log(timeCooldownTravis, now, timeCooldownTravis < now);
+
       if (timeCooldownTravis < now) {
         timeCooldownTravis = 10 * 60 * 1000 + now;
         ComfyJS.Say("Travis UPOUPO", extra.channel);
@@ -175,7 +174,7 @@ const messages = () =>
 
     if (user == "traviscwat" && extra.channel == "l2plelouch") {
       let now = Date.now();
-      console.log(timeCooldownTravis, now, timeCooldownTravis < now);
+
       if (timeCooldownTravis < now) {
         timeCooldownTravis = 3 * 60 * 1000 + now;
         ComfyJS.Say("^ Denciak", extra.channel);
@@ -184,7 +183,7 @@ const messages = () =>
 
     if (user == "og1ii" && extra.channel == "l2plelouch") {
       let now = Date.now();
-      console.log(timeCooldownOgiii, now, timeCooldownOgiii < now);
+ 
       if (timeCooldownOgiii < now) {
         timeCooldownOgiii = 3 * 60 * 1000 + now;
         ComfyJS.Say("^ Dyktator", extra.channel);
