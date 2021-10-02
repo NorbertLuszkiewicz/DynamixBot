@@ -2,6 +2,7 @@ const axios = require("axios");
 
 const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
+const AUTHORIZE = "https://accounts.spotify.com/authorize";
 const TOKEN = "https://accounts.spotify.com/api/token";
 const PLAY = "https://api.spotify.com/v1/me/player/play";
 const PAUSE = "https://api.spotify.com/v1/me/player/pause";
@@ -41,6 +42,21 @@ let accessTokenList = {
 };
 let maxVolumeDate = null;
 let timeMaxVolume = null;
+
+const addNewUser = (code) => {
+  axios
+    .get(
+      `${AUTHORIZE}?client_id=${clientId}&response_type=code&redirect_uri=https://dynamix-bot.glitch.me/callback`
+    )
+    .then((resp) => {
+      console.log(resp);
+    })
+    .catch(({ response }) =>
+      console.log(
+        `Error while account authorization (${response.status} ${response.statusText})`
+      )
+    );
+};
 
 const startSong = streamer => {
   let body = { position_ms: positionMs };
@@ -219,5 +235,6 @@ module.exports = {
   refreshDevices,
   changeVolumeOnTime,
   setVolume,
-  currentlyPlaying
+  currentlyPlaying,
+  addNewUser
 };
