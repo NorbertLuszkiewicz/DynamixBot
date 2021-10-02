@@ -22,7 +22,7 @@ let refreshTokenList = {
   og1ii:
     "AQCYs0az-dh95MDuWB72JAruSc4rj821ERIEK4RpMsEvsQqp5pyzsaqu9kMbqUKsamCI2_gzqyNDkFEEIXE0pHvVX_3_1c3XjfyT-S2NXYKSPl7Ms3w1ZKxsq9ZInJZiezY",
   dynam1x1:
-    "AQD4Hj5MV4kGIzduoEm6_zYbAK7OeCKXQYkjXDt5jvf0QE6kzv_SpvZc9nrP8cmxV_vXMcNGtqecRP1TMvbd8KpkR6g8XQtmR4CwZ6KDAXhpxtnKOVUhjpUl0AF-q7XcTiE",  
+    "AQDZ1nmBW5nL_uy1Xlp8-hP2aikNfvIeZ61WcF_rTd6LcpRx82hjR5CzDPRoiIEjREPugOBT8eDPLLVOX1Y65QP05xBRt_Dwc0TosNGb1ZUiREL_a4j95WaI_5OiB6GuDWc",  
   kezman22:
     "AQARUA5cDjZDt0Bv-5ZOPVOj9u3i_Mio7XvW61jBLGCMOKl5x1xFw_gqieiIN5P5kSsWMkqCEmXm4uMmCRk8QsujTEhjRhYx5NuyvgikcTc6C47j12dp-BRxYAEPSOZ4l3g",
   simplywojtek: "AQBhH6yBoKlt5nWUuJ0lkD5FUdN9OP_5PLtZozdWbHZ5Azfu1fz7moPnzEFeP2ClvD82CfNXkS504SLSwSJEmz-WFbxj8uviA8B927lkNlBgAS6CGKIp52YjuL5La-2fjpU" 
@@ -32,7 +32,7 @@ let accessTokenList = {
   og1ii:
     "BQBujnjEobElD-6NrVgSYQrHbMzVKy8R8HnYOyZXwZMne-vmupE8wruoSWU58ytwsRtYEZKPpqNQ2ICdlTyC0IzGjJJsYusNyNCDDrmdFutUFn7mSjLIvkNpQyHfhsrx6aT0ysgc7_kDYPPx3A2LOjNsxQDksJG44W-hAb8MnHzkslxBZmmtXfBqZc2UYz1WYCY2txOgB4DVbgbiHphW9a7fAL3fnqRtC-ZrY20Ji_14GqNaEWSB4pmHel3FhD_XvdSY2PNKT3CFcXFDQZJsjQnDbz9Xv-rG",
   dynam1x1:
-    "BQC6oKNWXk_2vfSbAe5mqLehyTkC03GLjsS5_LFEnKMD3DPv6EGB4PFLP1FXJHGvBorncMkaUwgtyqDpZ0dmtxdEP_OYXk4Pol7KVaUOHje0noG_hN44pvr17aPCPa-QMOU44D37sS3q3Xl8A6n7jla_v0F5_dZ8W7G7eoTTJllyDmW5hzSPoNc_9RTZhR2VvIaM3bvVc5cPz8VCh5sT9duZjE9Dfc1vs-Vn0hNUj9VnJK-etWSoPX5WNGKMMqHZbbm5e2asaFtEvYue8JRrMivsno2YnfbLvvdLf1-cCotiIZxb",
+    "BQCn8j4JkYaxVUK_bIft2NYhBjM_EkOUIHqKKyrM_cztAV61GDtwBp879QnFvxrkkFEHY038wgpXqAGsGJa24asCFSMA80c8zN3DmR1mCvWg2FrV4W-m_ZqUWoZ8URWpsk0PBspVFWMhHDHN-rnO_OvgcRzGMrVjW1Z54EPZU3AGDbHRV5JV1p8THp01vWnjsWyVAhRWWA2-4nkUJA2cL5mWvW9kNzaVmkewejio7VnoxNkwxBeH8jjVahtSRV2yeOve8JuqIZdhBYw3fnLXVLp9R6SU_miosfM",
   simplywojtek: "BQALo0dMXY0AgNIY14InjDAxX-OPVdYd0c2crRBRv-kSSS_srVlCGMNufH2AEeWmWXee8yWTNB2V3LTLwHged38ZyJKIh2x8imSE-MQmFTpRLO3EX8kvX2uSaCyzAnl-3Z0siDZQZ0shjYUmQolR7f4aq45DyzGUCaqGTBpGf9HRai0gj0gxqz2r2Vcarf7dmEeQJCrEP4mCMTOlLDJ3jXI2JCibdSn7D7YSUPCWWWS9GbPPY2yxDp3ZlRReswJZmjnwNzYw8s5L_WMn8rRhYbiixzAK9DFgMQoCmA",
   kezman22:
     "BQBCwAtXVoIC_MmGrKGVtOBXWELImybf_lmm2W9Ccj8u6YCOCQSAX7jt9kVfWg1LztAApu9a6JKgBA7W4TqnytEeSDvIzWBbTOsFus-w9XHYnJvuzf_b7IGu8b0Ss2NZbzIY8VSaZYLEFF08X6kjCrGF5imyjDhimCNauJipt1T3ZBYc4GCOeXorqbKct4OGXWZRSeJxZfR-CkkACFvJeWxJ02jAVMKxCLKOg9I9pDzSkNPrTZpCWN0SYOlK2rRPVRjRx07UdhUfEZo7KvF9_mArzIvD",
@@ -122,10 +122,12 @@ function refreshAccessToken() {
   const bodyOgi = `grant_type=refresh_token&refresh_token=${refreshTokenList.og1ii}&client_id=${clientId}`;
   const bodyKezman = `grant_type=refresh_token&refresh_token=${refreshTokenList.kezman22}&client_id=${clientId}`;
   const bodySimplywojtek = `grant_type=refresh_token&refresh_token=${refreshTokenList.simplywojtek}&client_id=${clientId}`;
+  const bodydynamix = `grant_type=refresh_token&refresh_token=${refreshTokenList.dynam1x1}&client_id=${clientId}`;
 
   callAuthorizationApi(bodyOgi, "og1ii");
   callAuthorizationApi(bodyKezman, "kezman22");
   callAuthorizationApi(bodySimplywojtek, "simplywojtek");
+  callAuthorizationApi(bodydynamix, "dynam1x1");
 }
 
 function callAuthorizationApi(body, streamer) {
