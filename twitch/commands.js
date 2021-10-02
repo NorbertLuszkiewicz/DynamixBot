@@ -2,7 +2,7 @@ const ComfyJS = require("comfy.js");
 const { currentlyPlaying, nextSong } = require("../spotifyBot");
 const { songPlayingNow, timeRequest } = require("../streamElements");
 
-const commands = (ComfyJS.onCommand = (
+const commands = ()=>(ComfyJS.onCommand = (
   user,
   command,
   message,

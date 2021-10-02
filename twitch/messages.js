@@ -67,7 +67,7 @@ const maxVolumeList = [
   }
 ];
 
-ComfyJS.onChat = (user, message, flags, self, extra) => {
+const messages = ()=> (ComfyJS.onChat = (user, message, flags, self, extra) => {
   addSongIdList.forEach(({ id }) => {
     if (flags.customReward && extra.customRewardId === id) {
       ComfyJS.Say("!sr " + message, extra.channel);
@@ -189,8 +189,8 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
       ComfyJS.Say("^ Dyktator", extra.channel);
     }
   }
-};
+});
 
 module.exports = {
-  
+  messages
 };
