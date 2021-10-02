@@ -80,7 +80,7 @@ let timeMaxVolume = 0;
 let timeCooldownTravis = 0;
 let timeCooldownOgiii = 0;
 
-setTimeout(refreshAccessToken, 5000);
+setTimeout(refreshAccessToken, 4000);
 setInterval( refreshAccessToken, 1800*1000);
 
 const addSongIdList = [
@@ -184,11 +184,8 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   });
 
   if (message === "pause" && user === "DynaM1X1") {
-    // pauseSong(extra.channel, status => {
-    //   status == "200" && timeRequest(extra.channel, "skip");
-    // });
+    setVolume(extra.channel, 30);
     
-    changeVolumeOnTime(extra.channel, 30,45,5000)
   }
 
   if (message === "start" && user === "DynaM1X1") {
