@@ -496,11 +496,12 @@ fastify.get("/callback", (req, res) => {
     res.send(`Callback Error: ${error}`);
     return;
   }
-  
-  addNewUser(code, (callback)=>{
-    callback === "success" ? res.view("/src/pages/index.hbs", params);
+
+  addNewUser(code, callback => {
+    callback == "success"
+      ? res.view("/src/pages/index.hbs", params)
+      : res.send("Something went wrong");
   });
-  // res.view("/src/pages/index.hbs", params);
 });
 
 // Run the server and report out to the logs

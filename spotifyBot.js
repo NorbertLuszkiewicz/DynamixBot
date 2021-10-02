@@ -60,14 +60,15 @@ const addNewUser = (code, callback) => {
     .then(({ data }) => {
       data.access_token && (accessToken = data.access_token);
       data.refresh_token && (refreshToken = data.refresh_token);
-      callback = "success";
       console.log("accessToken", data.access_token);
+      console.log("refreshToken", data.refresh_token);
+      callback("success");
     })
     .catch(({ response }) => {
-      callback = "error";
       console.log(
         `Error while getting first token (${response.status} ${response.statusText})`
       );
+      callback("error");
     });
 };
 
