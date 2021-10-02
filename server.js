@@ -495,17 +495,18 @@ fastify.get("/login", (req, res) => {
 });
 
 fastify.get("/callback", (req, res) => {
-//   const error = req.query.error;
-//   const code = req.query.code;
+  const error = req.query.error;
+  const code = req.query.code;
+  const params = {succes: code ? "true" : "false"}
 
-//   if (error) {
-//     console.error("Callback Error:", error);
-//     res.send(`Callback Error: ${error}`);
-//     return;
-//   }
-//   console.log(code);
-//   addNewUser(code)
-  res.send("succes")
+  if (error) {
+    console.error("Callback Error:", error);
+    res.send(`Callback Error: ${error}`);
+    return;
+  }
+  console.log(code);
+  addNewUser(code)
+  res.view("/src/pages/callback.hbs", params);
 });
 
 // Run the server and report out to the logs

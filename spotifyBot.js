@@ -43,45 +43,29 @@ let accessTokenList = {
 let maxVolumeDate = null;
 let timeMaxVolume = null;
 
-const addNewUser = () => {
-  const scopes = [
-    "ugc-image-upload",
-    "user-read-playback-state",
-    "user-modify-playback-state",
-    "user-read-currently-playing",
-    "streaming",
-    "app-remote-control",
-    "user-read-email",
-    "user-read-private",
-    "playlist-read-collaborative",
-    "playlist-modify-public",
-    "playlist-read-private",
-    "playlist-modify-private",
-    "user-library-modify",
-    "user-library-read",
-    "user-top-read",
-    "user-read-playback-position",
-    "user-read-recently-played",
-    "user-follow-read",
-    "user-follow-modify"
-  ];
+const addNewUser = (code) => {
+  let accessToken
+  let refreshToken
+  
+    axios
+      .post(`${TOKEN}`, code, {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Authorization: `Basic ${Buffer.from(
+            clientId + ":" + clientSecret
+          ).toString("base64")}`
+        }
+      })
+      .then(({ data }) => { 
+        data.access_token && accessToken = data.access_token);
+        data.refresh_token && refreshToken = data.refresh_token);
+      })
+      .catch(({ response }) =>
+        console.log(
+          `Error while resetting Spotify token (${response.status} ${response.statusText})`
+        )
+      );
 
-  axios
-    .get(
-      `${AUTHORIZE}?response_type=code&client_id=${
-        process.env.CLIENT_ID
-      }&scope=${encodeURIComponent(scopes)}&redirect_uri=${encodeURIComponent(
-        "https://dynamix-bot.glitch.me/callback"
-      )}`
-    )
-    .then(resp => {
-      console.log(resp);
-    })
-    .catch(({ response }) =>
-      console.log(
-        `Error while account authorization (${response.status} ${response.statusText})`
-      )
-    );
 };
 
 const startSong = streamer => {
