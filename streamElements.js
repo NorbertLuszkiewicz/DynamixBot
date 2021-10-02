@@ -25,6 +25,7 @@ const getPlayer = async (streamer) => {
         },
       }
     );
+    console.log(data, " getplayer");
     return data;
   } catch ({ response }) {
     console.log(
@@ -69,13 +70,13 @@ const getQueue = async (streamer) => {
   }
 };
 
-const returnSpotifyData = async (streamer, returnSongFunction) => {
+const returnSpotifyData = async (streamer) => {
 
-  returnSongFunction({
+  return {
     player: await getPlayer(streamer),
     playing: await getPlaying(streamer),
     queue: await getQueue(streamer),
-  });
+  }
 };
 
 const songPlayingNow = (streamer, done) => {

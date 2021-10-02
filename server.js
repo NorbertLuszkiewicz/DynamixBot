@@ -4,9 +4,8 @@ const { twitchCommends } = require("./twitch/index.js");
 twitchCommends();
 
 const { returnSpotifyData } = require("./streamElements.js");
-returnSpotifyData("dynam1x1", (data)=>{
-  console.log(data)
-})
+const data = returnSpotifyData("kezman22")
+console.log(data)
 
 setTimeout(refreshAccessToken, 5000);
 setInterval(refreshAccessToken, 1800 * 1000);
