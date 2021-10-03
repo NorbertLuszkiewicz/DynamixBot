@@ -69,6 +69,16 @@ const UserSchema = new Schema({
   commentAfterSubs: {
     type: String,
     default: null,
+  }, 
+  timeCooldownTravis: {
+    type: Number,
+    default: null,
+    unique: true,
+  },
+  timeCooldownOg1ii: {
+    type: String,
+    default: null,
+    unique: true,
   },
 });
 
