@@ -1,5 +1,5 @@
 const axios = require("axios");
-const { startSong } = require("./spotifyBot");
+const { startSong } = require("./spotify");
 
 const clientId = {
   kezman22: process.env.SR_CLIENT_ID_KEZMAN,

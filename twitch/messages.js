@@ -5,7 +5,7 @@ const {
   refreshDevices,
   changeVolumeOnTime,
   setVolume
-} = require("../spotifyBot");
+} = require("../spotify");
 
 const { songPlayingNow, timeRequest } = require("../streamElements");
 

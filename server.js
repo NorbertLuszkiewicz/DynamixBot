@@ -1,4 +1,4 @@
-const { addNewUser, refreshAccessToken } = require("./spotifyBot");
+const { addNewUser, refreshAccessToken } = require("./spotify");
 const path = require("path");
 const { twitchCommends } = require("./twitch/index.js");
 twitchCommends();
