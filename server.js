@@ -23,24 +23,17 @@ client.connect(err => {
 
   const collection = client.db("streamers").collection("users");
 
-  // collection.insertOne({
-  //   stremer: "og1ii",
-  //   addSongID: "4834784f-eb24-4559-8c00-ea474897c3e6",
-  //   skipSongID: "dc293b9a-8278-401e-aa23-e715e3f6b4bc",
-  //   refreshToken: "AQARUA5cDjZDt0Bv-5ZOPVOj9u3i_Mio7XvW61jBLGCMOKl5x1xFw_gqieiIN5P5kSsWMkqCEmXm4uMmCRk8QsujTEhjRhYx5NuyvgikcTc6C47j12dp-BRxYAEPSOZ4l3g",
-  //   accessToken: "BQBCwAtXVoIC_MmGrKGVtOBXWELImybf_lmm2W9Ccj8u6YCOCQSAX7jt9kVfWg1LztAApu9a6JKgBA7W4TqnytEeSDvIzWBbTOsFus-w9XHYnJvuzf_b7IGu8b0Ss2NZbzIY8VSaZYLEFF08X6kjCrGF5imyjDhimCNauJipt1T3ZBYc4GCOeXorqbKct4OGXWZRSeJxZfR-CkkACFvJeWxJ02jAVMKxCLKOg9I9pDzSkNPrTZpCWN0SYOlK2rRPVRjRx07UdhUfEZo7KvF9_mArzIvD",
-  //   device: "74f023b787b851fef40a8b91620ccc5371ce71bb",
-  //   clientSongRequestID: "59c00fd7374e871d019253fd",
-  //   clientSongRequestSecret: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
-  //   volumeSongID: {
-  //     id: "8700497a-4653-4d41-9c21-4afa31836666",
-  //     max: 100,
-  //     min: 55,
-  //     maxSR: 65,
-  //     minSR: 15,
-  //     time: 45000
-  //   }
-  // });
+//   collection.insertOne({
+//     stremer: "og1ii",
+//     addSongID: "4834784f-eb24-4559-8c00-ea474897c3e6",
+//     skipSongID: "dc293b9a-8278-401e-aa23-e715e3f6b4bc",
+//     refreshToken: "AQCYs0az-dh95MDuWB72JAruSc4rj821ERIEK4RpMsEvsQqp5pyzsaqu9kMbqUKsamCI2_gzqyNDkFEEIXE0pHvVX_3_1c3XjfyT-S2NXYKSPl7Ms3w1ZKxsq9ZInJZiezY",
+//     accessToken: "BQBujnjEobElD-6NrVgSYQrHbMzVKy8R8HnYOyZXwZMne-vmupE8wruoSWU58ytwsRtYEZKPpqNQ2ICdlTyC0IzGjJJsYusNyNCDDrmdFutUFn7mSjLIvkNpQyHfhsrx6aT0ysgc7_kDYPPx3A2LOjNsxQDksJG44W-hAb8MnHzkslxBZmmtXfBqZc2UYz1WYCY2txOgB4DVbgbiHphW9a7fAL3fnqRtC-ZrY20Ji_14GqNaEWSB4pmHel3FhD_XvdSY2PNKT3CFcXFDQZJsjQnDbz9Xv-rG",
+//     device: "74f023b787b851fef40a8b91620ccc5371ce71bb",
+//     clientSongRequestID: "60f4bd84c7bdca5bc32e77c7",
+//     clientSongRequestSecret: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiNjBmNGJkODRjN2JkY2ExOTA3MmU3N2M2Iiwicm9sZSI6Im93bmVyIiwiY2hhbm5lbCI6IjYwZjRiZDg0YzdiZGNhNWJjMzJlNzdjNyIsInByb3ZpZGVyIjoidHdpdGNoIiwiYXV0aFRva2VuIjoiRlJ3Znc4YVlSc3BuTGoyWTRXOER1X2MzZk50OE1FVzdQTkptb2VoNFlBV3p4UWppIiwiaWF0IjoxNjI5OTM0NDk4LCJpc3MiOiJTdHJlYW1FbGVtZW50cyJ9.8y0ISUUjFcVZ9qc1b2MVpYX646SR61V1ptnZLhkWwKc",
+
+//   });
 }); 
 
 const fastify = require("fastify")({
