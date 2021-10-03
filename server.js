@@ -4,7 +4,14 @@ const { twitchCommends } = require("./twitch/index.js");
 twitchCommends();
 
 const { updateUser } = require("./controllers/UserController");
-updateUser("test");
+
+const test = async () =>{
+const data = await updateUser({streamer: "test", clientSongRequestID: "123", clientSongRequestSecret: "test"});
+
+
+console.log(data)
+}
+test()
 
 setTimeout(refreshAccessToken, 5000);
 setInterval(refreshAccessToken, 1800 * 1000);

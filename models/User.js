@@ -10,7 +10,7 @@ mongoose.connect(
 );
 
 const UserSchema = new Schema({
-  stremer: {
+  streamer: {
     type: String,
     required: true,
     unique: true,
