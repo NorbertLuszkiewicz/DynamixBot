@@ -1,5 +1,9 @@
 const axios = require("axios");
-const { getAllUser, updateUser, getUser } = require("./controllers/UserController.js");
+const {
+  getAllUser,
+  updateUser,
+  getUser
+} = require("./controllers/UserController.js");
 
 const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
@@ -94,9 +98,9 @@ const startSong = async streamer => {
 
 const pauseSong = async streamer => {
   try {
-    const [data] = await getUser(streamer)
-    const {accessToken, device} = data
-    
+    const [user] = await getUser(streamer);
+    const { accessToken, device } = user;
+
     return await axios.put(
       `${PAUSE}?device_id=${device}`,
       {},
@@ -106,8 +110,7 @@ const pauseSong = async streamer => {
         }
       }
     );
-  } catch ({response} ) {
-
+  } catch ({ response }) {
     console.log(
       `Error while stopping song (${response.status} ${response.statusText})`
     );
@@ -223,8 +226,7 @@ const refreshAccessToken = async () => {
       });
     });
     console.log("reset spotify token");
-  } catch ({response}) {
-
+  } catch ({ response }) {
     console.log(
       `Error while resetting Spotify token (${response.status} ${response.statusText})`
     );
@@ -248,22 +250,28 @@ const currentlyPlaying = async (streamer, callback) => {
   }
 };
 
-function refreshDevices(streamer) {
-  axios
-    .get(DEVICES, {
+const refreshDevices = async streamer => {
+  try {
+    const [user] = await getUser(streamer);
+    const { accessToken } = user;
+    
+    const { data } = axios.get(DEVICES, {
       headers: {
-        Authorization: `Bearer ${accessTokenList[streamer]}`
+        Authorization: `Bearer ${accessToken}`
       }
-    })
-    .then(({ data }) => {
-      console.log("devices", data);
-    })
-    .catch(({ response }) =>
-      console.log(
-        `Error while getting devices (${response.status} ${response.statusText})`
-      )
+    });
+
+    console.log("devices", data);
+    // await updateUser({
+    //   streamer: streamer
+    //   device: data,
+    // });
+  } catch ({ response }) {
+    console.log(
+      `Error while getting devices (${response.status} ${response.statusText})`
     );
-}
+  }
+};
 
 module.exports = {
   pauseSong,
