@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 mongoose.connect(
-  "mongodb+srv://admin:admin@ashion.45xac.mongodb.net/streamers?retryWrites=true&w=majority",
+  `mongodb+srv://${process.env.MONGODB}&w=majority`,
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
