@@ -7,6 +7,12 @@ const {
   setVolume
 } = require("../spotify");
 
+const {
+  getAllUser,
+  updateUser,
+  getUser
+} = require("../controllers/UserController.js");
+
 const { songPlayingNow, timeRequest } = require("../streamElements");
 
 const ComfyJS = require("comfy.js");
@@ -68,7 +74,12 @@ const maxVolumeList = [
 ];
 
 const messages = () =>
-  (ComfyJS.onChat = (user, message, flags, self, extra) => {
+  (ComfyJS.onChat = async(user, message, flags, self, extra) => {
+    try{}
+    catch{(err)=> console.log()}
+    
+    getUser
+    
     addSongIdList.forEach(({ id }) => {
       if (flags.customReward && extra.customRewardId === id) {
         ComfyJS.Say("!sr " + message, extra.channel);
