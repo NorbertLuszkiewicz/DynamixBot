@@ -15,11 +15,11 @@ const UserSchema = new Schema({
     required: true,
     unique: true,
   },
-  clientID: {
+  refreshToken: {
     type: String,
     default: null,
   },
-  clientSecret: {
+  accessToken: {
     type: String,
     default: null,
   },

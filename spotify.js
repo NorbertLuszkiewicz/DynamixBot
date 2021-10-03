@@ -84,7 +84,7 @@ const startSong = async streamer => {
         }
       }
     );
-  } catch (response) {
+  } catch ({response}) {
     console.log(
       `Error while starting song (${response.status} ${response.statusText})`
     );
@@ -102,7 +102,7 @@ const pauseSong = async streamer => {
         }
       }
     );
-  } catch (response) {
+  } catch ({response}) {
     console.log(
       `Error while stopping song (${response.status} ${response.statusText})`
     );
@@ -120,7 +120,7 @@ const nextSong = async streamer => {
         }
       }
     );
-  } catch (response) {
+  } catch ({response}) {
     console.log(
       `Error while stopping song (${response.status} ${response.statusText})`
     );
@@ -185,18 +185,25 @@ const setVolume = async (streamer, value) => {
         }
       }
     );
-  } catch (response) {
+  } catch ({response}) {
     console.log(
       `Error while volume changes (${response.status} ${response.statusText})`
     );
   }
 };
 
-function refreshAccessToken() {
-  Object.keys(accessTokenList).forEach(streamer => {
-    const body = `grant_type=refresh_token&refresh_token=${refreshTokenList[streamer]}&client_id=${clientId}`;
+const refreshAccessToken = async() => {
+  
+  try{
+    const streamers = getAllUser()
+    
+  Object.keys(streamers).forEach(streamer => {
+    const body = `grant_type=refresh_token&refresh_token=${streamer.}&client_id=${clientId}`;
 
-    axios
+
+  });
+    
+    const {data} =    axios
       .post(`${TOKEN}`, body, {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
@@ -205,16 +212,23 @@ function refreshAccessToken() {
           ).toString("base64")}`
         }
       })
-      .then(({ data }) => {
+    
         console.log("reset spotify token");
         data.access_token && (accessTokenList[streamer] = data.access_token);
         data.refresh_token && (refreshTokenList[streamer] = data.refresh_token);
-      })
-      .catch(({ response }) =>
-        console.log(
+    
+    
+  }catch({response}){
+    console.log(
           `Error while resetting Spotify token (${response.status} ${response.statusText})`
         )
-      );
+  }
+  
+  
+  Object.keys(accessTokenList).forEach(streamer => {
+    const body = `grant_type=refresh_token&refresh_token=${refreshTokenList[streamer]}&client_id=${clientId}`;
+
+
   });
 }
 

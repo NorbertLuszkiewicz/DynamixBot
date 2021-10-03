@@ -31,14 +31,23 @@ const addUser = ({
     console.log("User added");
   });
 };
-const getUser = async (user, callback) => {
+
+const getAllUser = async () => {
+  try{
+    const data = await User.find({})
+    return data
+  }catch (err){
+    console.log(err)
+  }
+};
+
+const getUser = async (user) => {
   try{
     const data = await User.find({ streamer: user })
     return data
   }catch (err){
     console.log(err)
   }
-
 };
 
 const updateUser = (data, res) => {
