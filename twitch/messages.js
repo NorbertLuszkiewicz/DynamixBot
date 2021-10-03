@@ -117,7 +117,7 @@ const messages = () =>
     });
 
     if (message === "pause" && user === "DynaM1X1") {
-      setVolume(extra.channel, 30);
+        pauseSong(extra.channel);
     }
 
     if (message === "start" && user === "DynaM1X1") {

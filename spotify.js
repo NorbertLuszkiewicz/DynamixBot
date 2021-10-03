@@ -62,7 +62,6 @@ const addNewUser = async (code, callback) => {
     console.log("accessToken", data.access_token);
     console.log("refreshToken", data.refresh_token);
     callback("success");
-    
   } catch ({ response }) {
     console.log(
       `Error while getting first token (${response.status} ${response.statusText})`
@@ -71,28 +70,30 @@ const addNewUser = async (code, callback) => {
   }
 };
 
-const startSong = streamer => {
+const startSong = async (streamer) => {
   let body = { position_ms: positionMs };
-  
+
   try {
-   return axios
-    .put(`${PLAY}?device_id=${device[streamer]}`, JSON.stringify(body), {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessTokenList[streamer]}`
+    return await axios.put(
+      `${PLAY}?device_id=${device[streamer]}`,
+      JSON.stringify(body),
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessTokenList[streamer]}`
+        }
       }
-    })
-  }
-  catch(response) {
+    );
+  } catch (response) {
     console.log(
-        `Error while starting song (${response.status} ${response.statusText})`
-      )
+      `Error while starting song (${response.status} ${response.statusText})`
+    );
   }
 };
 
-const pauseSong = streamer => {
-  axios
-    .put(
+const pauseSong = async (streamer) => {
+  try {
+    return await axios.put(
       `${PAUSE}?device_id=${device[streamer]}`,
       {},
       {
@@ -100,17 +101,17 @@ const pauseSong = streamer => {
           Authorization: `Bearer ${accessTokenList[streamer]}`
         }
       }
-    )
-    .catch(({ response }) =>
-      console.log(
-        `Error while stopping song (${response.status} ${response.statusText})`
-      )
     );
+  } catch (response) {
+    console.log(
+      `Error while stopping song (${response.status} ${response.statusText})`
+    );
+  }
 };
 
-const nextSong = streamer => {
-  axios
-    .post(
+const nextSong = async (streamer) => {
+  try {
+    return await axios.post(
       `${NEXT}?device_id=${device[streamer]}`,
       {},
       {
@@ -118,12 +119,12 @@ const nextSong = streamer => {
           Authorization: `Bearer ${accessTokenList[streamer]}`
         }
       }
-    )
-    .catch(({ response }) =>
-      console.log(
-        `Error while skipping song (${response.status} ${response.statusText})`
-      )
     );
+  } catch (response) {
+    console.log(
+      `Error while stopping song (${response.status} ${response.statusText})`
+    );
+  }
 };
 
 const changeVolumeOnTime = (streamer, min, max, time) => {
