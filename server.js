@@ -5,9 +5,16 @@ twitchCommends();
 
 const { getUser } = require("./controllers/UserController.js");
 
-  getUser("dynam1x1", data => {
-    console.log("aaaaa", data);
-  });
+const test = async () => {
+  try {
+      const data = await getUser("dynam1x1");
+    console.log(data)
+  } catch {
+    console.log("error")
+  }
+}
+test()
+
 
 setTimeout(refreshAccessToken, 5000);
 setInterval(refreshAccessToken, 1800 * 1000);
