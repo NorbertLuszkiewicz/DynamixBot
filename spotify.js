@@ -221,7 +221,7 @@ const currentlyPlaying = async (streamer, callback) => {
       }
     });
 
-    callback = data;
+    callback(data);
   } catch ({ response }) {
     console.log(
       `Error while getting currently song (${response.status} ${response.statusText})`

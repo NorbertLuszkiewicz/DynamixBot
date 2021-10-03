@@ -3,9 +3,11 @@ const { currentlyPlaying, nextSong } = require("../spotify");
 const { songPlayingNow, timeRequest } = require("../streamElements");
 
 const commands = () =>
-  (ComfyJS.onCommand = (user, command, message, flags, extra) => {
+  (ComfyJS.onCommand = async (user, command, message, flags, extra) => {
     if (command == "song") {
-      currentlyPlaying(extra.channel, data => {
+      try{
+        const data = await currentlyPlaying(extra.channel)
+        
         songPlayingNow(extra.channel, function(songPlaying, title, url) {
           if (songPlaying) {
             ComfyJS.Say("@" + user + " " + title + " " + url, extra.channel);
@@ -30,7 +32,10 @@ const commands = () =>
               );
           }
         });
-      });
+      }
+      catch(err){console.log(`Error when use !song on twitch (${err})`)}
+      
+     
     }
 
     if (command == "playlist" || command == "playlista") {

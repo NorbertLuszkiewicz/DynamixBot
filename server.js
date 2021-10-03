@@ -3,8 +3,8 @@ const path = require("path");
 const { twitchCommends } = require("./twitch/index.js");
 twitchCommends();
 
-currentlyPlaying("dynam1x1", (30, 55, 5000)=>{});
-
+currentlyPlaying("dynam1x1", (data)=>{ console.log(data)});
+ 
 setTimeout(refreshAccessToken, 5000);
 setInterval(refreshAccessToken, 1800 * 1000);
 
