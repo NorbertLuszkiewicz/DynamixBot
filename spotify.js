@@ -43,11 +43,13 @@ let accessTokenList = {
 let maxVolumeDate = null;
 let timeMaxVolume = null;
 
-const addNewUser = (code, callback) => {
+const addNewUser = async(code, callback) => {
   let accessToken;
   let refreshToken;
   const body = `grant_type=authorization_code&code=${code}&redirect_uri=https://dynamix-bot.glitch.me/callback`;
 
+  
+  
   axios
     .post(`${TOKEN}`, body, {
       headers: {
