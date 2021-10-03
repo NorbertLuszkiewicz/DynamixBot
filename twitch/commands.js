@@ -7,35 +7,33 @@ const commands = () =>
     if (command == "song") {
       try {
         const spotifyData = await currentlyPlaying(extra.channel);
+        const { isPlayingNow, title, link } = songPlayingNow(extra.channel);
 
-        songPlayingNow(extra.channel, function(songPlaying, title, url) {
-          if (songPlaying) {
-            ComfyJS.Say("@" + user + " " + title + " " + url, extra.channel);
-          } else {
-            let url = spotifyData.item.external_urls.spotify
-              ? spotifyData.item.external_urls.spotify
-              : "";
-            let title = spotifyData.item.name
-              ? spotifyData.item.name
-              : "Nieznany tytł utworu";
-            let autor = "";
-            if (
-              spotifyData.item.artists.length < 4 &&
-              spotifyData.item.artists.length > 0
-            ) {
-              spotifyData.item.artists.forEach(artist => {
-                autor += artist.name + ", ";
-              });
-            }
-
-            spotifyData &&
-              ComfyJS.Say(
-                "@" + user + " " + title + " | " + autor + " " + url,
-                extra.channel
-              );
+        if (isPlayingNow) {
+          ComfyJS.Say("@" + user + " " + title + " " + link, extra.channel);
+        } else {
+          let url = spotifyData.item.external_urls.spotify
+            ? spotifyData.item.external_urls.spotify
+            : "";
+          let title = spotifyData.item.name
+            ? spotifyData.item.name
+            : "Nieznany tytł utworu";
+          let autor = "";
+          if (
+            spotifyData.item.artists.length < 4 &&
+            spotifyData.item.artists.length > 0
+          ) {
+            spotifyData.item.artists.forEach(artist => {
+              autor += artist.name + ", ";
+            });
           }
-        });
-        console.log(spotifyData);
+
+          spotifyData &&
+            ComfyJS.Say(
+              "@" + user + " " + title + " | " + autor + " " + url,
+              extra.channel
+            );
+        }
       } catch (err) {
         console.log(`Error when use !song on twitch (${err})`);
       }
@@ -50,7 +48,8 @@ const commands = () =>
           : "Nieznana Playlista";
 
         spotifyData &&
-          ComfyJS.Say(`@${user} aktualnie leci ta playlista: ${url} catJAM `,
+          ComfyJS.Say(
+            `@${user} aktualnie leci ta playlista: ${url} catJAM `,
             extra.channel
           );
       } catch (err) {
@@ -59,14 +58,13 @@ const commands = () =>
     }
 
     if (command == "next" && (user === "DynaM1X1" || flags.broadcaster)) {
-      songPlayingNow(extra.channel, function(songPlaying) {
-        if (songPlaying) {
-          ComfyJS.Say("!skip", extra.channel);
-          timeRequest(extra.channel, "skip");
-        } else {
-          nextSong(extra.channel);
-        }
-      });
+      const { isPlayingNow, title, link } = songPlayingNow(extra.channel);
+      if (isPlayingNow) {
+        ComfyJS.Say("!skip", extra.channel);
+        timeRequest(extra.channel, "skip");
+      } else {
+        nextSong(extra.channel);
+      }
     }
   });
 

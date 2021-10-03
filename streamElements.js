@@ -13,7 +13,7 @@ const getSpotifyAreaData = async (streamer, area) => {
   try {
     const [user] = await getUser(streamer);
     const { clientSongRequestID, clientSongRequestSecret } = user;
-    
+
     const { data } = await axios.get(
       `${url}songrequest/${clientSongRequestID}/${area}`,
       {
@@ -31,16 +31,16 @@ const getSpotifyAreaData = async (streamer, area) => {
   }
 };
 
-const songPlayingNow = async (streamer, done) => {
+const songPlayingNow = async streamer => {
   try {
     const player = await getSpotifyAreaData(streamer, "player");
     const playing = await getSpotifyAreaData(streamer, "playing");
 
-    done(
-      player.state == "playing" && playing != null,
-      playing && playing.title,
-      playing && `https://www.youtube.com/watch?v=${playing.videoId}`
-    );
+    return {
+      isPlayingNow: player.state == "playing" && playing != null,
+      title: playing && playing.title,
+      link: playing && `https://www.youtube.com/watch?v=${playing.videoId}`
+    };
   } catch (err) {
     console.log(`Error while checking what song playing now ${err}`);
   }

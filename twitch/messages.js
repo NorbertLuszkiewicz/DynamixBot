@@ -89,12 +89,11 @@ const messages = () => {
         message.lastIndexOf("to the queue") != -1
       ) {
         pauseSong(extra.channel, status => {
-          status == "200" && timeRequest(extra.channel, "add");
+          timeRequest(extra.channel, "add");
         });
       }
 
-      skipSongIdList.forEach(({ id }) => {
-        if (flags.customReward && extra.customRewardId === id) {
+        if (flags.customReward && extra.customRewardId === skipSongID) {
           songPlayingNow(extra.channel, function(songPlaying) {
             if (songPlaying) {
               ComfyJS.Say("!skip", extra.channel);
@@ -104,7 +103,7 @@ const messages = () => {
             }
           });
         }
-      });
+      
 
       maxVolumeList.forEach(({ id, min, max, minSR, maxSR, time }) => {
         if (flags.customReward && extra.customRewardId === id) {
