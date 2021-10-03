@@ -52,48 +52,40 @@ const songPlayingNow = (streamer, done) => {
 };
 
 const timeRequest = async (streamer, action) => {
-  
-  try{
-    
-  }catch (err){
-    console.log(``)
-  }
-  
-  
-  getSpotifyData(streamer, data => {
+  try {
+    const player = await getSpotifyAreaData(streamer, "player");
+    const playing = await getSpotifyAreaData(streamer, "playing");
+    const queue = await getSpotifyAreaData(streamer, "queue");
+
     let now = Date.now();
 
     setTimeout(() => {
-      console.log(data, "data po 1s", data.queue[data.queue.length - 1]);
       if (action == "add") {
         if (!endTime || endTime < now) {
-          data.queue.length == 0
-            ? (endTime =
-                parseInt(data.playing ? data.playing.duration : 0) * 1000 + now)
+          queue.length == 0
+            ? (endTime = parseInt(playing ? playing.duration : 0) * 1000 + now)
             : (endTime =
-                parseInt(data.queue[data.queue.length - 1].duration) * 1000 +
-                now);
+                parseInt(queue[queue.length - 1].duration) * 1000 + now);
         } else if (endTime > now) {
-          data.queue.length == 0
-            ? (endTime = parseInt(data.playing.duration) * 1000 + endTime)
+          queue.length == 0
+            ? (endTime = parseInt(playing.duration) * 1000 + endTime)
             : (endTime =
-                endTime +
-                parseInt(data.queue[data.queue.length - 1].duration) * 1000);
+                endTime + parseInt(queue[queue.length - 1].duration) * 1000);
         }
       }
       if (action == "skip") {
         setTimeout(() => {
-          if (data.playing) {
-            if (data.queue.length != 0) {
+          if (playing) {
+            if (queue.length != 0) {
               let allQueueTime = 0;
-              data.queue.forEach(item => {
+              queue.forEach(item => {
                 allQueueTime += parseInt(item.duration);
               });
 
               endTime =
-                (parseInt(data.playing.duration) + allQueueTime) * 1000 + now;
+                (parseInt(playing.duration) + allQueueTime) * 1000 + now;
             } else {
-              endTime = parseInt(data.playing.duration) * 1000 + now;
+              endTime = parseInt(playing.duration) * 1000 + now;
             }
           }
         }, 1000);
@@ -108,7 +100,9 @@ const timeRequest = async (streamer, action) => {
         });
       }, endTime - now + 2000);
     });
-  });
+  } catch (err) {
+    console.log(`Error while changging volume on time ${err}`);
+  }
 };
 
 module.exports = {
