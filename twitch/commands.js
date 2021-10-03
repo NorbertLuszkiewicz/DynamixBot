@@ -58,7 +58,7 @@ const commands = () =>
     }
 
     if (command == "next" && (user === "DynaM1X1" || flags.broadcaster)) {
-      const { isPlayingNow, title, link } = songPlayingNow(extra.channel);
+      const { isPlayingNow } = songPlayingNow(extra.channel);
       if (isPlayingNow) {
         ComfyJS.Say("!skip", extra.channel);
         timeRequest(extra.channel, "skip");
@@ -66,6 +66,10 @@ const commands = () =>
         nextSong(extra.channel);
       }
     }
+
+    command === "dynamix" &&
+      (flags.mod || flags.broadcaster) &&
+      ComfyJS.Say("Bot works!", extra.channel);
   });
 
 module.exports = {
