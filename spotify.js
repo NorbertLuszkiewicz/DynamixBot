@@ -94,13 +94,11 @@ const startSong = async streamer => {
 
 const pauseSong = async streamer => {
   try {
-    const data = await getUser(streamer)
-    const device2 = device[streamer]
-    const accessToken = accessTokenList[streamer]
-    console.log([{data}])
+    const [data] = await getUser(streamer)
+    const {accessToken, device} = data
     
     return await axios.put(
-      `${PAUSE}?device_id=${device2}`,
+      `${PAUSE}?device_id=${device}`,
       {},
       {
         headers: {
@@ -108,7 +106,7 @@ const pauseSong = async streamer => {
         }
       }
     );
-  } catch (response ) {
+  } catch ({response} ) {
 
     console.log(
       `Error while stopping song (${response.status} ${response.statusText})`
