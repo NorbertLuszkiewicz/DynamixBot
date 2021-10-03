@@ -254,21 +254,27 @@ const refreshDevices = async streamer => {
   try {
     const [user] = await getUser(streamer);
     const { accessToken } = user;
-    
-    const { data } = axios.get(DEVICES, {
+
+    const { data } = await axios.get(DEVICES, {
       headers: {
         Authorization: `Bearer ${accessToken}`
       }
     });
+    
+    console.log(data.find(element => element.is_active))
 
-    console.log("devices", data);
+    const device = data.find(element => element.is_active)
+      ? data.find(element => element.is_active)
+      : data[0];
+
+    //console.log("devices", data);
     // await updateUser({
-    //   streamer: streamer
-    //   device: data,
+    //   streamer: streamer,
+    //   device: device.id
     // });
-  } catch ({ response }) {
+  } catch ( response ) {
     console.log(
-      `Error while getting devices (${response.status} ${response.statusText})`
+      `${response})`
     );
   }
 };
