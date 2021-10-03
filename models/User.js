@@ -1,0 +1,71 @@
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
+
+mongoose.connect(
+  "mongodb+srv://admin:admin@ashion.45xac.mongodb.net/streamers?retryWrites=true&w=majority",
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  }
+);
+
+const UserSchema = new Schema({
+  stremer: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  clientID: {
+    type: String,
+    default: null,
+  },
+  clientSecret: {
+    type: String,
+    default: null,
+  },
+  device: {
+    type: String,
+    default: null,
+  },
+  code: {
+    type: String,
+    default: null,
+  },
+  clientSongRequestID: {
+    type: String,
+    default: null,
+  },
+  addSongID: {
+    type: String,
+    default: null,
+  },
+  skipSongID: {
+    type: String,
+    default: null,
+  },
+  volumeSongID: {
+    type: {
+      id: String,
+      max: Number,
+      min: Number,
+      maxSR: Number,
+      minSR: Number,
+      time: Number,
+    },
+    default: null,
+  },
+  timeoutVolume: {
+    type: Schema.Types.Mixed,
+    default: null,
+  },
+  maxVolumeTime: {
+    type: Number,
+    default: null,
+  },
+  commentAfterSubs: {
+    type: String,
+    default: null,
+  },
+});
+
+mongoose.model("user", UserSchema);
