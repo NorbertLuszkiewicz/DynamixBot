@@ -42,17 +42,20 @@ const commands = () =>
     }
 
     if (command == "playlist" || command == "playlista") {
-      currentlyPlaying(extra.channel, data => {
-        let url = data.context.external_urls.spotify
-          ? data.context.external_urls.spotify
+      try {
+        const spotifyData = await currentlyPlaying(extra.channel);
+
+        let url = spotifyData.context.external_urls.spotify
+          ? spotifyData.context.external_urls.spotify
           : "Nieznana Playlista";
 
-        data &&
-          ComfyJS.Say(
-            "@" + user + " aktualnie leci ta playlista: " + url + " catJAM ",
+        spotifyData &&
+          ComfyJS.Say(`@${user} aktualnie leci ta playlista: ${url} catJAM `,
             extra.channel
           );
-      });
+      } catch (err) {
+        console.log(`Error when use !playlist on twitch (${err})`);
+      }
     }
 
     if (command == "next" && (user === "DynaM1X1" || flags.broadcaster)) {
