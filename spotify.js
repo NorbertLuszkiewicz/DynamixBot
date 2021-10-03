@@ -70,7 +70,7 @@ const addNewUser = async (code, callback) => {
   }
 };
 
-const startSong = async (streamer) => {
+const startSong = async streamer => {
   let body = { position_ms: positionMs };
 
   try {
@@ -91,7 +91,7 @@ const startSong = async (streamer) => {
   }
 };
 
-const pauseSong = async (streamer) => {
+const pauseSong = async streamer => {
   try {
     return await axios.put(
       `${PAUSE}?device_id=${device[streamer]}`,
@@ -109,7 +109,7 @@ const pauseSong = async (streamer) => {
   }
 };
 
-const nextSong = async (streamer) => {
+const nextSong = async streamer => {
   try {
     return await axios.post(
       `${NEXT}?device_id=${device[streamer]}`,
@@ -174,9 +174,9 @@ const changeVolumeOnTime = (streamer, min, max, time) => {
   }, maxVolumeDate - now);
 };
 
-const setVolume = (streamer, value) => {
-  axios
-    .put(
+const setVolume = async (streamer, value) => {
+  try {
+    return await axios.put(
       `${VOLUME}?volume_percent=${value}&device_id=${device[streamer]}`,
       {},
       {
@@ -184,12 +184,12 @@ const setVolume = (streamer, value) => {
           Authorization: `Bearer ${accessTokenList[streamer]}`
         }
       }
-    )
-    .catch(({ response }) =>
-      console.log(
-        `Error while volume changes (${response.status} ${response.statusText})`
-      )
     );
+  } catch (response) {
+    console.log(
+      `Error while volume changes (${response.status} ${response.statusText})`
+    );
+  }
 };
 
 function refreshAccessToken() {
