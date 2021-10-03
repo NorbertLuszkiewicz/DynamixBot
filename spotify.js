@@ -77,15 +77,17 @@ const addNewUser = async (code, callback) => {
 
 const startSong = async streamer => {
   let body = { position_ms: positionMs };
+  const [user] = await getUser(streamer);
+  const { accessToken, device } = user;
 
   try {
     return await axios.put(
-      `${PLAY}?device_id=${device[streamer]}`,
+      `${PLAY}?device_id=${device}`,
       JSON.stringify(body),
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${accessTokenList[streamer]}`
+          Authorization: `Bearer ${accessToken}`
         }
       }
     );
@@ -119,12 +121,14 @@ const pauseSong = async streamer => {
 
 const nextSong = async streamer => {
   try {
+    const [user] = await getUser(streamer);
+    const { accessToken, device } = user;
     return await axios.post(
-      `${NEXT}?device_id=${device[streamer]}`,
+      `${NEXT}?device_id=${device}`,
       {},
       {
         headers: {
-          Authorization: `Bearer ${accessTokenList[streamer]}`
+          Authorization: `Bearer ${accessToken}`
         }
       }
     );
@@ -135,9 +139,12 @@ const nextSong = async streamer => {
   }
 };
 
-const changeVolumeOnTime = (streamer, min, max, time) => {
-  axios
-    .put(
+const changeVolumeOnTime = async (streamer, min, max, time) => {
+  try {
+    const [user] = await getUser(streamer);
+    const { accessToken, device } = user;
+
+    await axios.put(
       `${VOLUME}?volume_percent=${max}&device_id=${device[streamer]}`,
       {},
       {
@@ -145,41 +152,41 @@ const changeVolumeOnTime = (streamer, min, max, time) => {
           Authorization: `Bearer ${accessTokenList[streamer]}`
         }
       }
-    )
-    .catch(({ response }) =>
-      console.log(
-        `Error while volume changes to higher (${response.status} ${response.statusText})`
-      )
     );
 
-  let now = Date.now();
+    let now = Date.now();
 
-  if (maxVolumeDate > now) {
-    maxVolumeDate += time;
-  }
+    if (maxVolumeDate > now) {
+      maxVolumeDate += time;
+    }
 
-  if (!maxVolumeDate || maxVolumeDate < now) {
-    maxVolumeDate = now + time;
-  }
+    if (!maxVolumeDate || maxVolumeDate < now) {
+      maxVolumeDate = now + time;
+    }
 
-  clearTimeout(timeMaxVolume);
-  timeMaxVolume = setTimeout(() => {
-    axios
-      .put(
-        `${VOLUME}?volume_percent=${min}&device_id=${device[streamer]}`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${accessTokenList[streamer]}`
+    clearTimeout(timeMaxVolume);
+    timeMaxVolume = setTimeout(() => {
+      axios
+        .put(
+          `${VOLUME}?volume_percent=${min}&device_id=${device[streamer]}`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${accessTokenList[streamer]}`
+            }
           }
-        }
-      )
-      .catch(({ response }) =>
-        console.log(
-          `Error while volume changes to lower (${response.status} ${response.statusText})`
         )
-      );
-  }, maxVolumeDate - now);
+        .catch(({ response }) =>
+          console.log(
+            `Error while volume changes to lower (${response.status} ${response.statusText})`
+          )
+        );
+    }, maxVolumeDate - now);
+  } catch ({ response }) {
+    console.log(
+      `Error while volume changes to higher (${response.status} ${response.statusText})`
+    );
+  }
 };
 
 const setVolume = async (streamer, value) => {
@@ -260,22 +267,17 @@ const refreshDevices = async streamer => {
         Authorization: `Bearer ${accessToken}`
       }
     });
-    
-    console.log(data.find(element => element.is_active))
+    console.log("devices", data);
+    const device = data.devices.find(element => element.is_active)
+      ? data.devices.find(element => element.is_active)
+      : data.devices[0];
 
-    const device = data.find(element => element.is_active)
-      ? data.find(element => element.is_active)
-      : data[0];
-
-    //console.log("devices", data);
-    // await updateUser({
-    //   streamer: streamer,
-    //   device: device.id
-    // });
-  } catch ( response ) {
-    console.log(
-      `${response})`
-    );
+    await updateUser({
+      streamer: streamer,
+      device: device.id
+    });
+  } catch (response) {
+    console.log(`${response})`);
   }
 };
 
