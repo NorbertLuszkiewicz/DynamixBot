@@ -82,7 +82,7 @@ const updateUser = async (
       volumeSongID
     };
     console.log(updatedUserData)
-    return await User.findByIdAndUpdate(streamer, updatedUserData);
+    return await User.findOneAndUpdate({streamer}, updatedUserData);
   } catch (err) {
     console.log(err);
   }

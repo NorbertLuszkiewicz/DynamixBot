@@ -6,7 +6,7 @@ twitchCommends();
 const { updateUser } = require("./controllers/UserController");
 
 const test = async () =>{
-const data = await updateUser({streamer: "test", clientSongRequestID: "123", clientSongRequestSecret: "test"});
+const data = await updateUser({streamer: "test", clientSongRequestID: "123", clientSongRequestSecret: "456"});
 
 console.log(data)
 }
