@@ -3,6 +3,8 @@ const path = require("path");
 const { twitchCommends } = require("./twitch/index.js");
 twitchCommends();
 
+const { getUser } = require("./controllers/UserController.js");
+
 setTimeout(refreshAccessToken, 5000);
 setInterval(refreshAccessToken, 1800 * 1000);
 
@@ -20,6 +22,10 @@ client.connect(err => {
   err
     ? console.log("Error with connect to database")
     : console.log("Database connected!");
+
+  getUser("dynam1x1", data => {
+    console.log("aaaaa", data);
+  });
 });
 
 const fastify = require("fastify")({

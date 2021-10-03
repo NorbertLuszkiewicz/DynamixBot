@@ -33,7 +33,7 @@ const addUser = ({
 };
 const getUser = (user, callback) => {
   User.find({ streamer: user })
-    .then((results) => (callback = results))
+    .then((results) => (callback(results))
     .catch((err) => console.log(err));
 };
 
