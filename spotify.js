@@ -145,11 +145,11 @@ const changeVolumeOnTime = async (streamer, min, max, time) => {
     const { accessToken, device } = user;
 
     await axios.put(
-      `${VOLUME}?volume_percent=${max}&device_id=${device[streamer]}`,
+      `${VOLUME}?volume_percent=${max}&device_id=${device}`,
       {},
       {
         headers: {
-          Authorization: `Bearer ${accessTokenList[streamer]}`
+          Authorization: `Bearer ${accessToken}`
         }
       }
     );
@@ -165,22 +165,22 @@ const changeVolumeOnTime = async (streamer, min, max, time) => {
     }
 
     clearTimeout(timeMaxVolume);
-    timeMaxVolume = setTimeout(() => {
-      axios
-        .put(
-          `${VOLUME}?volume_percent=${min}&device_id=${device[streamer]}`,
+    timeMaxVolume = setTimeout(async () => {
+      try {
+        await axios.put(
+          `${VOLUME}?volume_percent=${min}&device_id=${device}`,
           {},
           {
             headers: {
-              Authorization: `Bearer ${accessTokenList[streamer]}`
+              Authorization: `Bearer ${accessToken}`
             }
           }
-        )
-        .catch(({ response }) =>
-          console.log(
-            `Error while volume changes to lower (${response.status} ${response.statusText})`
-          )
         );
+      } catch ({ response }) {
+        console.log(
+          `Error while volume changes to lower (${response.status} ${response.statusText})`
+        );
+      }
     }, maxVolumeDate - now);
   } catch ({ response }) {
     console.log(
@@ -191,12 +191,15 @@ const changeVolumeOnTime = async (streamer, min, max, time) => {
 
 const setVolume = async (streamer, value) => {
   try {
+        const [user] = await getUser(streamer);
+    const { accessToken, device } = user;
+    
     return await axios.put(
-      `${VOLUME}?volume_percent=${value}&device_id=${device[streamer]}`,
+      `${VOLUME}?volume_percent=${value}&device_id=${device}`,
       {},
       {
         headers: {
-          Authorization: `Bearer ${accessTokenList[streamer]}`
+          Authorization: `Bearer ${accessToken}`
         }
       }
     );
@@ -242,9 +245,12 @@ const refreshAccessToken = async () => {
 
 const currentlyPlaying = async (streamer, callback) => {
   try {
+    const [user] = await getUser(streamer);
+    const { accessToken } = user;
+    
     const { data } = await axios.get(`${PLAYER}?market=US`, {
       headers: {
-        Authorization: `Bearer ${accessTokenList[streamer]}`
+        Authorization: `Bearer ${accessToken}`
       }
     });
 

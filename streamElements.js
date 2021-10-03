@@ -51,7 +51,15 @@ const songPlayingNow = (streamer, done) => {
   });
 };
 
-const timeRequest = (streamer, action) => {
+const timeRequest = async (streamer, action) => {
+  
+  try{
+    
+  }catch (err){
+    console.log(``)
+  }
+  
+  
   getSpotifyData(streamer, data => {
     let now = Date.now();
 

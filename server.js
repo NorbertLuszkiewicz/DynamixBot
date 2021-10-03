@@ -1,7 +1,9 @@
-const { addNewUser, refreshAccessToken } = require("./spotify");
+const { addNewUser, refreshAccessToken, changeVolumeOnTime } = require("./spotify");
 const path = require("path");
 const { twitchCommends } = require("./twitch/index.js");
 twitchCommends();
+
+changeVolumeOnTime("dynam1x1", 30, 55, 5000);
 
 setTimeout(refreshAccessToken, 5000);
 setInterval(refreshAccessToken, 1800 * 1000);
