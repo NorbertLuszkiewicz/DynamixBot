@@ -23,24 +23,24 @@ client.connect(err => {
 
   const collection = client.db("streamers").collection("users");
 
-  collection.insertOne({
-    stremer: "kezman22",
-    addSongID: "3d0baf73-3272-4ed5-8b06-dc12ad764dc6",
-    skipSongID: "0feec3ff-0f07-4e6c-8113-70e1eb6a8dec",
-    refreshToken: "AQARUA5cDjZDt0Bv-5ZOPVOj9u3i_Mio7XvW61jBLGCMOKl5x1xFw_gqieiIN5P5kSsWMkqCEmXm4uMmCRk8QsujTEhjRhYx5NuyvgikcTc6C47j12dp-BRxYAEPSOZ4l3g",
-    accessToken: "BQBCwAtXVoIC_MmGrKGVtOBXWELImybf_lmm2W9Ccj8u6YCOCQSAX7jt9kVfWg1LztAApu9a6JKgBA7W4TqnytEeSDvIzWBbTOsFus-w9XHYnJvuzf_b7IGu8b0Ss2NZbzIY8VSaZYLEFF08X6kjCrGF5imyjDhimCNauJipt1T3ZBYc4GCOeXorqbKct4OGXWZRSeJxZfR-CkkACFvJeWxJ02jAVMKxCLKOg9I9pDzSkNPrTZpCWN0SYOlK2rRPVRjRx07UdhUfEZo7KvF9_mArzIvD",
-    device: "74f023b787b851fef40a8b91620ccc5371ce71bb",
-    clientSongRequestID: "59c00fd7374e871d019253fd",
-    clientSongRequestSecret: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
-    volumeSongID: {
-      id: "8700497a-4653-4d41-9c21-4afa31836666",
-      max: 100,
-      min: 55,
-      maxSR: 65,
-      minSR: 15,
-      time: 45000
-    }
-  });
+  // collection.insertOne({
+  //   stremer: "og1ii",
+  //   addSongID: "4834784f-eb24-4559-8c00-ea474897c3e6",
+  //   skipSongID: "dc293b9a-8278-401e-aa23-e715e3f6b4bc",
+  //   refreshToken: "AQARUA5cDjZDt0Bv-5ZOPVOj9u3i_Mio7XvW61jBLGCMOKl5x1xFw_gqieiIN5P5kSsWMkqCEmXm4uMmCRk8QsujTEhjRhYx5NuyvgikcTc6C47j12dp-BRxYAEPSOZ4l3g",
+  //   accessToken: "BQBCwAtXVoIC_MmGrKGVtOBXWELImybf_lmm2W9Ccj8u6YCOCQSAX7jt9kVfWg1LztAApu9a6JKgBA7W4TqnytEeSDvIzWBbTOsFus-w9XHYnJvuzf_b7IGu8b0Ss2NZbzIY8VSaZYLEFF08X6kjCrGF5imyjDhimCNauJipt1T3ZBYc4GCOeXorqbKct4OGXWZRSeJxZfR-CkkACFvJeWxJ02jAVMKxCLKOg9I9pDzSkNPrTZpCWN0SYOlK2rRPVRjRx07UdhUfEZo7KvF9_mArzIvD",
+  //   device: "74f023b787b851fef40a8b91620ccc5371ce71bb",
+  //   clientSongRequestID: "59c00fd7374e871d019253fd",
+  //   clientSongRequestSecret: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
+  //   volumeSongID: {
+  //     id: "8700497a-4653-4d41-9c21-4afa31836666",
+  //     max: 100,
+  //     min: 55,
+  //     maxSR: 65,
+  //     minSR: 15,
+  //     time: 45000
+  //   }
+  // });
 }); 
 
 const fastify = require("fastify")({
