@@ -33,22 +33,19 @@ const getSpotifyAreaData = async (streamer, area) => {
   }
 };
 
-const getSpotifyData = async (streamer, data) => {
-  data({
-    player: await getSpotifyAreaData(streamer, "player"),
-    playing: await getSpotifyAreaData(streamer, "playing"),
-    queue: await getSpotifyAreaData(streamer, "queue")
-  });
-};
+const songPlayingNow = async (streamer, done) => {
+  try {
+    const player = await getSpotifyAreaData(streamer, "player");
+    const playing = await getSpotifyAreaData(streamer, "playing");
 
-const songPlayingNow = (streamer, done) => {
-  getSpotifyData(streamer, data => {
     done(
-      data.player.state == "playing" && data.playing != null,
-      data.playing && data.playing.title,
-      data.playing && `https://www.youtube.com/watch?v=${data.playing.videoId}`
+      player.state == "playing" && playing != null,
+      playing && playing.title,
+      playing && `https://www.youtube.com/watch?v=${playing.videoId}`
     );
-  });
+  } catch (err) {
+    console.log(`Error while checking what song playing now ${err}`);
+  }
 };
 
 const timeRequest = async (streamer, action) => {
@@ -92,12 +89,10 @@ const timeRequest = async (streamer, action) => {
       }
 
       setTimeout(() => {
-        getSpotifyData(streamer, data => {
-          if (!data.playing) {
-            startSong(streamer);
-            endTime = null;
-          }
-        });
+        if (!playing) {
+          startSong(streamer);
+          endTime = null;
+        }
       }, endTime - now + 2000);
     });
   } catch (err) {
@@ -106,7 +101,6 @@ const timeRequest = async (streamer, action) => {
 };
 
 module.exports = {
-  getSpotifyData,
   songPlayingNow,
   timeRequest
 };
