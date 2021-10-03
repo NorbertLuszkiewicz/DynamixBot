@@ -43,52 +43,51 @@ let accessTokenList = {
 let maxVolumeDate = null;
 let timeMaxVolume = null;
 
-const addNewUser = async(code, callback) => {
+const addNewUser = async (code, callback) => {
   let accessToken;
   let refreshToken;
   const body = `grant_type=authorization_code&code=${code}&redirect_uri=https://dynamix-bot.glitch.me/callback`;
 
-  
-  
-  axios
-    .post(`${TOKEN}`, body, {
+  try {
+    const { data } = axios.post(`${TOKEN}`, body, {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         Authorization: `Basic ${Buffer.from(
           clientId + ":" + clientSecret
         ).toString("base64")}`
       }
-    })
-    .then(({ data }) => {
-      data.access_token && (accessToken = data.access_token);
-      data.refresh_token && (refreshToken = data.refresh_token);
-      console.log("accessToken", data.access_token);
-      console.log("refreshToken", data.refresh_token);
-      callback("success");
-    })
-    .catch(({ response }) => {
-      console.log(
-        `Error while getting first token (${response.status} ${response.statusText})`
-      );
-      callback("error");
     });
+    data.access_token && (accessToken = data.access_token);
+    data.refresh_token && (refreshToken = data.refresh_token);
+    console.log("accessToken", data.access_token);
+    console.log("refreshToken", data.refresh_token);
+    callback("success");
+    
+  } catch ({ response }) {
+    console.log(
+      `Error while getting first token (${response.status} ${response.statusText})`
+    );
+    callback("error");
+  }
 };
 
 const startSong = streamer => {
   let body = { position_ms: positionMs };
-
-  axios
+  
+  try {
+   return axios
     .put(`${PLAY}?device_id=${device[streamer]}`, JSON.stringify(body), {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${accessTokenList[streamer]}`
       }
     })
-    .catch(({ response }) =>
-      console.log(
+  }
+  catch(response) {
+    console.log(
         `Error while starting song (${response.status} ${response.statusText})`
       )
-    );
+  }
 };
 
 const pauseSong = streamer => {
