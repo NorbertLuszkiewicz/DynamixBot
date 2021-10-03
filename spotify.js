@@ -94,18 +94,22 @@ const startSong = async streamer => {
 
 const pauseSong = async streamer => {
   try {
-    const {accessToken} = await getUser(streamer)
+    const data = await getUser(streamer)
+    const device2 = device[streamer]
+    const accessToken = accessTokenList[streamer]
+    console.log([{data}])
     
     return await axios.put(
-      `${PAUSE}?device_id=${device[streamer]}`,
+      `${PAUSE}?device_id=${device2}`,
       {},
       {
         headers: {
-          Authorization: `Bearer ${accessTokenList[streamer]}`
+          Authorization: `Bearer ${accessToken}`
         }
       }
     );
-  } catch ({ response }) {
+  } catch (response ) {
+
     console.log(
       `Error while stopping song (${response.status} ${response.statusText})`
     );
@@ -221,8 +225,8 @@ const refreshAccessToken = async () => {
       });
     });
     console.log("reset spotify token");
-  } catch (response) {
-    console.log(response);
+  } catch ({response}) {
+
     console.log(
       `Error while resetting Spotify token (${response.status} ${response.statusText})`
     );

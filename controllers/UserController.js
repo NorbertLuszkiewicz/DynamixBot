@@ -81,7 +81,7 @@ const updateUser = async (
       skipSongID,
       volumeSongID
     };
-    console.log(updatedUserData)
+
     return await User.findOneAndUpdate({streamer}, updatedUserData);
   } catch (err) {
     console.log(err);
