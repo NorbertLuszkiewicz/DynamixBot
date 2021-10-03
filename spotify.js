@@ -1,5 +1,5 @@
 const axios = require("axios");
-const { getAllUser, updateUser } = require("./controllers/UserController.js");
+const { getAllUser, updateUser, getUser } = require("./controllers/UserController.js");
 
 const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
@@ -94,6 +94,8 @@ const startSong = async streamer => {
 
 const pauseSong = async streamer => {
   try {
+    const {accessToken} = await getUser(streamer)
+    
     return await axios.put(
       `${PAUSE}?device_id=${device[streamer]}`,
       {},
