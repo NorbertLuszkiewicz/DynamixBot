@@ -5,6 +5,10 @@ twitchCommends();
 
 const { getUser } = require("./controllers/UserController.js");
 
+  getUser("dynam1x1", data => {
+    console.log("aaaaa", data);
+  });
+
 setTimeout(refreshAccessToken, 5000);
 setInterval(refreshAccessToken, 1800 * 1000);
 
@@ -23,9 +27,6 @@ client.connect(err => {
     ? console.log("Error with connect to database")
     : console.log("Database connected!");
 
-  getUser("dynam1x1", data => {
-    console.log("aaaaa", data);
-  });
 });
 
 const fastify = require("fastify")({
