@@ -1,26 +1,24 @@
 const axios = require("axios");
 const { startSong } = require("./spotify");
+const {
+  getAllUser,
+  updateUser,
+  getUser
+} = require("./controllers/UserController.js");
 
-const clientId = {
-  kezman22: process.env.SR_CLIENT_ID_KEZMAN,
-  og1ii: process.env.SR_CLIENT_ID_OGI,
-  simplywojtek: process.env.SR_CLIENT_ID_WOJTEK
-};
-const clientSecret = {
-  kezman22: process.env.SR_CLIENT_SECRET_KEZMAN,
-  og1ii: process.env.SR_CLIENT_SECRET_OGI,
-  simplywojtek: process.env.SR_CLIENT_SECRET_WOJTEK
-};
 const url = "https://api.streamelements.com/kappa/v2/";
 let endTime;
 
 const getSpotifyAreaData = async (streamer, area) => {
   try {
+    const [user] = await getUser(streamer);
+    const { clientSongRequestID, clientSongRequestSecret } = user;
+    
     const { data } = await axios.get(
-      `${url}songrequest/${clientId[streamer]}/${area}`,
+      `${url}songrequest/${clientSongRequestID}/${area}`,
       {
         headers: {
-          Authorization: `Bearer ${clientSecret[streamer]}`
+          Authorization: `Bearer ${clientSongRequestSecret}`
         }
       }
     );
