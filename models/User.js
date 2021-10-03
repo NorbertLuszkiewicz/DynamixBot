@@ -35,6 +35,10 @@ const UserSchema = new Schema({
     type: String,
     default: null,
   },
+  clientSongRequestSecret: {
+    type: String,
+    default: null,
+  },
   addSongID: {
     type: String,
     default: null,
