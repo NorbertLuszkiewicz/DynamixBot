@@ -8,7 +8,7 @@ mongoose.connect(
     useUnifiedTopology: true,
   }
 );
-
+ 
 const UserSchema = new Schema({
   streamer: {
     type: String,

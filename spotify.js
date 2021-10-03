@@ -161,9 +161,9 @@ const changeVolumeOnTime = async (streamer, min, max, time) => {
 
 const setVolume = async (streamer, value) => {
   try {
-        const [user] = await getUser(streamer);
+    const [user] = await getUser(streamer);
     const { accessToken, device } = user;
-    
+
     return await axios.put(
       `${VOLUME}?volume_percent=${value}&device_id=${device}`,
       {},
@@ -210,18 +210,18 @@ const refreshAccessToken = async () => {
   }
 };
 
-const currentlyPlaying = async (streamer, callback) => {
+const currentlyPlaying = async streamer => {
   try {
     const [user] = await getUser(streamer);
     const { accessToken } = user;
-    
+
     const { data } = await axios.get(`${PLAYER}?market=US`, {
       headers: {
         Authorization: `Bearer ${accessToken}`
       }
     });
 
-    callback(data);
+    return data;
   } catch ({ response }) {
     console.log(
       `Error while getting currently song (${response.status} ${response.statusText})`
