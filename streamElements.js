@@ -1,4 +1,3 @@
-const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 const axios = require("axios");
 const { startSong } = require("./spotifyBot");
 
