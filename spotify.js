@@ -1,5 +1,5 @@
 const axios = require("axios");
-const { getAllUser } = require("./controllers/UserController.js");
+const { getAllUser, updateUser } = require("./controllers/UserController.js");
 
 const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
@@ -209,39 +209,40 @@ const refreshAccessToken = async () => {
         }
       });
 
-      
       data.access_token && (accessTokenList[streamer] = data.access_token);
       data.refresh_token && (refreshTokenList[streamer] = data.refresh_token);
-      
-      
+
+      await updateUser({
+        streamer: streamer.streamer,
+        accessToken: data.access_token,
+        refreshToken: data.refresh_token
+      });
     });
     console.log("reset spotify token");
-  } catch ( response ) {
-    console.log(response)
+  } catch (response) {
+    console.log(response);
     console.log(
       `Error while resetting Spotify token (${response.status} ${response.statusText})`
     );
   }
-
 };
 
-function currentlyPlaying(streamer, callback) {
-  axios
-    .get(`${PLAYER}?market=US`, {
+const currentlyPlaying = async (streamer, callback) => {
+  try {
+    const { data } = await axios.get(`${PLAYER}?market=US`, {
       headers: {
         Authorization: `Bearer ${accessTokenList[streamer]}`
       }
-    })
-    .then(({ data }) => {
-      positionMs = data.progress_ms;
-      callback = data;
-    })
-    .catch(({ response }) =>
-      console.log(
-        `Error while getting currently song (${response.status} ${response.statusText})`
-      )
+    });
+
+    positionMs = data.progress_ms;
+    callback = data;
+  } catch ({ response }) {
+    console.log(
+      `Error while getting currently song (${response.status} ${response.statusText})`
     );
-}
+  }
+};
 
 function refreshDevices(streamer) {
   axios
