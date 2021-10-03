@@ -3,6 +3,9 @@ const path = require("path");
 const { twitchCommends } = require("./twitch/index.js");
 twitchCommends();
 
+const { updateUser } = require("./controllers/UserController");
+updateUser("test");
+
 setTimeout(refreshAccessToken, 5000);
 setInterval(refreshAccessToken, 1800 * 1000);
 
@@ -23,14 +26,6 @@ client.connect(err => {
 
   const collection = client.db("streamers").collection("users");
 
-  collection.insertOne({
-    stremer: "dynam1x1",
-    refreshToken: "AQDZ1nmBW5nL_uy1Xlp8-hP2aikNfvIeZ61WcF_rTd6LcpRx82hjR5CzDPRoiIEjREPugOBT8eDPLLVOX1Y65QP05xBRt_Dwc0TosNGb1ZUiREL_a4j95WaI_5OiB6GuDWc",
-    accessToken: "BQCn8j4JkYaxVUK_bIft2NYhBjM_EkOUIHqKKyrM_cztAV61GDtwBp879QnFvxrkkFEHY038wgpXqAGsGJa24asCFSMA80c8zN3DmR1mCvWg2FrV4W-m_ZqUWoZ8URWpsk0PBspVFWMhHDHN-rnO_OvgcRzGMrVjW1Z54EPZU3AGDbHRV5JV1p8THp01vWnjsWyVAhRWWA2-4nkUJA2cL5mWvW9kNzaVmkewejio7VnoxNkwxBeH8jjVahtSRV2yeOve8JuqIZdhBYw3fnLXVLp9R6SU_miosfM",
-    device: "c3e9e9038e921489b7106d098ca11128b330ae36",
-    clientSongRequestID: "5bb10e2363a6df5e9a3ddddd",
-    clientSongRequestSecret: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
-  });
 }); 
 
 const fastify = require("fastify")({

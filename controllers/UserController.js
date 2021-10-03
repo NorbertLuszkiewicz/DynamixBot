@@ -5,25 +5,27 @@ const User = mongoose.model("user");
 
 const addUser = ({
   stremer,
-  clientID,
-  clientSecret,
+  refreshToken,
+  accessToken,
   device,
   code,
   clientSongRequestID,
+  clientSongRequestSecret,
   addSongID,
   skipSongID,
-  volumeSongID,
+  volumeSongID
 }) => {
   const newUserData = {
     stremer,
-    clientID,
-    clientSecret,
+    refreshToken,
+    accessToken,
     device,
     code,
     clientSongRequestID,
+    clientSongRequestSecret,
     addSongID,
     skipSongID,
-    volumeSongID,
+    volumeSongID
   };
 
   const newUser = new User(newUserData);
@@ -33,39 +35,58 @@ const addUser = ({
 };
 
 const getAllUser = async () => {
-  try{
-    const data = await User.find({})
-    return data
-  }catch (err){
-    console.log(err)
+  try {
+    const data = await User.find({});
+    return data;
+  } catch (err) {
+    console.log(err);
   }
 };
 
-const getUser = async (user) => {
-  try{
-    const data = await User.find({ streamer: user })
-    return data
-  }catch (err){
-    console.log(err)
+const getUser = async user => {
+  try {
+    const data = await User.find({ streamer: user });
+    return data;
+  } catch (err) {
+    console.log(err);
   }
 };
 
-const updateUser = (data, res) => {
-  const updatedUserData = {
-    clientID: data.clientID,
-    clientSecret: data.clientSecret,
-    device: data.device,
-    code: data.code,
-    clientSongRequestID: data.clientSongRequestID,
-    addSongID: data.addSongID,
-    skipSongID: data.skipSongID,
-    volumeSongID: data.volumeSongID,
-  };
-  User.findByIdAndUpdate(data.stremer, updatedUserData)
-    .then((updatedUser) => res.send(updatedUser))
-    .catch((err) => console.log(err));
+const updateUser = async (
+  {
+    stremer,
+    refreshToken,
+    accessToken,
+    device,
+    code,
+    clientSongRequestID,
+    clientSongRequestSecret,
+    addSongID,
+    skipSongID,
+    volumeSongID
+  },
+  res
+) => {
+  try {
+    const updatedUserData = {
+      stremer,
+      refreshToken,
+      accessToken,
+      device,
+      code,
+      clientSongRequestID,
+      clientSongRequestSecret,
+      addSongID,
+      skipSongID,
+      volumeSongID
+    };
+
+    return await User.findByIdAndUpdate(stremer, updatedUserData);
+  } catch (err) {
+    console.log(err);
+  }
 };
-const deleteUser = (data) => {
+const deleteUser = data => {
   User.findByIdAndDelete(data.streamer);
 };
 

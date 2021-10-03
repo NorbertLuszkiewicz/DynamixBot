@@ -210,10 +210,13 @@ const refreshAccessToken = async () => {
         }
       });
 
-      console.log("reset spotify token");
+      
       data.access_token && (accessTokenList[streamer] = data.access_token);
       data.refresh_token && (refreshTokenList[streamer] = data.refresh_token);
+      
+      
     });
+    console.log("reset spotify token");
   } catch ( response ) {
     console.log(response)
     console.log(
