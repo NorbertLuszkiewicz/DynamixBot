@@ -16,7 +16,6 @@ const VOLUME = "https://api.spotify.com/v1/me/player/volume";
 const PLAYER = "https://api.spotify.com/v1/me/player";
 const DEVICES = "https://api.spotify.com/v1/me/player/devices";
 
-let positionMs = 0;
 let device = {
   og1ii: process.env.DEVICE_OGI,
   dynam1x1: "c3e9e9038e921489b7106d098ca11128b330ae36",
@@ -76,14 +75,13 @@ const addNewUser = async (code, callback) => {
 };
 
 const startSong = async streamer => {
-  let body = { position_ms: positionMs };
   const [user] = await getUser(streamer);
   const { accessToken, device } = user;
 
   try {
     return await axios.put(
       `${PLAY}?device_id=${device}`,
-      JSON.stringify(body),
+      {},
       {
         headers: {
           "Content-Type": "application/json",
@@ -254,7 +252,6 @@ const currentlyPlaying = async (streamer, callback) => {
       }
     });
 
-    positionMs = data.progress_ms;
     callback = data;
   } catch ({ response }) {
     console.log(
