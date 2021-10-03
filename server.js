@@ -8,7 +8,6 @@ const { updateUser } = require("./controllers/UserController");
 const test = async () =>{
 const data = await updateUser({streamer: "test", clientSongRequestID: "123", clientSongRequestSecret: "test"});
 
-
 console.log(data)
 }
 test()

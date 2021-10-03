@@ -4,7 +4,7 @@ require("../models/User");
 const User = mongoose.model("user");
 
 const addUser = ({
-  stremer,
+  streamer,
   refreshToken,
   accessToken,
   device,
@@ -16,7 +16,7 @@ const addUser = ({
   volumeSongID
 }) => {
   const newUserData = {
-    stremer,
+    streamer,
     refreshToken,
     accessToken,
     device,
@@ -54,7 +54,7 @@ const getUser = async user => {
 
 const updateUser = async (
   {
-    stremer,
+    streamer,
     refreshToken,
     accessToken,
     device,
@@ -68,8 +68,9 @@ const updateUser = async (
   res
 ) => {
   try {
+    
     const updatedUserData = {
-      stremer,
+      streamer,
       refreshToken,
       accessToken,
       device,
@@ -80,8 +81,8 @@ const updateUser = async (
       skipSongID,
       volumeSongID
     };
-
-    return await User.findByIdAndUpdate(stremer, updatedUserData);
+    console.log(updatedUserData)
+    return await User.findByIdAndUpdate(streamer, updatedUserData);
   } catch (err) {
     console.log(err);
   }

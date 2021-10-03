@@ -196,7 +196,6 @@ const setVolume = async (streamer, value) => {
 const refreshAccessToken = async () => {
   try {
     const streamers = await getAllUser();
-    console.log(streamers, "streamers")
 
     streamers.forEach(async streamer => {
       const body = `grant_type=refresh_token&refresh_token=${streamer.refreshToken}&client_id=${clientId}`;
