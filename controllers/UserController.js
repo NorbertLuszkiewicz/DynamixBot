@@ -69,4 +69,4 @@ const deleteUser = (data) => {
   User.findByIdAndDelete(data.streamer);
 };
 
-module.exports = { addUser, getUser };
+module.exports = { addUser, getUser, getAllUser };

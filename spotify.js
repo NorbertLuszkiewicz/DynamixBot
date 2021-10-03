@@ -1,4 +1,5 @@
 const axios = require("axios");
+const { getAllUser } = require("./controllers/UserController.js");
 
 const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
@@ -84,7 +85,7 @@ const startSong = async streamer => {
         }
       }
     );
-  } catch ({response}) {
+  } catch ({ response }) {
     console.log(
       `Error while starting song (${response.status} ${response.statusText})`
     );
@@ -102,7 +103,7 @@ const pauseSong = async streamer => {
         }
       }
     );
-  } catch ({response}) {
+  } catch ({ response }) {
     console.log(
       `Error while stopping song (${response.status} ${response.statusText})`
     );
@@ -120,7 +121,7 @@ const nextSong = async streamer => {
         }
       }
     );
-  } catch ({response}) {
+  } catch ({ response }) {
     console.log(
       `Error while stopping song (${response.status} ${response.statusText})`
     );
@@ -185,52 +186,42 @@ const setVolume = async (streamer, value) => {
         }
       }
     );
-  } catch ({response}) {
+  } catch ({ response }) {
     console.log(
       `Error while volume changes (${response.status} ${response.statusText})`
     );
   }
 };
 
-const refreshAccessToken = async() => {
-  
-  try{
-    const streamers = getAllUser()
-    
-  Object.keys(streamers).forEach(streamer => {
-    const body = `grant_type=refresh_token&refresh_token=${streamer.}&client_id=${clientId}`;
+const refreshAccessToken = async () => {
+  try {
+    const streamers = await getAllUser();
+    console.log(streamers, "streamers")
 
+    streamers.forEach(async streamer => {
+      const body = `grant_type=refresh_token&refresh_token=${streamer.refreshToken}&client_id=${clientId}`;
 
-  });
-    
-    const {data} =    axios
-      .post(`${TOKEN}`, body, {
+      const { data } = await axios.post(`${TOKEN}`, body, {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           Authorization: `Basic ${Buffer.from(
             clientId + ":" + clientSecret
           ).toString("base64")}`
         }
-      })
-    
-        console.log("reset spotify token");
-        data.access_token && (accessTokenList[streamer] = data.access_token);
-        data.refresh_token && (refreshTokenList[streamer] = data.refresh_token);
-    
-    
-  }catch({response}){
+      });
+
+      console.log("reset spotify token");
+      data.access_token && (accessTokenList[streamer] = data.access_token);
+      data.refresh_token && (refreshTokenList[streamer] = data.refresh_token);
+    });
+  } catch ( response ) {
+    console.log(response)
     console.log(
-          `Error while resetting Spotify token (${response.status} ${response.statusText})`
-        )
+      `Error while resetting Spotify token (${response.status} ${response.statusText})`
+    );
   }
-  
-  
-  Object.keys(accessTokenList).forEach(streamer => {
-    const body = `grant_type=refresh_token&refresh_token=${refreshTokenList[streamer]}&client_id=${clientId}`;
 
-
-  });
-}
+};
 
 function currentlyPlaying(streamer, callback) {
   axios
