@@ -90,7 +90,8 @@ const timeRequest = async (streamer, action) => {
           streamer: streamer,
           endTime: timeOfAllSongs + now
         });
-        console.log(timeOfAllSongs, timeOfSongPlayingNow, "aaaaa");
+
+        console.log(timeOfSongsInQueue, timeOfSongPlayingNow ,timeOfAllSongs,  "aaaaa");
         clearTimeout(timeoutVolume[streamer]);
 
         timeoutVolume[streamer] = setTimeout(async () => {
