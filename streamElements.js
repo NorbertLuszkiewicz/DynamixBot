@@ -61,37 +61,39 @@ const timeRequest = async (streamer, action) => {
 
     //console.log({ playing, queue });
 
-    if (action === "add") {
-      const truePlayingDuration = playing
-        ? playing.duration
-        : queue[0].duration;
+    if (action === "add") {  
+      let newEndTime
       
-      console.log(truePlayingDuration, "truePlayingDuration")
-
-      if (truePlayingDuration) {
-        let timeOfSongsInQueue = 0;
-        let timeOfAllSongs = 0;
-
-        if (playing) {
-          queue.length > 0
-            ? queue.forEach(song => (timeOfSongsInQueue += song.duration))
-            : (timeOfSongsInQueue = 0);
-        } else {
-          timeOfSongsInQueue = 0;
-        }
-
-        const timeOfSongPlayingNow = endTime > now ? endTime - now : 0;
-
-        !timeOfSongsInQueue
-          ? (timeOfAllSongs = truePlayingDuration * 1000)
-          : (timeOfAllSongs = timeOfSongsInQueue * 1000 + timeOfSongPlayingNow);
+      if(playing && playing.duration && queue.length == 0){
+        newEndTime = playing.duration * 1000
+        
+         await updateUser({
+          streamer: streamer,
+          endTime: newEndTime + now
+        });
+      }     
+      
+      if(!playing  && queue.length == 1){
+        newEndTime = queue[0].duration * 1000
+        
+        await updateUser({
+          streamer: streamer,
+          endTime: newEndTime + now
+        });
+      }
+      
+      if(playing && queue.length > 1){
+        
+        newEndTime = endTime + queue[queue.length - 1].duration
 
         await updateUser({
           streamer: streamer,
-          endTime: timeOfAllSongs + now
+          endTime: endTime + queue[queue.length - 1].duration
         });
 
         console.log(timeOfSongsInQueue, timeOfSongPlayingNow ,timeOfAllSongs,  "aaaaa");
+      }
+
         clearTimeout(timeoutVolume[streamer]);
 
         timeoutVolume[streamer] = setTimeout(async () => {
@@ -100,8 +102,8 @@ const timeRequest = async (streamer, action) => {
           console.log("teraz", playing == null);
 
           !playing && startSong(streamer);
-        }, timeOfAllSongs + 1000 * (queue.length + 3));
-      }
+        }, newEndTime + 1000 * (queue.length + 3));
+      
     }
     if (action === "skip") {
       if (playing) {
