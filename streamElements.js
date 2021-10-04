@@ -52,75 +52,79 @@ const songPlayingNow = async streamer => {
 
 const timeRequest = async (streamer, action) => {
   try {
-    
-      let playing = await getSpotifyAreaData(streamer, "playing");
-      const queue = await getSpotifyAreaData(streamer, "queue");
-      const [user] = await getUser(streamer);
-      const { endTime } = user;
+    let playing = await getSpotifyAreaData(streamer, "playing");
+    const queue = await getSpotifyAreaData(streamer, "queue");
+    const [user] = await getUser(streamer);
+    const { endTime } = user;
 
-      let now = Date.now();
+    let now = Date.now();
 
-      //console.log({ playing, queue });
+    //console.log({ playing, queue });
 
-      if (action === "add") {
-       const truePlayingDuration = playing ? playing.duration : queue[0].duration
-        
+    if (action === "add") {
+      const truePlayingDuration = playing
+        ? playing.duration
+        : queue[0].duration;
+
+      if (truePlayingDuration) {
+        let timeOfSongsInQueue = 0;
+        let timeOfAllSongs = 0;
+
         if (playing) {
-          let timeOfSongsInQueue = 0;
-          let timeOfAllSongs = 0;
           queue.length > 0
             ? queue.forEach(song => (timeOfSongsInQueue += song.duration))
             : (timeOfSongsInQueue = 0);
-
-          const timeOfSongPlayingNow = endTime > now ? endTime - now : 0;
-
-          !timeOfSongsInQueue
-            ? (timeOfAllSongs = truePlayingDuration * 1000)
-            : (timeOfAllSongs =
-                (timeOfSongsInQueue + timeOfSongPlayingNow) * 1000);
-
-          await updateUser({
-            streamer: streamer,
-            endTime: timeOfAllSongs + now
-          });
-          console.log(timeOfAllSongs, endTime - now, "aaaaa");
-          clearTimeout(timeoutVolume[streamer]);
-
-          timeoutVolume[streamer] = setTimeout(async () => {
-            playing = await getSpotifyAreaData(streamer, "playing");
-
-            console.log("teraz", playing == null);
-
-            !playing && startSong(streamer);
-          }, timeOfAllSongs + 1000 * (queue.length + 1));
-        }
-      }
-      if (action === "skip") {
-        if (playing) {
-          let timeOfSongsInQueue = 0;
-          queue.length > 0
-            ? queue.forEach(song => (timeOfSongsInQueue += song.duration))
-            : (timeOfSongsInQueue = 0);
-
-          const timeOfAllSongs = (playing.duration + timeOfSongsInQueue) * 1000;
-
-          await updateUser({
-            streamer: streamer,
-            endTime: timeOfAllSongs + now
-          });
-
-          clearTimeout(timeoutVolume[streamer]);
-
-          timeoutVolume[streamer] = setTimeout(async () => {
-            playing = await getSpotifyAreaData(streamer, "playing");
-
-            !playing && startSong(streamer);
-          }, timeOfAllSongs + 1000 * (queue.length + 1));
         } else {
-          startSong(streamer);
+          timeOfSongsInQueue = 0;
         }
+
+        const timeOfSongPlayingNow = endTime > now ? endTime - now : 0;
+
+        !timeOfSongsInQueue
+          ? (timeOfAllSongs = truePlayingDuration * 1000)
+          : (timeOfAllSongs = timeOfSongsInQueue * 1000 + timeOfSongPlayingNow);
+
+        await updateUser({
+          streamer: streamer,
+          endTime: timeOfAllSongs + now
+        });
+        console.log(timeOfAllSongs, endTime - now, "aaaaa");
+        clearTimeout(timeoutVolume[streamer]);
+
+        timeoutVolume[streamer] = setTimeout(async () => {
+          playing = await getSpotifyAreaData(streamer, "playing");
+
+          console.log("teraz", playing == null);
+
+          !playing && startSong(streamer);
+        }, timeOfAllSongs + 1000 * (queue.length + 1));
       }
-    
+    }
+    if (action === "skip") {
+      if (playing) {
+        let timeOfSongsInQueue = 0;
+        queue.length > 0
+          ? queue.forEach(song => (timeOfSongsInQueue += song.duration))
+          : (timeOfSongsInQueue = 0);
+
+        const timeOfAllSongs = (playing.duration + timeOfSongsInQueue) * 1000;
+
+        await updateUser({
+          streamer: streamer,
+          endTime: timeOfAllSongs + now
+        });
+
+        clearTimeout(timeoutVolume[streamer]);
+
+        timeoutVolume[streamer] = setTimeout(async () => {
+          playing = await getSpotifyAreaData(streamer, "playing");
+
+          !playing && startSong(streamer);
+        }, timeOfAllSongs + 1000 * (queue.length + 1));
+      } else {
+        startSong(streamer);
+      }
+    }
   } catch (err) {
     console.log(`Error while changging volume on time ${err}`);
   }
