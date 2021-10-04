@@ -56,22 +56,41 @@ const timeRequest = async (streamer, action) => {
     let now = Date.now();
 
     //console.log({ playing, queue });
+        if (action === "skip") {
+      if (playing) {
+        let timeOfSongsInQueue = 0;
+        queue.length > 0
+          ? queue.forEach(song => (timeOfSongsInQueue += song.duration))
+          : (timeOfSongsInQueue = 0);
+
+        const timeOfAllSongs = (playing.duration + timeOfSongsInQueue)*1000 ;
+
+        await updateUser({
+          streamer: streamer,
+          endTime: timeOfAllSongs
+        });
+        
+        setTimeout(()=>{}, )
+        startSong(streamer);
+        
+      } else {
+        startSong(streamer);
+      }
+    }
+    
 
     if (action === "skip") {
       if (playing) {
-        let timeOfSongsInQueue
-        queue.length > 0 ? queue.forEach(song => timeOfSongsInQueue += song.duration): timeOfSongsInQueue = 0
-        
-        console.log(timeOfSongsInQueue)
-          
-        
-        const timeOfAllSongs = playing.duration + 0
+        let timeOfSongsInQueue = 0;
+        queue.length > 0
+          ? queue.forEach(song => (timeOfSongsInQueue += song.duration))
+          : (timeOfSongsInQueue = 0);
 
-        
-        
+        const timeOfAllSongs = playing.duration + timeOfSongsInQueue;
+
         await updateUser({
           streamer: streamer,
-          endTime: 0
+          endTime: timeOfAllSongs
         });
       } else {
         startSong(streamer);
