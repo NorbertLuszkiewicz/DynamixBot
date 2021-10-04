@@ -125,7 +125,7 @@ const messages = () => {
       let now = Date.now();
 
       if (timeCooldownTravis < now) {
-        timeCooldownTravis = 10 * 60 * 1000 + now;
+        timeCooldownTravis = 5 * 60 * 1000 + now;
         ComfyJS.Say("Travis UPOUPO", extra.channel);
       }
     }
@@ -134,7 +134,7 @@ const messages = () => {
       let now = Date.now();
 
       if (timeCooldownTravis < now) {
-        timeCooldownTravis = 3 * 60 * 1000 + now;
+        timeCooldownTravis = 5 * 60 * 1000 + now;
         ComfyJS.Say("^ Denciak", extra.channel);
       }
     }
@@ -143,7 +143,7 @@ const messages = () => {
       let now = Date.now();
 
       if (timeCooldownOgiii < now) {
-        timeCooldownOgiii = 3 * 60 * 1000 + now;
+        timeCooldownOgiii = 5 * 60 * 1000 + now;
         ComfyJS.Say("^ Dyktator", extra.channel);
       }
     }

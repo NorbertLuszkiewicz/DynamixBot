@@ -24,7 +24,22 @@ client.connect(err => {
     : console.log("Database connected!");
 
   const collection = client.db("streamers").collection("users");
-
+  
+  // collection.insertOne({
+  //   stremer: "l2plelouch",
+  //   addSongID: "456465465",
+  // timeCooldownTravis: {
+  //         user: "traviscwat",
+  //         message: "^ Denciak",
+  //         time: 300000,
+  //         last:
+  //     },
+  // timeCooldownOg1ii: {
+  //         user: "og1ii",
+  //         message: "^ Dyktator",
+  //         time: 300000
+  //     }
+  // });
 }); 
 
 const fastify = require("fastify")({
