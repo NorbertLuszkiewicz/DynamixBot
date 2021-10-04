@@ -42,7 +42,8 @@ const messages = () => {
       }
 
       if (flags.customReward && extra.customRewardId === skipSongID) {
-        const { isPlayingNow } = songPlayingNow(extra.channel);
+        const { isPlayingNow, queue } = songPlayingNow(extra.channel);
+        console.log(isPlayingNow, queue)
         if (isPlayingNow) {
           ComfyJS.Say("!skip", extra.channel);
           timeRequest(extra.channel, "skip");
