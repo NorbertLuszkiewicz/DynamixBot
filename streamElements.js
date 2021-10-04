@@ -62,6 +62,7 @@ const timeRequest = async (streamer, action) => {
     //console.log({ playing, queue });
 
     if (action === "add") {
+      console.log(playing)
       if (playing) {
         let timeOfSongsInQueue = 0;
         let timeOfAllSongs = 0;
@@ -86,7 +87,7 @@ const timeRequest = async (streamer, action) => {
 
         timeoutVolume[streamer] = setTimeout(async () => {
           playing = await getSpotifyAreaData(streamer, "playing");
-
+          console.log("teraz", !playing)
           !playing && startSong(streamer);
         }, timeOfAllSongs + 1000 * (queue.length + 1));
       } else {
@@ -105,7 +106,7 @@ const timeRequest = async (streamer, action) => {
 
         await updateUser({
           streamer: streamer,
-          endTime: timeOfAllSongs
+          endTime: timeOfAllSongs + now
         });
 
         clearTimeout(timeoutVolume[streamer]);
