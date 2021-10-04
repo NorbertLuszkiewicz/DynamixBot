@@ -65,7 +65,7 @@ const timeRequest = async (streamer, action) => {
       if (action === "add") {
        const truePlayingDuration = playing ? playing.duration : queue[0].duration
         
-        console.log(playing, queue)
+        
         if (playing) {
           let timeOfSongsInQueue = 0;
           let timeOfAllSongs = 0;
@@ -76,7 +76,7 @@ const timeRequest = async (streamer, action) => {
           const timeOfSongPlayingNow = endTime > now ? endTime - now : 0;
 
           !timeOfSongsInQueue
-            ? (timeOfAllSongs = playing.duration * 1000)
+            ? (timeOfAllSongs = truePlayingDuration * 1000)
             : (timeOfAllSongs =
                 (timeOfSongsInQueue + timeOfSongPlayingNow) * 1000);
 

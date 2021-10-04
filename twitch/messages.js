@@ -98,10 +98,7 @@ const messages = () => {
         }
       }
 
-      if (message === "aaa" && user === "DynaM1X1") {
-        ComfyJS.Say("ume ", extra.channel);
-      }
-    } catch {}
+    } catch(err) {console.log(`Error when use message ${err}`)}
 
     if (message === "pause" && user === "DynaM1X1") {
       pauseSong(extra.channel);
