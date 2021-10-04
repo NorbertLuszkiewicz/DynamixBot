@@ -61,51 +61,61 @@ const timeRequest = async (streamer, action) => {
 
     //console.log({ playing, queue });
 
-    if (action === "add") {  
-      let newEndTime
-      
-      if(playing && playing.duration && queue.length == 0){
-        newEndTime = playing.duration * 1000
-        
-         await updateUser({
-          streamer: streamer,
-          endTime: newEndTime + now
-        });
-        console.log(newEndTime,  "1");
-      }     
-      
-      if(!playing  && queue.length == 1){
-        newEndTime = queue[0].duration * 1000
-        
-        await updateUser({
-          streamer: streamer,
-          endTime: newEndTime + now
-        });
-        console.log(newEndTime,  "2");
-      }
-      
-      if(playing && queue.length > 0){
-        
-        newEndTime = endTime - now + (queue[queue.length - 1].duration * 1000)
+    if (action === "add") {
+      let newEndTime;
+
+      if (playing && playing.duration && queue.length == 0) {
+        newEndTime = playing.duration * 1000;
 
         await updateUser({
           streamer: streamer,
           endTime: newEndTime + now
         });
-
-        console.log(newEndTime,queue[queue.length - 1].duration* 1000 , "3");
+        console.log(newEndTime, "1");
       }
 
-        clearTimeout(timeoutVolume[streamer]);
+      if (!playing && queue.length == 1) {
+        newEndTime = queue[0].duration * 1000;
 
-        timeoutVolume[streamer] = setTimeout(async () => {
-          playing = await getSpotifyAreaData(streamer, "playing");
+        await updateUser({
+          streamer: streamer,
+          endTime: newEndTime + now
+        });
+        console.log(newEndTime, "2");
+      }
 
-          console.log("teraz", playing == null);
+      if (playing && queue.length > 0) {
+        if (endTime > now) {
+          newEndTime = endTime - now + queue[queue.length - 1].duration * 1000;
 
-          !playing && startSong(streamer);
-        }, newEndTime + 1000 * (queue.length + 1));
-      
+          await updateUser({
+            streamer: streamer,
+            endTime: newEndTime + now
+          });
+
+          console.log(newEndTime, queue[queue.length - 1].duration * 1000, "3");
+        } else {
+          let allQueueTimes = 0
+          queue.forEach((song)=> allQueueTimes += song.duration)
+          
+          newEndTime = now + queue[queue.length - 1].duration * 1000;
+
+          await updateUser({
+            streamer: streamer,
+            endTime: newEndTime + now
+          });
+        }
+      }
+
+      clearTimeout(timeoutVolume[streamer]);
+
+      timeoutVolume[streamer] = setTimeout(async () => {
+        playing = await getSpotifyAreaData(streamer, "playing");
+
+        console.log("teraz", playing == null);
+
+        !playing && startSong(streamer);
+      }, newEndTime + 1000 * (queue.length + 1));
     }
     if (action === "skip") {
       if (playing) {
