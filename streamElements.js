@@ -101,7 +101,7 @@ const timeRequest = async (streamer, action) => {
           let allQueueTimes = 0
           queue.forEach((song)=> allQueueTimes += song.duration)
           
-          newEndTime = now + ( allQueueTimes + playing.duration ) * 1000;
+          newEndTime = ( allQueueTimes + playing.duration ) * 1000;
 
           await updateUser({
             streamer: streamer,
