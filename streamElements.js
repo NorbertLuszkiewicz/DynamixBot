@@ -80,7 +80,7 @@ const timeRequest = async (streamer, action) => {
           timeOfSongsInQueue = 0;
         }
 
-        const timeOfSongPlayingNow = endTime > now ? endTime - now - timeOfSongsInQueue : 0;
+        const timeOfSongPlayingNow = endTime > now ? endTime - now : 0;
 
         !timeOfSongsInQueue
           ? (timeOfAllSongs = truePlayingDuration * 1000)
