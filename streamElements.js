@@ -35,13 +35,11 @@ const songPlayingNow = async streamer => {
   try {
     const player = await getSpotifyAreaData(streamer, "player");
     const playing = await getSpotifyAreaData(streamer, "playing");
-    const queue = await getSpotifyAreaData(streamer, "queue");
 
     return {
       isPlayingNow: player.state == "playing" && playing != null,
       title: playing && playing.title,
       link: playing && `https://www.youtube.com/watch?v=${playing.videoId}`,
-      queue
     };
   } catch (err) {
     console.log(`Error while checking what song playing now ${err}`);
@@ -56,46 +54,12 @@ const timeRequest = async (streamer, action) => {
     const { endTime } = user;
 
     let now = Date.now();
+    
+    console.log({playing, queue})
 
-    setTimeout(() => {
-      if (action == "add") {
-        if (!endTime || endTime < now) {
-          queue.length == 0
-            ? (endTime = parseInt(playing ? playing.duration : 0) * 1000 + now)
-            : (endTime =
-                parseInt(queue[queue.length - 1].duration) * 1000 + now);
-        } else if (endTime > now) {
-          queue.length == 0
-            ? (endTime = parseInt(playing.duration) * 1000 + endTime)
-            : (endTime =
-                endTime + parseInt(queue[queue.length - 1].duration) * 1000);
-        }
-      }
-      if (action == "skip") {
-        setTimeout(() => {
-          if (playing) {
-            if (queue.length != 0) {
-              let allQueueTime = 0;
-              queue.forEach(item => {
-                allQueueTime += parseInt(item.duration);
-              });
-
-              endTime =
-                (parseInt(playing.duration) + allQueueTime) * 1000 + now;
-            } else {
-              endTime = parseInt(playing.duration) * 1000 + now;
-            }
-          }
-        }, 1000);
-      }
-
-      setTimeout(() => {
-        if (!playing) {
-          startSong(streamer);
-          endTime = null;
-        }
-      }, endTime - now + 2000);
-    });
+    if (action === "skip") {
+      
+    }
   } catch (err) {
     console.log(`Error while changging volume on time ${err}`);
   }
