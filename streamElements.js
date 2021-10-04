@@ -74,8 +74,15 @@ const timeRequest = async (streamer, action) => {
           endTime: timeOfAllSongs
         });
         
-        timeoutVolume[streamer] = setTimeout(()=>{}, )
-        startSong(streamer);
+        clearTimeout(timeoutVolume[streamer])
+        
+        timeoutVolume[streamer] = setTimeout(()=>{
+          
+          console.log("teraz")
+          !playing && startSong(streamer);
+          
+        }, timeOfAllSongs + 1000 * (queue.length +1))
+        
         
       } else {
         startSong(streamer);
