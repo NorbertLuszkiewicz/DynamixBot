@@ -16,7 +16,7 @@ const VOLUME = "https://api.spotify.com/v1/me/player/volume";
 const PLAYER = "https://api.spotify.com/v1/me/player";
 const DEVICES = "https://api.spotify.com/v1/me/player/devices";
 
-let timeoutVolume = null
+let timeoutVolume = {kezman22: null, dynam1x1: null};
 
 const addNewUser = async (code, callback) => {
   let accessToken;
@@ -111,7 +111,7 @@ const nextSong = async streamer => {
 const changeVolumeOnTime = async (streamer, min, max, time) => {
   try {
     let [user] = await getUser(streamer);
-    let { accessToken, device, maxVolumeTime, timeoutVolume } = user;
+    let { accessToken, device, maxVolumeTime } = user;
     let newMaxVolumeTime = 0;
 
     await axios.put(
@@ -138,13 +138,13 @@ const changeVolumeOnTime = async (streamer, min, max, time) => {
       streamer: streamer,
       maxVolumeTime: newMaxVolumeTime
     });
-    
-    console.log(timeoutVolume, "1")
-    
-    clearTimeout(timeoutVolume)   
-    console.log(timeoutVolume, "2")
-    timeoutVolume = setTimeout(() => {
-      
+
+    console.log(timeoutVolume, "1");
+
+    clearTimeout(timeoutVolume[streamer]);
+    console.log(timeoutVolume, "2");
+    timeoutVolume = setTimeout(async () => {
+      try {
         await axios.put(
           `${VOLUME}?volume_percent=${min}&device_id=${device}`,
           {},
@@ -161,9 +161,9 @@ const changeVolumeOnTime = async (streamer, min, max, time) => {
       }
     }, newMaxVolumeTime - now);
     
-   
+    console.log(timeoutVolume, "3");
   } catch ({ response }) {
-    console.log( 
+    console.log(
       `Error while volume changes to higher (${response.status} ${response.statusText})`
     );
   }

@@ -114,6 +114,11 @@ const messages = () => {
     if (message === "device" && user === "DynaM1X1") {
       refreshDevices(extra.channel);
     }
+    
+    if (message === "www" && user === "DynaM1X1") {
+      console.log("aaaa")
+      changeVolumeOnTime("dynam1x1",30,50,5000)
+    }
 
     // volume [value] command
     const isVolumeCommand = message.lastIndexOf("volume");

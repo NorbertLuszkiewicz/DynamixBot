@@ -3,9 +3,6 @@ const path = require("path");
 const { twitchCommends } = require("./twitch/index.js");
 twitchCommends();
 
- test = async ()=>{await changeVolumeOnTime("dynam1x1",30,50,5000); setTimeout(async()=> await changeVolumeOnTime("dynam1x1",30,50,5000),3000); setTimeout(async()=> await changeVolumeOnTime("dynam1x1",30,50,5000),7000)} 
- test()
-
 setTimeout(refreshAccessToken, 5000);
 setInterval(refreshAccessToken, 1800 * 1000);
 
