@@ -108,8 +108,8 @@ const nextSong = async streamer => {
 
 const changeVolumeOnTime = async (streamer, min, max, time) => {
   try {
-    const [user] = await getUser(streamer);
-    const { accessToken, device, maxVolumeTime, timeoutVolume } = user;
+    let [user] = await getUser(streamer);
+    let { accessToken, device, maxVolumeTime, timeoutVolume } = user;
 
     await axios.put(
       `${VOLUME}?volume_percent=${max}&device_id=${device}`,
@@ -161,6 +161,8 @@ const changeVolumeOnTime = async (streamer, min, max, time) => {
       streamer: streamer,
       timeoutVolume: newTimeoutVolume
     });
+    
+    newTimeoutVolume
   } catch ({ response }) {
     console.log(
       `Error while volume changes to higher (${response.status} ${response.statusText})`
