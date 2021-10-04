@@ -16,9 +16,6 @@ const VOLUME = "https://api.spotify.com/v1/me/player/volume";
 const PLAYER = "https://api.spotify.com/v1/me/player";
 const DEVICES = "https://api.spotify.com/v1/me/player/devices";
 
-let maxVolumeDate = null;
-let timeMaxVolume = null;
-
 const addNewUser = async (code, callback) => {
   let accessToken;
   let refreshToken;
@@ -112,7 +109,7 @@ const nextSong = async streamer => {
 const changeVolumeOnTime = async (streamer, min, max, time) => {
   try {
     const [user] = await getUser(streamer);
-    const { accessToken, device, } = user;
+    const { accessToken, device, maxVolumeTime, timeoutVolume } = user;
 
     await axios.put(
       `${VOLUME}?volume_percent=${max}&device_id=${device}`,
@@ -126,16 +123,23 @@ const changeVolumeOnTime = async (streamer, min, max, time) => {
 
     let now = Date.now();
 
-    if (maxVolumeDate > now) {
-      maxVolumeDate += time;
+    if (maxVolumeTime > now) {
+      await updateUser({
+        streamer: streamer,
+        maxVolumeTime: maxVolumeTime + time
+      });
     }
 
-    if (!maxVolumeDate || maxVolumeDate < now) {
-      maxVolumeDate = now + time;
+    if (!maxVolumeTime || maxVolumeTime < now) {
+      await updateUser({
+        streamer: streamer,
+        maxVolumeTime: now + time
+      });
     }
 
-    clearTimeout(timeMaxVolume);
-    timeMaxVolume = setTimeout(async () => {
+    clearTimeout(timeoutVolume);
+
+    const newTimeoutVolume = setTimeout(async () => {
       try {
         await axios.put(
           `${VOLUME}?volume_percent=${min}&device_id=${device}`,
@@ -151,7 +155,12 @@ const changeVolumeOnTime = async (streamer, min, max, time) => {
           `Error while volume changes to lower (${response.status} ${response.statusText})`
         );
       }
-    }, maxVolumeDate - now);
+    }, maxVolumeTime - now);
+
+    await updateUser({
+      streamer: streamer,
+      timeoutVolume: newTimeoutVolume
+    });
   } catch ({ response }) {
     console.log(
       `Error while volume changes to higher (${response.status} ${response.statusText})`
@@ -185,25 +194,24 @@ const refreshAccessToken = async () => {
     const streamers = await getAllUser();
 
     streamers.forEach(async streamer => {
-      if(streamer.refreshToken){
-              const body = `grant_type=refresh_token&refresh_token=${streamer.refreshToken}&client_id=${clientId}`;
+      if (streamer.refreshToken) {
+        const body = `grant_type=refresh_token&refresh_token=${streamer.refreshToken}&client_id=${clientId}`;
 
-      const { data } = await axios.post(`${TOKEN}`, body, {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-          Authorization: `Basic ${Buffer.from(
-            clientId + ":" + clientSecret
-          ).toString("base64")}`
-        }
-      });
+        const { data } = await axios.post(`${TOKEN}`, body, {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            Authorization: `Basic ${Buffer.from(
+              clientId + ":" + clientSecret
+            ).toString("base64")}`
+          }
+        });
 
-      await updateUser({
-        streamer: streamer.streamer,
-        accessToken: data.access_token,
-        refreshToken: data.refresh_token
-      });
+        await updateUser({
+          streamer: streamer.streamer,
+          accessToken: data.access_token,
+          refreshToken: data.refresh_token
+        });
       }
-
     });
     console.log("reset spotify token");
   } catch ({ response }) {
