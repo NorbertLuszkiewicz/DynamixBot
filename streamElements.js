@@ -52,7 +52,7 @@ const songPlayingNow = async streamer => {
 
 const timeRequest = async (streamer, action) => {
   try {
-    setTimeout(async () => {
+    
       let playing = await getSpotifyAreaData(streamer, "playing");
       const queue = await getSpotifyAreaData(streamer, "queue");
       const [user] = await getUser(streamer);
@@ -63,6 +63,9 @@ const timeRequest = async (streamer, action) => {
       //console.log({ playing, queue });
 
       if (action === "add") {
+       const truePlayingDuration = playing ? playing.duration : queue[0].duration
+        
+        console.log(playing, queue)
         if (playing) {
           let timeOfSongsInQueue = 0;
           let timeOfAllSongs = 0;
@@ -118,7 +121,7 @@ const timeRequest = async (streamer, action) => {
           startSong(streamer);
         }
       }
-    }, 1000);
+    
   } catch (err) {
     console.log(`Error while changging volume on time ${err}`);
   }
