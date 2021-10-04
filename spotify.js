@@ -136,7 +136,7 @@ const changeVolumeOnTime = async (streamer, min, max, time) => {
       streamer: streamer,
       maxVolumeTime: newMaxVolumeTime
     });
-
+      
     const set = setTimeout(async () => {
       try {
         await axios.put(
@@ -154,11 +154,9 @@ const changeVolumeOnTime = async (streamer, min, max, time) => {
         );
       }
     }, newMaxVolumeTime - now);
-    console.log(set)
-    await updateUser({
-      streamer: streamer,
-      timeoutVolume: set
-    });
+    
+     set
+   
   } catch ({ response }) {
     console.log( 
       `Error while volume changes to higher (${response.status} ${response.statusText})`
