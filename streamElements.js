@@ -104,7 +104,7 @@ const timeRequest = async (streamer, action) => {
           console.log("teraz", playing == null);
 
           !playing && startSong(streamer);
-        }, newEndTime + 1000 * (queue.length + 3));
+        }, newEndTime + 1000 * (queue.length + 1));
       
     }
     if (action === "skip") {
