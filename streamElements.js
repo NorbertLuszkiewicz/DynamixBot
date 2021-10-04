@@ -75,10 +75,10 @@ const timeRequest = async (streamer, action) => {
         });
         
         clearTimeout(timeoutVolume[streamer])
-        console.log(timeOfAllSongs, "timeOfAllSongs", timeOfAllSongs + 1000 * (queue.length +1))
+    
         timeoutVolume[streamer] = setTimeout(async()=>{
           playing = await getSpotifyAreaData(streamer, "playing");
-          console.log("teraz", playing)
+          
           !playing && startSong(streamer);
           
         }, timeOfAllSongs + 1000 * (queue.length +1))
