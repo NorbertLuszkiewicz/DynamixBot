@@ -125,9 +125,9 @@ ComfyJS.onChat = (user, message, flags, self, extra) => {
   });
 
   if (user == "StreamElements" && message.lastIndexOf("to the queue") != -1) {
-    pauseSong(extra.channel, (status) => {
-      status == "200" && timeRequest(extra.channel, "add");
-    });
+    pauseSong(extra.channel)
+    timeRequest(extra.channel, "add");
+  
   }
 
   skipSongIdList.forEach(({ id }) => {
