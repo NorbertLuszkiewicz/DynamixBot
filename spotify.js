@@ -122,7 +122,7 @@ const changeVolumeOnTime = async (streamer, min, max, time) => {
     );
 
     let now = Date.now();
-
+    console.log(maxVolumeTime, now, "1")
     if (maxVolumeTime > now) {
       await updateUser({
         streamer: streamer,
@@ -131,13 +131,17 @@ const changeVolumeOnTime = async (streamer, min, max, time) => {
     }
 
     if (!maxVolumeTime || maxVolumeTime < now) {
+      console.log(now + time, streamer)
+      
       await updateUser({
         streamer: streamer,
         maxVolumeTime: now + time
       });
+      console.log(maxVolumeTime, now, "2")
     }
-
-    clearTimeout(timeoutVolume);
+    
+    [user] = await getUser(streamer);
+    console.log(maxVolumeTime,user.maxVolumeTime , now, "3") 
 
     const newTimeoutVolume = setTimeout(async () => {
       try {
@@ -148,21 +152,22 @@ const changeVolumeOnTime = async (streamer, min, max, time) => {
             headers: {
               Authorization: `Bearer ${accessToken}`
             }
-          }
+          } 
         );
       } catch ({ response }) {
         console.log(
           `Error while volume changes to lower (${response.status} ${response.statusText})`
         );
       }
-    }, maxVolumeTime - now);
+    }, user.maxVolumeTime - now);
+     await console.log(maxVolumeTime - now, "last")
 
     await updateUser({
       streamer: streamer,
       timeoutVolume: newTimeoutVolume
     });
     
-    newTimeoutVolume
+    await newTimeoutVolume
   } catch ({ response }) {
     console.log(
       `Error while volume changes to higher (${response.status} ${response.statusText})`

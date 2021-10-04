@@ -63,12 +63,16 @@ const updateUser = async (
     clientSongRequestSecret,
     addSongID,
     skipSongID,
-    volumeSongID
+    volumeSongID,
+    maxVolumeTime,
+    timeoutVolume,
+    timeCooldownTravis,
+    timeCooldownOg1ii,
+    endTime
   },
   res
 ) => {
   try {
-    
     const updatedUserData = {
       streamer,
       refreshToken,
@@ -82,7 +86,7 @@ const updateUser = async (
       volumeSongID
     };
 
-    return await User.findOneAndUpdate({streamer}, updatedUserData);
+    return await User.findOneAndUpdate({ streamer }, updatedUserData);
   } catch (err) {
     console.log(err);
   }
