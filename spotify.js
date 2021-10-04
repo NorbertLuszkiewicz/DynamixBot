@@ -112,7 +112,7 @@ const nextSong = async streamer => {
 const changeVolumeOnTime = async (streamer, min, max, time) => {
   try {
     const [user] = await getUser(streamer);
-    const { accessToken, device } = user;
+    const { accessToken, device, } = user;
 
     await axios.put(
       `${VOLUME}?volume_percent=${max}&device_id=${device}`,
@@ -185,7 +185,8 @@ const refreshAccessToken = async () => {
     const streamers = await getAllUser();
 
     streamers.forEach(async streamer => {
-      const body = `grant_type=refresh_token&refresh_token=${streamer.refreshToken}&client_id=${clientId}`;
+      if(streamer.refreshToken){
+              const body = `grant_type=refresh_token&refresh_token=${streamer.refreshToken}&client_id=${clientId}`;
 
       const { data } = await axios.post(`${TOKEN}`, body, {
         headers: {
@@ -201,6 +202,8 @@ const refreshAccessToken = async () => {
         accessToken: data.access_token,
         refreshToken: data.refresh_token
       });
+      }
+
     });
     console.log("reset spotify token");
   } catch ({ response }) {
