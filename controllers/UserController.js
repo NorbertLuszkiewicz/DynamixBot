@@ -74,16 +74,21 @@ const updateUser = async (
 ) => {
   try {
     const updatedUserData = {
-      streamer,
-      refreshToken,
-      accessToken,
-      device,
-      code,
-      clientSongRequestID,
-      clientSongRequestSecret,
-      addSongID,
-      skipSongID,
-      volumeSongID
+    streamer,
+    refreshToken,
+    accessToken,
+    device,
+    code,
+    clientSongRequestID,
+    clientSongRequestSecret,
+    addSongID,
+    skipSongID,
+    volumeSongID,
+    maxVolumeTime,
+    timeoutVolume,
+    timeCooldownTravis,
+    timeCooldownOg1ii,
+    endTime
     };
 
     return await User.findOneAndUpdate({ streamer }, updatedUserData);
