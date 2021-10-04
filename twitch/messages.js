@@ -34,11 +34,11 @@ const messages = () => {
 
       if (
         user == "StreamElements" &&
-        (message.lastIndexOf("to the queue") != -1 || message.lastIndexOf("do kolejki"))
+        (message.lastIndexOf("to the queue") != -1 ||
+          message.lastIndexOf("do kolejki"))
       ) {
-        await pauseSong(extra.channel)
+        await pauseSong(extra.channel);
         await timeRequest(extra.channel, "add");
-        
       }
 
       if (flags.customReward && extra.customRewardId === skipSongID) {
@@ -72,6 +72,17 @@ const messages = () => {
           ComfyJS.Say("!volume " + minSR, extra.channel);
         }, maxVolumeDate - now);
       }
+
+      if (message === "skip" && user === "DynaM1X1") {
+        const { isPlayingNow } = songPlayingNow(extra.channel);
+
+        if (isPlayingNow) {
+          await ComfyJS.Say("!skip", extra.channel);
+          await timeRequest(extra.channel, "skip");
+        } else {
+          nextSong(extra.channel);
+        }
+      }
     } catch {
       err => console.log(`Error when use song request award ${err}`);
     }
@@ -96,8 +107,8 @@ const messages = () => {
       setVolume(extra.channel, volumeValue);
     }
 
-     // volume [value] command
-    
+    // volume [value] command
+
     const isPriamidka = message.lastIndexOf("piramidka");
     let emote = message.substr(9);
     !emote && (emote = "catJAM ");

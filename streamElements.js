@@ -59,9 +59,13 @@ const timeRequest = async (streamer, action) => {
 
     if (action === "skip") {
       if (playing) {
-        const timeOfSongsInQueue = 
+        let timeOfSongsInQueue
+        queue.length > 0 ? queue.forEach(song => timeOfSongsInQueue += song.duration): timeOfSongsInQueue = 0
+        console.log(queue.forEach(song => song.duration))
+        console.log(timeOfSongsInQueue)
+          
         
-        const timeOfAllSongs = playing.duration +
+        const timeOfAllSongs = playing.duration + 0
 
         
         
