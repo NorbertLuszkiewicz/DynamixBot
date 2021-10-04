@@ -101,7 +101,7 @@ const messages = () => {
     } catch(err) {console.log(`Error when use message ${err}`)}
 
     if (message === "pause" && user === "DynaM1X1") {
-      pauseSong(extra.channel);
+     pauseSong(extra.channel);
     }
 
     if (message === "start" && user === "DynaM1X1") {
@@ -114,7 +114,8 @@ const messages = () => {
     
     if (message === "www" && user === "DynaM1X1") {
       console.log("aaaa")
-      changeVolumeOnTime("dynam1x1",30,50,5000)
+      ComfyJS.Say("aaaa", extra.channel);
+      //changeVolumeOnTime("dynam1x1",30,50,5000)
     }
 
     // volume [value] command

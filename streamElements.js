@@ -65,7 +65,6 @@ const timeRequest = async (streamer, action) => {
       if (action === "add") {
        const truePlayingDuration = playing ? playing.duration : queue[0].duration
         
-        
         if (playing) {
           let timeOfSongsInQueue = 0;
           let timeOfAllSongs = 0;

@@ -39,7 +39,7 @@ const getAllUser = async () => {
     const data = await User.find({});
     return data;
   } catch (err) {
-    console.log(err);
+    console.log(`Error while getting all users ${err}`);
   }
 };
 
@@ -93,7 +93,7 @@ const updateUser = async (
 
     return await User.findOneAndUpdate({ streamer }, updatedUserData);
   } catch (err) {
-    console.log(err);
+    console.log(`Error while updating user ${err}`);
   }
 };
 const deleteUser = data => {

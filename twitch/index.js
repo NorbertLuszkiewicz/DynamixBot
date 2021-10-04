@@ -17,8 +17,8 @@ const twitchCommends = async () => {
     const OAUTH = process.env.OAUTH;
 
     ComfyJS.Init(TWITCHUSER, OAUTH, TWITCHCHANNELS);
-  } catch {
-    console.log("Error");
+  } catch (err) {
+    console.log(`Error while connecting to twitch ${err}`);
   }
 };
 
