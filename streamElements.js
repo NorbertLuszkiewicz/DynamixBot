@@ -8,9 +8,9 @@ const {
 
 const url = "https://api.streamelements.com/kappa/v2/";
 let endTime;
-let timeoutVolume= {
+let timeoutVolume = {
   kezman22: null,
-  dynam1x1: null,
+  dynam1x1: null
 };
 
 const getSpotifyAreaData = async (streamer, area) => {
@@ -60,35 +60,30 @@ const timeRequest = async (streamer, action) => {
     let now = Date.now();
 
     //console.log({ playing, queue });
-        if (action === "skip") {
+
+    if (action === "add") {
       if (playing) {
         let timeOfSongsInQueue = 0;
+        let timeOfAllSongs = 0
         queue.length > 0
           ? queue.forEach(song => (timeOfSongsInQueue += song.duration))
           : (timeOfSongsInQueue = 0);
+  
+      const timeOfSongPlayingNow = endTime > now ? 
+        
+            !timeOfSongsInQueue ? timeOfAllSongs = 
+      
 
-        const timeOfAllSongs = (playing.duration + timeOfSongsInQueue)*1000 ;
+        
 
         await updateUser({
           streamer: streamer,
           endTime: timeOfAllSongs
         });
-        
-        clearTimeout(timeoutVolume[streamer])
-    
-        timeoutVolume[streamer] = setTimeout(async()=>{
-          playing = await getSpotifyAreaData(streamer, "playing");
-          
-          !playing && startSong(streamer);
-          
-        }, timeOfAllSongs + 1000 * (queue.length +1))
-        
-        
       } else {
         startSong(streamer);
       }
     }
-    
 
     if (action === "skip") {
       if (playing) {
@@ -97,12 +92,20 @@ const timeRequest = async (streamer, action) => {
           ? queue.forEach(song => (timeOfSongsInQueue += song.duration))
           : (timeOfSongsInQueue = 0);
 
-        const timeOfAllSongs = playing.duration + timeOfSongsInQueue;
+        const timeOfAllSongs = (playing.duration + timeOfSongsInQueue) * 1000;
 
         await updateUser({
           streamer: streamer,
           endTime: timeOfAllSongs
         });
+
+        clearTimeout(timeoutVolume[streamer]);
+
+        timeoutVolume[streamer] = setTimeout(async () => {
+          playing = await getSpotifyAreaData(streamer, "playing");
+
+          !playing && startSong(streamer);
+        }, timeOfAllSongs + 1000 * (queue.length + 1));
       } else {
         startSong(streamer);
       }
