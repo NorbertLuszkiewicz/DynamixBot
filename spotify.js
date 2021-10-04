@@ -194,7 +194,7 @@ const refreshAccessToken = async () => {
     const streamers = await getAllUser();
 
     streamers.forEach(async streamer => {
-      if (streamer.refreshToken) {
+      if (streamer.streamer != "og1ii" && streamer.refreshToken) {
         const body = `grant_type=refresh_token&refresh_token=${streamer.refreshToken}&client_id=${clientId}`;
 
         const { data } = await axios.post(`${TOKEN}`, body, {

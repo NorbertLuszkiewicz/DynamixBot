@@ -2,6 +2,7 @@ const ComfyJS = require("comfy.js");
 const { messages } = require("./messages");
 const { events } = require("./events");
 const { commands } = require("./commands");
+const { getAllUser } = require("../controllers/UserController.js");
 
 const twitchCommends = () => {
   messages();
@@ -9,16 +10,22 @@ const twitchCommends = () => {
   commands();
 
   const TWITCHUSER = "dynam1x1";
-  const TWITCHCHANNELS = [
-    "kezman22",
-    "simplywojtek",
-    "og1ii",
-    "l2plelouch",
-    "dynam1x1"
-  ];
+  const TWITCHCHANNELS = async () => {
+    try {
+      return await getAllUser();
+    } catch {}
+  };
   const OAUTH = process.env.OAUTH;
 
-  ComfyJS.Init(TWITCHUSER, OAUTH, TWITCHCHANNELS);
+ 
+  async ()=>{
+   try{
+      console.log(TWITCHCHANNELS, "TWITCHCHANNELS");
+   }catch{}
+    
+  }
+
+  ComfyJS.Init(TWITCHUSER, OAUTH, "dynam1x1");
 };
 
 module.exports = {
