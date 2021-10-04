@@ -1,51 +1,48 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-mongoose.connect(
-  `mongodb+srv://${process.env.MONGODB}&w=majority`,
-  {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  }
-);
- 
+mongoose.connect(`mongodb+srv://${process.env.MONGODB}&w=majority`, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
+
 const UserSchema = new Schema({
   streamer: {
     type: String,
     required: true,
-    unique: true,
+    unique: true
   },
   refreshToken: {
     type: String,
-    default: null,
+    default: null
   },
   accessToken: {
     type: String,
-    default: null,
+    default: null
   },
   device: {
     type: String,
-    default: null,
+    default: null
   },
   code: {
     type: String,
-    default: null,
+    default: null
   },
   clientSongRequestID: {
     type: String,
-    default: null,
+    default: null
   },
   clientSongRequestSecret: {
     type: String,
-    default: null,
+    default: null
   },
   addSongID: {
     type: String,
-    default: null,
+    default: null
   },
   skipSongID: {
     type: String,
-    default: null,
+    default: null
   },
   volumeSongID: {
     type: {
@@ -54,32 +51,37 @@ const UserSchema = new Schema({
       min: Number,
       maxSR: Number,
       minSR: Number,
-      time: Number,
+      time: Number
     },
-    default: null,
+    default: null
   },
   timeoutVolume: {
     type: Schema.Types.Mixed,
-    default: null,
+    default: null
   },
   maxVolumeTime: {
     type: Number,
-    default: null,
+    default: null
   },
   commentAfterSubs: {
     type: String,
-    default: null,
-  }, 
+    default: null
+  },
   timeCooldownTravis: {
     type: Number,
     default: null,
-    unique: true,
+    unique: true
   },
   timeCooldownOg1ii: {
     type: String,
     default: null,
-    unique: true,
+    unique: true
   },
+  endTime: {
+    type: Number,
+    default: null,
+    unique: true
+  }
 });
 
 mongoose.model("user", UserSchema);
