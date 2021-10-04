@@ -4,28 +4,22 @@ const { events } = require("./events");
 const { commands } = require("./commands");
 const { getAllUser } = require("../controllers/UserController.js");
 
-const twitchCommends = () => {
-  messages();
-  events();
-  commands();
+const twitchCommends = async () => {
+  try {
+    messages();
+    events();
+    commands();
 
-  const TWITCHUSER = "dynam1x1";
-  const TWITCHCHANNELS = async () => {
-    try {
-      return await getAllUser();
-    } catch {}
-  };
-  const OAUTH = process.env.OAUTH;
+    const allStreamers = await getAllUser();
 
- 
-  async ()=>{
-   try{
-      console.log(TWITCHCHANNELS, "TWITCHCHANNELS");
-   }catch{}
-    
+    const TWITCHCHANNELS = allStreamers.map(streamer => streamer.streamer);
+    const TWITCHUSER = "dynam1x1";
+    const OAUTH = process.env.OAUTH;
+
+    ComfyJS.Init(TWITCHUSER, OAUTH, TWITCHCHANNELS);
+  } catch {
+    console.log("Error");
   }
-
-  ComfyJS.Init(TWITCHUSER, OAUTH, "dynam1x1");
 };
 
 module.exports = {
