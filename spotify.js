@@ -16,6 +16,8 @@ const VOLUME = "https://api.spotify.com/v1/me/player/volume";
 const PLAYER = "https://api.spotify.com/v1/me/player";
 const DEVICES = "https://api.spotify.com/v1/me/player/devices";
 
+let timeoutVolume = null
+
 const addNewUser = async (code, callback) => {
   let accessToken;
   let refreshToken;
@@ -136,9 +138,13 @@ const changeVolumeOnTime = async (streamer, min, max, time) => {
       streamer: streamer,
       maxVolumeTime: newMaxVolumeTime
     });
+    
+    console.log(timeoutVolume, "1")
+    
+    clearTimeout(timeoutVolume)   
+    console.log(timeoutVolume, "2")
+    timeoutVolume = setTimeout(() => {
       
-    const set = setTimeout(async () => {
-      try {
         await axios.put(
           `${VOLUME}?volume_percent=${min}&device_id=${device}`,
           {},
@@ -155,7 +161,6 @@ const changeVolumeOnTime = async (streamer, min, max, time) => {
       }
     }, newMaxVolumeTime - now);
     
-     set
    
   } catch ({ response }) {
     console.log( 
