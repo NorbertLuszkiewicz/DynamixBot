@@ -71,6 +71,7 @@ const timeRequest = async (streamer, action) => {
           streamer: streamer,
           endTime: newEndTime + now
         });
+        console.log(newEndTime,  "1");
       }     
       
       if(!playing  && queue.length == 1){
@@ -80,18 +81,19 @@ const timeRequest = async (streamer, action) => {
           streamer: streamer,
           endTime: newEndTime + now
         });
+        console.log(newEndTime,  "2");
       }
       
-      if(playing && queue.length > 1){
+      if(playing && queue.length > 0){
         
-        newEndTime = endTime + queue[queue.length - 1].duration
+        newEndTime = endTime - now + (queue[queue.length - 1].duration * 1000)
 
         await updateUser({
           streamer: streamer,
-          endTime: endTime + queue[queue.length - 1].duration
+          endTime: newEndTime + now
         });
 
-        console.log(timeOfSongsInQueue, timeOfSongPlayingNow ,timeOfAllSongs,  "aaaaa");
+        console.log(newEndTime,queue[queue.length - 1].duration* 1000 , "3");
       }
 
         clearTimeout(timeoutVolume[streamer]);
