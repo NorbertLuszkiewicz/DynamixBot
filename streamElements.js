@@ -99,7 +99,7 @@ const timeRequest = async (streamer, action) => {
           console.log("teraz", playing == null);
 
           !playing && startSong(streamer);
-        }, timeOfAllSongs + 1000 * (queue.length + 5));
+        }, timeOfAllSongs + 1000 * (queue.length + 3));
       }
     }
     if (action === "skip") {
