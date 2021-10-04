@@ -48,9 +48,10 @@ const songPlayingNow = async streamer => {
 
 const timeRequest = async (streamer, action) => {
   try {
-    const player = await getSpotifyAreaData(streamer, "player");
     const playing = await getSpotifyAreaData(streamer, "playing");
     const queue = await getSpotifyAreaData(streamer, "queue");
+    const [user] = await getUser(streamer);
+    const { endTime } = user;
 
     let now = Date.now();
 
