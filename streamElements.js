@@ -8,6 +8,10 @@ const {
 
 const url = "https://api.streamelements.com/kappa/v2/";
 let endTime;
+let timeoutVolume= {
+  kezman22: null,
+  dynam1x1: null,
+};
 
 const getSpotifyAreaData = async (streamer, area) => {
   try {
@@ -70,7 +74,7 @@ const timeRequest = async (streamer, action) => {
           endTime: timeOfAllSongs
         });
         
-        setTimeout(()=>{}, )
+        timeoutVolume[streamer] = setTimeout(()=>{}, )
         startSong(streamer);
         
       } else {

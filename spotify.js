@@ -16,7 +16,7 @@ const VOLUME = "https://api.spotify.com/v1/me/player/volume";
 const PLAYER = "https://api.spotify.com/v1/me/player";
 const DEVICES = "https://api.spotify.com/v1/me/player/devices";
 
-let timeoutVolume = {kezman22: null, dynam1x1: null};
+let timeoutVolume = { kezman22: null, dynam1x1: null };
 
 const addNewUser = async (code, callback) => {
   let accessToken;
@@ -125,7 +125,7 @@ const changeVolumeOnTime = async (streamer, min, max, time) => {
     );
 
     let now = Date.now();
-    console.log(maxVolumeTime, now, "1");
+
     if (maxVolumeTime > now) {
       newMaxVolumeTime = maxVolumeTime + time;
     }
@@ -139,29 +139,28 @@ const changeVolumeOnTime = async (streamer, min, max, time) => {
       maxVolumeTime: newMaxVolumeTime
     });
 
-    console.log(timeoutVolume, "1");
-
     clearTimeout(timeoutVolume[streamer]);
-    console.log(timeoutVolume, "2");
-    timeoutVolume = setTimeout(async () => {
-      try {
-        await axios.put(
-          `${VOLUME}?volume_percent=${min}&device_id=${device}`,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`
+    timeoutVolume[streamer] = setTimeout(
+      async () => {
+        try {
+          await axios.put(
+            `${VOLUME}?volume_percent=${min}&device_id=${device}`,
+            {},
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`
+              }
             }
-          }
-        );
-      } catch ({ response }) {
-        console.log(
-          `Error while volume changes to lower (${response.status} ${response.statusText})`
-        );
-      }
-    }, newMaxVolumeTime - now);
-    
-    console.log(timeoutVolume, "3");
+          );
+        } catch ({ response }) {
+          console.log(
+            `Error while volume changes to lower (${response.status} ${response.statusText})`
+          );
+        }
+      },
+      newMaxVolumeTime - now,
+      streamer
+    );
   } catch ({ response }) {
     console.log(
       `Error while volume changes to higher (${response.status} ${response.statusText})`
