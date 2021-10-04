@@ -57,15 +57,15 @@ const commands = () =>
       }
     }
 
-    if (command == "next" && (flags.mod || flags.broadcaster)) {
-      const { isPlayingNow } = songPlayingNow(extra.channel);
-      if (isPlayingNow) {
-        ComfyJS.Say("!skip", extra.channel);
-        timeRequest(extra.channel, "skip");
-      } else {
-        nextSong(extra.channel);
-      }
-    }
+    // if (command == "next" && (flags.mod || flags.broadcaster)) {
+    //   const { isPlayingNow } = songPlayingNow(extra.channel);
+    //   if (isPlayingNow) {
+    //     ComfyJS.Say("!skip", extra.channel);
+    //     timeRequest(extra.channel, "skip");
+    //   } else {
+    //     nextSong(extra.channel);
+    //   }
+    // }
     if (command === "dynamix" && (flags.mod || flags.broadcaster)) {
       ComfyJS.Say("Bot works!", extra.channel);
     }

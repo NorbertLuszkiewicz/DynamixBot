@@ -33,12 +33,12 @@ const messages = () => {
       }
 
       if (
-        user == "StreamElements" &&
+        user === "StreamElements" &&
         (message.lastIndexOf("to the queue") != -1 ||
-          message.lastIndexOf("do kolejki"))
+          message.lastIndexOf("do kolejki") != -1 )
       ) {
-        await pauseSong(extra.channel);
-        await timeRequest(extra.channel, "add");
+         pauseSong(extra.channel);
+         timeRequest(extra.channel, "add");
       }
 
       if (flags.customReward && extra.customRewardId === skipSongID) {
