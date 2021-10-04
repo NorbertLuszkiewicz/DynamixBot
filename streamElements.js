@@ -64,22 +64,31 @@ const timeRequest = async (streamer, action) => {
     if (action === "add") {
       if (playing) {
         let timeOfSongsInQueue = 0;
-        let timeOfAllSongs = 0
+        let timeOfAllSongs = 0;
         queue.length > 0
           ? queue.forEach(song => (timeOfSongsInQueue += song.duration))
           : (timeOfSongsInQueue = 0);
-  
-      const timeOfSongPlayingNow = endTime > now ? 
-        
-            !timeOfSongsInQueue ? timeOfAllSongs = 
-      
 
-        
+        const timeOfSongPlayingNow =
+          endTime > now ? endTime - now : 0;
+
+        !timeOfSongsInQueue
+          ? (timeOfAllSongs = playing.duration * 1000)
+          : (timeOfAllSongs =
+              (timeOfSongsInQueue + timeOfSongPlayingNow) * 1000);
 
         await updateUser({
           streamer: streamer,
-          endTime: timeOfAllSongs
+          endTime: timeOfAllSongs + now
         });
+
+        clearTimeout(timeoutVolume[streamer]);
+
+        timeoutVolume[streamer] = setTimeout(async () => {
+          playing = await getSpotifyAreaData(streamer, "playing");
+
+          !playing && startSong(streamer);
+        }, timeOfAllSongs + 1000 * (queue.length + 1));
       } else {
         startSong(streamer);
       }
