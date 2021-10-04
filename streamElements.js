@@ -10,7 +10,10 @@ const url = "https://api.streamelements.com/kappa/v2/";
 let endTime;
 let timeoutVolume = {
   kezman22: null,
-  dynam1x1: null
+  dynam1x1: null,
+  og1ii: null,
+  l2plelouch: null,
+  simplywojtek: null
 };
 
 const getSpotifyAreaData = async (streamer, area) => {
@@ -98,7 +101,7 @@ const timeRequest = async (streamer, action) => {
           let allQueueTimes = 0
           queue.forEach((song)=> allQueueTimes += song.duration)
           
-          newEndTime = now + queue[queue.length - 1].duration * 1000;
+          newEndTime = now + ( allQueueTimes + playing.duration ) * 1000;
 
           await updateUser({
             streamer: streamer,
@@ -112,10 +115,10 @@ const timeRequest = async (streamer, action) => {
       timeoutVolume[streamer] = setTimeout(async () => {
         playing = await getSpotifyAreaData(streamer, "playing");
 
-        console.log("teraz", playing == null);
+        console.log("teraz", playing == null, streamer);
 
         !playing && startSong(streamer);
-      }, newEndTime + 1000 * (queue.length + 1));
+      }, newEndTime + 1000 * (queue.length + 2));
     }
     if (action === "skip") {
       if (playing) {
