@@ -65,6 +65,8 @@ const timeRequest = async (streamer, action) => {
       const truePlayingDuration = playing
         ? playing.duration
         : queue[0].duration;
+      
+      console.log(truePlayingDuration, "truePlayingDuration")
 
       if (truePlayingDuration) {
         let timeOfSongsInQueue = 0;
@@ -97,7 +99,7 @@ const timeRequest = async (streamer, action) => {
           console.log("teraz", playing == null);
 
           !playing && startSong(streamer);
-        }, timeOfAllSongs + 1000 * (queue.length + 1));
+        }, timeOfAllSongs + 1000 * (queue.length + 5));
       }
     }
     if (action === "skip") {
