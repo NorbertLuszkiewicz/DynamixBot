@@ -45,9 +45,8 @@ const messages = () => {
         const { isPlayingNow } = songPlayingNow(extra.channel);
 
         if (isPlayingNow) {
-          await timeRequest(extra.channel, "skip");
           await ComfyJS.Say("!skip", extra.channel);
-          
+          await timeRequest(extra.channel, "skip");
         } else {
           nextSong(extra.channel);
         }

@@ -39,7 +39,7 @@ const songPlayingNow = async streamer => {
     return {
       isPlayingNow: player.state == "playing" && playing != null,
       title: playing && playing.title,
-      link: playing && `https://www.youtube.com/watch?v=${playing.videoId}`,
+      link: playing && `https://www.youtube.com/watch?v=${playing.videoId}`
     };
   } catch (err) {
     console.log(`Error while checking what song playing now ${err}`);
@@ -54,11 +54,24 @@ const timeRequest = async (streamer, action) => {
     const { endTime } = user;
 
     let now = Date.now();
-    
-    console.log({playing, queue})
+
+    console.log({ playing, queue });
 
     if (action === "skip") {
-      
+      if (playing) {
+        const timeOfSongsInQueue = 
+        
+        const timeOfAllSongs = playing.duration +
+
+        
+        
+        await updateUser({
+          streamer: streamer,
+          endTime: 0
+        });
+      } else {
+        startSong(streamer);
+      }
     }
   } catch (err) {
     console.log(`Error while changging volume on time ${err}`);
