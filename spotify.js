@@ -101,7 +101,7 @@ const nextSong = async streamer => {
     );
   } catch ({ response }) {
     console.log(
-      `Error while stopping song (${response.status} ${response.statusText})`
+      `Error while skipping song (${response.status} ${response.statusText})`
     );
   }
 };
