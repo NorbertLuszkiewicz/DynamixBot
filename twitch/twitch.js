@@ -1,5 +1,5 @@
 const axios = require("axios");
-const { addUser } = require("../controllers/UserController.js");
+const { addUser, getUser } = require("../controllers/UserController.js");
 
 const TOKEN = "https://id.twitch.tv/oauth2/token";
 
@@ -11,17 +11,25 @@ const addNewUser = async code => {
   try {
     const { data } = await axios.post(`${TOKEN}`, body, {});
     const users = await getStreamerData(data.access_token);
+    const userName = users.data[0].login
 
     data.access_token && (accessToken = data.access_token);
     data.refresh_token && (refreshToken = data.refresh_token);
 
-    await addUser({
-      streamer: users.data[0].login,
-      spotifyAccessToken: data.access_token,
-      spotifyRefreshToken: data.refresh_token
-    });
-    
-    return {status:"success", name: users[0].login, token: data.access_token};
+    const userInDatabase = await getUser(userName);
+
+    userInDatabase.length === 0 &&
+      (await addUser({
+        streamer: userName,
+        twitchAccessToken: data.access_token,
+        twitchRefreshToken: data.refresh_token
+      }));
+
+    return {
+      status: "success",
+      name: userName,
+      token: data.access_token
+    };
   } catch (err) {
     console.log(`Error while getting first token (${err})`);
     return "error";
@@ -35,8 +43,9 @@ const getStreamerData = async accessToken => {
         Authorization: `Bearer ${accessToken}`,
         "Client-Id": "bhwlcwuvtg51226poslegrqdcm8naz"
       }
-    });)
-    return {data};
+    });
+
+    return data;
   } catch (err) {
     console.log(`Error while getting streamer data ${err}`);
   }
