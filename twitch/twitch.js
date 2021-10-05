@@ -1,5 +1,9 @@
 const axios = require("axios");
-const { addUser, getUser, updateUser } = require("../controllers/UserController.js");
+const {
+  addUser,
+  getUser,
+  updateUser
+} = require("../controllers/UserController.js");
 
 const TOKEN = "https://id.twitch.tv/oauth2/token";
 
@@ -18,12 +22,19 @@ const addNewUser = async code => {
 
     const userInDatabase = await getUser(userName);
 
-    userInDatabase.length === 0 &&
-      (await addUser({
+    if (userInDatabase.length === 0) {
+      await addUser({
         streamer: userName,
         twitchAccessToken: data.access_token,
         twitchRefreshToken: data.refresh_token
-      }));
+      });
+    } else {
+      await updateUser({
+        streamer: userName,
+        twitchAccessToken: data.access_token,
+        twitchRefreshToken: data.refresh_token
+      });
+    }
 
     return {
       status: "success",
@@ -38,21 +49,23 @@ const addNewUser = async code => {
 
 const refreshTwitchTokens = async streamer => {
   try {
-    const [refreshToken] = await getUser(streamer)
-console.log("aaa2") 
-    const body = `grant_type=refresh_token&refresh_token=${encodeURIComponent(refreshToken.twitchRefreshToken)}&client_id=${process.env.BOT_CLIENT_ID}&client_secret=${process.env.BOT_CLIENT_SECRET}`;
-    const data = await axios.post(`${TOKEN}/${body}?`, {});
-    
-    console.log(data) 
-    console.log("aaa") 
-    
+    const [refreshToken] = await getUser(streamer);
+
+    const body = `grant_type=refresh_token&refresh_token=${encodeURIComponent(
+      refreshToken.twitchRefreshToken
+    )}&client_id=${process.env.BOT_CLIENT_ID}&client_secret=${
+      process.env.BOT_CLIENT_SECRET
+    }`;
+
+    const {data} = await axios.post(`${TOKEN}`, body, {});
+
     await updateUser({
       streamer: streamer,
       twitchAccessToken: data.access_token,
       twitchRefreshToken: data.refresh_token
     });
-  } catch (err){
-    console.log(`Error while refreshing twitch tokens ${err}`)
+  } catch (err) {
+    console.log(`Error while refreshing twitch tokens ${err}`);
   }
 };
 
