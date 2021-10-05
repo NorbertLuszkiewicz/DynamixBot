@@ -34,8 +34,11 @@ const addSpotify = async (code) => {
     });
     data.access_token && (accessToken = data.access_token);
     data.refresh_token && (refreshToken = data.refresh_token);
-    console.log("accessToken", data.access_token);
-    console.log("refreshToken", data.refresh_token);
+    await updateUser({
+      streamer: streamer,
+      spotifyAccessToken: data.access_token,
+      spotifyRefreshToken: data.refresh_token
+    });
     
     return "success"
     

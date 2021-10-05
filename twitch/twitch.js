@@ -1,5 +1,5 @@
 const axios = require("axios");
-const { updateUser } = require("../controllers/UserController.js");
+const { addUser } = require("../controllers/UserController.js");
 
 const TOKEN = "https://id.twitch.tv/oauth2/token";
 
@@ -10,23 +10,19 @@ const addNewUser = async code => {
 
   try {
     const { data } = await axios.post(`${TOKEN}`, body, {});
-    const users = await getStreamerData(data.access_token)
+    const users = await getStreamerData(data.access_token);
 
     data.access_token && (accessToken = data.access_token);
     data.refresh_token && (refreshToken = data.refresh_token);
     console.log("accessToken", data.access_token);
     console.log("refreshToken", data.refresh_token);
     console.log("users", users);
-    
-    
-    // await updateUser({
-    //   streamer: streamer.streamer,
-    //   spotifyAccessToken: data.access_token,
-    //   spotifyRefreshToken: data.refresh_token
-    // });
-    
-    console.log(data)
 
+    await addUser({
+      streamer: users[0].login,
+      spotifyAccessToken: data.access_token,
+      spotifyRefreshToken: data.refresh_token
+    });
   } catch (err) {
     console.log(`Error while getting first token (${err})`);
     return "error";
@@ -35,17 +31,14 @@ const addNewUser = async code => {
 
 const getStreamerData = async accessToken => {
   try {
-    const { data } = await axios.get(
-      "https://api.twitch.tv/helix/user",
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Client-Id": "bhwlcwuvtg51226poslegrqdcm8naz"
-        }
+    const { data } = await axios.get("https://api.twitch.tv/helix/users", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Client-Id": "bhwlcwuvtg51226poslegrqdcm8naz"
       }
-    );
-    
-    return data
+    });
+
+    return {data};
   } catch (err) {
     console.log(`Error while getting streamer data ${err}`);
   }
