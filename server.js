@@ -128,6 +128,20 @@ fastify.get("/register", async (req, res) => {
   } catch {}
 });
 
+fastify.get("/account", async (req, res) => {
+  const name = req.query.code;
+  const token = req.query.token;
+  console.log(code);
+  const params = { seo: seo, auth: "auth" };
+  try {
+    const callback = await addNewUser(code);
+
+    callback.status == "success"
+      ? res.redirect(`http://localhost:3000/dashboard?name=${callback.name}&token=${callback.token}`)
+      : res.send("Something went wrong");
+  } catch {}
+});
+
 
 
 fastify.listen(process.env.PORT, function(err, address) {
