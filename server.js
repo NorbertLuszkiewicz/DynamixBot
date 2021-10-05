@@ -4,7 +4,7 @@ const {
   changeVolumeOnTime,
   currentlyPlaying
 } = require("./spotify");
-const { addNewUser }  = require("./twitch/twitch.js")
+const { addNewUser } = require("./twitch/twitch.js");
 const path = require("path");
 const { twitchCommends } = require("./twitch/index.js");
 twitchCommends();
@@ -116,16 +116,14 @@ fastify.get("/callback", async (req, res) => {
 });
 
 fastify.get("/register", async (req, res) => {
-  const code = req.query.code
-  console.log(code)
-
-    try {
-      
-      await addNewUser(code)
-    // const callback = await addNewUser(code);
-    // callback == "success"
-    //   ? res.view("/src/pages/index.hbs", params)
-    //   : res.send("Something went wrong");
+  const code = req.query.code;
+  console.log(code);
+  const params = { seo: seo, auth: "auth" };
+  try {
+    const callback = await addNewUser(code);
+    callback == "success"
+      ? res.view("/src/pages/index.hbs", params)
+      : res.send("Something went wrong");
   } catch {}
 });
 
