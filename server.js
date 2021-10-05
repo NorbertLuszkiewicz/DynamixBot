@@ -10,7 +10,7 @@ const path = require("path");
 const { twitchCommends } = require("./twitch/index.js");
 twitchCommends();
 
-setTimeout(refreshAccessToken, 5000);
+setTimeout(refreshAccessToken, 1000);
 setInterval(refreshAccessToken, 1800 * 1000);
 
 const { MongoClient } = require("mongodb");
