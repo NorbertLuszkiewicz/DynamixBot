@@ -49,7 +49,7 @@ const addSpotify = async (code) => {
 
 const startSong = async streamer => {
   const [user] = await getUser(streamer);
-  const { accessToken, device } = user;
+  const { spotifyAccessToken, device } = user;
 
   try {
     return await axios.put(
@@ -58,7 +58,7 @@ const startSong = async streamer => {
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`
+          Authorization: `Bearer ${spotifyAccessToken}`
         }
       }
     );
@@ -72,14 +72,14 @@ const startSong = async streamer => {
 const pauseSong = async streamer => {
   try {
     const [user] = await getUser(streamer);
-    const { accessToken, device } = user;
+    const { spotifyAccessToken, device } = user;
 
     return await axios.put(
       `${PAUSE}?device_id=${device}`,
       {},
       {
         headers: {
-          Authorization: `Bearer ${accessToken}`
+          Authorization: `Bearer ${spotifyAccessToken}`
         }
       }
     );
@@ -93,13 +93,13 @@ const pauseSong = async streamer => {
 const nextSong = async streamer => {
   try {
     const [user] = await getUser(streamer);
-    const { accessToken, device } = user;
+    const { spotifyAccessToken, device } = user;
     return await axios.post(
       `${NEXT}?device_id=${device}`,
       {},
       {
         headers: {
-          Authorization: `Bearer ${accessToken}`
+          Authorization: `Bearer ${spotifyAccessToken}`
         }
       }
     );
@@ -113,7 +113,7 @@ const nextSong = async streamer => {
 const changeVolumeOnTime = async (streamer, min, max, time) => {
   try {
     let [user] = await getUser(streamer);
-    let { accessToken, device, maxVolumeTime } = user;
+    let { spotifyAccessToken, device, maxVolumeTime } = user;
     let newMaxVolumeTime = 0;
 
     await axios.put(
@@ -121,7 +121,7 @@ const changeVolumeOnTime = async (streamer, min, max, time) => {
       {},
       {
         headers: {
-          Authorization: `Bearer ${accessToken}`
+          Authorization: `Bearer ${spotifyAccessToken}`
         }
       }
     );
@@ -150,7 +150,7 @@ const changeVolumeOnTime = async (streamer, min, max, time) => {
             {},
             {
               headers: {
-                Authorization: `Bearer ${accessToken}`
+                Authorization: `Bearer ${spotifyAccessToken}`
               }
             }
           );
@@ -173,14 +173,14 @@ const changeVolumeOnTime = async (streamer, min, max, time) => {
 const setVolume = async (streamer, value) => {
   try {
     const [user] = await getUser(streamer);
-    const { accessToken, device } = user;
+    const { spotifyAccessToken, device } = user;
 
     return await axios.put(
       `${VOLUME}?volume_percent=${value}&device_id=${device}`,
       {},
       {
         headers: {
-          Authorization: `Bearer ${accessToken}`
+          Authorization: `Bearer ${spotifyAccessToken}`
         }
       }
     );
@@ -196,8 +196,8 @@ const refreshAccessToken = async () => {
     const streamers = await getAllUser();
 
     streamers.forEach(async streamer => {
-      if (streamer.streamer != "og1ii" && streamer.refreshToken) {
-        const body = `grant_type=refresh_token&refresh_token=${streamer.refreshToken}&client_id=${clientId}`;
+      if (streamer.streamer != "og1ii" && streamer.spotifyRefreshToken) {
+        const body = `grant_type=refresh_token&refresh_token=${streamer.spotifyRefreshToken}&client_id=${clientId}`;
 
         const { data } = await axios.post(`${TOKEN}`, body, {
           headers: {
@@ -210,8 +210,8 @@ const refreshAccessToken = async () => {
 
         await updateUser({
           streamer: streamer.streamer,
-          accessToken: data.access_token,
-          refreshToken: data.refresh_token
+          spotifyAccessToken: data.access_token,
+          spotifyRefreshToken: data.refresh_token
         });
       }
     });
@@ -226,11 +226,11 @@ const refreshAccessToken = async () => {
 const currentlyPlaying = async streamer => {
   try {
     const [user] = await getUser(streamer);
-    const { accessToken } = user;
+    const { spotifyAccessToken } = user;
 
     const { data } = await axios.get(`${PLAYER}?market=US`, {
       headers: {
-        Authorization: `Bearer ${accessToken}`
+        Authorization: `Bearer ${spotifyAccessToken}`
       }
     });
 
@@ -245,11 +245,11 @@ const currentlyPlaying = async streamer => {
 const refreshDevices = async streamer => {
   try {
     const [user] = await getUser(streamer);
-    const { accessToken } = user;
+    const { spotifyAccessToken } = user;
 
     const { data } = await axios.get(DEVICES, {
       headers: {
-        Authorization: `Bearer ${accessToken}`
+        Authorization: `Bearer ${spotifyAccessToken}`
       }
     });
     console.log("devices", data);

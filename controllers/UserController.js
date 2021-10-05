@@ -5,9 +5,10 @@ const User = mongoose.model("user");
 
 const addUser = ({
     streamer,
-    twitchToken,
-    refreshToken,
-    accessToken,
+    twitchAccessToken,
+    twitchRefreshToken,
+    spotifyRefreshToken,
+    spotifyAccessToken,
     device,
     code,
     clientSongRequestID,
@@ -20,12 +21,13 @@ const addUser = ({
     timeCooldownTravis,
     timeCooldownOg1ii,
     endTime
-}) => {
+  }) => {
   const newUserData = {
     streamer,
-    twitchToken,
-    refreshToken,
-    accessToken,
+    twitchAccessToken,
+    twitchRefreshToken,
+    spotifyRefreshToken,
+    spotifyAccessToken,
     device,
     code,
     clientSongRequestID,
@@ -64,12 +66,14 @@ const getUser = async user => {
   }
 };
 
+
 const updateUser = async (
   {
     streamer,
-    twitchToken,
-    refreshToken,
-    accessToken,
+    twitchAccessToken,
+    twitchRefreshToken,
+    spotifyRefreshToken,
+    spotifyAccessToken,
     device,
     code,
     clientSongRequestID,
@@ -88,9 +92,10 @@ const updateUser = async (
   try {
     const updatedUserData = {
     streamer,
-    twitchToken,
-    refreshToken,
-    accessToken,
+    twitchAccessToken,
+    twitchRefreshToken,
+    spotifyRefreshToken,
+    spotifyAccessToken,
     device,
     code,
     clientSongRequestID,
@@ -103,7 +108,7 @@ const updateUser = async (
     timeCooldownTravis,
     timeCooldownOg1ii,
     endTime
-    };
+  };
 
     return await User.findOneAndUpdate({ streamer }, updatedUserData);
   } catch (err) {
