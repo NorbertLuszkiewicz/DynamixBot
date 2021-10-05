@@ -36,17 +36,24 @@ client.connect(err => {
 const fastify = require("fastify")({
   logger: true
 });
+fastify.register((fastify, options, done) => {
+  fastify.register(require("fastify-static"), {
+    root: path.join(__dirname, "public"),
+    prefix: "/"
+  });
 
-fastify.register(require("fastify-static"), {
-  root: path.join(__dirname, "public"),
-  prefix: "/"
-});
+  fastify.register(require("fastify-formbody"));
+  fastify.register(require("point-of-view"), {
+    engine: {
+      handlebars: require("handlebars")
+    }
+  });
+    fastify.register(require("fastify-cors"), {
+    origin: "*",
+    methods: ['GET, POST, OPTIONS, PUT, PATCH, DELETE']
+  });
 
-fastify.register(require("fastify-formbody"));
-fastify.register(require("point-of-view"), {
-  engine: {
-    handlebars: require("handlebars")
-  }
+  done();
 });
 
 // load and parse SEO data
@@ -133,6 +140,9 @@ fastify.get("/register", async (req, res) => {
 });
 
 fastify.get("/account", async (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "POST");
+  
   const name = req.query.name;
   const token = req.query.token;
   console.log(name, token);
@@ -142,11 +152,11 @@ fastify.get("/account", async (req, res) => {
     console.log(user);
 
     if (user) {
-      user.twitchAccessToken === token ? res.send(user) :
-      res.status(403).send({
-        message: "Unauthorization"
-      });
-      
+      user.twitchAccessToken === token
+        ? res.send(user)
+        : res.status(403).send({
+            message: "Unauthorization"
+          });
     } else {
       res.status(400).send({
         message: "This user dosn't exist"
@@ -155,25 +165,6 @@ fastify.get("/account", async (req, res) => {
   } catch {
     console.log("Error when get account");
   }
-});
-
-fastify.use(function (req, res, next) {
-
-    // Website you wish to allow to connect
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
-
-    // Request methods you wish to allow
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-
-    // Request headers you wish to allow
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-
-    // Set to true if you need the website to include cookies in the requests sent
-    // to the API (e.g. in case you use sessions)
-    res.setHeader('Access-Control-Allow-Credentials', true);
-
-    // Pass to next layer of middleware
-    next();
 });
 
 fastify.listen(process.env.PORT, function(err, address) {
