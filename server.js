@@ -4,6 +4,7 @@ const {
   changeVolumeOnTime,
   currentlyPlaying
 } = require("./spotify");
+const { getUser } = require("./controllers/UserController.js");
 const { addNewUser } = require("./twitch/twitch.js");
 const path = require("path");
 const { twitchCommends } = require("./twitch/index.js");
@@ -108,7 +109,7 @@ fastify.get("/callback", async (req, res) => {
   }
 
   try {
-    const callback = await addSpotify("streamer" ,code);
+    const callback = await addSpotify("streamer", code);
     callback == "success"
       ? res.view("/src/pages/index.hbs", params)
       : res.send("Something went wrong");
@@ -117,32 +118,29 @@ fastify.get("/callback", async (req, res) => {
 
 fastify.get("/register", async (req, res) => {
   const code = req.query.code;
-  console.log(code);
-  const params = { seo: seo, auth: "auth" };
+
   try {
     const callback = await addNewUser(code);
 
     callback.status == "success"
-      ? res.redirect(`http://localhost:3000/dashboard?name=${callback.name}&token=${callback.token}`)
+      ? res.redirect(
+          `http://localhost:3000/dashboard?name=${callback.name}&token=${callback.token}`
+        )
       : res.send("Something went wrong");
   } catch {}
 });
 
 fastify.get("/account", async (req, res) => {
-  const name = req.query.code;
+  const name = req.query.name;
   const token = req.query.token;
-  console.log(code);
-  const params = { seo: seo, auth: "auth" };
-  try {
-    const callback = await addNewUser(code);
+  console.log(name, token);
 
-    callback.status == "success"
-      ? res.redirect(`http://localhost:3000/dashboard?name=${callback.name}&token=${callback.token}`)
-      : res.send("Something went wrong");
+  try {
+    const user = await getUser(name);
+    console.log(user)
+
   } catch {}
 });
-
-
 
 fastify.listen(process.env.PORT, function(err, address) {
   if (err) {
