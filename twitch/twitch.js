@@ -39,18 +39,21 @@ const addNewUser = async code => {
 const refreshTwitchTokens = async streamer => {
   try {
     const [refreshToken] = await getUser(streamer)
-    console.log(refreshToken, "refreshToken")
-    const body = `grant_type=refresh_token&&refresh_token=${refreshToken.twitchRefreshToken}&client_id=${process.env.BOT_CLIENT_ID}&client_secret=${process.env.BOT_CLIENT_SECRET}`;
-    const data = await axios.post(`${TOKEN}`, body, {});
+console.log("aaa2") 
+    const body = `grant_type=refresh_token&refresh_token=${encodeURIComponent(refreshToken.twitchRefreshToken)}&client_id=${process.env.BOT_CLIENT_ID}&client_secret=${process.env.BOT_CLIENT_SECRET}`;
+    const data = await axios.post(`${TOKEN}/${body}?`, {});
     
-    console.log(data)
+    console.log(data) 
+    console.log("aaa") 
     
     await updateUser({
       streamer: streamer,
       twitchAccessToken: data.access_token,
       twitchRefreshToken: data.refresh_token
     });
-  } catch {}
+  } catch (err){
+    console.log(`Error while refreshing twitch tokens ${err}`)
+  }
 };
 
 const getStreamerData = async accessToken => {
