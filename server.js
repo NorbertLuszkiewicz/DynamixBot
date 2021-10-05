@@ -5,10 +5,12 @@ const {
   currentlyPlaying
 } = require("./spotify");
 const { getUser } = require("./controllers/UserController.js");
-const { addNewUser } = require("./twitch/twitch.js");
+const { addNewUser, refreshTwitchTokens } = require("./twitch/twitch.js");
 const path = require("path");
 const { twitchCommends } = require("./twitch/index.js");
 twitchCommends();
+
+refreshTwitchTokens("dynam1x1")
 
 setTimeout(refreshAccessToken, 1000);
 setInterval(refreshAccessToken, 1800 * 1000);

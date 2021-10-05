@@ -1,5 +1,5 @@
 const axios = require("axios");
-const { addUser, getUser } = require("../controllers/UserController.js");
+const { addUser, getUser, updateUser } = require("../controllers/UserController.js");
 
 const TOKEN = "https://id.twitch.tv/oauth2/token";
 
@@ -11,7 +11,7 @@ const addNewUser = async code => {
   try {
     const { data } = await axios.post(`${TOKEN}`, body, {});
     const users = await getStreamerData(data.access_token);
-    const userName = users.data[0].login
+    const userName = users.data[0].login;
 
     data.access_token && (accessToken = data.access_token);
     data.refresh_token && (refreshToken = data.refresh_token);
@@ -36,6 +36,23 @@ const addNewUser = async code => {
   }
 };
 
+const refreshTwitchTokens = async streamer => {
+  try {
+    const [refreshToken] = await getUser(streamer)
+    console.log(refreshToken, "refreshToken")
+    const body = `grant_type=refresh_token&&refresh_token=${refreshToken.twitchRefreshToken}&client_id=${process.env.BOT_CLIENT_ID}&client_secret=${process.env.BOT_CLIENT_SECRET}`;
+    const data = await axios.post(`${TOKEN}`, body, {});
+    
+    console.log(data)
+    
+    await updateUser({
+      streamer: streamer,
+      twitchAccessToken: data.access_token,
+      twitchRefreshToken: data.refresh_token
+    });
+  } catch {}
+};
+
 const getStreamerData = async accessToken => {
   try {
     const { data } = await axios.get("https://api.twitch.tv/helix/users", {
@@ -52,5 +69,6 @@ const getStreamerData = async accessToken => {
 };
 
 module.exports = {
-  addNewUser
+  addNewUser,
+  refreshTwitchTokens
 };
