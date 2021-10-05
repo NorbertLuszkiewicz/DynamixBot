@@ -4,7 +4,7 @@ const axios = require("axios");
 
 const TOKEN = "https://id.twitch.tv/oauth2/token"
 
-const addSpotify = async (code) => {
+const addNewUser = async (code) => {
   let accessToken;
   let refreshToken;
   const body = `grant_type=authorization_code&code=${code}&redirect_uri=https://dynamix-bot.glitch.me/register&client_id=bhwlcwuvtg51226poslegrqdcm8naz&client_secret=j3up4evrkm7mbkgixcbafv7cjrrxw6`;
@@ -34,5 +34,5 @@ const addSpotify = async (code) => {
 };
 
 module.exports = {
-  addSpotify
+  addNewUser
 };

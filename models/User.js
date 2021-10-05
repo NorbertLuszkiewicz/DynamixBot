@@ -12,15 +12,19 @@ const UserSchema = new Schema({
     required: true,
     unique: true
   },
-  twitchToken: {
+  twitchAccessToken: {
     type: String,
     required: true,
   },
-  refreshToken: {
+  twitchRefreshToken: {
+    type: String,
+    required: true,
+  },
+  spotifyRefreshToken: {
     type: String,
     default: null
   },
-  accessToken: {
+  spotifyAccessToken: {
     type: String,
     default: null
   },
