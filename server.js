@@ -142,7 +142,7 @@ fastify.get("/account", async (req, res) => {
     console.log(user);
 
     if (user) {
-      user.twitchAccessToken === token ? res.send(user) :
+      user.twitchAccessToken === token ? res.send({data:user}) :
       res.status(403).send({
         message: "Unauthorization"
       });
