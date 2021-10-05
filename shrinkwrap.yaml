@@ -3,6 +3,7 @@ dependencies:
   comfy.js: 1.1.12
   express: 4.17.1
   fastify: 3.22.0
+  fastify-cors: 6.0.2
   fastify-formbody: 5.1.0
   fastify-static: 4.2.3
   handlebars: 4.7.7
@@ -353,6 +354,13 @@ packages:
     dev: false
     resolution:
       integrity: sha512-W+KJc2dmILlPplD/H4K9l9LcAHAfPtP6BY84uVLXQ6Evcz9Lcg33Y2z1IVblT6xdY54PXYVHEv+0Wpq8Io6zkA==
+  /fastify-cors/6.0.2:
+    dependencies:
+      fastify-plugin: 3.0.0
+      vary: 1.1.2
+    dev: false
+    resolution:
+      integrity: sha512-sE0AOyzmj5hLLRRVgenjA6G2iOGX35/1S3QGYB9rr9TXelMZB3lFrXy4CzwYVOMiujJeMiLgO4J7eRm8sQSv8Q==
   /fastify-error/0.3.1:
     dev: false
     resolution:
@@ -1203,6 +1211,7 @@ specifiers:
   comfy.js: ^1.1.10
   express: ^4.17.1
   fastify: ^3.14.1
+  fastify-cors: ^6.0.2
   fastify-formbody: ^5.0.0
   fastify-static: ^4.0.0
   handlebars: ^4.7.7
