@@ -18,7 +18,7 @@ const DEVICES = "https://api.spotify.com/v1/me/player/devices";
 
 let timeoutVolume = { kezman22: null, dynam1x1: null };
 
-const addNewUser = async (code, callback) => {
+const addSpotify = async (code) => {
   let accessToken;
   let refreshToken;
   const body = `grant_type=authorization_code&code=${code}&redirect_uri=https://dynamix-bot.glitch.me/callback`;
@@ -36,12 +36,14 @@ const addNewUser = async (code, callback) => {
     data.refresh_token && (refreshToken = data.refresh_token);
     console.log("accessToken", data.access_token);
     console.log("refreshToken", data.refresh_token);
-    callback("success");
+    
+    return "success"
+    
   } catch ({ response }) {
     console.log(
       `Error while getting first token (${response.status} ${response.statusText})`
     );
-    callback("error");
+    return"error";
   }
 };
 
@@ -274,5 +276,5 @@ module.exports = {
   changeVolumeOnTime,
   setVolume,
   currentlyPlaying,
-  addNewUser
+  addSpotify
 };

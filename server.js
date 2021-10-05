@@ -1,4 +1,10 @@
-const { addNewUser, refreshAccessToken, changeVolumeOnTime, currentlyPlaying } = require("./spotify");
+const {
+  addSpotify,
+  refreshAccessToken,
+  changeVolumeOnTime,
+  currentlyPlaying
+} = require("./spotify");
+const { addNewUser }  = require("./twitch/twitch.js")
 const path = require("path");
 const { twitchCommends } = require("./twitch/index.js");
 twitchCommends();
@@ -22,9 +28,7 @@ client.connect(err => {
     : console.log("Database connected!");
 
   const collection = client.db("streamers").collection("users");
-  
-
-}); 
+});
 
 const fastify = require("fastify")({
   logger: true
@@ -92,7 +96,7 @@ fastify.get("/login", (req, res) => {
   );
 });
 
-fastify.get("/callback", (req, res) => {
+fastify.get("/callback", async (req, res) => {
   const error = req.query.error;
   const code = req.query.code;
   const params = { seo: seo, auth: "auth" };
@@ -103,20 +107,26 @@ fastify.get("/callback", (req, res) => {
     return;
   }
 
-  addNewUser(code, callback => {
+  try {
+    const callback = await addSpotify(code);
     callback == "success"
       ? res.view("/src/pages/index.hbs", params)
       : res.send("Something went wrong");
-  });
+  } catch {}
 });
 
-fastify.get("/register", (req, res) => {
-console.log(req.query.code)
-  
-  
-  
-  const params = { seo: seo, auth: "auth" };
-  res.view("/src/pages/index.hbs", params)
+fastify.get("/register", async (req, res) => {
+  const code = req.query.code
+  console.log(code)
+
+    try {
+      
+      await addNewUser(code)
+    // const callback = await addNewUser(code);
+    // callback == "success"
+    //   ? res.view("/src/pages/index.hbs", params)
+    //   : res.send("Something went wrong");
+  } catch {}
 });
 
 fastify.listen(process.env.PORT, function(err, address) {
