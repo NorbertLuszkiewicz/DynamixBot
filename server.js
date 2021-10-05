@@ -108,7 +108,7 @@ fastify.get("/callback", async (req, res) => {
   }
 
   try {
-    const callback = await addSpotify(code);
+    const callback = await addSpotify("streamer" ,code);
     callback == "success"
       ? res.view("/src/pages/index.hbs", params)
       : res.send("Something went wrong");

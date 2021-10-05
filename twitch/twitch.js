@@ -6,7 +6,7 @@ const TOKEN = "https://id.twitch.tv/oauth2/token";
 const addNewUser = async code => {
   let accessToken;
   let refreshToken;
-  const body = `grant_type=authorization_code&code=${code}&redirect_uri=https://dynamix-bot.glitch.me/register&client_id=bhwlcwuvtg51226poslegrqdcm8naz&client_secret=j3up4evrkm7mbkgixcbafv7cjrrxw6`;
+  const body = `grant_type=authorization_code&code=${code}&redirect_uri=https://dynamix-bot.glitch.me/register&client_id=${process.env.BOT_CLIENT_ID}&client_secret=${process.env.BOT_CLIENT_SECRET}`;
 
   try {
     const { data } = await axios.post(`${TOKEN}`, body, {});
@@ -14,15 +14,14 @@ const addNewUser = async code => {
 
     data.access_token && (accessToken = data.access_token);
     data.refresh_token && (refreshToken = data.refresh_token);
-    console.log("accessToken", data.access_token);
-    console.log("refreshToken", data.refresh_token);
-    console.log("users", users);
 
     await addUser({
       streamer: users[0].login,
       spotifyAccessToken: data.access_token,
       spotifyRefreshToken: data.refresh_token
     });
+    
+    return "success";
   } catch (err) {
     console.log(`Error while getting first token (${err})`);
     return "error";
