@@ -2,12 +2,12 @@
 
 const axios = require("axios");
 
-const AUTH = 
+const TOKEN = "https://id.twitch.tv/oauth2/token"
 
 const addSpotify = async (code) => {
   let accessToken;
   let refreshToken;
-  const body = `grant_type=authorization_code&code=${code}&redirect_uri=https://dynamix-bot.glitch.me/callback`;
+  const body = `grant_type=authorization_code&code=${code}&redirect_uri=https://dynamix-bot.glitch.me/register&client_id=bhwlcwuvtg51226poslegrqdcm8naz&j3up4evrkm7mbkgixcbafv7cjrrxw6`;
 
   try {
     const { data } = axios.post(`${TOKEN}`, body, {
