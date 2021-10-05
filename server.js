@@ -136,10 +136,23 @@ fastify.get("/account", async (req, res) => {
   console.log(name, token);
 
   try {
-    const user = await getUser(name);
-    console.log(user)
+    const [user] = await getUser(name);
+    console.log(user);
 
-  } catch {}
+    if (user) {
+      user.twitchAccessToken === token ? res.send(user) :
+      res.status(403).send({
+        message: "Unauthorization"
+      });
+      
+    } else {
+      res.status(400).send({
+        message: "This user dosn't exist"
+      });
+    }
+  } catch {
+    console.log("Error when get account");
+  }
 });
 
 fastify.listen(process.env.PORT, function(err, address) {
