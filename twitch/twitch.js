@@ -24,6 +24,8 @@ const addNewUser = async code => {
     //   spotifyAccessToken: data.access_token,
     //   spotifyRefreshToken: data.refresh_token
     // });
+    
+    console.log(data)
 
   } catch (err) {
     console.log(`Error while getting first token (${err})`);
@@ -34,7 +36,7 @@ const addNewUser = async code => {
 const getStreamerData = async accessToken => {
   try {
     const { data } = await axios.get(
-      "https://api.twitch.tv/helix/streams?first=40",
+      "https://api.twitch.tv/helix/user",
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
