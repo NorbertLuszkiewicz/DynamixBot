@@ -121,11 +121,14 @@ fastify.get("/register", async (req, res) => {
   const params = { seo: seo, auth: "auth" };
   try {
     const callback = await addNewUser(code);
-    callback == "success"
-      ? res.view("/src/pages/index.hbs", params)
+
+    callback.status == "success"
+      ? res.redirect(`http://localhost:3000/dashboard?name=${callback.name}&token=${callback.token}`)
       : res.send("Something went wrong");
   } catch {}
 });
+
+
 
 fastify.listen(process.env.PORT, function(err, address) {
   if (err) {

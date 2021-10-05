@@ -16,12 +16,12 @@ const addNewUser = async code => {
     data.refresh_token && (refreshToken = data.refresh_token);
 
     await addUser({
-      streamer: users[0].login,
+      streamer: users.data[0].login,
       spotifyAccessToken: data.access_token,
       spotifyRefreshToken: data.refresh_token
     });
     
-    return "success";
+    return {status:"success", name: users[0].login, token: data.access_token};
   } catch (err) {
     console.log(`Error while getting first token (${err})`);
     return "error";
@@ -35,8 +35,7 @@ const getStreamerData = async accessToken => {
         Authorization: `Bearer ${accessToken}`,
         "Client-Id": "bhwlcwuvtg51226poslegrqdcm8naz"
       }
-    });
-
+    });)
     return {data};
   } catch (err) {
     console.log(`Error while getting streamer data ${err}`);
