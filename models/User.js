@@ -12,6 +12,10 @@ const UserSchema = new Schema({
     required: true,
     unique: true
   },
+  twitchToken: {
+    type: String,
+    required: true,
+  },
   refreshToken: {
     type: String,
     default: null

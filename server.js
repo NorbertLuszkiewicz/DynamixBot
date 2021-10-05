@@ -112,6 +112,7 @@ fastify.get("/callback", (req, res) => {
 
 fastify.get("/register", (req, res) => {
 console.log(req, res)
+  
 });
 
 fastify.listen(process.env.PORT, function(err, address) {
