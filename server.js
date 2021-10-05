@@ -10,10 +10,10 @@ const path = require("path");
 const { twitchCommends } = require("./twitch/index.js");
 twitchCommends();
 
-refreshTwitchTokens("dynam1x1")
-
 setTimeout(refreshAccessToken, 1000);
 setInterval(refreshAccessToken, 1800 * 1000);
+setTimeout(refreshTwitchTokens, 1000);
+setInterval(refreshTwitchTokens, 10000 * 1000);
 
 const { MongoClient } = require("mongodb");
 

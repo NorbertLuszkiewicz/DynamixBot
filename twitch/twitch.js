@@ -2,7 +2,8 @@ const axios = require("axios");
 const {
   addUser,
   getUser,
-  updateUser
+  updateUser,
+  getAllUser
 } = require("../controllers/UserController.js");
 
 const TOKEN = "https://id.twitch.tv/oauth2/token";
@@ -47,23 +48,31 @@ const addNewUser = async code => {
   }
 };
 
-const refreshTwitchTokens = async streamer => {
+const refreshTwitchTokens = async () => {
   try {
-    const [refreshToken] = await getUser(streamer);
+    const streamers = await getAllUser();
 
-    const body = `grant_type=refresh_token&refresh_token=${encodeURIComponent(
-      refreshToken.twitchRefreshToken
-    )}&client_id=${process.env.BOT_CLIENT_ID}&client_secret=${
-      process.env.BOT_CLIENT_SECRET
-    }`;
+    streamers.forEach(async streamer => {
+      if (streamer.twitchAccessToken) {
+        const [refreshToken] = await getUser(streamer.streamer);
 
-    const {data} = await axios.post(`${TOKEN}`, body, {});
+        const body = `grant_type=refresh_token&refresh_token=${encodeURIComponent(
+          refreshToken.twitchRefreshToken
+        )}&client_id=${process.env.BOT_CLIENT_ID}&client_secret=${
+          process.env.BOT_CLIENT_SECRET
+        }`;
 
-    await updateUser({
-      streamer: streamer,
-      twitchAccessToken: data.access_token,
-      twitchRefreshToken: data.refresh_token
+        const { data } = await axios.post(`${TOKEN}`, body, {});
+
+        await updateUser({
+          streamer: streamer.streamer,
+          twitchAccessToken: data.access_token,
+          twitchRefreshToken: data.refresh_token
+        });
+      }
     });
+    
+    console.log("reset twitch token")
   } catch (err) {
     console.log(`Error while refreshing twitch tokens ${err}`);
   }
