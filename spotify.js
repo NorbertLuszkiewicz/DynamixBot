@@ -257,7 +257,8 @@ const refreshDevices = async streamer => {
 
     await updateUser({
       streamer: streamer,
-      device: device.id
+      device: device.id,
+      twitchToken: "ejata134a9l3s1kacvmg8bzrqqmvee"
     });
   } catch (response) {
     console.log(`${response})`);

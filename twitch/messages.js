@@ -113,8 +113,9 @@ const messages = () => {
     }
     
     if (message === "www" && user === "DynaM1X1") {
-      console.log("aaaa")
+      console.log("ejata134a9l3s1kacvmg8bzrqqmvee")
       ComfyJS.Say("aaaa", extra.channel);
+      
       //changeVolumeOnTime("dynam1x1",30,50,5000)
     }
 
