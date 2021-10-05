@@ -111,7 +111,10 @@ fastify.get("/callback", (req, res) => {
 });
 
 fastify.get("/register", (req, res) => {
-console.log(location.hash)
+console.log(req.query.code)
+  
+  
+  
   const params = { seo: seo, auth: "auth" };
   res.view("/src/pages/index.hbs", params)
 });
