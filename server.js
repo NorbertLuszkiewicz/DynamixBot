@@ -89,13 +89,15 @@ fastify.get("/spotify", (req, res) => {
       process.env.CLIENT_ID
     }&scope=${encodeURIComponent(scopes)}&redirect_uri=${encodeURIComponent(
       "https://dynamix-bot.glitch.me/callback"
-    )}`
+    )}&state=${req.query.user}`
   );
 });
 
 fastify.get("/callback", async (req, res) => {
   const error = req.query.error;
   const code = req.query.code;
+  const user = req.query.state;
+  console.log(req.query, "aaaaaaaaa")
 
   if (error) {
     console.log("Callback Error:", error);
@@ -104,7 +106,7 @@ fastify.get("/callback", async (req, res) => {
   }
 
   try {
-    const callback = await addSpotify("streamer", code);
+    const callback = await addSpotify(user, code);
     callback == "success" ?
       res.redirect(
           `http://localhost:3000/dashboard`
