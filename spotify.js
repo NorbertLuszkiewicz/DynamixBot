@@ -24,6 +24,8 @@ const addSpotify = async (streamer, code) => {
   const body = `grant_type=authorization_code&code=${code}&redirect_uri=https://dynamix-bot.glitch.me/callback`;
 
   try {
+    console.log("tuuujest")
+    
     const { data } = axios.post(`${TOKEN}`, body, {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -34,6 +36,8 @@ const addSpotify = async (streamer, code) => {
     });
     data.access_token && (accessToken = data.access_token);
     data.refresh_token && (refreshToken = data.refresh_token);
+    
+    console.log(data)
     await updateUser({
       streamer: streamer,
       spotifyAccessToken: data.access_token,
@@ -42,11 +46,11 @@ const addSpotify = async (streamer, code) => {
     
     return "success"
     
-  } catch ({ response }) {
+  } catch ( err ) {
     console.log(
-      `Error while getting first token (${response.status} ${response.statusText})`
+      `Error while getting first token (${err.response.status} ${err.response.statusText})`
     );
-    return response;
+    return err;
   }
 };
 

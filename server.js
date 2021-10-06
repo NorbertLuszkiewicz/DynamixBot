@@ -89,14 +89,14 @@ fastify.get("/spotify", (req, res) => {
       process.env.CLIENT_ID
     }&scope=${encodeURIComponent(scopes)}&redirect_uri=${encodeURIComponent(
       `https://dynamix-bot.glitch.me/callback`
-    )}`
+    )}&state=${req.query.user}`
   );
 });
 
 fastify.get("/callback", async (req, res) => {
   const error = req.query.error;
   const code = req.query.code;
-  const user = req.query.user;
+  const user = req.query.state;
   
   console.log(req.query)
 
@@ -109,11 +109,11 @@ fastify.get("/callback", async (req, res) => {
           `http://localhost:3000/dashboard`
         ) :
       res.redirect(
-          `http://localhost:3000/dashboard?error${callback.status}`
+          `http://localhost:3000/dashboard?error${callback?.status? callback.status : 400}`
         )
 
-  } catch {
-    console.log("Error when redirect with spotify data to /dashboard "+ error)
+  } catch (err){
+    console.log("Error when redirect with spotify data to /dashboard "+ err+ error)
     res.redirect(
           `http://localhost:3000/dashboard`
         )
