@@ -62,7 +62,6 @@ fastify.get("/", function(request, reply) {
 });
 
 fastify.get("/spotify", (req, res) => {
-console.log("doszło tu")
   const scopes = [
     "ugc-image-upload",
     "user-read-playback-state",
@@ -95,20 +94,14 @@ console.log("doszło tu")
 });
 
 fastify.get("/callback", async (req, res) => {
-  console.log("doszło tu 2")
   const error = req.query.error;
   const code = req.query.code;
   const user = req.query.state;
-  console.log(req.query, "aaaaaaaaa")
-
-  if (error) {
-    console.log("Callback Error:", error);
-    res.send(`Callback Error: ${error}`);
-    return;
-  }
 
   try {
     const callback = await addSpotify(user, code);
+    
+    console.log(callback, "callback")
     callback == "success" ?
       res.redirect(
           `http://localhost:3000/dashboard`
@@ -118,7 +111,7 @@ fastify.get("/callback", async (req, res) => {
         )
 
   } catch {
-    console.log("Error when redirect with spotify data to /dashboard")
+    console.log("Error when redirect with spotify data to /dashboard "+ error)
     res.redirect(
           `http://localhost:3000/dashboard`
         )
