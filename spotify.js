@@ -24,7 +24,7 @@ const addSpotify = async (streamer, code) => {
   const body = `grant_type=authorization_code&code=${code}&redirect_uri=https://dynamix-bot.glitch.me/callback`;
 
   try {
-    console.log("tu jest");
+    console.log("tu jest", streamer);
     const { data } = await axios.post(`${TOKEN}`, body, {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -33,7 +33,7 @@ const addSpotify = async (streamer, code) => {
         ).toString("base64")}`
       }
     });
-    
+      console.log(data.access_token)
     data.access_token && (accessToken = data.access_token);
     data.refresh_token && (refreshToken = data.refresh_token);
 
