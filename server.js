@@ -9,6 +9,13 @@ const { addNewUser, refreshTwitchTokens } = require("./twitch/twitch.js");
 const path = require("path");
 const { twitchCommands } = require("./twitch/index.js");
 twitchCommands();
+const aaa = async ()=>{
+  try{
+    console.log( await currentlyPlaying("simplywojtek")) 
+  }catch{}
+  
+} 
+aaa()
 
 setTimeout(refreshAccessToken, 1000);
 setInterval(refreshAccessToken, 1800 * 1000);

@@ -42,6 +42,8 @@ const commands = () =>
     if (command == "playlist" || command == "playlista") {
       try {
         const spotifyData = await currentlyPlaying(extra.channel);
+        
+        console.log(spotifyData)
 
         let url = spotifyData.context.external_urls.spotify
           ? spotifyData.context.external_urls.spotify
@@ -57,15 +59,15 @@ const commands = () =>
       }
     }
 
-    // if (command == "next" && (flags.mod || flags.broadcaster)) {
-    //   const { isPlayingNow } = songPlayingNow(extra.channel);
-    //   if (isPlayingNow) {
-    //     ComfyJS.Say("!skip", extra.channel);
-    //     timeRequest(extra.channel, "skip");
-    //   } else {
-    //     nextSong(extra.channel);
-    //   }
-    // }
+    if (command == "next" && (flags.mod || flags.broadcaster)) {
+      const { isPlayingNow } = songPlayingNow(extra.channel);
+      if (isPlayingNow) {
+        ComfyJS.Say("!skip", extra.channel);
+        timeRequest(extra.channel, "skip");
+      } else {
+        nextSong(extra.channel);
+      }
+    }
     if (command === "dynamix" && (flags.mod || flags.broadcaster)) {
       ComfyJS.Say("Bot works!", extra.channel);
     }
