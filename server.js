@@ -179,7 +179,7 @@ fastify.put("/streamelements", async (req, res) => {
   } catch {
      console.log("Error when get account");
         res.status(404).send({
-        message: "Not Found"
+        message: "Something went wrong"
       });
   }
 });
