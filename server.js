@@ -62,6 +62,7 @@ fastify.get("/", function(request, reply) {
 });
 
 fastify.get("/spotify", (req, res) => {
+console.log("doszło tu")
   const scopes = [
     "ugc-image-upload",
     "user-read-playback-state",
@@ -94,6 +95,7 @@ fastify.get("/spotify", (req, res) => {
 });
 
 fastify.get("/callback", async (req, res) => {
+  console.log("doszło tu 2")
   const error = req.query.error;
   const code = req.query.code;
   const user = req.query.state;
@@ -145,11 +147,9 @@ fastify.get("/account", async (req, res) => {
 
   const name = req.query.name;
   const token = req.query.token;
-  console.log(name, token);
 
   try {
     const [user] = await getUser(name);
-    console.log(user);
 
     if (user) {
       user.twitchAccessToken === token
