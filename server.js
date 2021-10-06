@@ -135,9 +135,38 @@ fastify.get("/register", async (req, res) => {
 
 fastify.get("/account", async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "POST");
+  res.header("Access-Control-Allow-Methods", "GET");
 
   const name = req.query.name;
+  const token = req.query.token;
+
+  try {
+    const [user] = await getUser(name);
+
+    if (user) {
+      user.twitchAccessToken === token
+        ? res.send(user)
+        : res.status(403).send({
+            message: "Unauthorization"
+          });
+    } else {
+      res.status(400).send({
+        message: "This user dosn't exist"
+      });
+    }
+  } catch {
+     console.log("Error when get account");
+    res.status(404).send({
+        message: "Not Found"
+      });
+   
+  }
+});
+fastify.get("/streamelements", async (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "POST");
+
+  const clientID = req.query.name;
   const token = req.query.token;
 
   try {
