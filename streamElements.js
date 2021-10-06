@@ -62,8 +62,6 @@ const timeRequest = async (streamer, action) => {
 
     let now = Date.now();
 
-    //console.log({ playing, queue });
-
     if (action === "add") {
       let newEndTime;
 
@@ -74,7 +72,6 @@ const timeRequest = async (streamer, action) => {
           streamer: streamer,
           endTime: newEndTime + now
         });
-        console.log(newEndTime, "1");
       }
 
       if (!playing && queue.length == 1) {
@@ -84,7 +81,6 @@ const timeRequest = async (streamer, action) => {
           streamer: streamer,
           endTime: newEndTime + now
         });
-        console.log(newEndTime, "2");
       }
 
       if (playing && queue.length > 0) {
@@ -96,7 +92,6 @@ const timeRequest = async (streamer, action) => {
             endTime: newEndTime + now
           });
 
-          console.log(newEndTime, queue[queue.length - 1].duration * 1000, "3");
         } else {
           let allQueueTimes = 0
           queue.forEach((song)=> allQueueTimes += song.duration)
@@ -114,8 +109,6 @@ const timeRequest = async (streamer, action) => {
 
       timeoutVolume[streamer] = setTimeout(async () => {
         playing = await getSpotifyAreaData(streamer, "playing");
-
-        console.log("teraz", playing == null, streamer);
 
         !playing && startSong(streamer);
       }, newEndTime + 1350 * (queue.length + 3));

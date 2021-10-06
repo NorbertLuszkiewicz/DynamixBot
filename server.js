@@ -101,7 +101,6 @@ fastify.get("/callback", async (req, res) => {
   try {
     const callback = await addSpotify(user, code);
     
-    console.log(callback, "callback")
     callback == "success" ?
       res.redirect(
           `http://localhost:3000/dashboard`
@@ -123,8 +122,6 @@ fastify.get("/register", async (req, res) => {
 
   try {
     const callback = await addNewUser(code);
-    
-    console.log(callback)
 
     callback.status == "success"
       ? res.redirect(
