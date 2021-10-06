@@ -36,24 +36,17 @@ client.connect(err => {
 const fastify = require("fastify")({
   logger: true
 });
-fastify.register((fastify, options, done) => {
-  fastify.register(require("fastify-static"), {
-    root: path.join(__dirname, "public"),
-    prefix: "/"
-  });
 
-  fastify.register(require("fastify-formbody"));
-  fastify.register(require("point-of-view"), {
-    engine: {
-      handlebars: require("handlebars")
-    }
-  });
-    fastify.register(require("fastify-cors"), {
-    origin: "*",
-    methods: ['GET, POST, OPTIONS, PUT, PATCH, DELETE']
-  });
+fastify.register(require("fastify-static"), {
+  root: path.join(__dirname, "public"),
+  prefix: "/"
+});
 
-  done();
+fastify.register(require("fastify-formbody"));
+fastify.register(require("point-of-view"), {
+  engine: {
+    handlebars: require("handlebars")
+  }
 });
 
 // load and parse SEO data
@@ -63,12 +56,6 @@ if (seo.url === "glitch-default") {
 }
 
 fastify.get("/", function(request, reply) {
-  let params = { seo: seo, auth: "display-none" };
-
-  reply.view("/src/pages/index.hbs", params);
-});
-
-fastify.post("/", function(request, reply) {
   let params = { seo: seo, auth: "display-none" };
 
   reply.view("/src/pages/index.hbs", params);
@@ -142,7 +129,7 @@ fastify.get("/register", async (req, res) => {
 fastify.get("/account", async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "POST");
-  
+
   const name = req.query.name;
   const token = req.query.token;
   console.log(name, token);
