@@ -170,6 +170,8 @@ fastify.put("/streamelements", async (req, res) => {
   const token = req.body.token;
   const user = req.body.user;
 
+  console.log(clientID, token, user)
+  
   try {
      await updateUser({
       streamer: user,
