@@ -27,6 +27,16 @@ const messages = () => {
     try {
       const [data] = await getUser(extra.channel);
       const { addSongID, skipSongID, volumeSongID } = await data;
+      
+      if (flags.customReward && message === "add-song-award") {
+        
+        updateUser({
+          streamer:extra.channel,
+          
+        })
+        
+        ComfyJS.Say("!sr " + message, );extra.customRewardId
+      }
 
       if (flags.customReward && extra.customRewardId === addSongID) {
         ComfyJS.Say("!sr " + message, extra.channel);
