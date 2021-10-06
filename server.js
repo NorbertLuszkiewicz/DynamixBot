@@ -17,6 +17,8 @@ setInterval(refreshTwitchTokens, 10000 * 1000);
 
 const { MongoClient } = require("mongodb");
 
+addSpotify("dynam1x1","AQBqxWUUBknVh5YqD1aWSnDrR23pjnRi3lyIMaqIxaXB44ndpKZb3SGmr8hv6MjrHZt6pV5Xst5VJ7Lp9fj2UVINz9PAHvTv6-hSK9WH-_nUxOKJciMaOTKwP_BogalHEwqYySLjrMMR-CSXz8VZwltxx19wb-z0A29APjr63h0TiqYM3OTmGnLaOXwpca8vShRpd5ZP2Ga4lgCGQMlm6y6WXjf1ipdSA4TSZ8Pv5KBXIkHNar4DICrJdmtelTxH5gz18IfL3MjwrW_Y0dAUNdsHDslSb-_THHQeXISjBssqy4IPOjqOjIEBMi896e3jDL9WHCRw_4XcHrsvm2YD_fUzt8MkFakGhxmQWeLy0mluWYjbV9kK6bi2UjpFak-9rObPFJu1K5Wvfz3wJmxmQ2kbpYqueD9jbwAEKI7wHOyjFnbbKQU20qJJasrXmzjJtQa5hotqgnle4o6guRp8dq5uVfb1F2FDu6_G1pLq6Pt6jagK2kWktRsDj6KR6iNxOYfUk8KsRBJ-Pc8KQUxiLTEtLMzooK2fWMktAFrPnwqbZFUJfz5W5WdOd5xJJBhtFPzt0OFoPjgx6SzjHarEmyU8KSnZgS2fMEY2iSTkgt7E1fAZbU4oAWrBOv3aFN42tXcRqdDk6Ajjmbs6ixAh_mG3rDZZ3iak5SS_a4hGTCluW6lbpioQDGAoq9owDvXQ8YxnaadGUx9DpMIhfgNi2MiBkAHPSTWDVoLZdw")
+
 const client = new MongoClient(
   `mongodb+srv://${process.env.MONGODB}&w=majority`,
   {
@@ -87,9 +89,9 @@ fastify.get("/spotify", (req, res) => {
   res.redirect(
     `https://accounts.spotify.com/authorize?response_type=code&client_id=${
       process.env.CLIENT_ID
-    }&scope=${encodeURIComponent(scopes)}&redirect_uri=${encodeURIComponent(
+    }&scope=${encodeURIComponent(scopes)}&redirect_uri=${
       `https://dynamix-bot.glitch.me/callback`
-    )}&state=${req.query.user}`
+    }&state=${req.query.user}`
   );
 });
 

@@ -21,10 +21,10 @@ let timeoutVolume = { kezman22: null, dynam1x1: null };
 const addSpotify = async (streamer, code) => {
   let accessToken;
   let refreshToken;
-  const body = `grant_type=authorization_code&code=${code}&redirect_uri=${encodeURIComponent("https://dynamix-bot.glitch.me/callback")}`;
+  const body = `grant_type=authorization_code&code=${code}&redirect_uri=https://dynamix-bot.glitch.me/callback`;
 
   try {
-    console.log("tuuujest", code)
+    
     
     const { data } = axios.post(`${TOKEN}`, body, {
       headers: {
@@ -43,12 +43,12 @@ const addSpotify = async (streamer, code) => {
       spotifyAccessToken: data.access_token,
       spotifyRefreshToken: data.refresh_token
     });
-    
+     
     return "success"
     
   } catch ( err ) {
     console.log(
-      `Error while getting first token (${err.response.status} ${err.response.statusText})`
+      `Error while getting first token (${err})`
     );
     return err;
   }
