@@ -48,6 +48,7 @@ fastify.register(require("point-of-view"), {
     handlebars: require("handlebars")
   }
 });
+fastify.register(require('fastify-cors'))
 
 // load and parse SEO data
 const seo = require("./src/seo.json");
