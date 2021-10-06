@@ -61,7 +61,7 @@ fastify.get("/", function(request, reply) {
   reply.view("/src/pages/index.hbs", params);
 });
 
-fastify.get("/login", (req, res) => {
+fastify.get("/spotify", (req, res) => {
   const scopes = [
     "ugc-image-upload",
     "user-read-playback-state",
