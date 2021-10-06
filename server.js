@@ -89,14 +89,14 @@ fastify.get("/spotify", (req, res) => {
       process.env.CLIENT_ID
     }&scope=${encodeURIComponent(scopes)}&redirect_uri=${encodeURIComponent(
       "https://dynamix-bot.glitch.me/callback"
-    )}&state=${req.query.user}`
+    )}&user=${req.query.user}`
   );
 });
 
 fastify.get("/callback", async (req, res) => {
   const error = req.query.error;
   const code = req.query.code;
-  const user = req.query.state;
+  const user = req.query.user;
 
   try {
     const callback = await addSpotify(user, code);
