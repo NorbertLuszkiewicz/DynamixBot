@@ -99,8 +99,6 @@ fastify.get("/callback", async (req, res) => {
   const error = req.query.error;
   const code = req.query.code;
   const user = req.query.state;
-  
-  console.log(req.query)
 
   try {
     const callback = await addSpotify(user, code);
@@ -114,8 +112,8 @@ fastify.get("/callback", async (req, res) => {
           `http://localhost:3000/dashboard?error${callback ? callback.status : 400}`
         )
 
-  } catch (err){
-    console.log("Error when redirect with spotify data to /dashboard "+ err+ error)
+  } catch {
+    console.log("Error when redirect with spotify data to /dashboard ")
     res.redirect(
           `http://localhost:3000/dashboard`
         )
