@@ -88,7 +88,7 @@ fastify.get("/spotify", (req, res) => {
     `https://accounts.spotify.com/authorize?response_type=code&client_id=${
       process.env.CLIENT_ID
     }&scope=${encodeURIComponent(scopes)}&redirect_uri=${encodeURIComponent(
-      `https://dynamix-bot.glitch.me/callback?user=${req.query.user}"
+      `https://dynamix-bot.glitch.me/callback`
     )}`
   );
 });
