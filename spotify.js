@@ -46,7 +46,7 @@ const addSpotify = async (streamer, code) => {
     console.log(
       `Error while getting first token (${response.status} ${response.statusText})`
     );
-    return"error";
+    return response;
   }
 };
 
