@@ -31,11 +31,20 @@ const messages = () => {
       if (flags.customReward && message === "add-song-award") {
         
         updateUser({
-          streamer:extra.channel,
-          
+          streamer: extra.channel,
+          addSongID: extra.customRewardId,
         })
         
-        ComfyJS.Say("!sr " + message, );extra.customRewardId
+        ComfyJS.Say("Włączono automatyczne dodawanie piosenki przy zakupie tej nagrody", extra.channel);
+      }      
+      if (flags.customReward && message === "skip-song-award") {
+        
+        updateUser({
+          streamer: extra.channel,
+          skipSongID: extra.customRewardId,
+        })
+        
+        ComfyJS.Say("Włączono automatyczne dodawanie piosenki przy zakupie tej nagrody", extra.channel);
       }
 
       if (flags.customReward && extra.customRewardId === addSongID) {
