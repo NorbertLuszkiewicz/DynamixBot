@@ -106,7 +106,7 @@ fastify.get("/callback", async (req, res) => {
           `http://localhost:3000/dashboard`
         ) :
       res.redirect(
-          `http://localhost:3000/dashboard?error${callback ? callback.status : 400}`
+          `http://localhost:3000/?error${callback ? callback.status : 400}`
         )
 
   } catch {
