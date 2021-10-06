@@ -96,7 +96,6 @@ fastify.get("/login", (req, res) => {
 fastify.get("/callback", async (req, res) => {
   const error = req.query.error;
   const code = req.query.code;
-  const params = { seo: seo, auth: "auth" };
 
   if (error) {
     console.log("Callback Error:", error);
@@ -106,10 +105,20 @@ fastify.get("/callback", async (req, res) => {
 
   try {
     const callback = await addSpotify("streamer", code);
-    callback == "success"
-      ? res.view("/src/pages/index.hbs", params)
-      : res.send("Something went wrong");
-  } catch {}
+    callback == "success" ?
+      res.redirect(
+          `http://localhost:3000/dashboard`
+        ) :
+      res.redirect(
+          `http://localhost:3000/dashboard?error${callback}`
+        )
+
+  } catch {
+    console.log("Error when redirect with spotify data to /dashboard")
+    res.redirect(
+          `http://localhost:3000/dashboard`
+        )
+  }
 });
 
 fastify.get("/register", async (req, res) => {
@@ -123,7 +132,9 @@ fastify.get("/register", async (req, res) => {
           `http://localhost:3000/dashboard?name=${callback.name}&token=${callback.token}`
         )
       : res.send("Something went wrong");
-  } catch {}
+  } catch {
+    console.log("Error when redirect with twitch data to /dashboard")
+  }
 });
 
 fastify.get("/account", async (req, res) => {
@@ -150,7 +161,11 @@ fastify.get("/account", async (req, res) => {
       });
     }
   } catch {
-    console.log("Error when get account");
+     console.log("Error when get account");
+    res.status(404).send({
+        message: "Not Found"
+      });
+   
   }
 });
 
