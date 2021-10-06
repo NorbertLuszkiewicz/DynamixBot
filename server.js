@@ -7,8 +7,8 @@ const {
 const { getUser } = require("./controllers/UserController.js");
 const { addNewUser, refreshTwitchTokens } = require("./twitch/twitch.js");
 const path = require("path");
-const { twitchCommends } = require("./twitch/index.js");
-twitchCommends();
+const { twitchCommands } = require("./twitch/index.js");
+twitchCommands();
 
 setTimeout(refreshAccessToken, 1000);
 setInterval(refreshAccessToken, 1800 * 1000);
@@ -110,7 +110,7 @@ fastify.get("/callback", async (req, res) => {
           `http://localhost:3000/dashboard`
         ) :
       res.redirect(
-          `http://localhost:3000/dashboard?error${callback}`
+          `http://localhost:3000/dashboard?error${callback.status}`
         )
 
   } catch {

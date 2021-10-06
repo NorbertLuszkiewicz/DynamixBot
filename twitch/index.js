@@ -4,7 +4,7 @@ const { events } = require("./events");
 const { commands } = require("./commands");
 const { getAllUser } = require("../controllers/UserController.js");
 
-const twitchCommends = async () => {
+const twitchCommands = async () => {
   try {
     messages();
     events();
@@ -23,5 +23,5 @@ const twitchCommends = async () => {
 };
 
 module.exports = {
-  twitchCommends
+  twitchCommands
 };
