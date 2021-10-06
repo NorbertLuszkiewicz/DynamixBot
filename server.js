@@ -123,6 +123,8 @@ fastify.get("/register", async (req, res) => {
 
   try {
     const callback = await addNewUser(code);
+    
+    console.log(callback)
 
     callback.status == "success"
       ? res.redirect(
