@@ -50,12 +50,12 @@ const messages = () => {
       }      
       if ( message === "change-volume-song-award") {
         
+        let newVolumeSongID = volumeSongID
+        newVolumeSongID.id = "dizała"
+        
         updateUser({
           streamer: extra.channel,
-          volumeSongID: {
-            ...volumeSongID,
-            id: message,
-          }
+          volumeSongID: newVolumeSongID
         })
         
         ComfyJS.Say("Włączono automatyczą zmiane głosności przy zakupie tej nagrody", extra.channel);
