@@ -107,13 +107,13 @@ fastify.get("/callback", async (req, res) => {
     const callback = await addSpotify(user, code);
 
     callback == "success"
-      ? res.redirect(`http://localhost:3000/dashboard`)
+      ? res.redirect(`http://dynamix-bot.pl/dashboard`)
       : res.redirect(
-          `http://localhost:3000/?error${callback ? callback.status : 400}`
+          `http://dynamix-bot.pl/?error${callback ? callback.status : 400}`
         );
   } catch {
     console.log("Error when redirect with spotify data to /dashboard ");
-    res.redirect(`http://localhost:3000/?error${400}`);
+    res.redirect(`http://dynamix-bot.pl/?error${400}`);
   }
 });
 
@@ -125,7 +125,7 @@ fastify.get("/register", async (req, res) => {
 
     callback.status == "success"
       ? res.redirect(
-          `http://localhost:3000/dashboard?name=${callback.name}&token=${callback.token}`
+          `http://dynamix-bot.pl/dashboard?name=${callback.name}&token=${callback.token}`
         )
       : res.send("Something went wrong");
   } catch {
