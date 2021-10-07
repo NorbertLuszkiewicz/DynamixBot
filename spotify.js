@@ -23,7 +23,7 @@ const setTimeoutVolume = async () =>{
     const allUsers = await getAllUser()
     timeoutVolume = allUsers.reduce((acc, key) => ({ ...acc, [key.streamer]: null}), {})
   }
-  catch{console.log("Error when setTimeoutVolume")}
+  catch{console.log("Error when call setTimeoutVolume")}
 }
 
 const addSpotify = async (streamer, code) => {

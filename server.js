@@ -113,14 +113,8 @@ fastify.get("/callback", async (req, res) => {
         );
   } catch {
     console.log("Error when redirect with spotify data to /dashboard ");
-    res.redirect(`http://localhost:3000/dashboard`);
+    res.redirect(`http://localhost:3000/?error${400}`);
   }
-});
-
-fastify.get("/login", (req, res) => {
-  res.redirect(
-    `https://id.twitch.tv/oauth2/authorize?response_type=code&client_id=${process.env.BOT_CLIENT_ID}&redirect_uri=https://dynamix-bot.glitch.me/register&scope=viewing_activity_read channel:moderate channel:manage:redemptions channel:read:redemptions user:read:email chat:edit chat:read`
-  );
 });
 
 fastify.get("/register", async (req, res) => {
@@ -152,17 +146,17 @@ fastify.get("/account", async (req, res) => {
     if (user) {
       user.twitchAccessToken === token
         ? res.send(user)
-        : res.status(403).send({
-            message: "Unauthorization"
+        : res.status(401).send({
+            message: "Unauthorized"
           });
     } else {
-      res.status(400).send({
+      res.status(404).send({
         message: "This user dosn't exist"
       });
     }
   } catch {
     console.log("Error when get account");
-    res.status(404).send({
+    res.status(400).send({
       message: "Not Found"
     });
   }
@@ -184,7 +178,7 @@ fastify.put("/streamelements", async (req, res) => {
     });
   } catch {
     console.log("Error when get account");
-    res.status(404).send({
+    res.status(400).send({
       message: "Something went wrong"
     });
   }
@@ -218,7 +212,7 @@ fastify.put("/volumeaward", async (req, res) => {
     });
   } catch {
     console.log("Error when get account");
-    res.status(404).send({
+    res.status(400).send({
       message: "Something went wrong"
     });
   }
@@ -229,5 +223,5 @@ fastify.listen(process.env.PORT, function(err, address) {
     fastify.log.error(err);
     process.exit(1);
   }
-  fastify.log.info(`server listening on ${address}`);
+  fastify.log.info(`Server listening on ${address}`);
 });
