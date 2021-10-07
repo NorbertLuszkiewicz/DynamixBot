@@ -168,8 +168,6 @@ fastify.put("/streamelements", async (req, res) => {
   const token = req.body.token;
   const user = req.body.user;
 
-  console.log(clientID, token, user);
-
   try {
     await updateUser({
       streamer: user,
@@ -195,11 +193,8 @@ fastify.put("/volumeaward", async (req, res) => {
   const time = req.body.time;
   const user = req.body.user;
 
-  console.log(min, max, minSR, maxSR, time, user);
-
   try {
     const [data] = await getUser(user) 
-    console.log(data)
     const id = data.volumeSongID ? data.volumeSongID.id : ""
     
     await updateUser({
