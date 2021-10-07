@@ -70,11 +70,19 @@ const commands = () =>
 
     if (command == "weather") {
       try {
-        const weatherData = await getWeather(message);
+        const {temp, speed, description} = await getWeather(message);
+        let emote 
+        
+        switch (description) {
+          case "":
+              emote = "";
+            default:
+            emote = ""
+        };
 
-        weatherData
+        temp
           ? ComfyJS.Say(
-              `@${user} aktualnie leci ta playlista: ${weatherData} catJAM `,
+              `@${user} Jest ${temp - 273} °C, witr wieje z prędkości`,
               extra.channel
             )
           : ComfyJS.Say(`@${user} Nie znaleziono `, extra.channel);

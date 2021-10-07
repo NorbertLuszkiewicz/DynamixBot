@@ -103,8 +103,6 @@ const getWeather = async city => {
     const {data} = await axios.get(
       `http://api.openweathermap.org/data/2.5/weather?q=${city}&lang=pl&appid=${process.env.WEATHER_TOKEN}`
     );
-    
-    console.log(data)
 
     return {temp: data.main.temp, speed: data.wind.speed, description: data.weather[0].description};
   } catch (err) {
