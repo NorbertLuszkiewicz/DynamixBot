@@ -18,14 +18,14 @@ const addNewUser = async code => {
     const users = await getStreamerData(data.access_token);
     const userName = users.data[0].login;
 
-    console.log(userName, "userName")
-    
+    console.log(userName, "userName");
+
     data.access_token && (accessToken = data.access_token);
     data.refresh_token && (refreshToken = data.refresh_token);
 
     const userInDatabase = await getUser(userName);
-    
-    console.log(userInDatabase.length === 0 ,"test", userInDatabase)
+
+    console.log(userInDatabase.length === 0, "test", userInDatabase);
 
     if (userInDatabase.length === 0) {
       await addUser({
@@ -75,8 +75,8 @@ const refreshTwitchTokens = async () => {
         });
       }
     });
-    
-    console.log("reset twitch token")
+
+    console.log("reset twitch token");
   } catch (err) {
     console.log(`Error while refreshing twitch tokens ${err}`);
   }
@@ -94,6 +94,21 @@ const getStreamerData = async accessToken => {
     return data;
   } catch (err) {
     console.log(`Error while getting streamer data ${err}`);
+  }
+};
+
+const getWeather = async city => {
+  try {
+    const { data } = await axios.get(
+      `api.openweathermap.org/data/2.5/weather?q=${city}&appid=${process.env.WEATHER_TOKEN}`,
+      {}
+    );
+    
+    console.log(data)
+
+    return data;
+  } catch (err) {
+    console.log(`Error while getting weather ${err}`);
   }
 };
 

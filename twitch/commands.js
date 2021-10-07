@@ -66,6 +66,25 @@ const commands = () =>
         nextSong(extra.channel);
       }
     }
+    
+        if (command == "weather") {
+      try {
+        const spotifyData = await currentlyPlaying(extra.channel);
+
+        let url = spotifyData.context.external_urls
+          ? spotifyData.context.external_urls.spotify
+          : "Nieznana Playlista";
+
+        spotifyData &&
+          ComfyJS.Say(
+            `@${user} aktualnie leci ta playlista: ${url} catJAM `,
+            extra.channel
+          );
+      } catch (err) {
+        console.log(`Error when use !playlist on twitch (${err})`);
+      }
+    }
+    
     if (command === "dynamix" && (flags.mod || flags.broadcaster)) {
       ComfyJS.Say("Bot works!", extra.channel);
     }
