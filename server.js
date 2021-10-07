@@ -192,18 +192,20 @@ fastify.put("/volumeaward", async (req, res) => {
   const max = req.body.max;
   const minSR = req.body.minSR;
   const maxSR = req.body.maxSR;
+  const time = req.body.time;
   const user = req.body.user;
 
-  console.log(min, max, minSR, maxSR, user);
+  console.log(min, max, minSR, maxSR, time, user);
 
   try {
     await updateUser({
       streamer: user,
       volumeSongID: {
-        min: min,
-        max: max,
-        minSR: minSR,
-        maxSR: maxSR
+        min,
+        max,
+        minSR,
+        maxSR,
+        time,
       }
     });
   } catch {
