@@ -47,7 +47,7 @@ const messages = () => {
         ComfyJS.Say("Włączono automatyczne pomijanie piosenki przy zakupie tej nagrody", extra.channel);
         
       }      
-      if (flags.customReward && message === "change-volume-song-award") {
+      if ( message === "change-volume-song-award") {
         
         updateUser({
           streamer: extra.channel,
