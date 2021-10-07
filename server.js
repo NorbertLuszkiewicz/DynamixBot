@@ -2,7 +2,8 @@ const {
   addSpotify,
   refreshAccessToken,
   changeVolumeOnTime,
-  currentlyPlaying
+  currentlyPlaying,
+  setTimeoutVolume
 } = require("./spotify");
 const { getUser, updateUser } = require("./controllers/UserController.js");
 const { addNewUser, refreshTwitchTokens } = require("./twitch/twitch.js");
@@ -10,6 +11,8 @@ const path = require("path");
 const { twitchCommands } = require("./twitch/index.js");
 twitchCommands();
 
+// Initial data
+setTimeoutVolume()
 setTimeout(refreshAccessToken, 1000);
 setInterval(refreshAccessToken, 1800 * 1000);
 setTimeout(refreshTwitchTokens, 1000);

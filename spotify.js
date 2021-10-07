@@ -18,7 +18,13 @@ const DEVICES = "https://api.spotify.com/v1/me/player/devices";
 
 let timeoutVolume = { kezman22: null, dynam1x1: null };
 
-updateTimeoutVolume 
+const setTimeoutVolume = async () =>{
+  try{
+    const allUsers = await getAllUser()
+    timeoutVolume = allUsers.reduce((acc, key) => ({ ...acc, [key.streamer]: null}), {})
+  }
+  catch{console.log("Error when setTimeoutVolume")}
+}
 
 const addSpotify = async (streamer, code) => {
   let accessToken;
@@ -279,5 +285,6 @@ module.exports = {
   changeVolumeOnTime,
   setVolume,
   currentlyPlaying,
-  addSpotify
+  addSpotify,
+  setTimeoutVolume
 };
