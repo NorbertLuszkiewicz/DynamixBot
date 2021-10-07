@@ -77,11 +77,6 @@ const commands = () =>
         description == "zachmurzenie duże" && (emote = "☁️")
         description == "zachmurzenie umiarkowane" && (emote = "🌥️")
         description == "umiarkowane opady deszczu" && (emote = "🌧️")
-        description == "umiarkowane opady deszczu" && (emote = ":sunny:")
-        description == "umiarkowane opady deszczu" && (emote = ":sunny:")
-        description == "umiarkowane opady deszczu" && (emote = ":sunny:")
-
-        console.log(description);
 
         temp
           ? ComfyJS.Say(
