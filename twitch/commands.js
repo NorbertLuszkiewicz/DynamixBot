@@ -1,5 +1,5 @@
 const ComfyJS = require("comfy.js");
-const {getWeather} = require("./twitch")
+const { getWeather } = require("./twitch");
 const { currentlyPlaying, nextSong } = require("../spotify");
 const { songPlayingNow, timeRequest } = require("../streamElements");
 
@@ -70,19 +70,24 @@ const commands = () =>
 
     if (command == "weather") {
       try {
-        const {temp, speed, description} = await getWeather(message);
-        let emote 
-        
+        const { temp, speed, description } = await getWeather(message);
+        let emote;
+
         switch (description) {
-          case "":
-              emote = "";
-            default:
-            emote = ""
-        };
+          case "bezchmurnie":
+            emote = ":sunny:";
+            console.log(emote);
+          default:
+            emote = "";
+        }
+
+        console.log(emote);
 
         temp
           ? ComfyJS.Say(
-              `@${user} Jest ${temp - 273} °C, witr wieje z prędkości`,
+              `@${user} Jest ${Math.round(
+                temp - 273
+              )} °C, witr wieje z prędkością ${speed} km/h jest ${description} ${emote} :sunny: , 🌤️ `,
               extra.channel
             )
           : ComfyJS.Say(`@${user} Nie znaleziono `, extra.channel);
