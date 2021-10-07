@@ -198,9 +198,9 @@ fastify.put("/volumeaward", async (req, res) => {
   console.log(min, max, minSR, maxSR, time, user);
 
   try {
-    const account = await getUser(user) 
-    console.log(account)
-    const id = account.volumeSongID ? account.volumeSongID.id : ""
+    const [data] = await getUser(user) 
+    console.log(data)
+    const id = data.volumeSongID ? data.volumeSongID.id : ""
     
     await updateUser({
       streamer: user,
