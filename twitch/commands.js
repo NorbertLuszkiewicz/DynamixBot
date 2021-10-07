@@ -74,8 +74,9 @@ const commands = () =>
         let emote = "";
 
         description == "bezchmurnie" && (emote = "☀️")
-        description == "zachmurzenie duże" && (emote = "☁️")
+        description == "pochmurnie " && (emote = "🌤️")
         description == "zachmurzenie umiarkowane" && (emote = "🌥️")
+        description == "zachmurzenie duże" && (emote = "☁️")
         description == "umiarkowane opady deszczu" && (emote = "🌧️")
 
         temp
