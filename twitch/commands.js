@@ -73,13 +73,7 @@ const commands = () =>
         const { temp, speed, description } = await getWeather(message);
         let emote;
 
-        switch (description) {
-          case "bezchmurnie":
-            emote = ":sunny:";
-            console.log(emote);
-          default:
-            emote = "";
-        }
+        des
 
         console.log(emote);
 
