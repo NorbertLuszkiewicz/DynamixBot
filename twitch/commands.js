@@ -76,7 +76,10 @@ const commands = () =>
         description == "bezchmurnie" && (emote = "☀️")
         description == "zachmurzenie duże" && (emote = "☁️")
         description == "zachmurzenie umiarkowane" && (emote = "🌥️")
-        description == "bezchmurnie" && (emote = ":sunny:")
+        description == "umiarkowane opady deszczu" && (emote = "🌧️")
+        description == "umiarkowane opady deszczu" && (emote = ":sunny:")
+        description == "umiarkowane opady deszczu" && (emote = ":sunny:")
+        description == "umiarkowane opady deszczu" && (emote = ":sunny:")
 
         console.log(description);
 
@@ -84,7 +87,7 @@ const commands = () =>
           ? ComfyJS.Say(
               `@${user} Jest ${Math.round(
                 temp - 273
-              )} °C, ${description} ${emote}, wiatr wieje z prędkością ${speed} km/h`,
+              )} °C, ${description} ${emote} wiatr wieje z prędkością ${speed} km/h`,
               extra.channel
             )
           : ComfyJS.Say(`@${user} Nie znaleziono`, extra.channel);
