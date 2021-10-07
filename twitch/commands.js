@@ -1,4 +1,5 @@
 const ComfyJS = require("comfy.js");
+const {getWeather} = require("./twitch")
 const { currentlyPlaying, nextSong } = require("../spotify");
 const { songPlayingNow, timeRequest } = require("../streamElements");
 
@@ -66,25 +67,22 @@ const commands = () =>
         nextSong(extra.channel);
       }
     }
-    
-        if (command == "weather") {
+
+    if (command == "weather") {
       try {
-        const spotifyData = await currentlyPlaying(extra.channel);
+        const weatherData = await getWeather(message);
 
-        let url = spotifyData.context.external_urls
-          ? spotifyData.context.external_urls.spotify
-          : "Nieznana Playlista";
-
-        spotifyData &&
-          ComfyJS.Say(
-            `@${user} aktualnie leci ta playlista: ${url} catJAM `,
-            extra.channel
-          );
+        weatherData
+          ? ComfyJS.Say(
+              `@${user} aktualnie leci ta playlista: ${weatherData} catJAM `,
+              extra.channel
+            )
+          : ComfyJS.Say(`@${user} Nie znaleziono `, extra.channel);
       } catch (err) {
         console.log(`Error when use !playlist on twitch (${err})`);
       }
     }
-    
+
     if (command === "dynamix" && (flags.mod || flags.broadcaster)) {
       ComfyJS.Say("Bot works!", extra.channel);
     }

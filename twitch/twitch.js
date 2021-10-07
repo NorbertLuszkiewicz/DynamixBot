@@ -99,9 +99,8 @@ const getStreamerData = async accessToken => {
 
 const getWeather = async city => {
   try {
-    const { data } = await axios.get(
-      `api.openweathermap.org/data/2.5/weather?q=${city}&appid=${process.env.WEATHER_TOKEN}`,
-      {}
+    const data = await axios.get(
+      `api.openweathermap.org/data/2.5/weather?q=${city}&appid=${process.env.WEATHER_TOKEN}&lang=pl`
     );
     
     console.log(data)
@@ -114,5 +113,6 @@ const getWeather = async city => {
 
 module.exports = {
   addNewUser,
-  refreshTwitchTokens
+  refreshTwitchTokens,
+  getWeather
 };
