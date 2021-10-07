@@ -17,7 +17,7 @@ const commands = () =>
             : "";
           let title = spotifyData.item.name
             ? spotifyData.item.name
-            : "Nieznany tytł utworu";
+            : "Nieznany tytuł utworu";
           let autor = "";
           if (
             spotifyData.item.artists.length < 4 &&
