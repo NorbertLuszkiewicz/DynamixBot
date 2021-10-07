@@ -87,7 +87,7 @@ const commands = () =>
             )
           : ComfyJS.Say(`@${user} Nie znaleziono`, extra.channel);
       } catch (err) {
-        console.log(`Error when use !playlist on twitch (${err})`);
+        console.log(`Error when use !pogoda on twitch (${err})`);
       }
     }
 
