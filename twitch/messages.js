@@ -52,7 +52,7 @@ const messages = () => {
         updateUser({
           streamer: extra.channel,
           volumeSongID: {
-            id: extra.customRewardId
+            id: message
           }
         })
         
