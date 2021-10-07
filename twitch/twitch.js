@@ -99,13 +99,14 @@ const getStreamerData = async accessToken => {
 
 const getWeather = async city => {
   try {
-    const data = await axios.get(
-      `api.openweathermap.org/data/2.5/weather?q=${city}&appid=${process.env.WEATHER_TOKEN}&lang=pl`
+    console.log(city)
+    const {data} = await axios.get(
+      `http://api.openweathermap.org/data/2.5/weather?q=${city}&lang=pl&appid=${process.env.WEATHER_TOKEN}`
     );
     
     console.log(data)
 
-    return data;
+    return {temp: data.main.temp, speed: data.wind.speed, description: data.weather[0].description};
   } catch (err) {
     console.log(`Error while getting weather ${err}`);
   }
