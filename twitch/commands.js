@@ -71,20 +71,23 @@ const commands = () =>
     if (command == "weather") {
       try {
         const { temp, speed, description } = await getWeather(message);
-        let emote;
+        let emote = "";
 
-        des
+        description == "bezchmurnie" && (emote = "☀️")
+        description == "zachmurzenie duże" && (emote = "☁️")
+        description == "zachmurzenie umiarkowane" && (emote = "🌥️")
+        description == "bezchmurnie" && (emote = ":sunny:")
 
-        console.log(emote);
+        console.log(description);
 
         temp
           ? ComfyJS.Say(
               `@${user} Jest ${Math.round(
                 temp - 273
-              )} °C, witr wieje z prędkością ${speed} km/h jest ${description} ${emote} :sunny: , 🌤️ `,
+              )} °C, ${description} ${emote}, wiatr wieje z prędkością ${speed} km/h`,
               extra.channel
             )
-          : ComfyJS.Say(`@${user} Nie znaleziono `, extra.channel);
+          : ComfyJS.Say(`@${user} Nie znaleziono`, extra.channel);
       } catch (err) {
         console.log(`Error when use !playlist on twitch (${err})`);
       }
