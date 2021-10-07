@@ -11,7 +11,6 @@ const path = require("path");
 const { twitchCommands } = require("./twitch/index.js");
 twitchCommands();
 
-// Initial data
 setTimeoutVolume();
 setTimeout(refreshAccessToken, 1000);
 setInterval(refreshAccessToken, 1800 * 1000);
