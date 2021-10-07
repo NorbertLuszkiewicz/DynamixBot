@@ -42,10 +42,8 @@ const commands = () =>
     if (command == "playlist" || command == "playlista") {
       try {
         const spotifyData = await currentlyPlaying(extra.channel);
-        
-        console.log(spotifyData)
 
-        let url = spotifyData.context.external_urls.spotify
+        let url = spotifyData.context.external_urls
           ? spotifyData.context.external_urls.spotify
           : "Nieznana Playlista";
 
