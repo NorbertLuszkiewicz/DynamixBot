@@ -12,7 +12,7 @@ const { twitchCommands } = require("./twitch/index.js");
 twitchCommands();
 
 // Initial data
-setTimeoutVolume()
+setTimeoutVolume();
 setTimeout(refreshAccessToken, 1000);
 setInterval(refreshAccessToken, 1800 * 1000);
 setTimeout(refreshTwitchTokens, 1000);
@@ -118,6 +118,12 @@ fastify.get("/callback", async (req, res) => {
   }
 });
 
+fastify.get("/login", (req, res) => {
+  res.redirect(
+    `https://id.twitch.tv/oauth2/authorize?response_type=code&client_id=${process.env.BOT_CLIENT_ID}&redirect_uri=https://dynamix-bot.glitch.me/register&scope=viewing_activity_read channel:moderate channel:manage:redemptions channel:read:redemptions user:read:email chat:edit chat:read`
+  );
+});
+
 fastify.get("/register", async (req, res) => {
   const code = req.query.code;
 
@@ -197,9 +203,9 @@ fastify.put("/volumeaward", async (req, res) => {
   const user = req.body.user;
 
   try {
-    const [data] = await getUser(user) 
-    const id = data.volumeSongID ? data.volumeSongID.id : ""
-    
+    const [data] = await getUser(user);
+    const id = data.volumeSongID ? data.volumeSongID.id : "";
+
     await updateUser({
       streamer: user,
       volumeSongID: {
@@ -208,7 +214,7 @@ fastify.put("/volumeaward", async (req, res) => {
         max,
         minSR,
         maxSR,
-        time,
+        time
       }
     });
   } catch {
