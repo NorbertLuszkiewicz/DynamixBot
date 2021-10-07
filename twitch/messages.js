@@ -27,6 +27,7 @@ const messages = () => {
     try {
       const [data] = await getUser(extra.channel);
       const { addSongID, skipSongID, volumeSongID } = await data;
+
       
       if (flags.customReward && message === "add-song-award") {
         
@@ -47,12 +48,13 @@ const messages = () => {
         ComfyJS.Say("Włączono automatyczne pomijanie piosenki przy zakupie tej nagrody", extra.channel);
         
       }      
-      if (flags.customReward && message === "change-volume-song-award") {
+      if ( message === "change-volume-song-award") {
         
         updateUser({
           streamer: extra.channel,
           volumeSongID: {
-            id: extra.customRewardId
+            ...volumeSongID,
+            id: message,
           }
         })
         
