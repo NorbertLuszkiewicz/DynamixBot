@@ -10,7 +10,6 @@ const path = require("path");
 const { twitchCommands } = require("./twitch/index.js");
 twitchCommands();
 
-
 setTimeout(refreshAccessToken, 1000);
 setInterval(refreshAccessToken, 1800 * 1000);
 setTimeout(refreshTwitchTokens, 1000);
@@ -49,7 +48,7 @@ fastify.register(require("point-of-view"), {
     handlebars: require("handlebars")
   }
 });
-fastify.register(require('fastify-cors'))
+fastify.register(require("fastify-cors"));
 
 // load and parse SEO data
 const seo = require("./src/seo.json");
@@ -89,9 +88,11 @@ fastify.get("/spotify", (req, res) => {
   res.redirect(
     `https://accounts.spotify.com/authorize?response_type=code&client_id=${
       process.env.CLIENT_ID
-    }&scope=${encodeURIComponent(scopes)}&redirect_uri=${
-      `https://dynamix-bot.glitch.me/callback`
-    }&state=${req.query.user}`
+    }&scope=${encodeURIComponent(
+      scopes
+    )}&redirect_uri=${`https://dynamix-bot.glitch.me/callback`}&state=${
+      req.query.user
+    }`
   );
 });
 
@@ -102,20 +103,15 @@ fastify.get("/callback", async (req, res) => {
 
   try {
     const callback = await addSpotify(user, code);
-    
-    callback == "success" ?
-      res.redirect(
-          `http://localhost:3000/dashboard`
-        ) :
-      res.redirect(
-          `http://localhost:3000/?error${callback ? callback.status : 400}`
-        )
 
+    callback == "success"
+      ? res.redirect(`http://localhost:3000/dashboard`)
+      : res.redirect(
+          `http://localhost:3000/?error${callback ? callback.status : 400}`
+        );
   } catch {
-    console.log("Error when redirect with spotify data to /dashboard ")
-    res.redirect(
-          `http://localhost:3000/dashboard`
-        )
+    console.log("Error when redirect with spotify data to /dashboard ");
+    res.redirect(`http://localhost:3000/dashboard`);
   }
 });
 
@@ -131,7 +127,7 @@ fastify.get("/register", async (req, res) => {
         )
       : res.send("Something went wrong");
   } catch {
-    console.log("Error when redirect with twitch data to /dashboard")
+    console.log("Error when redirect with twitch data to /dashboard");
   }
 });
 
@@ -157,13 +153,13 @@ fastify.get("/account", async (req, res) => {
       });
     }
   } catch {
-     console.log("Error when get account");
+    console.log("Error when get account");
     res.status(404).send({
-        message: "Not Found"
-      });
-   
+      message: "Not Found"
+    });
   }
 });
+
 fastify.put("/streamelements", async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "PUT");
@@ -172,19 +168,49 @@ fastify.put("/streamelements", async (req, res) => {
   const token = req.body.token;
   const user = req.body.user;
 
-  console.log(clientID, token, user)
-  
+  console.log(clientID, token, user);
+
   try {
-     await updateUser({
+    await updateUser({
       streamer: user,
       clientSongRequestID: clientID,
       clientSongRequestSecret: token
     });
   } catch {
-     console.log("Error when get account");
-        res.status(404).send({
-        message: "Something went wrong"
-      });
+    console.log("Error when get account");
+    res.status(404).send({
+      message: "Something went wrong"
+    });
+  }
+});
+
+fastify.put("/volumeaward", async (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "PUT");
+
+  const min = req.body.min;
+  const max = req.body.max;
+  const minSR = req.body.minSR;
+  const maxSR = req.body.maxSR;
+  const user = req.body.user;
+
+  console.log(min, max, minSR, maxSR, user);
+
+  try {
+    await updateUser({
+      streamer: user,
+      volumeSongID: {
+        min: min,
+        max: max,
+        minSR: minSR,
+        maxSR: maxSR
+      }
+    });
+  } catch {
+    console.log("Error when get account");
+    res.status(404).send({
+      message: "Something went wrong"
+    });
   }
 });
 

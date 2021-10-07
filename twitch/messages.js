@@ -44,7 +44,19 @@ const messages = () => {
           skipSongID: extra.customRewardId,
         })
         
-        ComfyJS.Say("Włączono automatyczne dodawanie piosenki przy zakupie tej nagrody", extra.channel);
+        ComfyJS.Say("Włączono automatyczne pomijanie piosenki przy zakupie tej nagrody", extra.channel);
+        
+      }      
+      if (flags.customReward && message === "change-volume-song-award") {
+        
+        updateUser({
+          streamer: extra.channel,
+          volumeSongID: {
+            id: extra.customRewardId
+          }
+        })
+        
+        ComfyJS.Say("Włączono automatyczą zmiane głosności przy zakupie tej nagrody", extra.channel);
       }
 
       if (flags.customReward && extra.customRewardId === addSongID) {
