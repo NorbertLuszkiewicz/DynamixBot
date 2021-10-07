@@ -68,7 +68,7 @@ const commands = () =>
       }
     }
 
-    if (command == "weather") {
+    if (command == "weather" || command == "pogoda") {
       try {
         const { temp, speed, description } = await getWeather(message);
         let emote = "";
