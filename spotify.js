@@ -18,6 +18,8 @@ const DEVICES = "https://api.spotify.com/v1/me/player/devices";
 
 let timeoutVolume = { kezman22: null, dynam1x1: null };
 
+updateTimeoutVolume 
+
 const addSpotify = async (streamer, code) => {
   let accessToken;
   let refreshToken;
