@@ -4,7 +4,8 @@ const {
   startSong,
   refreshDevices,
   changeVolumeOnTime,
-  setVolume
+  setVolume,
+  timeoutVolume
 } = require("../spotify");
 
 const {
@@ -17,8 +18,6 @@ const { songPlayingNow, timeRequest } = require("../streamElements");
 
 const ComfyJS = require("comfy.js");
 
-let maxVolumeDate = 0;
-let timeMaxVolume = 0;
 let timeCooldownTravis = 0;
 let timeCooldownOgiii = 0;
 
@@ -28,36 +27,40 @@ const messages = () => {
       const [data] = await getUser(extra.channel);
       const { addSongID, skipSongID, volumeSongID } = await data;
 
-      
       if (flags.customReward && message === "add-song-award") {
-        
         updateUser({
           streamer: extra.channel,
-          addSongID: extra.customRewardId,
-        })
-        
-        ComfyJS.Say("Włączono automatyczne dodawanie piosenki przy zakupie tej nagrody", extra.channel);
-      }      
+          addSongID: extra.customRewardId
+        });
+
+        ComfyJS.Say(
+          "Włączono automatyczne dodawanie piosenki przy zakupie tej nagrody",
+          extra.channel
+        );
+      }
       if (flags.customReward && message === "skip-song-award") {
-        
         updateUser({
           streamer: extra.channel,
-          skipSongID: extra.customRewardId,
-        })
-        
-        ComfyJS.Say("Włączono automatyczne pomijanie piosenki przy zakupie tej nagrody", extra.channel);
-        
-      }      
-      if ( message === "change-volume-song-award") {
-        
-        let newVolumeSongID = volumeSongID
+          skipSongID: extra.customRewardId
+        });
+
+        ComfyJS.Say(
+          "Włączono automatyczne pomijanie piosenki przy zakupie tej nagrody",
+          extra.channel
+        );
+      }
+      if (message === "change-volume-song-award") {
+        let newVolumeSongID = volumeSongID;
 
         updateUser({
           streamer: extra.channel,
           volumeSongID: newVolumeSongID
-        })
-        
-        ComfyJS.Say("Włączono automatyczą zmiane głosności przy zakupie tej nagrody", extra.channel);
+        });
+
+        ComfyJS.Say(
+          "Włączono automatyczą zmiane głosności przy zakupie tej nagrody",
+          extra.channel
+        );
       }
 
       if (flags.customReward && extra.customRewardId === addSongID) {
@@ -67,10 +70,10 @@ const messages = () => {
       if (
         user === "StreamElements" &&
         (message.lastIndexOf("to the queue") != -1 ||
-          message.lastIndexOf("do kolejki") != -1 )
+          message.lastIndexOf("do kolejki") != -1)
       ) {
-         pauseSong(extra.channel);
-         timeRequest(extra.channel, "add");
+        pauseSong(extra.channel);
+        timeRequest(extra.channel, "add");
       }
 
       if (flags.customReward && extra.customRewardId === skipSongID) {
@@ -98,16 +101,23 @@ const messages = () => {
       if (volumeSongID && flags.customReward && extra.customRewardId === id) {
         ComfyJS.Say("!volume " + maxSR, extra.channel);
         changeVolumeOnTime(extra.channel, min, max, time);
+        let [user] = await getUser(extra.channel);
+
         let newMaxVolumeTime = 0;
         let now = Date.now();
 
-        if (maxVolumeDate > now) {
-          maxVolumeDate += time;
+        if (user.maxVolumeTime > now) {
+          newMaxVolumeTime = user.maxVolumeTime + time;
         }
 
-        if (!maxVolumeDate || maxVolumeDate < now) {
-          maxVolumeDate = now + time;
+        if (!user.maxVolumeTime || user.maxVolumeTime < now) {
+          newMaxVolumeTime = now + time;
         }
+
+        await updateUser({
+          streamer: extra.channel,
+          maxVolumeTime: newMaxVolumeTime
+        });
 
         clearTimeout(timeMaxVolume);
         timeMaxVolume = setTimeout(() => {
@@ -128,11 +138,12 @@ const messages = () => {
           console.log(`Error when skip song ${err}`);
         }
       }
-
-    } catch(err) {console.log(`Error when use message ${err}`)}
+    } catch (err) {
+      console.log(`Error when use message ${err}`);
+    }
 
     if (message === "pause" && user === "DynaM1X1") {
-     pauseSong(extra.channel);
+      pauseSong(extra.channel);
     }
 
     if (message === "start" && user === "DynaM1X1") {

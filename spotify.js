@@ -285,5 +285,5 @@ module.exports = {
   setVolume,
   currentlyPlaying,
   addSpotify,
-  setTimeoutVolume
+  setTimeoutVolume,
 };
