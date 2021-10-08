@@ -18,14 +18,10 @@ const addNewUser = async code => {
     const users = await getStreamerData(data.access_token);
     const userName = users.data[0].login;
 
-    console.log(userName, "userName");
-
     data.access_token && (accessToken = data.access_token);
     data.refresh_token && (refreshToken = data.refresh_token);
 
     const userInDatabase = await getUser(userName);
-
-    console.log(userInDatabase.length === 0, "test", userInDatabase);
 
     if (userInDatabase.length === 0) {
       await addUser({

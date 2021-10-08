@@ -51,7 +51,7 @@ const messages = () => {
       if ( message === "change-volume-song-award") {
         
         let newVolumeSongID = volumeSongID
-        newVolumeSongID.id = "dizała"
+        newVolumeSongID.id = extra.customRewardId
         
         updateUser({
           streamer: extra.channel,
@@ -125,8 +125,8 @@ const messages = () => {
           } else {
             nextSong(extra.channel);
           }
-        } catch {
-          console.log("Error when skip song");
+        } catch (err) {
+          console.log(`Error when skip song ${err}`);
         }
       }
 
@@ -143,13 +143,6 @@ const messages = () => {
     if (message === "device" && user === "DynaM1X1") {
       refreshDevices(extra.channel);
     }
-    
-    if (message === "www" && user === "DynaM1X1") {
-      console.log("ejata134a9l3s1kacvmg8bzrqqmvee")
-      ComfyJS.Say("aaaa", extra.channel);
-      
-      //changeVolumeOnTime("dynam1x1",30,50,5000)
-    }
 
     // volume [value] command
     const isVolumeCommand = message.lastIndexOf("volume");
@@ -159,7 +152,7 @@ const messages = () => {
       setVolume(extra.channel, volumeValue);
     }
 
-    // volume [value] command
+    // piramidka [emote] command
 
     const isPriamidka = message.lastIndexOf("piramidka");
     let emote = message.substr(9);
