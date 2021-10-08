@@ -8,12 +8,20 @@ const {
 
 const url = "https://api.streamelements.com/kappa/v2/";
 let endTime;
-let timeoutVolume = {
-  kezman22: null,
-  dynam1x1: null,
-  og1ii: null,
-  l2plelouch: null,
-  simplywojtek: null
+
+let timeoutVolume = {};
+
+const setTimeoutVolume = async () => {
+  try {
+    const allUsers = await getAllUser();
+
+    timeoutVolume = allUsers.reduce(
+      (acc, key) => ({ ...acc, [key.streamer]: null }),
+      {}
+    );
+  } catch {
+    console.log("Error when call setTimeoutVolume");
+  }
 };
 
 const getSpotifyAreaData = async (streamer, area) => {

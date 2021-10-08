@@ -2,6 +2,9 @@ const {
   refreshAccessToken,
   setTimeoutVolume
 } = require("./spotify");
+const {
+  setTimeoutVolume : setTimeoutVolumeStreamElements
+} = require("./streamElements");
 const {  refreshTwitchTokens } = require("./twitch/twitch.js");
 const path = require("path");
 const { twitchCommands } = require("./twitch/index.js");
@@ -10,6 +13,7 @@ const { MongoClient } = require("mongodb");
 //Initial functions
 twitchCommands();
 setTimeoutVolume();
+setTimeoutVolumeStreamElements();
 setTimeout(refreshAccessToken, 1000);
 setInterval(refreshAccessToken, 1800 * 1000);
 setTimeout(refreshTwitchTokens, 1000);
