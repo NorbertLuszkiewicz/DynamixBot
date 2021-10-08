@@ -1,5 +1,5 @@
 const ComfyJS = require("comfy.js");
-const { messages } = require("./messages");
+const { messages, setTimeoutVolume } = require("./messages");
 const { events } = require("./events");
 const { commands } = require("./commands");
 const { getAllUser } = require("../controllers/UserController.js");
@@ -9,7 +9,8 @@ const twitchCommands = async () => {
     messages();
     events();
     commands();
-
+    setTimeoutVolume()
+    
     const allStreamers = await getAllUser();
 
     const TWITCHCHANNELS = allStreamers.map(streamer => streamer.streamer);

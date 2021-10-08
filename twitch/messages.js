@@ -5,7 +5,6 @@ const {
   refreshDevices,
   changeVolumeOnTime,
   setVolume,
-  timeoutVolume
 } = require("../spotify");
 
 const {
@@ -20,6 +19,16 @@ const ComfyJS = require("comfy.js");
 
 let timeCooldownTravis = 0;
 let timeCooldownOgiii = 0;
+
+let timeoutVolume = { kezman22: null, dynam1x1: null };
+
+const setTimeoutVolume = async () =>{
+  try{
+    const allUsers = await getAllUser()
+    timeoutVolume = allUsers.reduce((acc, key) => ({ ...acc, [key.streamer]: null}), {})
+  }
+  catch{console.log("Error when call setTimeoutVolume")}
+}
 
 const messages = () => {
   ComfyJS.onChat = async (user, message, flags, self, extra) => {
@@ -119,10 +128,10 @@ const messages = () => {
           maxVolumeTime: newMaxVolumeTime
         });
 
-        clearTimeout(timeMaxVolume);
-        timeMaxVolume = setTimeout(() => {
+        clearTimeout(timeoutVolume[extra.channel]);
+        timeoutVolume[extra.channel] = setTimeout(() => {
           ComfyJS.Say("!volume " + minSR, extra.channel);
-        }, maxVolumeDate - now);
+        }, newMaxVolumeTime - now);
       }
 
       if (message == "skip" && user === "DynaM1X1") {
@@ -218,5 +227,6 @@ const messages = () => {
 };
 
 module.exports = {
-  messages
+  messages,
+  setTimeoutVolume
 };
