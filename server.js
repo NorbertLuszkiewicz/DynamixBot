@@ -59,7 +59,7 @@ if (seo.url === "glitch-default") {
 }
 
 fastify.get("/", function(req, res) {
-  res.redirect(`https://dynamix-bot.pl/`)
+  res.send("")
 });
 
 fastify.get("/spotify", (req, res) => {
