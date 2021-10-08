@@ -51,8 +51,7 @@ const messages = () => {
       if ( message === "change-volume-song-award") {
         
         let newVolumeSongID = volumeSongID
-        newVolumeSongID.id = extra.customRewardId
-        
+
         updateUser({
           streamer: extra.channel,
           volumeSongID: newVolumeSongID
@@ -99,7 +98,7 @@ const messages = () => {
       if (volumeSongID && flags.customReward && extra.customRewardId === id) {
         ComfyJS.Say("!volume " + maxSR, extra.channel);
         changeVolumeOnTime(extra.channel, min, max, time);
-
+        let newMaxVolumeTime = 0;
         let now = Date.now();
 
         if (maxVolumeDate > now) {
