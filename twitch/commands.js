@@ -72,9 +72,14 @@ const commands = () =>
       try {
         const { temp, speed, description } = await getWeather(message);
         let emote = "";
+        
+        {
+          bezchmurnie: ":sunn:"
+          pochmurnie: "🌤️"
+        }
 
         description == "bezchmurnie" && (emote = "☀️")
-        description == "pochmurnie " && (emote = "🌤️")
+        description == "pochmurnie" && (emote = "🌤️")
         description == "zachmurzenie umiarkowane" && (emote = "🌥️")
         description == "zachmurzenie duże" && (emote = "☁️")
         description == "umiarkowane opady deszczu" && (emote = "🌧️")
