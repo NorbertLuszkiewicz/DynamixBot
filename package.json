@@ -11,6 +11,7 @@
     "comfy.js": "^1.1.10",
     "express": "^4.17.1",
     "fastify": "^3.14.1",
+    "fastify-autoload": "^3.9.0",
     "fastify-cors": "^6.0.2",
     "fastify-formbody": "^5.0.0",
     "fastify-static": "^4.0.0",
