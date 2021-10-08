@@ -26,14 +26,12 @@ const client = new MongoClient(
 );
 
 client.connect(err => {
-  if(err){
+  if(err) {
     console.log("Error with connect to database")
     refreshAccessToken
-  }else{
-    
+  }else {
+    console.log("Database connected!")
   }
-    ? console.log("Error with connect to database")
-    : console.log("Database connected!");
 
 });
 
