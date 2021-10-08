@@ -1,3 +1,5 @@
+const fastify = require("fastify")({logger: true});
+const path = require("path");
 const {
   addSpotify,
   refreshAccessToken,
@@ -7,11 +9,9 @@ const {
 } = require("../spotify");
 const { getUser, updateUser } = require("../controllers/UserController.js");
 const { addNewUser, refreshTwitchTokens } = require("../twitch/twitch.js");
-const path = require("path");
 
-const fastify = require("fastify")({
-  logger: true
-});
+
+
 
 async function routes(fastify, options){
 fastify.get("/", function(req, res) {
