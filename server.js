@@ -58,10 +58,8 @@ if (seo.url === "glitch-default") {
   seo.url = `https://${process.env.PROJECT_DOMAIN}.glitch.me`;
 }
 
-fastify.get("/", function(request, reply) {
-  let params = { seo: seo, auth: "display-none" };
-
-  reply.view("/src/pages/index.hbs", params);
+fastify.get("/", function(req, res) {
+  res.redirect(`https://dynamix-bot.pl/`)
 });
 
 fastify.get("/spotify", (req, res) => {
@@ -107,13 +105,13 @@ fastify.get("/callback", async (req, res) => {
     const callback = await addSpotify(user, code);
 
     callback == "success"
-      ? res.redirect(`http://dynamix-bot.pl/dashboard`)
+      ? res.redirect(`https://dynamix-bot.pl/dashboard`)
       : res.redirect(
-          `http://dynamix-bot.pl/?error${callback ? callback.status : 400}`
+          `https://dynamix-bot.pl/?error${callback ? callback.status : 400}`
         );
   } catch {
     console.log("Error when redirect with spotify data to /dashboard ");
-    res.redirect(`http://dynamix-bot.pl/?error${400}`);
+    res.redirect(`https://dynamix-bot.pl/?error${400}`);
   }
 });
 
@@ -125,7 +123,7 @@ fastify.get("/register", async (req, res) => {
 
     callback.status == "success"
       ? res.redirect(
-          `http://dynamix-bot.pl/dashboard?name=${callback.name}&token=${callback.token}`
+          `https://dynamix-bot.pl/dashboard?name=${callback.name}&token=${callback.token}`
         )
       : res.send("Something went wrong");
   } catch {
