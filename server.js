@@ -30,7 +30,6 @@ client.connect(err => {
     ? console.log("Error with connect to database")
     : console.log("Database connected!");
 
-  const collection = client.db("streamers").collection("users");
 });
 
 const fastify = require("fastify")({
