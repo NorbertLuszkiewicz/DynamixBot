@@ -2,9 +2,7 @@ const {
   refreshAccessToken,
   setTimeoutVolume
 } = require("./spotify");
-const {
-  setTimeoutVolume : setTimeoutVolumeStreamElements
-} = require("./streamElements");
+const {setTimeoutVolume: setTimeoutVolumeStreamElements} = require("./streamElements");
 const {  refreshTwitchTokens } = require("./twitch/twitch.js");
 const path = require("path");
 const { twitchCommands } = require("./twitch/index.js");

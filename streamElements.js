@@ -7,7 +7,6 @@ const {
 } = require("./controllers/UserController.js");
 
 const url = "https://api.streamelements.com/kappa/v2/";
-let endTime;
 
 let timeoutVolume = {};
 
@@ -153,5 +152,6 @@ const timeRequest = async (streamer, action) => {
 
 module.exports = {
   songPlayingNow,
-  timeRequest
+  timeRequest,
+  setTimeoutVolume
 };
