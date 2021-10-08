@@ -119,7 +119,6 @@ const messages = () => {
       if (message == "skip" && user === "DynaM1X1") {
         try {
           const { isPlayingNow } = await songPlayingNow(extra.channel);
-          console.log("tu jest, ", isPlayingNow);
           if (isPlayingNow) {
             ComfyJS.Say("!skip", extra.channel);
             await timeRequest(extra.channel, "skip");
@@ -127,7 +126,7 @@ const messages = () => {
             nextSong(extra.channel);
           }
         } catch {
-          console.log("err");
+          console.log("Error when skip song");
         }
       }
 

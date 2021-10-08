@@ -43,9 +43,7 @@ const addUser = ({
   };
 
   const newUser = new User(newUserData);
-  newUser.save().then(() => {
-    console.log("User added");
-  });
+  newUser.save()
 };
 
 const getAllUser = async () => {
@@ -62,7 +60,7 @@ const getUser = async user => {
     const data = await User.find({ streamer: user });
     return data;
   } catch (err) {
-    console.log(err);
+    console.log(`Error while getting user ${err}`);
   }
 };
 
