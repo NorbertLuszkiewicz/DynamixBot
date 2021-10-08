@@ -132,7 +132,7 @@ fastify.get("/register", async (req, res) => {
 });
 
 fastify.get("/account", async (req, res) => {
-  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Origin", "https://dynamix-bot.pl");
   res.header("Access-Control-Allow-Methods", "GET");
 
   const name = req.query.name;
@@ -161,7 +161,7 @@ fastify.get("/account", async (req, res) => {
 });
 
 fastify.put("/streamelements", async (req, res) => {
-  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Origin", "https://dynamix-bot.pl");
   res.header("Access-Control-Allow-Methods", "PUT");
 
   const clientID = req.body.clientID;
@@ -183,7 +183,7 @@ fastify.put("/streamelements", async (req, res) => {
 });
 
 fastify.put("/volumeaward", async (req, res) => {
-  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Origin", "https://dynamix-bot.pl");
   res.header("Access-Control-Allow-Methods", "PUT");
 
   const min = req.body.min;
