@@ -3,12 +3,13 @@ dependencies:
   comfy.js: 1.1.12
   express: 4.17.1
   fastify: 3.22.0
+  fastify-autoload: 3.9.0
   fastify-cors: 6.0.2
   fastify-formbody: 5.1.0
-  fastify-static: 4.2.3
+  fastify-static: 4.4.0
   handlebars: 4.7.7
-  mongodb: 4.1.2
-  mongoose: 6.0.9
+  mongodb: 4.1.3
+  mongoose: 6.0.10
   node-fetch: 2.6.5
   point-of-view: 4.15.2
   spotify-web-api-node: 5.0.2
@@ -20,17 +21,17 @@ packages:
     dev: false
     resolution:
       integrity: sha512-gvCOUNpXsWrIQ3A4aXCLIdblL0tDq42BG/2Xw7oxbil9h11uow10ztS2GuFazNBfjbrsZ5nl+nPl5jDSjj5TSg==
-  /@types/node/16.10.2:
+  /@types/node/16.10.3:
     dev: false
     resolution:
-      integrity: sha512-zCclL4/rx+W5SQTzFs9wyvvyCwoK9QtBpratqz2IYJ3O8Umrn0m3nsTv0wQBk9sRGpvUe9CwPDrQFB10f1FIjQ==
+      integrity: sha512-ho3Ruq+fFnBrZhUYI46n/bV2GjwzSkwuT4dTf0GkuNFmnb8nq4ny2z9JEVemFi6bdEJanHLlYfy9c6FN9B9McQ==
   /@types/webidl-conversions/6.1.1:
     dev: false
     resolution:
       integrity: sha512-XAahCdThVuCFDQLT7R7Pk/vqeObFNL3YqRyFZg+AqAP/W1/w3xHaIxuW7WszQqTbIBOPRcItYJIou3i/mppu3Q==
   /@types/whatwg-url/8.2.1:
     dependencies:
-      '@types/node': 16.10.2
+      '@types/node': 16.10.3
       '@types/webidl-conversions': 6.1.1
     dev: false
     resolution:
@@ -131,14 +132,14 @@ packages:
     dev: false
     resolution:
       integrity: sha512-iCuPHDFgrHX7H2vEI/5xpz07zSHB00TpugqhmYtVmMO6518mCuRMoOYFldEBl0g187ufozdaHgWKcYFb61qGiA==
-  /bson/4.5.2:
+  /bson/4.5.3:
     dependencies:
       buffer: 5.7.1
     dev: false
     engines:
       node: '>=6.9.0'
     resolution:
-      integrity: sha512-8CEMJpwc7qlQtrn2rney38jQSEeMar847lz0LyitwRmVknAW8iHXrzW4fTjHfyWm0E3sukyD/zppdH+QU1QefA==
+      integrity: sha512-qVX7LX79Mtj7B3NPLzCfBiCP6RAsjiV8N63DjlaVVpZW+PFoDTxQ4SeDbSpcqgE6mXksM5CAwZnXxxxn/XwC0g==
   /buffer/5.7.1:
     dependencies:
       base64-js: 1.5.1
@@ -354,6 +355,13 @@ packages:
     dev: false
     resolution:
       integrity: sha512-W+KJc2dmILlPplD/H4K9l9LcAHAfPtP6BY84uVLXQ6Evcz9Lcg33Y2z1IVblT6xdY54PXYVHEv+0Wpq8Io6zkA==
+  /fastify-autoload/3.9.0:
+    dependencies:
+      pkg-up: 3.1.0
+      semver: 7.3.5
+    dev: false
+    resolution:
+      integrity: sha512-GNal/ijLiuwCJBmr7oVVQH/cuDQ9ytm/HbDZLbSWSGr3GW8doGp88vChN3SN87o99isL65whgoqwB97E+XoegQ==
   /fastify-cors/6.0.2:
     dependencies:
       fastify-plugin: 3.0.0
@@ -375,17 +383,18 @@ packages:
     dev: false
     resolution:
       integrity: sha512-ZdCvKEEd92DNLps5n0v231Bha8bkz1DjnPP/aEz37rz/q42Z5JVLmgnqR4DYuNn3NXAO3IDCPyRvgvxtJ4Ym4w==
-  /fastify-static/4.2.3:
+  /fastify-static/4.4.0:
     dependencies:
       content-disposition: 0.5.3
       encoding-negotiator: 2.0.1
       fastify-plugin: 3.0.0
       glob: 7.2.0
+      p-limit: 3.1.0
       readable-stream: 3.6.0
       send: 0.17.1
     dev: false
     resolution:
-      integrity: sha512-uFRgwYXZwLKyaMrByf10efO+HTjAPqyQOlUthoGljQKGCfbwUeTeE7EHadsDWeN7NMeqBE617RamVh9uqatuUw==
+      integrity: sha512-YInDwELexeGmTYliX4pPaRT0biIJgluj/pOG4un9EOBmDDY39MQ91GFehb2PgOhV+8U8n7yNHJzQSsAO0mZNZA==
   /fastify-warning/0.2.0:
     dev: false
     resolution:
@@ -400,7 +409,7 @@ packages:
       fastify-warning: 0.2.0
       find-my-way: 4.3.3
       flatstr: 1.0.12
-      light-my-request: 4.4.4
+      light-my-request: 4.5.0
       pino: 6.13.3
       proxy-addr: 2.0.7
       readable-stream: 3.6.0
@@ -442,6 +451,14 @@ packages:
       node: '>=10'
     resolution:
       integrity: sha512-5E4bRdaATB1MewjOCBjx4xvD205a4t2ripCnXB+YFhYEJ0NABtrcC7XLXLq0TPoFe/WYGUFqys3Qk3HCOGeNcw==
+  /find-up/3.0.0:
+    dependencies:
+      locate-path: 3.0.0
+    dev: false
+    engines:
+      node: '>=6'
+    resolution:
+      integrity: sha512-1yD6RmLI1XBfxugvORwlck6f75tYL+iR0jqwsOrOxMZyGYqUuDhJ0l4AXdO1iX/FTs9cBAMEk1gWSEx1kSbylg==
   /flatstr/1.0.12:
     dev: false
     resolution:
@@ -606,7 +623,7 @@ packages:
     dev: false
     resolution:
       integrity: sha512-STHz9P7X2L4Kwn72fA4rGyqyXdmrMSdxqHx9IXon/FXluXieaFA6KJ2upcHAHxQPQ0LeM/OjLrhFxifHewOALQ==
-  /light-my-request/4.4.4:
+  /light-my-request/4.5.0:
     dependencies:
       ajv: 8.6.3
       cookie: 0.4.1
@@ -615,7 +632,16 @@ packages:
       set-cookie-parser: 2.4.8
     dev: false
     resolution:
-      integrity: sha512-nxYLB+Lke3wGQ55HQIo/CjSS18xGyHRF0y/u7YxEwp1YsqQTxObteBXYHZY3ELSvYmqy0pRLTWbI5//zRYTXlg==
+      integrity: sha512-s9+n86YBw7M44lUZZWm7s/6kZm0ri7+gm0RJCIzX73btlzu37AdZPnRbYl6GX26UsFLPiVHCjMz8Z2jmLzzF5Q==
+  /locate-path/3.0.0:
+    dependencies:
+      p-locate: 3.0.0
+      path-exists: 3.0.0
+    dev: false
+    engines:
+      node: '>=6'
+    resolution:
+      integrity: sha512-7AO748wWnIhNqAuaty2ZWHkQHRSNfPVIsPIfwEOWO22AmaoVrWavlOcMR5nzTLNYvp36X220/maaRsrec1G65A==
   /lru-cache/6.0.0:
     dependencies:
       yallist: 4.0.0
@@ -692,7 +718,7 @@ packages:
       integrity: sha512-Qf9Zw7KGiRljWvMrrUFDdVqo46KIEiDuCzvEN97rh/PcKzk2bd6n9KuzEwBwW9xo5glwx69y1mI6s+jFUD/aIQ==
   /mongodb/4.1.2:
     dependencies:
-      bson: 4.5.2
+      bson: 4.5.3
       denque: 2.0.1
       mongodb-connection-string-url: 2.1.0
     dev: false
@@ -702,9 +728,21 @@ packages:
       saslprep: 1.0.3
     resolution:
       integrity: sha512-pHCKDoOy1h6mVurziJmXmTMPatYWOx8pbnyFgSgshja9Y36Q+caHUzTDY6rrIy9HCSrjnbXmx3pCtvNZHmR8xg==
-  /mongoose/6.0.9:
+  /mongodb/4.1.3:
     dependencies:
-      bson: 4.5.2
+      bson: 4.5.3
+      denque: 2.0.1
+      mongodb-connection-string-url: 2.1.0
+    dev: false
+    engines:
+      node: '>=12.9.0'
+    optionalDependencies:
+      saslprep: 1.0.3
+    resolution:
+      integrity: sha512-lHvTqODBiSpuqjpCj48DOyYWS6Iq6ElJNUiH9HWdQtONyOfjgsKzJULipWduMGsSzaNO4nFi/kmlMFCLvjox/Q==
+  /mongoose/6.0.10:
+    dependencies:
+      bson: 4.5.3
       kareem: 2.3.2
       mongodb: 4.1.2
       mpath: 0.8.4
@@ -717,7 +755,7 @@ packages:
     engines:
       node: '>=12.0.0'
     resolution:
-      integrity: sha512-j9wcL8sltyIPBzMv785HFuGOdO8a5b70HX+e1q5QOogJxFofEXQoCcuurGlFSOe6j8M25qxHLzeVeKVcITeviQ==
+      integrity: sha512-p/wiEDUXoQuyb/xQx8QW/YGN92ZsojJ5E/DDgMCUU0WOGxc5uhcWoZ7ijLu6Ssjq8UkwVSv+jzkYp4Wbr+NqBg==
   /mpath/0.8.4:
     dev: false
     engines:
@@ -782,12 +820,48 @@ packages:
     dev: false
     resolution:
       integrity: sha1-WDsap3WWHUsROsF9nFC6753Xa9E=
+  /p-limit/2.3.0:
+    dependencies:
+      p-try: 2.2.0
+    dev: false
+    engines:
+      node: '>=6'
+    resolution:
+      integrity: sha512-//88mFWSJx8lxCzwdAABTJL2MyWB12+eIY7MDL2SqLmAkeKU9qxRvWuSyTjm3FUmpBEMuFfckAIqEaVGUDxb6w==
+  /p-limit/3.1.0:
+    dependencies:
+      yocto-queue: 0.1.0
+    dev: false
+    engines:
+      node: '>=10'
+    resolution:
+      integrity: sha512-TYOanM3wGwNGsZN2cVTYPArw454xnXj5qmWF1bEoAc4+cU/ol7GVh7odevjp1FNHduHc3KZMcFduxU5Xc6uJRQ==
+  /p-locate/3.0.0:
+    dependencies:
+      p-limit: 2.3.0
+    dev: false
+    engines:
+      node: '>=6'
+    resolution:
+      integrity: sha512-x+12w/To+4GFfgJhBEpiDcLozRJGegY+Ei7/z0tSLkMmxGZNybVMSfWj9aJn8Z5Fc7dBUNJOOVgPv2H7IwulSQ==
+  /p-try/2.2.0:
+    dev: false
+    engines:
+      node: '>=6'
+    resolution:
+      integrity: sha512-R4nPAVTAU0B9D35/Gk3uJf/7XYbQcyohSKdvAxIRSNghFl4e71hVoGnBNQz9cWaXxO2I10KTC+3jMdvvoKw6dQ==
   /parseurl/1.3.3:
     dev: false
     engines:
       node: '>= 0.8'
     resolution:
       integrity: sha512-CiyeOxFT/JZyN5m0z9PfXw4SCBJ6Sygz1Dpl0wqjlhDEGGBP1GnsUVEL0p63hoG1fcj3fHynXi9NYO4nWOL+qQ==
+  /path-exists/3.0.0:
+    dev: false
+    engines:
+      node: '>=4'
+    resolution:
+      integrity: sha1-zg6+ql94yxiSXqfYENe1mwEP1RU=
   /path-is-absolute/1.0.1:
     dev: false
     engines:
@@ -815,6 +889,14 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-tJy6qVgkh9MwNgqX1/oYi3ehfl2Y9H0uHyEEMsBe74KinESIjdMrMQDWpcZPpPicg3VV35d/GLQZmo4QgU2Xkg==
+  /pkg-up/3.1.0:
+    dependencies:
+      find-up: 3.0.0
+    dev: false
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha512-nDywThFk1i4BQK4twPQ6TA4RT8bDY96yeuCVBWL3ePARCiEKDRSrNGbFIgUJpLp+XeIR65v8ra7WuJOFUBtkMA==
   /point-of-view/4.15.2:
     dependencies:
       fastify-plugin: 3.0.0
@@ -1203,6 +1285,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==
+  /yocto-queue/0.1.0:
+    dev: false
+    engines:
+      node: '>=10'
+    resolution:
+      integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
 registry: 'https://registry.npmjs.org/'
 shrinkwrapMinorVersion: 9
 shrinkwrapVersion: 3
@@ -1211,6 +1299,7 @@ specifiers:
   comfy.js: ^1.1.10
   express: ^4.17.1
   fastify: ^3.14.1
+  fastify-autoload: ^3.9.0
   fastify-cors: ^6.0.2
   fastify-formbody: ^5.0.0
   fastify-static: ^4.0.0
