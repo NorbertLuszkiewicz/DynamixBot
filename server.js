@@ -1,9 +1,8 @@
+const { refreshAccessToken, setTimeoutVolume, currentlyPlaying } = require("./spotify");
 const {
-  refreshAccessToken,
-  setTimeoutVolume
-} = require("./spotify");
-const {setTimeoutVolume: setTimeoutVolumeStreamElements} = require("./streamElements");
-const {  refreshTwitchTokens } = require("./twitch/twitch.js");
+  setTimeoutVolume: setTimeoutVolumeStreamElements
+} = require("./streamElements");
+const { refreshTwitchTokens } = require("./twitch/twitch.js");
 const path = require("path");
 const { twitchCommands } = require("./twitch/index.js");
 const { MongoClient } = require("mongodb");
@@ -17,6 +16,14 @@ setInterval(refreshAccessToken, 1800 * 1000);
 setTimeout(refreshTwitchTokens, 1000);
 setInterval(refreshTwitchTokens, 10000 * 1000);
 
+const test = async () => {
+  try {
+    console.log(await currentlyPlaying("simplywojtek"));
+  } catch(err) {console.log(err)}
+};
+
+test();
+
 const client = new MongoClient(
   `mongodb+srv://${process.env.MONGODB}&w=majority`,
   {
@@ -26,20 +33,19 @@ const client = new MongoClient(
 );
 
 client.connect(err => {
-  if(err) {
-    console.log("Error with connect to database")
-    refreshAccessToken
-  }else {
-    console.log("Database connected!")
+  if (err) {
+    console.log("Error with connect to database");
+    refreshAccessToken;
+  } else {
+    console.log("Database connected!");
   }
-
 });
 
 const fastify = require("fastify")({
   logger: true
 });
 fastify.register(require("fastify-cors"));
-fastify.register(require('./routes'));
+fastify.register(require("./routes"));
 
 fastify.listen(process.env.PORT, function(err, address) {
   if (err) {

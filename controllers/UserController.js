@@ -3,9 +3,9 @@ require("../models/User");
 
 const User = mongoose.model("user");
 
-const addUser = (newUserData) => {
+const addUser = newUserData => {
   const newUser = new User(newUserData);
-  newUser.save()
+  newUser.save();
 };
 
 const getAllUser = async () => {
@@ -26,20 +26,15 @@ const getUser = async user => {
   }
 };
 
-
-const updateUser = async (
-user
-
-) => {
+const updateUser = async user => {
   try {
-
-    return await User.findOneAndUpdate(user.streamer, user);
+    return await User.findOneAndUpdate({ streamer: user.streamer }, user);
   } catch (err) {
     console.log(`Error while updating user ${err}`);
   }
 };
 const deleteUser = data => {
-  User.findByIdAndDelete(data.streamer);
+  User.findByIdAndDelete({ streamer: data.streamer });
 };
 
 module.exports = { addUser, getUser, getAllUser, updateUser };
