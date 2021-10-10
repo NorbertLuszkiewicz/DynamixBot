@@ -40,7 +40,7 @@ const commands = () =>
       }
     }
 
-    if (command == "playlist" || command == "playlista") {
+    if (command == "playlist" || command == "playlista") { 
       try {
         const spotifyData = await currentlyPlaying(extra.channel);
 

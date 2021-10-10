@@ -1,4 +1,4 @@
-const { refreshAccessToken, setTimeoutVolume, currentlyPlaying } = require("./spotify");
+const { refreshAccessToken, setTimeoutVolume } = require("./spotify");
 const {
   setTimeoutVolume: setTimeoutVolumeStreamElements
 } = require("./streamElements");
@@ -15,14 +15,6 @@ setTimeout(refreshAccessToken, 1000);
 setInterval(refreshAccessToken, 1800 * 1000);
 setTimeout(refreshTwitchTokens, 1000);
 setInterval(refreshTwitchTokens, 10000 * 1000);
-
-const test = async () => {
-  try {
-    console.log(await currentlyPlaying("simplywojtek"));
-  } catch(err) {console.log(err)}
-};
-
-test();
 
 const client = new MongoClient(
   `mongodb+srv://${process.env.MONGODB}&w=majority`,
