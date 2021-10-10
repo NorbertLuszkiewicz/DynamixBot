@@ -3,45 +3,7 @@ require("../models/User");
 
 const User = mongoose.model("user");
 
-const addUser = ({
-    streamer,
-    twitchAccessToken,
-    twitchRefreshToken,
-    spotifyRefreshToken,
-    spotifyAccessToken,
-    device,
-    code,
-    clientSongRequestID,
-    clientSongRequestSecret,
-    addSongID,
-    skipSongID,
-    volumeSongID,
-    maxVolumeTime,
-    timeoutVolume,
-    timeCooldownTravis,
-    timeCooldownOg1ii,
-    endTime
-  }) => {
-  const newUserData = {
-    streamer,
-    twitchAccessToken,
-    twitchRefreshToken,
-    spotifyRefreshToken,
-    spotifyAccessToken,
-    device,
-    code,
-    clientSongRequestID,
-    clientSongRequestSecret,
-    addSongID,
-    skipSongID,
-    volumeSongID,
-    maxVolumeTime,
-    timeoutVolume,
-    timeCooldownTravis,
-    timeCooldownOg1ii,
-    endTime
-  };
-
+const addUser = (newUserData) => {
   const newUser = new User(newUserData);
   newUser.save()
 };
