@@ -28,49 +28,12 @@ const getUser = async user => {
 
 
 const updateUser = async (
-  {
-    streamer,
-    twitchAccessToken,
-    twitchRefreshToken,
-    spotifyRefreshToken,
-    spotifyAccessToken,
-    device,
-    code,
-    clientSongRequestID,
-    clientSongRequestSecret,
-    addSongID,
-    skipSongID,
-    volumeSongID,
-    maxVolumeTime,
-    timeoutVolume,
-    timeCooldownTravis,
-    timeCooldownOg1ii,
-    endTime
-  },
-  res
+user
+
 ) => {
   try {
-    const updatedUserData = {
-    streamer,
-    twitchAccessToken,
-    twitchRefreshToken,
-    spotifyRefreshToken,
-    spotifyAccessToken,
-    device,
-    code,
-    clientSongRequestID,
-    clientSongRequestSecret,
-    addSongID,
-    skipSongID,
-    volumeSongID,
-    maxVolumeTime,
-    timeoutVolume,
-    timeCooldownTravis,
-    timeCooldownOg1ii,
-    endTime
-  };
 
-    return await User.findOneAndUpdate({ streamer }, updatedUserData);
+    return await User.findOneAndUpdate(user.streamer, user);
   } catch (err) {
     console.log(`Error while updating user ${err}`);
   }
