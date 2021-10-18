@@ -10,7 +10,7 @@ const { twitchCommands } = require("./twitch/index.js");
 
 const { getUserTFT } = require("./riot/riot.js");
 
-getUserTFT()
+getUserTFT("dynam1x1")
 
 
 //Initial functions
