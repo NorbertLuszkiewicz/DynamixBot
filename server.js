@@ -7,6 +7,9 @@ const path = require("path");
 const { twitchCommands } = require("./twitch/index.js");
 const { MongoClient } = require("mongodb");
 
+const { matchListTft } = require("./riot.riot.js");
+
+
 //Initial functions
 twitchCommands();
 setTimeoutVolume();
