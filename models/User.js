@@ -94,7 +94,11 @@ const UserSchema = new Schema({
     type: String,
     default: null,
     unique: true
-  }
+  },  
+  matchList: {
+    type: Array,
+    default: null,
+  },
 });
 
 mongoose.model("user", UserSchema);
