@@ -6,7 +6,7 @@ const matchListTft = async () => {
   console.log("asd")
   
   const { response } = await api.Summoner.getByName(
-    "Maxii",
+    "DynaM1X1",
     Constants.Regions.LAT_NORTH
   );
 
