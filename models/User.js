@@ -89,6 +89,11 @@ const UserSchema = new Schema({
     type: Number,
     default: null,
     unique: true
+  } , 
+  puuid: {
+    type: Number,
+    default: null,
+    unique: true
   }
 });
 

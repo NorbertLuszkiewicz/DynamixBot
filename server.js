@@ -8,9 +8,9 @@ const { refreshTwitchTokens } = require("./twitch/twitch.js");
 const { twitchCommands } = require("./twitch/index.js");
 
 
-const { matchListTft } = require("./riot/riot.js");
+const { getUserTFT } = require("./riot/riot.js");
 
-matchListTft()
+getUserTFT()
 
 
 //Initial functions
