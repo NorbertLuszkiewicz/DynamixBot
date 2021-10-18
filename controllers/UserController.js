@@ -33,6 +33,7 @@ const updateUser = async user => {
     console.log(`Error while updating user ${err}`);
   }
 };
+
 const deleteUser = data => {
   User.findByIdAndDelete({ streamer: data.streamer });
 };

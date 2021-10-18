@@ -91,7 +91,7 @@ const UserSchema = new Schema({
     unique: true
   } , 
   puuid: {
-    type: Number,
+    type: String,
     default: null,
     unique: true
   }

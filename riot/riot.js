@@ -16,7 +16,6 @@ const getUserTFT = async streamer => {
     puuid: response.puuid
   });
 
-  console.log(response);
 };
 
 module.exports = { getUserTFT };
