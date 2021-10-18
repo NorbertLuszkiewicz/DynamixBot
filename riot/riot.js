@@ -3,6 +3,8 @@ const { TftApi, Constants } = require("twisted");
 const api = new TftApi();
 
 const matchListTft = async () => {
+  console.log("asd")
+  
   const { response } = await api.Summoner.getByName(
     "Maxii",
     Constants.Regions.LAT_NORTH
@@ -12,3 +14,5 @@ const matchListTft = async () => {
 
   return api.Match.list(response.puuid, Constants.RegionGroups.AMERICAS);
 };
+
+module.exports = {matchListTft}

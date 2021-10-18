@@ -1,13 +1,16 @@
+const path = require("path");
+const { MongoClient } = require("mongodb");
 const { refreshAccessToken, setTimeoutVolume } = require("./spotify");
 const {
   setTimeoutVolume: setTimeoutVolumeStreamElements
 } = require("./streamElements");
 const { refreshTwitchTokens } = require("./twitch/twitch.js");
-const path = require("path");
 const { twitchCommands } = require("./twitch/index.js");
-const { MongoClient } = require("mongodb");
 
-const { matchListTft } = require("./riot.riot.js");
+
+const { matchListTft } = require("./riot/riot.js");
+
+matchListTft()
 
 
 //Initial functions
