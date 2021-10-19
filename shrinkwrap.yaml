@@ -13,6 +13,7 @@ dependencies:
   node-fetch: 2.6.5
   point-of-view: 4.15.2
   spotify-web-api-node: 5.0.2
+  twisted: 1.46.3
   xmlhttprequest: 1.8.0
 packages:
   /@fastify/ajv-compiler/1.1.0:
@@ -94,6 +95,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-XW2CMCmZaCmCCsIaJaLKxAzPwF37fXi1KGxNOvedOpeisLdmxZnblGc3hpHWYnlP+KOUxZsazh43WXNHgXpbqw==
+  /axios/0.21.4:
+    dependencies:
+      follow-redirects: 1.14.4
+    dev: false
+    resolution:
+      integrity: sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==
   /axios/0.22.0:
     dependencies:
       follow-redirects: 1.14.4
@@ -160,6 +167,10 @@ packages:
     dev: false
     resolution:
       integrity: sha512-7O+FbCihrB5WGbFYesctwmTKae6rOiIzmz1icreWJ+0aA7LJfuqhEso2T9ncpcFtzMQtzXf2QGGueWJGTYsqrA==
+  /camelcasejs/1.0.3:
+    dev: false
+    resolution:
+      integrity: sha512-jzRiwgTNJ9CjkpwJSutEzzQqUaINaOphl2rlm5/ejTA3bI7zrwWucCt4nqqtz/goOYgMlfpv9aG8uCK6o5ssdw==
   /combined-stream/1.0.8:
     dependencies:
       delayed-stream: 1.0.0
@@ -259,6 +270,12 @@ packages:
     dev: false
     resolution:
       integrity: sha1-l4hXRCxEdJ5CBmE+N5RiBYJqvYA=
+  /dotenv/8.6.0:
+    dev: false
+    engines:
+      node: '>=10'
+    resolution:
+      integrity: sha512-IrPdXQsk2BbzvCBGBOTmmSH5SodmqZNt4ERAZDmW4CT+tL8VtvinqywuANaFu4bOMWki16nqf0e4oC0QIaDr/g==
   /ee-first/1.1.1:
     dev: false
     resolution:
@@ -578,6 +595,10 @@ packages:
       node: '>= 0.6'
     resolution:
       integrity: sha512-ZTTX0MWrsQ2ZAhA1cejAwDLycFsd7I7nVtnkT3Ol0aqodaKW+0CTZDQ1uBv5whptCnc8e8HeRRJxRs0kmm/Qfw==
+  /http-status-codes/1.4.0:
+    dev: false
+    resolution:
+      integrity: sha512-JrT3ua+WgH8zBD3HEJYbeEgnuQaAnUeRRko/YojPAJjGmIfGD3KPU/asLdsLwKjfxOmQe5nXMQ0pt/7MyapVbQ==
   /iconv-lite/0.4.24:
     dependencies:
       safer-buffer: 2.1.2
@@ -642,6 +663,10 @@ packages:
       node: '>=6'
     resolution:
       integrity: sha512-7AO748wWnIhNqAuaty2ZWHkQHRSNfPVIsPIfwEOWO22AmaoVrWavlOcMR5nzTLNYvp36X220/maaRsrec1G65A==
+  /lodash/4.17.21:
+    dev: false
+    resolution:
+      integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
   /lru-cache/6.0.0:
     dependencies:
       yallist: 4.0.0
@@ -904,6 +929,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-4HH/lJRBx8dzFjK5EiK+m459Bkw85GDuRnbk9qnxjQfUg0HYADQvJU73lLxZlHO2G4f9KvslOoTbdBx51mlDdg==
+  /promise-queue/2.2.5:
+    dev: false
+    engines:
+      node: '>= 0.8.0'
+    resolution:
+      integrity: sha1-L29ffA9tCBCelnZZx5uIqe1ek7Q=
   /proxy-addr/2.0.7:
     dependencies:
       forwarded: 0.2.0
@@ -1187,6 +1218,20 @@ packages:
       node: '>=8'
     resolution:
       integrity: sha512-15Ih7phfcdP5YxqiB+iDtLoaTz4Nd35+IiAv0kQ5FNKHzXgdWqPoTIqEDDJmXceQt4JZk6lVPT8lnDlPpGDppw==
+  /twisted/1.46.3:
+    dependencies:
+      axios: 0.21.4
+      camelcasejs: 1.0.3
+      dotenv: 8.6.0
+      http-status-codes: 1.4.0
+      lodash: 4.17.21
+      promise-queue: 2.2.5
+      uuid: 8.3.2
+    dev: false
+    engines:
+      node: '>=8.6.0'
+    resolution:
+      integrity: sha512-ZVdcRToMj5ide28BL96yWmBCVtnO0Radx0+WyEfq3VXb9t1xmCiIomBLcvUQH7QeON2cgrA1DAxw5NMEU4SJgA==
   /type-is/1.6.18:
     dependencies:
       media-typer: 0.3.0
@@ -1226,6 +1271,11 @@ packages:
       node: '>= 0.4.0'
     resolution:
       integrity: sha1-n5VxD1CiZ5R7LMwSR0HBAoQn5xM=
+  /uuid/8.3.2:
+    dev: false
+    hasBin: true
+    resolution:
+      integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==
   /vary/1.1.2:
     dev: false
     engines:
@@ -1309,4 +1359,5 @@ specifiers:
   node-fetch: ^2.6.1
   point-of-view: ^4.14.0
   spotify-web-api-node: ^5.0.2
+  twisted: ^1.46.3
   xmlhttprequest: ^1.8.0
