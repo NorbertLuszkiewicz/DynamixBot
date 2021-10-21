@@ -1,6 +1,7 @@
 const path = require("path");
 const { MongoClient } = require("mongodb");
-const pino = require("pino");
+const pino = require('pino')
+const logger = pino({level: 'error'}, './logs/error.log');
 const fastify = require("fastify")({
   logger: true
 });
@@ -12,7 +13,7 @@ const { refreshTwitchTokens } = require("./twitch/twitch.js");
 const { twitchCommands } = require("./twitch/index.js");
 const { getUserTFT } = require("./riot/riot.js");
 
-const logger = require('pino')( pino.destination('/logs/combined.log'))
+
 
 //Initial functions
 twitchCommands();

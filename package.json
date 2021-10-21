@@ -19,6 +19,7 @@
     "mongodb": "^4.1.2",
     "mongoose": "^6.0.8",
     "node-fetch": "^2.6.1",
+    "pino": "^7.0.3",
     "point-of-view": "^4.14.0",
     "spotify-web-api-node": "^5.0.2",
     "twisted": "^1.46.3",
