@@ -1,17 +1,18 @@
 const path = require("path");
 const { MongoClient } = require("mongodb");
+const pino = require("pino");
+const fastify = require("fastify")({
+  logger: true
+});
 const { refreshAccessToken, setTimeoutVolume } = require("./spotify");
 const {
   setTimeoutVolume: setTimeoutVolumeStreamElements
 } = require("./streamElements");
 const { refreshTwitchTokens } = require("./twitch/twitch.js");
 const { twitchCommands } = require("./twitch/index.js");
-
-
 const { getUserTFT } = require("./riot/riot.js");
 
-
-
+const logger = require('pino')( pino.destination('/logs/combined.log'))
 
 //Initial functions
 twitchCommands();
@@ -39,9 +40,6 @@ client.connect(err => {
   }
 });
 
-const fastify = require("fastify")({
-  logger: true
-});
 fastify.register(require("fastify-cors"));
 fastify.register(require("./routes"));
 
