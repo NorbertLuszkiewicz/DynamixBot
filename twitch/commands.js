@@ -33,7 +33,7 @@ const commands = () =>
             ComfyJS.Say(`@${user} ${title} | ${autor} ${url}`, extra.channel);
         }
       } catch (err) {
-        console.log(`Error when use !song on twitch (${err})`);
+        fastify.log.info('Something important happened!')(`Error when use !song on twitch (${err})`);
       }
     }
 
