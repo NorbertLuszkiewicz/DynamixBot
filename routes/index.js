@@ -66,7 +66,7 @@ fastify.get("/callback", async (req, res) => {
           `https://dynamix-bot.pl/?error${callback ? callback.status : 400}`
         );
   } catch {
-    console.log("Error when redirect with spotify data");
+    fastify.log.error("Error when redirect with spotify data");
     res.redirect(`https://dynamix-bot.pl/?error${400}`);
   }
 });
@@ -83,7 +83,7 @@ fastify.get("/register", async (req, res) => {
         )
       : res.send("Something went wrong");
   } catch {
-    console.log("Error when redirect with twitch data");
+    fastify.log.error("Error when redirect with twitch data");
   }
 });
 
@@ -109,7 +109,7 @@ fastify.get("/account", async (req, res) => {
       });
     }
   } catch {
-    console.log("Error when get account");
+    fastify.log.error("Error when get account");
     res.status(400).send({
       message: "Not Found"
     });
@@ -131,7 +131,7 @@ fastify.put("/streamelements", async (req, res) => {
       clientSongRequestSecret: token
     });
   } catch {
-    console.log("Error when get account");
+    fastify.log.error("Error when get account");
     res.status(400).send({
       message: "Something went wrong"
     });
@@ -165,7 +165,7 @@ fastify.put("/volumeaward", async (req, res) => {
       }
     });
   } catch {
-    console.log("Error when get account");
+    fastify.log.error("Error when get account");
     res.status(400).send({
       message: "Something went wrong"
     });
