@@ -11,7 +11,7 @@ const commands = () =>
         const { isPlayingNow, title, link } = songPlayingNow(extra.channel);
 
         if (isPlayingNow) {
-          ComfyJS.Say("@" + user + " " + title + " " + link, extra.channel);
+          ComfyJS.Say(`@${user} ${title} ${link}`, extra.channel);
         } else {
           let url = spotifyData.item.external_urls.spotify
             ? spotifyData.item.external_urls.spotify
@@ -30,17 +30,14 @@ const commands = () =>
           }
 
           spotifyData &&
-            ComfyJS.Say(
-              "@" + user + " " + title + " | " + autor + " " + url,
-              extra.channel
-            );
+            ComfyJS.Say(`@${user} ${title} | ${autor} ${url}`, extra.channel);
         }
       } catch (err) {
         console.log(`Error when use !song on twitch (${err})`);
       }
     }
 
-    if (command == "playlist" || command == "playlista") { 
+    if (command == "playlist" || command == "playlista") {
       try {
         const spotifyData = await currentlyPlaying(extra.channel);
 
@@ -72,17 +69,17 @@ const commands = () =>
       try {
         const { temp, speed, description } = await getWeather(message);
         let emote = "";
-        
+
         {
-          bezchmurnie: ":sunn:"
-          pochmurnie: "🌤️"
+          bezchmurnie: ":sunn:";
+          pochmurnie: "🌤️";
         }
 
-        description == "bezchmurnie" && (emote = "☀️")
-        description == "pochmurnie" && (emote = "🌤️")
-        description == "zachmurzenie umiarkowane" && (emote = "🌥️")
-        description == "zachmurzenie duże" && (emote = "☁️")
-        description == "umiarkowane opady deszczu" && (emote = "🌧️")
+        description == "bezchmurnie" && (emote = "☀️");
+        description == "pochmurnie" && (emote = "🌤️");
+        description == "zachmurzenie umiarkowane" && (emote = "🌥️");
+        description == "zachmurzenie duże" && (emote = "☁️");
+        description == "umiarkowane opady deszczu" && (emote = "🌧️");
 
         temp
           ? ComfyJS.Say(
