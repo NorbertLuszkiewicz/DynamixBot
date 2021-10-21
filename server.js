@@ -1,9 +1,8 @@
 const path = require("path");
 const { MongoClient } = require("mongodb");
-const pino = require('pino')
-const logger = pino({level: 'error'}, './logs/error.log');
 const fastify = require("fastify")({
-  logger: true
+  logger: {file: "./logs/combined"}
+  
 });
 const { refreshAccessToken, setTimeoutVolume } = require("./spotify");
 const {
@@ -13,15 +12,13 @@ const { refreshTwitchTokens } = require("./twitch/twitch.js");
 const { twitchCommands } = require("./twitch/index.js");
 const { getUserTFT } = require("./riot/riot.js");
 
-
-
 //Initial functions
 twitchCommands();
 setTimeoutVolume();
 setTimeoutVolumeStreamElements();
-setTimeout(refreshAccessToken, 1000);
+
 setInterval(refreshAccessToken, 1800 * 1000);
-setTimeout(refreshTwitchTokens, 1000);
+
 setInterval(refreshTwitchTokens, 10000 * 1000);
 
 const client = new MongoClient(
@@ -38,6 +35,8 @@ client.connect(err => {
     refreshAccessToken;
   } else {
     console.log("Database connected!");
+    refreshAccessToken();
+    refreshTwitchTokens();
   }
 });
 
