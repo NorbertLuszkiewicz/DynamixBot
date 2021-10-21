@@ -1,7 +1,8 @@
 const path = require("path");
 const { MongoClient } = require("mongodb");
+const logger = require('pino')('./logs/combined')
 const fastify = require("fastify")({
-  logger: {level: 'info', file: "./logs/combined"} 
+  logger
 });
 const { refreshAccessToken, setTimeoutVolume } = require("./spotify");
 const {
