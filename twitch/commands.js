@@ -21,7 +21,6 @@ const commands = () =>
             : "Nieznany tytuł utworu";
           let autor = "";
           if (
-            spotifyData.item.artists.length < 4 &&
             spotifyData.item.artists.length > 0
           ) {
             spotifyData.item.artists.forEach(artist => {
