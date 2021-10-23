@@ -4,7 +4,6 @@ const { updateUser, getUser } = require("../controllers/UserController.js");
 const api = new TftApi();
 
 const getUserTFT = async streamer => {
-  console.log("asd");
 
   const { response } = await api.Summoner.getByName(
     "DynaM1X1",
@@ -18,7 +17,7 @@ const getUserTFT = async streamer => {
 
 };
 const tftMatchList = async streamer => {
-  console.log("asd");
+
   const {puuid} = await getUser(streamer)
   
   const data = await api.Match.list(puuid, Constants.Regions.EU_EAST)
