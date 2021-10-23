@@ -1,4 +1,4 @@
-const fastify = require("fastify")({logger: true});
+const fastify = require("fastify")({ logger: true });
 const path = require("path");
 const {
   addSpotify,
@@ -10,167 +10,187 @@ const {
 const { getUser, updateUser } = require("../controllers/UserController.js");
 const { addNewUser, refreshTwitchTokens } = require("../twitch/twitch.js");
 
+async function routes(fastify, options) {
+  fastify.get("/", function(req, res) {
+    res.send("");
+  });
 
+  fastify.get("/spotify", (req, res) => {
+    const scopes = [
+      "ugc-image-upload",
+      "user-read-playback-state",
+      "user-modify-playback-state",
+      "user-read-currently-playing",
+      "streaming",
+      "app-remote-control",
+      "user-read-email",
+      "user-read-private",
+      "playlist-read-collaborative",
+      "playlist-modify-public",
+      "playlist-read-private",
+      "playlist-modify-private",
+      "user-library-modify",
+      "user-library-read",
+      "user-top-read",
+      "user-read-playback-position",
+      "user-read-recently-played",
+      "user-follow-read",
+      "user-follow-modify"
+    ];
 
+    res.redirect(
+      `https://accounts.spotify.com/authorize?response_type=code&client_id=${
+        process.env.CLIENT_ID
+      }&scope=${encodeURIComponent(
+        scopes
+      )}&redirect_uri=${`https://dynamix-bot.glitch.me/callback`}&state=${
+        req.query.user
+      }`
+    );
+  });
 
-async function routes(fastify, options){
-fastify.get("/", function(req, res) {
-  res.send("")
-});
+  fastify.get("/callback", async (req, res) => {
+    const error = req.query.error;
+    const code = req.query.code;
+    const user = req.query.state;
 
-fastify.get("/spotify", (req, res) => {
-  const scopes = [
-    "ugc-image-upload",
-    "user-read-playback-state",
-    "user-modify-playback-state",
-    "user-read-currently-playing",
-    "streaming",
-    "app-remote-control",
-    "user-read-email",
-    "user-read-private",
-    "playlist-read-collaborative",
-    "playlist-modify-public",
-    "playlist-read-private",
-    "playlist-modify-private",
-    "user-library-modify",
-    "user-library-read",
-    "user-top-read",
-    "user-read-playback-position",
-    "user-read-recently-played",
-    "user-follow-read",
-    "user-follow-modify"
-  ];
+    try {
+      const callback = await addSpotify(user, code);
 
-  res.redirect(
-    `https://accounts.spotify.com/authorize?response_type=code&client_id=${
-      process.env.CLIENT_ID
-    }&scope=${encodeURIComponent(
-      scopes
-    )}&redirect_uri=${`https://dynamix-bot.glitch.me/callback`}&state=${
-      req.query.user
-    }`
-  );
-});
+      callback == "success"
+        ? res.redirect(`https://dynamix-bot.pl/dashboard`)
+        : res.redirect(
+            `https://dynamix-bot.pl/?error${callback ? callback.status : 400}`
+          );
+    } catch {
+      fastify.log.error("Error when redirect with spotify data");
+      res.redirect(`https://dynamix-bot.pl/?error${400}`);
+    }
+  });
 
-fastify.get("/callback", async (req, res) => {
-  const error = req.query.error;
-  const code = req.query.code;
-  const user = req.query.state;
+  fastify.get("/register", async (req, res) => {
+    const code = req.query.code;
 
-  try {
-    const callback = await addSpotify(user, code);
+    try {
+      const callback = await addNewUser(code);
 
-    callback == "success"
-      ? res.redirect(`https://dynamix-bot.pl/dashboard`)
-      : res.redirect(
-          `https://dynamix-bot.pl/?error${callback ? callback.status : 400}`
-        );
-  } catch {
-    fastify.log.error("Error when redirect with spotify data");
-    res.redirect(`https://dynamix-bot.pl/?error${400}`);
-  }
-});
+      callback.status == "success"
+        ? res.redirect(
+            `https://dynamix-bot.pl/dashboard?name=${callback.name}&token=${callback.token}`
+          )
+        : res.send("Something went wrong");
+    } catch {
+      fastify.log.error("Error when redirect with twitch data");
+    }
+  });
 
-fastify.get("/register", async (req, res) => {
-  const code = req.query.code;
+  fastify.get("/account", async (req, res) => {
+    res.header("Access-Control-Allow-Origin", "https://dynamix-bot.pl");
+    res.header("Access-Control-Allow-Methods", "GET");
 
-  try {
-    const callback = await addNewUser(code);
+    const name = req.query.name;
+    const token = req.query.token;
 
-    callback.status == "success"
-      ? res.redirect(
-          `https://dynamix-bot.pl/dashboard?name=${callback.name}&token=${callback.token}`
-        )
-      : res.send("Something went wrong");
-  } catch {
-    fastify.log.error("Error when redirect with twitch data");
-  }
-});
+    try {
+      const [user] = await getUser(name);
 
-fastify.get("/account", async (req, res) => {
-  res.header("Access-Control-Allow-Origin", "https://dynamix-bot.pl");
-  res.header("Access-Control-Allow-Methods", "GET");
-
-  const name = req.query.name;
-  const token = req.query.token;
-
-  try {
-    const [user] = await getUser(name);
-
-    if (user) {
-      user.twitchAccessToken === token
-        ? res.send(user)
-        : res.status(401).send({
-            message: "Unauthorized"
-          });
-    } else {
-      res.status(404).send({
-        message: "This user dosn't exist"
+      if (user) {
+        user.twitchAccessToken === token
+          ? res.send(user)
+          : res.status(401).send({
+              message: "Unauthorized"
+            });
+      } else {
+        res.status(404).send({
+          message: "This user dosn't exist"
+        });
+      }
+    } catch {
+      fastify.log.error("Error when get account");
+      res.status(400).send({
+        message: "Not Found"
       });
     }
-  } catch {
-    fastify.log.error("Error when get account");
-    res.status(400).send({
-      message: "Not Found"
-    });
-  }
-});
+  });
 
-fastify.put("/streamelements", async (req, res) => {
-  res.header("Access-Control-Allow-Origin", "https://dynamix-bot.pl");
-  res.header("Access-Control-Allow-Methods", "PUT");
+  fastify.put("/streamelements", async (req, res) => {
+    res.header("Access-Control-Allow-Origin", "https://dynamix-bot.pl");
+    res.header("Access-Control-Allow-Methods", "PUT");
 
-  const clientID = req.body.clientID;
-  const token = req.body.token;
-  const user = req.body.user;
+    const clientID = req.body.clientID;
+    const token = req.body.token;
+    const user = req.body.user;
 
-  try {
-    await updateUser({
-      streamer: user,
-      clientSongRequestID: clientID,
-      clientSongRequestSecret: token
-    });
-  } catch {
-    fastify.log.error("Error when get account");
-    res.status(400).send({
-      message: "Something went wrong"
-    });
-  }
-});
+    try {
+      await updateUser({
+        streamer: user,
+        clientSongRequestID: clientID,
+        clientSongRequestSecret: token
+      });
+    } catch {
+      fastify.log.error("Error when get account");
+      res.status(400).send({
+        message: "Something went wrong"
+      });
+    }
+  });
 
-fastify.put("/volumeaward", async (req, res) => {
-  res.header("Access-Control-Allow-Origin", "https://dynamix-bot.pl");
-  res.header("Access-Control-Allow-Methods", "PUT");
+  fastify.put("/volumeaward", async (req, res) => {
+    res.header("Access-Control-Allow-Origin", "https://dynamix-bot.pl");
+    res.header("Access-Control-Allow-Methods", "PUT");
 
-  const min = req.body.min;
-  const max = req.body.max;
-  const minSR = req.body.minSR;
-  const maxSR = req.body.maxSR;
-  const time = req.body.time;
-  const user = req.body.user;
+    const min = req.body.min;
+    const max = req.body.max;
+    const minSR = req.body.minSR;
+    const maxSR = req.body.maxSR;
+    const time = req.body.time;
+    const user = req.body.user;
 
-  try {
-    const [data] = await getUser(user);
-    const id = data.volumeSongID ? data.volumeSongID.id : "";
+    try {
+      const [data] = await getUser(user);
+      const id = data.volumeSongID ? data.volumeSongID.id : "";
 
-    await updateUser({
-      streamer: user,
-      volumeSongID: {
-        id,
-        min,
-        max,
-        minSR,
-        maxSR,
-        time
-      }
-    });
-  } catch {
-    fastify.log.error("Error when get account");
-    res.status(400).send({
-      message: "Something went wrong"
-    });
-  }
-});
+      await updateUser({
+        streamer: user,
+        volumeSongID: {
+          id,
+          min,
+          max,
+          minSR,
+          maxSR,
+          time
+        }
+      });
+    } catch {
+      fastify.log.error("Error when get account");
+      res.status(400).send({
+        message: "Something went wrong"
+      });
+    }
+  });
+
+  fastify.put("/riot", async (req, res) => {
+    res.header("Access-Control-Allow-Origin", "https://dynamix-bot.pl");
+    res.header("Access-Control-Allow-Methods", "PUT");
+
+    const name = req.body.name;
+    const server = req.body.server;
+    const user = req.body.user;
+
+    try {
+      const [data] = await getUser(user);
+
+      await updateUser({
+        streamer: user,
+        riotAccountList: [...data.riotAccountList, {name, server}]
+      });
+    } catch {
+      fastify.log.error("Error when add riot account");
+      res.status(400).send({
+        message: "Something went wrong"
+      });
+    }
+  });
 }
 
-module.exports = routes
+module.exports = routes;
