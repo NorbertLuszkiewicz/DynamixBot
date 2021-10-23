@@ -58,7 +58,9 @@ const checkActiveRiotAccount = async () => {
       streamer.riotAccountList.forEach(async ({ name, server }) => {
         const { response } = await api.Summoner.getByName(name, server);
         
-        const getActiveRiotAccount =  
+        const now = new Date();
+        
+        const getActiveRiotAccount = now - response.revisionDate < 1000*180
 
         await updateUser({
           streamer,
