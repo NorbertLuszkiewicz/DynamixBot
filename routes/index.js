@@ -9,6 +9,7 @@ const {
 } = require("../spotify");
 const { getUser, updateUser } = require("../controllers/UserController.js");
 const { addNewUser, refreshTwitchTokens } = require("../twitch/twitch.js");
+const { addTftUser } = require("../riot/riot.js");
 
 async function routes(fastify, options) {
   fastify.get("/", function(req, res) {
@@ -178,16 +179,8 @@ async function routes(fastify, options) {
     const user = req.body.user;
 
     try {
-      const [data] = await getUser(user);
+      addTftUser(name, server, user)
 
-      const newRiotAccountList = data.riotAccountList
-        ? [...data.riotAccountList, { name, server }]
-        : [{ name, server }];
-
-      await updateUser({
-        streamer: user,
-        riotAccountList: newRiotAccountList
-      });
     } catch {
       fastify.log.error("Error when add riot account");
       res.status(400).send({

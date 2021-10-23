@@ -3,25 +3,24 @@ const { updateUser, getUser } = require("../controllers/UserController.js");
 
 const api = new TftApi();
 
-const getUserTFT = async streamer => {
+const addTftUser = async (name, server, streamer) => {
+  const [data] = await getUser(streamer);
 
-  const { response } = await api.Summoner.getByName(
-    "DynaM1X1",
-    Constants.Regions.EU_EAST
-  );
+  const { response } = await api.Summoner.getByName(name, server);
+
+  const newRiotAccountList = data.riotAccountList
+    ? [...data.riotAccountList, { name, server, puuid: response.puuid }]
+    : [{ name, server, puuid: response.puuid }];
 
   await updateUser({
-    streamer: streamer,
-    puuid: response.puuid
+    streamer,
+    riotAccountList: newRiotAccountList
   });
-
 };
 const tftMatchList = async streamer => {
+  const [data] = await getUser(streamer);
 
-  const {puuid} = await getUser(streamer)
-  
-  const data = await api.Match.list(puuid, Constants.Regions.EU_EAST)
-
+  const matchList = await api.Match.list(data, Constants.Regions.EU_EAST);
 };
 
-module.exports = { getUserTFT };
+module.exports = { addTftUser, tftMatchList };
