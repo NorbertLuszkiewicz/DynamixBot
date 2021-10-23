@@ -11,7 +11,7 @@ const { refreshTwitchTokens } = require("./twitch/twitch.js");
 const { twitchCommands } = require("./twitch/index.js");
 const { tftMatchList } = require("./riot/riot.js");
 
-tftMatchList()
+tftMatchList("dynam1x1")
 
 //Initial functions
 twitchCommands();
