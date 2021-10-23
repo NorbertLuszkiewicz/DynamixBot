@@ -65,20 +65,21 @@ const checkActiveRiotAccount = async () => {
           const today = Date.parse(
             `${now.getMonth() + 1}, ${now.getDate()}, ${now.getFullYear()} UTC`
           );
-          console.log(lastMatch[0].info.game_datetime);
+
           const lastGameIsToday =
             lastMatch[0].info && lastMatch[0].info.game_datetime - today < 0;
-
+          
           if (
             lastGameIsToday &&
-            lastMatch[0].info.game_datetime > streamer.activeRiotAccount.date
+            lastMatch[0].info.game_datetime >
+              (streamer.activeRiotAccount ? streamer.activeRiotAccount.date : 0)
           ) {
             await updateUser({
               streamer,
               activeRiotAccount: {
                 name,
                 server,
-                date: lastMatch.info.game_datetime
+                date: lastMatch[0].info.game_datetime
               }
             });
           }
