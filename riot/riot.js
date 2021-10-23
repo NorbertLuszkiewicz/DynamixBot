@@ -42,4 +42,36 @@ const tftMatchList = async streamer => {
   
 };
 
+const checkActiveRiotAccount = async ()=>{
+    try {
+    const streamers = await getAllUser();
+
+    streamers.forEach(async streamer => {
+      if (streamer.streamer != "og1ii" && streamer.spotifyRefreshToken) {
+        const body = `grant_type=refresh_token&refresh_token=${streamer.spotifyRefreshToken}&client_id=${clientId}`;
+
+        const { data } = await axios.post(`${TOKEN}`, body, {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            Authorization: `Basic ${Buffer.from(
+              clientId + ":" + clientSecret
+            ).toString("base64")}`
+          }
+        });
+
+        await updateUser({
+          streamer: streamer.streamer,
+          spotifyAccessToken: data.access_token,
+          spotifyRefreshToken: data.refresh_token
+        });
+      }
+    });
+    console.log("reset spotify token");
+  } catch ({ response }) {
+    console.log(
+      `Error while resetting Spotify token (${response.status} ${response.statusText})`
+    );
+  }
+}
+
 module.exports = { addTftUser, tftMatchList };
