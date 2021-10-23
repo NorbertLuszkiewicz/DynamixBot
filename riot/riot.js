@@ -37,17 +37,18 @@ const addTftUser = async (name, server, streamer) => {
 const tftMatchList = async streamer => {
   const [data] = await getUser(streamer);
 
-  //     data.riotAccountList.forEach( async({puuid, server})=>{
+
   //       const matchList = await api.Match.listWithDetails(puuid, region[server], {count: 10});
 
   //       const now = new Date();
-
   //       const today = Date.parse(`${now.getMonth()+1}, ${now.getDate()}, ${now.getFullYear()} UTC`)
 
-  //       const todayMatchList = ""
+  //       const todayMatchList = matchList.map((match)=>{
+  //          return match
+//})
 
   //       console.log(matchList)
-  //     })
+
 };
 
 const checkActiveRiotAccount = async () => {
@@ -66,8 +67,8 @@ const checkActiveRiotAccount = async () => {
         const today = Date.parse(
           `${now.getMonth() + 1}, ${now.getDate()}, ${now.getFullYear()} UTC`
         );
-
-        const lastGameIsToday = lastMatch.info.game_datetime - today < 0;
+        
+        const lastGameIsToday = lastMatch.info && lastMatch.info.game_datetime - today < 0;
 
         if (
           lastGameIsToday &&
@@ -84,10 +85,10 @@ const checkActiveRiotAccount = async () => {
         }
       });
     });
-    console.log("reset spotify token");
+    console.log("reset last games in tft");
   } catch ({ response }) {
     console.log(
-      `Error while resetting Spotify token (${response.status} ${response.statusText})`
+      `Error while resetting last games in tft (${response.status} ${response.statusText})`
     );
   }
 };
