@@ -3,6 +3,13 @@ const { updateUser, getUser } = require("../controllers/UserController.js");
 
 const api = new TftApi();
 
+const region = {
+  EUW1: "EUROPE",
+  EUN1: "EUROPE",
+  NA1: "AMERICAS",
+  KR: "ASIA",
+}
+
 const addTftUser = async (name, server, streamer) => {
   const [data] = await getUser(streamer);
 
@@ -21,7 +28,7 @@ const tftMatchList = async streamer => {
   const [data] = await getUser(streamer);
   
   data.riotAccountList.forEach( async({puuid, server})=>{
-    const matchList = await api.Match.list(puuid, server);
+    const matchList = await api.Match.list(puuid, region[server]); 
     
     const today = ""
     
