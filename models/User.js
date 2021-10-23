@@ -100,7 +100,7 @@ const UserSchema = new Schema({
     default: [],
   },
   activeRiotAccount: {
-    type: {name: String, server: String, date: Number},
+    type: {name: String, server: String, date: Number, puuid: String},
     default: null,
   },  
   matchList: {

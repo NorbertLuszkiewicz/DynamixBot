@@ -39,13 +39,21 @@ const tftMatchList = async streamer => {
   const [data] = await getUser(streamer);
 
   if (data) {
-    //       const matchList = await api.Match.listWithDetails(puuid, region[server], {count: 10});
-    //       const now = new Date();
-    //       const today = Date.parse(`${now.getMonth()+1}, ${now.getDate()}, ${now.getFullYear()} UTC`)
-    //       const todayMatchList = matchList.map((match)=>{
-    //          if(match.info.game_datetime > today){return match}
-    //       })
-    //       console.log(matchList)
+          const matchList = await api.Match.listWithDetails(
+            data.activeRiotAccount.puuid,
+            region[data.activeRiotAccount.server],
+            { count: 10 }
+          );
+          const now = new Date();
+          const today = Date.parse(
+            `${now.getMonth() + 1}, ${now.getDate()}, ${now.getFullYear()} UTC`
+          );
+          const todayMatchList = matchList.map(match => { 
+            if (match.info.game_datetime > today) {
+              return match;
+            }
+          });
+          console.log(todayMatchList);
   }
 };
 const checkActiveRiotAccount = async () => {
@@ -74,11 +82,13 @@ const checkActiveRiotAccount = async () => {
             lastMatch[0].info.game_datetime >
               (streamer.activeRiotAccount ? streamer.activeRiotAccount.date : 0)
           ) {
+            console.log(puuid)
             await updateUser({
               streamer: streamer.streamer,
               activeRiotAccount: {
                 name,
                 server,
+                puuid,
                 date: lastMatch[0].info.game_datetime
               }
             });
