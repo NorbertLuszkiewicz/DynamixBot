@@ -177,12 +177,8 @@ async function routes(fastify, options) {
     const server = req.body.server;
     const user = req.body.user;
 
-    console.log([{ name, server }], "aaaa");
-
     try {
       const [data] = await getUser(user);
-      
-      console.log(data.riotAccountList, "aaa2")
 
       const newRiotAccountList = data.riotAccountList
         ? [...data.riotAccountList, { name, server }]
