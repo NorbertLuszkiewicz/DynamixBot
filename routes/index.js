@@ -176,6 +176,8 @@ async function routes(fastify, options) {
     const name = req.body.name;
     const server = req.body.server;
     const user = req.body.user;
+    
+    console.log(name,server,user, "aaaa")
 
     try {
       const [data] = await getUser(user);
