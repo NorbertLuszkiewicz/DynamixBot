@@ -97,10 +97,10 @@ const UserSchema = new Schema({
   },  
   riotAccountList: {
     type: Array,
-    default: null,
+    default: [],
   },  matchList: {
     type: Array,
-    default: null,
+    default: [],
   },
 });
 

@@ -176,15 +176,21 @@ async function routes(fastify, options) {
     const name = req.body.name;
     const server = req.body.server;
     const user = req.body.user;
-    
-    console.log(name,server,user, "aaaa")
+
+    console.log([{ name, server }], "aaaa");
 
     try {
       const [data] = await getUser(user);
+      
+      console.log(data.riotAccountList, "aaa2")
+
+      const newRiotAccountList = data.riotAccountList
+        ? [...data.riotAccountList, { name, server }]
+        : [{ name, server }];
 
       await updateUser({
         streamer: user,
-        riotAccountList: [...data.riotAccountList, {name, server}]
+        riotAccountList: newRiotAccountList
       });
     } catch {
       fastify.log.error("Error when add riot account");
