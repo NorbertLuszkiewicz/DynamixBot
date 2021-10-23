@@ -48,13 +48,16 @@ const tftMatchList = async streamer => {
           const today = Date.parse(
             `${now.getMonth() + 1}, ${now.getDate()}, ${now.getFullYear()} UTC`
           );
-          const todayMatchList = matchList.map(match => { 
+          const todayMatchList = matchList.filter(match => { 
             if (match.info.game_datetime > today) {
               return match;
             }
           });
-          console.log(todayMatchList);
+          console.log(matchList);
+    
   }
+  
+  return "nie zagrał dzisiaj żadnej gry"
 };
 const checkActiveRiotAccount = async () => {
   try {
@@ -82,7 +85,7 @@ const checkActiveRiotAccount = async () => {
             lastMatch[0].info.game_datetime >
               (streamer.activeRiotAccount ? streamer.activeRiotAccount.date : 0)
           ) {
-            console.log(puuid)
+
             await updateUser({
               streamer: streamer.streamer,
               activeRiotAccount: {
