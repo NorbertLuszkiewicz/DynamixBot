@@ -49,13 +49,22 @@ const tftMatchList = async streamer => {
             `${now.getMonth() + 1}, ${now.getDate()}, ${now.getFullYear()} UTC`
           );
           const todayMatchList = matchList.filter(match => { 
-            if (match.info.game_datetime > today) {
+            if (match.info.game_datetime > today) { //
               return match;
             }
           });
-          
-    
-        myBoard =
+      
+      let matchListTwitch = ""
+      
+      todayMatchList.forEach((match)=>{
+        const myBoard = match.info.participants.find(( item )=>{
+          return item.puuid === data.activeRiotAccount.puuid
+        })
+        
+        console.log(myBoard) 
+      })
+      
+       
     
   }
   
