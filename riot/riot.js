@@ -53,11 +53,13 @@ const tftMatchList = async streamer => {
               return match;
             }
           });
-          console.log(matchList);
+          
+    
+        myBoard =
     
   }
   
-  return "nie zagrał dzisiaj żadnej gry"
+  return "nie zagrał dzisiaj żadnej gry" 
 };
 const checkActiveRiotAccount = async () => {
   try {
