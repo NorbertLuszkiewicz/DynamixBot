@@ -38,12 +38,12 @@ const tftMatchList = async streamer => {
   const [data] = await getUser(streamer);
 
 //     data.riotAccountList.forEach( async({puuid, server})=>{
-//       const matchList = await api.Match.listWithDetails(puuid, region[server], {count: 1});
+//       const matchList = await api.Match.listWithDetails(puuid, region[server], {count: 10});
 
 //       const now = new Date();
 
 //       const today = Date.parse(`${now.getMonth()+1}, ${now.getDate()}, ${now.getFullYear()} UTC`)
-
+ 
 //       const todayMatchList = ""
 
 //       console.log(matchList)
@@ -59,8 +59,9 @@ const checkActiveRiotAccount = async () => {
         const lastMatch = await api.Match.listWithDetails(puuid, region[server], {count: 1});
         
         const now = new Date();
+        const today = Date.parse(`${now.getMonth()+1}, ${now.getDate()}, ${now.getFullYear()} UTC`)
         
-        const getActiveRiotAccount = now - lastMatch.revisionDate < 1000*180
+        const lastGameIs =  lastMatch.info.game_datetime - today < 0
 
         await updateUser({
           streamer,
