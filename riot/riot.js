@@ -19,8 +19,18 @@ const addTftUser = async (name, server, streamer) => {
 };
 const tftMatchList = async streamer => {
   const [data] = await getUser(streamer);
+  
+  data.riotAccountList.forEach( async({puuid, server})=>{
+    const matchList = await api.Match.list(puuid, server);
+    
+    const today = ""
+    
+    const todayMatchList = ""
+    
+    console.log(matchList)
+  })
 
-  const matchList = await api.Match.list(data, Constants.Regions.EU_EAST);
+  
 };
 
 module.exports = { addTftUser, tftMatchList };
