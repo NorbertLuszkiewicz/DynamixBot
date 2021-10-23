@@ -28,13 +28,13 @@ const tftMatchList = async streamer => {
   const [data] = await getUser(streamer);
   
   data.riotAccountList.forEach( async({puuid, server})=>{
-    const matchList = await api.Match.list(puuid, region[server]); 
+    const matchList = await api.Match.listWithDetails(puuid, region[server], {count: 10});
     
     const today = ""
     
     const todayMatchList = ""
     
-    console.log(matchList)
+    console.log(matchList) 
   })
 
   
