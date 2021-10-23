@@ -75,7 +75,7 @@ const checkActiveRiotAccount = async () => {
               (streamer.activeRiotAccount ? streamer.activeRiotAccount.date : 0)
           ) {
             await updateUser({
-              streamer,
+              streamer: streamer.streamer,
               activeRiotAccount: {
                 name,
                 server,
