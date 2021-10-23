@@ -18,7 +18,7 @@ const addTftUser = async (name, server, streamer) => {
   const [data] = await getUser(streamer);
 
   const existThisAccount = data.riotAccountList.find(
-    riotAccount => riotAccount.name == name
+    riotAccount => riotAccount.name == name && riotAccount.server == server
   );
 
   if (!existThisAccount) {
@@ -55,8 +55,15 @@ const checkActiveRiotAccount = async () => {
     const streamers = await getAllUser();
 
     streamers.forEach(async streamer => {
-      await updateUser({
-        streamer
+      streamer.riotAccountList.forEach(async ({ name, server }) => {
+        const { response } = await api.Summoner.getByName(name, server);
+        
+        const getActiveRiotAccount =  
+
+        await updateUser({
+          streamer,
+          activeRiotAccount: 
+        });
       });
     });
     console.log("reset spotify token");
