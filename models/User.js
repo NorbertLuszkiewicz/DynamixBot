@@ -98,7 +98,12 @@ const UserSchema = new Schema({
   riotAccountList: {
     type: Array,
     default: [],
-  },  matchList: {
+  },
+  activeRiotAccount: {
+    type: {name: String, server: String, date: Number},
+    default: null,
+  },  
+  matchList: {
     type: Array,
     default: [],
   },

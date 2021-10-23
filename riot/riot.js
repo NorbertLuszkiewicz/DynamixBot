@@ -37,17 +37,17 @@ const addTftUser = async (name, server, streamer) => {
 const tftMatchList = async streamer => {
   const [data] = await getUser(streamer);
 
-//     data.riotAccountList.forEach( async({puuid, server})=>{
-//       const matchList = await api.Match.listWithDetails(puuid, region[server], {count: 10});
+  //     data.riotAccountList.forEach( async({puuid, server})=>{
+  //       const matchList = await api.Match.listWithDetails(puuid, region[server], {count: 10});
 
-//       const now = new Date();
+  //       const now = new Date();
 
-//       const today = Date.parse(`${now.getMonth()+1}, ${now.getDate()}, ${now.getFullYear()} UTC`)
- 
-//       const todayMatchList = ""
+  //       const today = Date.parse(`${now.getMonth()+1}, ${now.getDate()}, ${now.getFullYear()} UTC`)
 
-//       console.log(matchList)
-//     })
+  //       const todayMatchList = ""
+
+  //       console.log(matchList)
+  //     })
 };
 
 const checkActiveRiotAccount = async () => {
@@ -55,18 +55,33 @@ const checkActiveRiotAccount = async () => {
     const streamers = await getAllUser();
 
     streamers.forEach(async streamer => {
-      streamer.riotAccountList.forEach(async ({ puuid, server }) => {
-        const lastMatch = await api.Match.listWithDetails(puuid, region[server], {count: 1});
-        
-        const now = new Date();
-        const today = Date.parse(`${now.getMonth()+1}, ${now.getDate()}, ${now.getFullYear()} UTC`)
-        
-        const lastGameIs =  lastMatch.info.game_datetime - today < 0
+      streamer.riotAccountList.forEach(async ({ puuid, server, name }) => {
+        const lastMatch = await api.Match.listWithDetails(
+          puuid,
+          region[server],
+          { count: 1 }
+        );
 
-        await updateUser({
-          streamer,
-          activeRiotAccount: ""
-        });
+        const now = new Date();
+        const today = Date.parse(
+          `${now.getMonth() + 1}, ${now.getDate()}, ${now.getFullYear()} UTC`
+        );
+
+        const lastGameIsToday = lastMatch.info.game_datetime - today < 0;
+
+        if (
+          lastGameIsToday &&
+          lastMatch.info.game_datetime > streamer.activeRiotAccount.date
+        ) {
+          await updateUser({
+            streamer,
+            activeRiotAccount: {
+              name,
+              server,
+              date: lastMatch.info.game_datetime
+            }
+          });
+        }
       });
     });
     console.log("reset spotify token");
@@ -77,4 +92,4 @@ const checkActiveRiotAccount = async () => {
   }
 };
 
-module.exports = { addTftUser, tftMatchList };
+module.exports = { addTftUser, tftMatchList, checkActiveRiotAccount };
