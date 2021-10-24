@@ -61,10 +61,11 @@ const tftMatchList = async streamer => {
           return item.puuid === data.activeRiotAccount.puuid
         })
         
-        const traits = 
+        const traits = myBoard.traits.sort((a,b) => a.num_units > b.num_units) 
         
         matchListTwitch = matchListTwitch + `${index+1}.[Top${myBoard.placement}]`   
         console.log(myBoard)  
+        console.log(traits)  
       })
       
        
