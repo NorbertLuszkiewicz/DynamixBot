@@ -54,7 +54,7 @@ const tftMatchList = async streamer => {
       }
     });
   
-  if (todayMatchList) {
+  if (todayMatchList.length > 0) {
 
     let matchListTwitch = `dzisiejsze gierki: `;
 
