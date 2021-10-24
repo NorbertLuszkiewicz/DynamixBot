@@ -60,6 +60,9 @@ const tftMatchList = async streamer => {
         const myBoard = match.info.participants.find(( item )=>{
           return item.puuid === data.activeRiotAccount.puuid
         })
+        
+        const traits = 
+        
         matchListTwitch = matchListTwitch + `${index+1}.[Top${myBoard.placement}]`   
         console.log(myBoard)  
       })
