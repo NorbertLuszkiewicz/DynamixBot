@@ -49,13 +49,13 @@ const tftMatchList = async streamer => {
       `${now.getMonth() + 1}, ${now.getDate()}, ${now.getFullYear()} UTC`
     );
     const todayMatchList = matchList.filter(match => {
-      if (match.info.game_datetime === data.activeRiotAccount.date) {
+      if (match.info.game_datetime > 0) {
         // === data.activeRiotAccount.date   ------ > today
         return match;
       }
     });
 
-    let matchListTwitch = `${streamer.streamer} zagrał dziś:`;
+    let matchListTwitch = `dzisiejsze gierki: `;
 
     todayMatchList.forEach((match, index) => {
       const myBoard = match.info.participants.find(item => {
@@ -72,7 +72,7 @@ const tftMatchList = async streamer => {
           traits[1].num_units
         }${traits[1].name.substr(5)}|${
           traits[2].num_units
-        }${traits[2].name.substr(5)}`;
+        }${traits[2].name.substr(5)} `;
     });
 
     return matchListTwitch

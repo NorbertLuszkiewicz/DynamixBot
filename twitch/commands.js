@@ -1,5 +1,6 @@
 const ComfyJS = require("comfy.js");
 const { getWeather } = require("./twitch");
+const { tftMatchList } = require("../riot/riot.js");
 const { currentlyPlaying, nextSong } = require("../spotify");
 const { songPlayingNow, timeRequest } = require("../streamElements");
 
@@ -56,15 +57,11 @@ const commands = () =>
     
     if (command == "matches" || command == "mecze") {
       try {
-        const spotifyData = await tftMatchList(extra.channel);
+        const matchesList = await tftMatchList(extra.channel);
 
-        let url = spotifyData.context
-          ? spotifyData.context.external_urls.spotify
-          : "Nieznana Playlista";
 
-        spotifyData &&
           ComfyJS.Say(
-            `@${user} aktualnie leci ta playlista: ${url} catJAM `,
+            `${matchesList}`,
             extra.channel
           );
       } catch (err) {
