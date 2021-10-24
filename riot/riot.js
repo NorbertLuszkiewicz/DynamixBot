@@ -39,40 +39,46 @@ const tftMatchList = async streamer => {
   const [data] = await getUser(streamer);
 
   if (data) {
-          const matchList = await api.Match.listWithDetails(
-            data.activeRiotAccount.puuid,
-            region[data.activeRiotAccount.server],
-            { count: 10 }
-          );
-          const now = new Date();
-          const today = Date.parse(
-            `${now.getMonth() + 1}, ${now.getDate()}, ${now.getFullYear()} UTC`
-          );
-          const todayMatchList = matchList.filter(match => { 
-            if (match.info.game_datetime === data.activeRiotAccount.date) { // === data.activeRiotAccount.date   ------ > today
-              return match;
-            }
-          });
-      
-      let matchListTwitch = ""
-      
-      todayMatchList.forEach((match, index)=>{
-        const myBoard = match.info.participants.find(( item )=>{
-          return item.puuid === data.activeRiotAccount.puuid
-        })
-        
-        const traits = myBoard.traits.sort((a,b) => b.num_units - a.num_units)
-        
-        matchListTwitch = matchListTwitch + `${index+1}_[Top${myBoard.placement}]${traits[0].num_units}-${traits[0].name.substr(5)}|${traits[1].num_units}-${traits[1].name.substr(5)}|${traits[2].num_units}-${traits[2].name.substr(5)}`   
-        console.log(myBoard)  
-        console.log(traits)  
-      })
-      
-       
-    console.log(matchListTwitch, "test")
+    const matchList = await api.Match.listWithDetails(
+      data.activeRiotAccount.puuid,
+      region[data.activeRiotAccount.server],
+      { count: 10 }
+    );
+    const now = new Date();
+    const today = Date.parse(
+      `${now.getMonth() + 1}, ${now.getDate()}, ${now.getFullYear()} UTC`
+    );
+    const todayMatchList = matchList.filter(match => {
+      if (match.info.game_datetime === data.activeRiotAccount.date) {
+        // === data.activeRiotAccount.date   ------ > today
+        return match;
+      }
+    });
+
+    let matchListTwitch = `${streamer.streamer} zagrał dziś:`;
+
+    todayMatchList.forEach((match, index) => {
+      const myBoard = match.info.participants.find(item => {
+        return item.puuid === data.activeRiotAccount.puuid;
+      });
+
+      const traits = myBoard.traits.sort((a, b) => b.num_units - a.num_units);
+
+      matchListTwitch =
+        matchListTwitch +
+        `${index + 1}[Top${myBoard.placement}]${
+          traits[0].num_units
+        }${traits[0].name.substr(5)}|${
+          traits[1].num_units
+        }${traits[1].name.substr(5)}|${
+          traits[2].num_units
+        }${traits[2].name.substr(5)}`;
+    });
+
+    return matchListTwitch
   }
-  
-  return "nie zagrał dzisiaj żadnej gry" 
+
+  return "nie zagrał dzisiaj żadnej gry";
 };
 const checkActiveRiotAccount = async () => {
   try {
@@ -94,13 +100,12 @@ const checkActiveRiotAccount = async () => {
 
           const lastGameIsToday =
             lastMatch[0].info && lastMatch[0].info.game_datetime - today < 0;
-          
+
           if (
             lastGameIsToday &&
             lastMatch[0].info.game_datetime >
               (streamer.activeRiotAccount ? streamer.activeRiotAccount.date : 0)
           ) {
-
             await updateUser({
               streamer: streamer.streamer,
               activeRiotAccount: {

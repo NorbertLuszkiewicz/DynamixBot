@@ -53,6 +53,24 @@ const commands = () =>
         console.log(`Error when use !playlist on twitch (${err})`);
       }
     }
+    
+    if (command == "matches" || command == "mecze") {
+      try {
+        const spotifyData = await tftMatchList(extra.channel);
+
+        let url = spotifyData.context
+          ? spotifyData.context.external_urls.spotify
+          : "Nieznana Playlista";
+
+        spotifyData &&
+          ComfyJS.Say(
+            `@${user} aktualnie leci ta playlista: ${url} catJAM `,
+            extra.channel
+          );
+      } catch (err) {
+        console.log(`Error when use !playlist on twitch (${err})`);
+      }
+    }
 
     if (command == "next" && (flags.mod || flags.broadcaster)) {
       const { isPlayingNow } = songPlayingNow(extra.channel);
