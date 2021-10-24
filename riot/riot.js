@@ -64,7 +64,7 @@ const tftMatchList = async streamer => {
 
       const traits = myBoard.traits.sort((a, b) => b.num_units - a.num_units);
       
-     const emote = ["kezmanEZ","kezmanGlad", "kezmanGlad", "kezmanGlad", "kezmanWTF ", "kezmanWTF ", "kezmanWTF ", "kezmanWrr"]
+     const emote = ["EZ","kezmanGlad", "kezmanGlad", "kezmanGlad", "Sadge ", "Sadge ", "Sadge ", "kezmanWrr"]
 
       matchListTwitch =
         matchListTwitch +
