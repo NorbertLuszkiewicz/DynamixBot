@@ -38,7 +38,7 @@ const addTftUser = async (name, server, streamer) => {
 const tftMatchList = async streamer => {
   const [data] = await getUser(streamer);
 
-  if (data) {
+  
     const matchList = await api.Match.listWithDetails(
       data.activeRiotAccount.puuid,
       region[data.activeRiotAccount.server],
@@ -49,11 +49,12 @@ const tftMatchList = async streamer => {
       `${now.getMonth() + 1}, ${now.getDate()}, ${now.getFullYear()} UTC`
     );
     const todayMatchList = matchList.filter(match => {
-      if (match.info.game_datetime > 0) {
-        // === data.activeRiotAccount.date   ------ > today
+      if (match.info.game_datetime > today) {
         return match;
       }
     });
+  
+  if (todayMatchList) {
 
     let matchListTwitch = `dzisiejsze gierki: `;
 
@@ -63,8 +64,17 @@ const tftMatchList = async streamer => {
       });
 
       const traits = myBoard.traits.sort((a, b) => b.num_units - a.num_units);
-      
-     const emote = ["EZ","kezmanGlad", "kezmanGlad", "kezmanGlad", "Sadge ", "Sadge ", "Sadge ", "kezmanWrr"]
+
+      const emote = [
+        "EZ",
+        "kezmanGlad",
+        "kezmanGlad",
+        "kezmanGlad",
+        "Sadge ",
+        "Sadge ",
+        "Sadge ",
+        "kezmanWrr"
+      ];
 
       matchListTwitch =
         matchListTwitch +
@@ -77,11 +87,12 @@ const tftMatchList = async streamer => {
         }${traits[2].name.substr(5)} ${emote[myBoard.placement - 1]} `;
     });
 
-    return matchListTwitch
+    return matchListTwitch;
   }
 
-  return "nie zagrał dzisiaj żadnej gry";
+  return `${streamer} nie zagrał dzisiaj żadnej gry` ;
 };
+
 const checkActiveRiotAccount = async () => {
   try {
     const streamers = await getAllUser();
