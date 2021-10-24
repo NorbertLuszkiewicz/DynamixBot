@@ -63,6 +63,8 @@ const tftMatchList = async streamer => {
       });
 
       const traits = myBoard.traits.sort((a, b) => b.num_units - a.num_units);
+      
+  
 
       matchListTwitch =
         matchListTwitch +

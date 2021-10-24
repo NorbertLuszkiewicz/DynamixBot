@@ -11,8 +11,6 @@ const { refreshTwitchTokens } = require("./twitch/twitch.js");
 const { twitchCommands } = require("./twitch/index.js");
 const { tftMatchList, checkActiveRiotAccount } = require("./riot/riot.js");
 
-tftMatchList("dynam1x1")
-
 //Initial functions
 twitchCommands();
 setTimeoutVolume();
