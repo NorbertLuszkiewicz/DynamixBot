@@ -49,7 +49,7 @@ const tftMatchList = async streamer => {
             `${now.getMonth() + 1}, ${now.getDate()}, ${now.getFullYear()} UTC`
           );
           const todayMatchList = matchList.filter(match => { 
-            if (match.info.game_datetime > today) { // data.activeRiotAccount.date   ------ today
+            if (match.info.game_datetime > today) { // === data.activeRiotAccount.date   ------ > today
               return match;
             }
           });
@@ -60,7 +60,7 @@ const tftMatchList = async streamer => {
         const myBoard = match.info.participants.find(( item )=>{
           return item.puuid === data.activeRiotAccount.puuid
         })
-        
+                
         console.log(myBoard) 
       })
       
