@@ -59,6 +59,7 @@ const tftMatchList = async streamer => {
     let matchListTwitch = `dzisiejsze gierki: `;
 
     todayMatchList.forEach((match, index) => {
+      console.log(match)
       const myBoard = match.info.participants.find(item => {
         return item.puuid === data.activeRiotAccount.puuid;
       });
