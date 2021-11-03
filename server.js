@@ -9,7 +9,8 @@ const {
 } = require("./streamElements");
 const { refreshTwitchTokens } = require("./twitch/twitch.js");
 const { twitchCommands } = require("./twitch/index.js");
-const { tftMatchList, checkActiveRiotAccount } = require("./riot/riot.js");
+const { tftMatchList, checkActiveRiotAccount,addTftUser } = require("./riot/riot.js");
+
 
 //Initial functions
 twitchCommands();
