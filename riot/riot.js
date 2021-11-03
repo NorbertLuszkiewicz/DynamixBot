@@ -94,6 +94,10 @@ const tftMatchList = async streamer => {
   return `${streamer} nie zagrał dzisiaj żadnej gry` ;
 };
 
+const getMatch = async () => {
+  
+}
+
 const checkActiveRiotAccount = async () => {
   try {
     const streamers = await getAllUser();
