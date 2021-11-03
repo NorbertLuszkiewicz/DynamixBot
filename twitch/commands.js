@@ -65,7 +65,7 @@ const commands = () =>
             extra.channel
           );
       } catch (err) {
-        console.log(`Error when use !playlist on twitch (${err})`);
+        console.log(`Error when use !mecze on twitch (${err})`);
       }
     }
 
