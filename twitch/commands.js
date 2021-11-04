@@ -66,6 +66,17 @@ const commands = () =>
           );
       } catch (err) {
         console.log(`Error when use !mecze on twitch (${err})`);
+          
+    if ((command == "match" || command == "mecz") && parseInt(message) > 0 && parseInt(message) < 11 ) {
+      try {
+        const match = await getMatch(message ,extra.channel);
+
+          ComfyJS.Say(
+            `aaaa`,
+            extra.channel
+          );
+      } catch (err) {
+        console.log(`Error when use !mecze on twitch (${err})`);
       }
     }
 

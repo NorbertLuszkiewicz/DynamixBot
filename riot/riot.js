@@ -94,14 +94,21 @@ const tftMatchList = async streamer => {
   return `${streamer} nie zagrał dzisiaj żadnej gry` ;
 };
 
-const getMatch = async (streamer) => {
+const getMatch = async (number, streamer) => {
   const [data] = await getUser(streamer);
   
-      const matchList = await api.Match.listWithDetails(
+      const matchList = await api.Match.list(
       data.activeRiotAccount.puuid,
       region[data.activeRiotAccount.server],
       { count: 10 }
     );
+  
+    const matchDetails = await api.Match.get(
+      matchList[number - 1],
+      region[data.activeRiotAccount.server],
+    )
+    
+    console.log(matchDetails)
 }
 
 const checkActiveRiotAccount = async () => {
@@ -151,4 +158,4 @@ const checkActiveRiotAccount = async () => {
   }
 };
 
-module.exports = { addTftUser, tftMatchList, checkActiveRiotAccount };
+module.exports = { addTftUser, tftMatchList, checkActiveRiotAccount, getMatch };
