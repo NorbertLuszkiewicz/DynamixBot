@@ -109,6 +109,7 @@ const getMatch = async (number, streamer) => {
     )
     
     console.log(matchDetails)
+  return matchDetails
 }
 
 const checkActiveRiotAccount = async () => {
