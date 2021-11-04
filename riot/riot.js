@@ -133,7 +133,7 @@ const getMatch = async (number, streamer) => {
       if(unit.items.length > 0){
         items = []
         
-        unit.items.forEach(item => items = `${items}`)
+        unit.items.forEach(item => items.push(item))
       }
       
     message = message + `${unit.tier}*${unit.character_id.substr(5)}${items}, `;
@@ -189,5 +189,7 @@ const checkActiveRiotAccount = async () => {
     );
   }
 };
+
+const itemIdToName = []
 
 module.exports = { addTftUser, tftMatchList, checkActiveRiotAccount, getMatch };
