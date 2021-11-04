@@ -138,10 +138,8 @@ const getMatch = async (number, streamer) => {
           items.push(itemIdToName[item]);
         }
       });
-      
-      console.log(items, itemIdToName[27])
-      
-      items.length = 0 && (items = "" )
+
+      items.length === 0 ? (items = "") : (items = `[${items}]`);
     }
 
     message = message + `${unit.tier}*${unit.character_id.substr(5)}${items}, `;
