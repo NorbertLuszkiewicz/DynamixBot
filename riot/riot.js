@@ -38,28 +38,26 @@ const addTftUser = async (name, server, streamer) => {
 const tftMatchList = async streamer => {
   const [data] = await getUser(streamer);
 
-  
-    const matchList = await api.Match.listWithDetails(
-      data.activeRiotAccount.puuid,
-      region[data.activeRiotAccount.server],
-      { count: 10 }
-    );
-    const now = new Date();
-    const today = Date.parse(
-      `${now.getMonth() + 1}, ${now.getDate()}, ${now.getFullYear()} UTC`
-    );
-    const todayMatchList = matchList.filter(match => {
-      if (match.info.game_datetime > today) {
-        return match;
-      }
-    });
-  
-  if (todayMatchList.length > 0) {
+  const matchList = await api.Match.listWithDetails(
+    data.activeRiotAccount.puuid,
+    region[data.activeRiotAccount.server],
+    { count: 10 }
+  );
+  const now = new Date();
+  const today = Date.parse(
+    `${now.getMonth() + 1}, ${now.getDate()}, ${now.getFullYear()} UTC`
+  );
+  const todayMatchList = matchList.filter(match => {
+    if (match.info.game_datetime > today) {
+      return match;
+    }
+  });
 
+  if (todayMatchList.length > 0) {
     let matchListTwitch = `dzisiejsze gierki: `;
 
     todayMatchList.forEach((match, index) => {
-      console.log(match)
+      console.log(match);
       const myBoard = match.info.participants.find(item => {
         return item.puuid === data.activeRiotAccount.puuid;
       });
@@ -91,26 +89,26 @@ const tftMatchList = async streamer => {
     return matchListTwitch;
   }
 
-  return `${streamer} nie zagrał dzisiaj żadnej gry` ;
+  return `${streamer} nie zagrał dzisiaj żadnej gry`;
 };
 
 const getMatch = async (number, streamer) => {
   const [data] = await getUser(streamer);
-  
-      const matchList = await api.Match.list(
-      data.activeRiotAccount.puuid,
-      region[data.activeRiotAccount.server],
-      { count: 10 }
-    );
-  
-    const matchDetails = await api.Match.get(
-      matchList[number - 1],
-      region[data.activeRiotAccount.server],
-    )
-    
-    console.log(matchDetails)
-  return matchDetails
-}
+
+  const { response } = await api.Match.list(
+    data.activeRiotAccount.puuid,
+    region[data.activeRiotAccount.server]
+  );
+  const matchList = response;
+
+  // const matchDetails = await api.Match.get(
+  //   matchList[number - 1],
+  //   region[data.activeRiotAccount.server],
+  // )
+
+  console.log(matchList, matchList[number - 1]);
+  return "matchDetails";
+};
 
 const checkActiveRiotAccount = async () => {
   try {
