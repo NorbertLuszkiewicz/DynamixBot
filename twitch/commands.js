@@ -71,7 +71,7 @@ const commands = () =>
       try {
         const match = await getMatch(parseInt(message), extra.channel);
 
-        ComfyJS.Say(`aaaa`, extra.channel);
+        ComfyJS.Say(match, extra.channel);
       } catch (err) {
         console.log(`Error when use !mecz on twitch (${err})`);
       }

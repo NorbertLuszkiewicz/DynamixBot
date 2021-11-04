@@ -112,14 +112,23 @@ const getMatch = async (number, streamer) => {
 
   const correctTraits = myBoard.traits
     .filter(trait => trait.tier_current > 0)
-    .sort((a, b) => a.num_units - b.num_units);
+    .sort((a, b) => b.num_units - a.num_units); 
+  
+  const correctUnits = myBoard.traits
+    .sort((a, b) => b.items.length - a.items.length)
+    .sort((a, b) => b.tier - a.tier)
+    .sort((a, b) => b.rarity - a.rarity);
 
   let message = `[Top${myBoard.placement}] Level: ${myBoard.level} | `
   
+  correctTraits.forEach(trait => {
+    message = message + `${trait.name.substr(5)}*${trait.num_units}, `
+  })
   
+  message = message + "___________________________________________________"
   
-  console.log(myBoard);
-  return "matchDetails";
+  console.log(correctUnits);
+  return message;
 };
 
 const checkActiveRiotAccount = async () => {
