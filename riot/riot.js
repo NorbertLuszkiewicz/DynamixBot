@@ -191,6 +191,19 @@ const checkActiveRiotAccount = async () => {
 };
 
 const itemIdToName = {
+  601: "AcE",
+  604: "ArE",
+  612: "AsE",
+  626: "ChalE",
+  630: "ChemE",
+  675: "ImE",
+  658: "ME",
+  726: "SE",
+  34: "AS",
+  79: "BC",
+  16: "BT",
+  44: "Blue",
+  55: "BV",
   
 }
 
