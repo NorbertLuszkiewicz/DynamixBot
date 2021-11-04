@@ -112,21 +112,33 @@ const getMatch = async (number, streamer) => {
 
   const correctTraits = myBoard.traits
     .filter(trait => trait.tier_current > 0)
-    .sort((a, b) => b.num_units - a.num_units); 
-  
-  const correctUnits = myBoard.traits
-    .sort((a, b) => b.items.length - a.items.length)
-    .sort((a, b) => b.tier - a.tier)
-    .sort((a, b) => b.rarity - a.rarity);
+    .sort((a, b) => b.num_units - a.num_units);
 
-  let message = `[Top${myBoard.placement}] Level: ${myBoard.level} | `
-  
+  const correctUnits = myBoard.units
+    .sort((a, b) => b.rarity - a.rarity)
+    .sort((a, b) => b.tier - a.tier)
+    .sort((a, b) => b.items.length - a.items.length);
+
+  let message = `[Top${myBoard.placement}] Level: ${myBoard.level} | `;
+
   correctTraits.forEach(trait => {
-    message = message + `${trait.name.substr(5)}*${trait.num_units}, `
-  })
+    message = message + `${trait.name.substr(5)}*${trait.num_units}, `;
+  });
+
+  message = message + "___________________________________________________";
   
-  message = message + "___________________________________________________"
-  
+    correctUnits.forEach(unit => {
+      let items = ""
+      
+      if(unit.items.length > 0){
+        items = []
+        
+        unit.items.forEach(item => items = `${items}`)
+      }
+      
+    message = message + `${unit.tier}*${unit.character_id.substr(5)}${items}, `;
+  });
+
   console.log(correctUnits);
   return message;
 };
