@@ -101,10 +101,10 @@ const getMatch = async (number, streamer) => {
   );
   const matchList = response;
 
-  // const matchDetails = await api.Match.get(
-  //   matchList[number - 1],
-  //   region[data.activeRiotAccount.server],
-  // )
+  const matchDetails = await api.Match.get(
+    matchList[number - 1],
+    region[data.activeRiotAccount.server],
+  )
 
   console.log(matchList, matchList[number - 1]);
   return "matchDetails";
