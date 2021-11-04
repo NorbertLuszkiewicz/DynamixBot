@@ -109,9 +109,15 @@ const getMatch = async (number, streamer) => {
   const myBoard = matchDetails.response.info.participants.find(item => {
     return item.puuid === data.activeRiotAccount.puuid;
   });
-  
-  
 
+  const correctTraits = myBoard.traits
+    .filter(trait => trait.tier_current > 0)
+    .sort((a, b) => a.num_units - b.num_units);
+
+  let message = `[Top${myBoard.placement}] Level: ${myBoard.level} | `
+  
+  
+  
   console.log(myBoard);
   return "matchDetails";
 };
