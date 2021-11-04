@@ -94,8 +94,14 @@ const tftMatchList = async streamer => {
   return `${streamer} nie zagrał dzisiaj żadnej gry` ;
 };
 
-const getMatch = async () => {
+const getMatch = async (streamer) => {
+  const [data] = await getUser(streamer);
   
+      const matchList = await api.Match.listWithDetails(
+      data.activeRiotAccount.puuid,
+      region[data.activeRiotAccount.server],
+      { count: 10 }
+    );
 }
 
 const checkActiveRiotAccount = async () => {
