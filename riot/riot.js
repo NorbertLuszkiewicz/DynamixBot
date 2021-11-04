@@ -103,10 +103,16 @@ const getMatch = async (number, streamer) => {
 
   const matchDetails = await api.Match.get(
     matchList[number - 1],
-    region[data.activeRiotAccount.server],
-  )
+    region[data.activeRiotAccount.server]
+  );
 
-  console.log(matchList, matchList[number - 1]);
+  const myBoard = matchDetails.response.info.participants.find(item => {
+    return item.puuid === data.activeRiotAccount.puuid;
+  });
+  
+  
+
+  console.log(myBoard);
   return "matchDetails";
 };
 
