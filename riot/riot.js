@@ -83,7 +83,7 @@ const tftMatchList = async streamer => {
           traits[1].num_units
         }${traits[1].name.substr(5)}|${
           traits[2].num_units
-        }${traits[2].name.substr(5)} ${emote[myBoard.placement - 1]} `;
+        }${traits[2].name.substr(5)} `;
     });
 
     return matchListTwitch;
