@@ -1,6 +1,6 @@
 const ComfyJS = require("comfy.js");
 const { getWeather } = require("./twitch");
-const { tftMatchList } = require("../riot/riot.js");
+const { tftMatchList, getMatch } = require("../riot/riot.js");
 const { currentlyPlaying, nextSong } = require("../spotify");
 const { songPlayingNow, timeRequest } = require("../streamElements");
 
@@ -21,9 +21,7 @@ const commands = () =>
             ? spotifyData.item.name
             : "Nieznany tytuł utworu";
           let autor = "";
-          if (
-            spotifyData.item.artists.length > 0
-          ) {
+          if (spotifyData.item.artists.length > 0) {
             spotifyData.item.artists.forEach(artist => {
               autor += artist.name + ", ";
             });
@@ -54,29 +52,28 @@ const commands = () =>
         console.log(`Error when use !playlist on twitch (${err})`);
       }
     }
-    
+
     if (command == "matches" || command == "mecze") {
       try {
         const matchesList = await tftMatchList(extra.channel);
 
-
-          ComfyJS.Say(
-            `${matchesList}`,
-            extra.channel
-          );
+        ComfyJS.Say(`${matchesList}`, extra.channel);
       } catch (err) {
         console.log(`Error when use !mecze on twitch (${err})`);
-          
-    if ((command == "match" || command == "mecz") && parseInt(message) > 0 && parseInt(message) < 11 ) {
+      }
+    }
+
+    if (
+      (command == "match" || command == "mecz") &&
+      parseInt(message) > 0 &&
+      parseInt(message) < 11
+    ) {
       try {
-        const match = await getMatch(message ,extra.channel);
+        const match = await getMatch(parseInt(message), extra.channel);
 
-          ComfyJS.Say(
-            `aaaa`,
-            extra.channel
-          );
+        ComfyJS.Say(`aaaa`, extra.channel);
       } catch (err) {
-        console.log(`Error when use !mecze on twitch (${err})`);
+        console.log(`Error when use !mecz on twitch (${err})`);
       }
     }
 
