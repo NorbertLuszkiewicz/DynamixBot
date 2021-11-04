@@ -190,6 +190,8 @@ const checkActiveRiotAccount = async () => {
   }
 };
 
-const itemIdToName = []
+const itemIdToName = {
+  
+}
 
 module.exports = { addTftUser, tftMatchList, checkActiveRiotAccount, getMatch };
