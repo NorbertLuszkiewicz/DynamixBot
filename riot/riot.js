@@ -126,16 +126,24 @@ const getMatch = async (number, streamer) => {
   });
 
   message = message + "___________________________________________________";
-  
-    correctUnits.forEach(unit => {
-      let items = ""
+
+  correctUnits.forEach(unit => {
+    let items = "";
+
+    if (unit.items.length > 0) {
+      items = [];
+
+      unit.items.forEach(item => {
+        if (itemIdToName[item]) {
+          items.push(itemIdToName[item]);
+        }
+      });
       
-      if(unit.items.length > 0){
-        items = []
-        
-        unit.items.forEach(item => items.push(item))
-      }
+      console.log(items, itemIdToName[27])
       
+      items.length = 0 && (items = "" )
+    }
+
     message = message + `${unit.tier}*${unit.character_id.substr(5)}${items}, `;
   });
 
@@ -223,8 +231,19 @@ const itemIdToName = {
   69: "QS",
   33: "Rab",
   22: "RFC",
-  22: "RFC",
-  
-}
+  47: "Rdmp",
+  26: "RH",
+  59: "SoS",
+  14: "Shoj",
+  24: "SS",
+  57: "Sun",
+  88: "FoN",
+  99: "TG",
+  25: "TR",
+  77: "WM",
+  17: "Zeke",
+  67: "Zeph",
+  27: "ZZR"
+};
 
 module.exports = { addTftUser, tftMatchList, checkActiveRiotAccount, getMatch };
