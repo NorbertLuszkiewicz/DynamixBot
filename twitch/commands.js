@@ -10,7 +10,7 @@ const commands = () =>
       try {
         const spotifyData = await currentlyPlaying(extra.channel);
         const { isPlayingNow, title, link } = songPlayingNow(extra.channel);
-
+        console.log(`@${user} ${title} ${link}`)
         if (isPlayingNow) {
           ComfyJS.Say(`@${user} ${title} ${link}`, extra.channel);
         } else {
