@@ -9,8 +9,10 @@ const commands = () =>
     if (command == "song") {
       try {
         const spotifyData = await currentlyPlaying(extra.channel);
-        const { isPlayingNow, title, link } = await songPlayingNow(extra.channel);
-        console.log(`@${user} ${title} ${link}`)
+        const { isPlayingNow, title, link } = await songPlayingNow(
+          extra.channel
+        );
+
         if (isPlayingNow) {
           ComfyJS.Say(`@${user} ${title} ${link}`, extra.channel);
         } else {
