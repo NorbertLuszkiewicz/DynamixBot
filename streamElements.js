@@ -144,6 +144,7 @@ const timeRequest = async (streamer, action) => {
         clearTimeout(timeoutVolume[streamer]);
 
         timeoutVolume[streamer] = setTimeout(async () => {
+          console.log("teraz ")
           playing = await getSpotifyAreaData(streamer, "playing");
 
           !playing && startSong(streamer);
