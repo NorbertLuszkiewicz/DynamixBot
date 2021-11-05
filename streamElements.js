@@ -49,8 +49,14 @@ const songPlayingNow = async streamer => {
   try {
     const player = await getSpotifyAreaData(streamer, "player");
     const playing = await getSpotifyAreaData(streamer, "playing");
-    
-    console.log(player, "player", playing, "aaaa", player.state == "playing" && playing != null)
+
+    console.log(
+      player,
+      "player",
+      playing,
+      "aaaa",
+      player.state == "playing" && playing != null
+    );
 
     return {
       isPlayingNow: player.state == "playing" && playing != null,
@@ -100,12 +106,11 @@ const timeRequest = async (streamer, action) => {
             streamer: streamer,
             endTime: newEndTime + now
           });
-
         } else {
-          let allQueueTimes = 0
-          queue.forEach((song)=> allQueueTimes += song.duration)
-          
-          newEndTime = ( allQueueTimes + playing.duration ) * 1000;
+          let allQueueTimes = 0;
+          queue.forEach(song => (allQueueTimes += song.duration));
+
+          newEndTime = (allQueueTimes + playing.duration) * 1000;
 
           await updateUser({
             streamer: streamer,
