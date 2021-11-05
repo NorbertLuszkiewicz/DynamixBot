@@ -9,7 +9,7 @@ const commands = () =>
     if (command == "song") {
       try {
         const spotifyData = await currentlyPlaying(extra.channel);
-        const { isPlayingNow, title, link } = songPlayingNow(extra.channel);
+        const { isPlayingNow, title, link } = await songPlayingNow(extra.channel);
         console.log(`@${user} ${title} ${link}`)
         if (isPlayingNow) {
           ComfyJS.Say(`@${user} ${title} ${link}`, extra.channel);
@@ -78,7 +78,7 @@ const commands = () =>
     }
 
     if (command == "next" && (flags.mod || flags.broadcaster)) {
-      const { isPlayingNow } = songPlayingNow(extra.channel);
+      const { isPlayingNow } = await songPlayingNow(extra.channel);
       if (isPlayingNow) {
         ComfyJS.Say("!skip", extra.channel);
         timeRequest(extra.channel, "skip");
