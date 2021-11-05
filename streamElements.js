@@ -123,7 +123,7 @@ const timeRequest = async (streamer, action) => {
 
       timeoutVolume[streamer] = setTimeout(async () => {
         playing = await getSpotifyAreaData(streamer, "playing");
-
+console.log("teraz ");
         !playing && startSong(streamer);
       }, newEndTime + 1350 * (queue.length + 3));
     }
@@ -144,9 +144,8 @@ const timeRequest = async (streamer, action) => {
         clearTimeout(timeoutVolume[streamer]);
 
         timeoutVolume[streamer] = setTimeout(async () => {
-          console.log("teraz ")
+          
           playing = await getSpotifyAreaData(streamer, "playing");
-
           !playing && startSong(streamer);
         }, timeOfAllSongs + 1000 * (queue.length + 1));
       } else {
