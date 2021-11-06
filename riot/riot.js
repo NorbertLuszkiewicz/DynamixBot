@@ -41,6 +41,7 @@ const addTftUser = async (name, server, streamer) => {
 const tftMatchList = async (streamer, nickname, server) => {
   const [data] = await getUser(streamer);
   let matchList = "";
+  let puuid = "";
 
   if (nickname) {
     const { response } = await api.Summoner.getByName(
@@ -53,13 +54,14 @@ const tftMatchList = async (streamer, nickname, server) => {
       server ? region[serverNameToServerId[server]] : "EUROPE",
       { count: 10 }
     );
-    
+    puuid = response.puuid;
   } else {
     matchList = await api.Match.listWithDetails(
       data.activeRiotAccount.puuid,
       region[data.activeRiotAccount.server],
       { count: 10 }
     );
+    puuid = data.activeRiotAccount.puuid;
   }
 
   const now = new Date();
@@ -77,10 +79,10 @@ const tftMatchList = async (streamer, nickname, server) => {
 
     todayMatchList.forEach((match, index) => {
       const myBoard = match.info.participants.find(item => {
-        return item.puuid === data.activeRiotAccount.puuid;
+        return item.puuid === puuid;
       });
-      
-      console.log(myBoard)
+
+      console.log(todayMatchList);
 
       const traits = myBoard.traits.sort((a, b) => b.num_units - a.num_units);
 
@@ -171,9 +173,10 @@ const getStats = async (streamer, nickname, server) => {
       server ? serverNameToServerId[server] : "EUW1"
     );
     const userInfo = userData.response[0];
-    message = `statystyki gracza: ${response.name} | ${userInfo.tier}-${userInfo.rank} ${
-      userInfo.leaguePoints
-    }LP ${userInfo.wins}wins ${userInfo.wins + userInfo.losses}games`;
+    message = `statystyki gracza: ${response.name} | ${userInfo.tier}-${
+      userInfo.rank
+    } ${userInfo.leaguePoints}LP ${userInfo.wins}wins ${userInfo.wins +
+      userInfo.losses}games`;
 
     return message;
   } else {
@@ -182,9 +185,11 @@ const getStats = async (streamer, nickname, server) => {
       data.activeRiotAccount.server
     );
     const userInfo = userData.response[0];
-    message = `statystyki gracza: ${data.activeRiotAccount.name} | ${userInfo.tier}-${userInfo.rank} ${
-      userInfo.leaguePoints
-    }LP ${userInfo.wins}wins ${userInfo.wins + userInfo.losses}games`;
+    message = `statystyki gracza: ${data.activeRiotAccount.name} | ${
+      userInfo.tier
+    }-${userInfo.rank} ${userInfo.leaguePoints}LP ${
+      userInfo.wins
+    }wins ${userInfo.wins + userInfo.losses}games`;
     return message;
   }
 };
