@@ -169,18 +169,22 @@ const getStats = async (streamer, nickname, server) => {
       response.id,
       server ? serverNameToServerId[server] : "EUW1"
     );
-    const userInfo = userData.response[0]
-    message = `statystyki ${nickname} |${userInfo.tier}${userInfo.rank} ${userInfo.leaguePoints}LP ${userInfo.wins} wins`
-    
-console.log(userData)
-    return "asd";
+    const userInfo = userData.response[0];
+    message = `statystyki gracza: ${response.name} | ${userInfo.tier}-${userInfo.rank} ${
+      userInfo.leaguePoints
+    }LP ${userInfo.wins}wins ${userInfo.wins + userInfo.losses}games`;
+
+    return message;
   } else {
     const userData = await api.League.get(
       data.activeRiotAccount.id,
       data.activeRiotAccount.server
     );
-  console.log(userData)
-    return "asd";
+    const userInfo = userData.response[0];
+    message = `statystyki gracza: ${data.activeRiotAccount.name} | ${userInfo.tier}-${userInfo.rank} ${
+      userInfo.leaguePoints
+    }LP ${userInfo.wins}wins ${userInfo.wins + userInfo.losses}games`;
+    return message;
   }
 };
 
