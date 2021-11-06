@@ -53,6 +53,7 @@ const tftMatchList = async (streamer, nickname, server) => {
       server ? region[serverNameToServerId[server]] : "EUROPE",
       { count: 10 }
     );
+    
   } else {
     matchList = await api.Match.listWithDetails(
       data.activeRiotAccount.puuid,
@@ -75,10 +76,11 @@ const tftMatchList = async (streamer, nickname, server) => {
     let matchListTwitch = `dzisiejsze gierki: `;
 
     todayMatchList.forEach((match, index) => {
-      console.log(match);
       const myBoard = match.info.participants.find(item => {
         return item.puuid === data.activeRiotAccount.puuid;
       });
+      
+      console.log(myBoard)
 
       const traits = myBoard.traits.sort((a, b) => b.num_units - a.num_units);
 
@@ -152,7 +154,6 @@ const getMatch = async (number, streamer) => {
     message = message + `${unit.tier}*${unit.character_id.substr(5)}${items}, `;
   });
 
-  console.log(correctUnits);
   return message;
 };
 
