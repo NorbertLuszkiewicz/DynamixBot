@@ -37,9 +37,8 @@ const addTftUser = async (name, server, streamer) => {
 
 const tftMatchList = async (streamer, nickname, server) => {
   const [data] = await getUser(streamer);
-
-  let matchList;
-  console.log(nickname, server)
+  let matchList = "";
+  
   if (nickname) {
     const { response } = await api.Summoner.getByName(
       nickname,
@@ -51,6 +50,7 @@ const tftMatchList = async (streamer, nickname, server) => {
       server ? serverNameToServerId[server] : "EUW1",
       { count: 10 }
     );
+    console.log(matchList)
   } else {
     matchList = await api.Match.listWithDetails(
       data.activeRiotAccount.puuid,
