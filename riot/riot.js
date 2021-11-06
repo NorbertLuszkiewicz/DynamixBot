@@ -162,6 +162,8 @@ const getStats = async (streamer, nickname, server) => {
       nickname,
       server ? serverNameToServerId[server] : "EUW1"
     );
+    console.log(response)
+    
     response.puuid
     return "asd";
   } else {
