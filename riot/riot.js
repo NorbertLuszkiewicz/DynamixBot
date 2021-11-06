@@ -25,8 +25,11 @@ const addTftUser = async (name, server, streamer) => {
     const { response } = await api.Summoner.getByName(name, server);
 
     const newRiotAccountList = data.riotAccountList
-      ? [...data.riotAccountList, { name, server, puuid: response.puuid, id:  response.id}]
-      : [{ name, server, puuid: response.puuid, id: response.id}];
+      ? [
+          ...data.riotAccountList,
+          { name, server, puuid: response.puuid, id: response.id }
+        ]
+      : [{ name, server, puuid: response.puuid, id: response.id }];
 
     await updateUser({
       streamer,
@@ -155,21 +158,28 @@ const getMatch = async (number, streamer) => {
 
 const getStats = async (streamer, nickname, server) => {
   const [data] = await getUser(streamer);
-  let userData = "";
+  let message = "";
 
   if (nickname) {
     const { response } = await api.Summoner.getByName(
       nickname,
       server ? serverNameToServerId[server] : "EUW1"
     );
-    console.log(response)
+    const userData = await api.League.get(
+      response.id,
+      server ? serverNameToServerId[server] : "EUW1"
+    );
+    const userInfo = userData.response[0]
+    message = `statystyki ${nickname} | ranga:${userInfo.tier}${userInfo.rank} ${userInfo.}`
     
-    response.puuid
+console.log(userData)
     return "asd";
   } else {
-   data.activeRiotAccount.puuid
-    
-    
+    const userData = await api.League.get(
+      data.activeRiotAccount.id,
+      data.activeRiotAccount.server
+    );
+  console.log(userData)
     return "asd";
   }
 };
@@ -180,29 +190,31 @@ const checkActiveRiotAccount = async () => {
 
     streamers.forEach(async streamer => {
       if (streamer.riotAccountList) {
-        streamer.riotAccountList.forEach(async ({ puuid, server, name, id }) => {
-          const lastMatch = await api.Match.listWithDetails(
-            puuid,
-            region[server],
-            { count: 1 }
-          );
+        streamer.riotAccountList.forEach(
+          async ({ puuid, server, name, id }) => {
+            const lastMatch = await api.Match.listWithDetails(
+              puuid,
+              region[server],
+              { count: 1 }
+            );
 
-          if (
-            lastMatch[0].info.game_datetime >
-            (streamer.activeRiotAccount ? streamer.activeRiotAccount.date : 0)
-          ) {
-            await updateUser({
-              streamer: streamer.streamer,
-              activeRiotAccount: {
-                name,
-                server,
-                puuid,
-                id,
-                date: lastMatch[0].info.game_datetime
-              }
-            });
+            if (
+              lastMatch[0].info.game_datetime >
+              (streamer.activeRiotAccount ? streamer.activeRiotAccount.date : 0)
+            ) {
+              await updateUser({
+                streamer: streamer.streamer,
+                activeRiotAccount: {
+                  name,
+                  server,
+                  puuid,
+                  id,
+                  date: lastMatch[0].info.game_datetime
+                }
+              });
+            }
           }
-        });
+        );
       }
     });
     console.log("reset last games in tft");
