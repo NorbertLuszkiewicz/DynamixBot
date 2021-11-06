@@ -35,7 +35,7 @@ const addTftUser = async (name, server, streamer) => {
   }
 };
 
-const tftMatchList = async streamer => {
+const tftMatchList = async (streamer, nickname, server) => {
   const [data] = await getUser(streamer);
 
   const matchList = await api.Match.listWithDetails(
@@ -43,6 +43,9 @@ const tftMatchList = async streamer => {
     region[data.activeRiotAccount.server],
     { count: 10 }
   );
+  
+  
+  
   const now = new Date();
   const today = Date.parse(
     `${now.getMonth() + 1}, ${now.getDate()}, ${now.getFullYear()} UTC`
