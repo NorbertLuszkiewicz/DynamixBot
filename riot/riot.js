@@ -160,7 +160,7 @@ const getStats = async (streamer, nickname, server) => {
   if (nickname) {
     const { response } = await api.Summoner.getByName(
       nickname,
-      server ? serverNameToServerId[server] : "EUROPE"
+      server ? serverNameToServerId[server] : "EUW1"
     );
     console.log(response);
     return "asd";

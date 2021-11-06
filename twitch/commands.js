@@ -106,7 +106,7 @@ const commands = () =>
 
         ComfyJS.Say(stats, extra.channel);
       } catch (err) {
-        console.log(`Error when use !mecz on twitch (${err})`);
+        console.log(`Error when use !staty on twitch (${err})`);
       }
     }
 
