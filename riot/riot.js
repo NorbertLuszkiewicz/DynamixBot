@@ -154,8 +154,23 @@ const getMatch = async (number, streamer) => {
   return message;
 };
 
-const getStats = async() => {
+const getStats = async(streamer, nickname, server) => {
+    const [data] = await getUser(streamer);
+    const userData = data
   
+    if (nickname) {
+    const { response } = await api.Summoner.getByName(
+      nickname,
+      server ? serverNameToServerId[server] : "EUROPE"
+    );
+  
+
+  } else {
+    const { response } = await api.Summoner.getByName(
+      data.activeRiotAccount.puuid,
+      region[data.activeRiotAccount.server],
+    );
+  }
 }
 
 const checkActiveRiotAccount = async () => {
