@@ -211,11 +211,11 @@ const getRank = async (streamer, server) => {
       user.leaguePoints
     } LP`;
     
-    if(9 < sortedTopRank.length ? index == 9 : index == sortedTopRank.length){
+    if(9 < sortedTopRank.length - 1 ? index == 9 : index == sortedTopRank.length -1){
       return message;
     }
   });
-  
+  return message;
 };
 
 const checkActiveRiotAccount = async () => {
