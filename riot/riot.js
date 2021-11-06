@@ -39,11 +39,11 @@ const tftMatchList = async (streamer, nickname, server) => {
   const [data] = await getUser(streamer);
 
   let matchList;
-
+  console.log(nickname, server)
   if (nickname) {
     const { response } = await api.Summoner.getByName(
       nickname,
-      serverNameToServerId[server]
+      server ? serverNameToServerId[server] : "EUW1"
     );
 
     matchList = await api.Match.listWithDetails(
