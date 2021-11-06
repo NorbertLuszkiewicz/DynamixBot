@@ -156,14 +156,14 @@ const getMatch = async (number, streamer) => {
 
 const getStats = async(streamer, nickname, server) => {
     const [data] = await getUser(streamer);
-    const userData = data
+    let userData 
   
     if (nickname) {
     const { response } = await api.Summoner.getByName(
       nickname,
-      server ? serverNameToServerId[server] : "EUROPE"
+      server ? serverNameToServerId[server] : "EUW1"
     );
-  
+    console.log(response)
 
   } else {
     const { response } = await api.Summoner.getByName(
