@@ -42,15 +42,15 @@ const tftMatchList = async (streamer, nickname, server) => {
   if (nickname) {
     const { response } = await api.Summoner.getByName(
       nickname,
-      server ? serverNameToServerId[server] : "EUW1"
+      server ? serverNameToServerId[server] : "EUROPE"
     );
-    
+
     matchList = await api.Match.listWithDetails(
       response.puuid,
-      server ? region[serverNameToServerId[server]] : "EUW1",
+      server ? region[serverNameToServerId[server]] : "EUROPE",
       { count: 10 }
     );
-    console.log(matchList)
+
   } else {
     matchList = await api.Match.listWithDetails(
       data.activeRiotAccount.puuid,
@@ -94,7 +94,7 @@ const tftMatchList = async (streamer, nickname, server) => {
     return matchListTwitch;
   }
 
-  return `${streamer} nie zagrał dzisiaj żadnej gry`;
+  return `${nickname ? nickname: streamer} nie zagrał dzisiaj żadnej gry`;
 };
 
 const getMatch = async (number, streamer) => {
@@ -153,6 +153,10 @@ const getMatch = async (number, streamer) => {
   console.log(correctUnits);
   return message;
 };
+
+const getStats = async() => {
+  
+}
 
 const checkActiveRiotAccount = async () => {
   try {
