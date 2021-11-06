@@ -1,6 +1,6 @@
 const ComfyJS = require("comfy.js");
 const { getWeather } = require("./twitch");
-const { tftMatchList, getMatch } = require("../riot/riot.js");
+const { tftMatchList, getMatch, getStats } = require("../riot/riot.js");
 const { currentlyPlaying, nextSong } = require("../spotify");
 const { songPlayingNow, timeRequest } = require("../streamElements");
 
@@ -57,9 +57,13 @@ const commands = () =>
 
     if (command == "matches" || command == "mecze") {
       try {
-        const NickNameAndServer = message ? message.split(", ") : [null, null]
-        
-        const matchesList = await tftMatchList(extra.channel, NickNameAndServer[0], NickNameAndServer[1] && NickNameAndServer[1].toUpperCase());
+        const NickNameAndServer = message ? message.split(", ") : [null, null];
+
+        const matchesList = await tftMatchList(
+          extra.channel,
+          NickNameAndServer[0],
+          NickNameAndServer[1] && NickNameAndServer[1].toUpperCase()
+        );
 
         ComfyJS.Say(`${matchesList}`, extra.channel);
       } catch (err) {
@@ -76,6 +80,31 @@ const commands = () =>
         const match = await getMatch(parseInt(message), extra.channel);
 
         ComfyJS.Say(match, extra.channel);
+      } catch (err) {
+        console.log(`Error when use !mecz on twitch (${err})`);
+      }
+    }
+
+    if (command == "next" && (flags.mod || flags.broadcaster)) {
+      const { isPlayingNow } = await songPlayingNow(extra.channel);
+      if (isPlayingNow) {
+        ComfyJS.Say("!skip", extra.channel);
+        timeRequest(extra.channel, "skip");
+      } else {
+        nextSong(extra.channel);
+      }
+    }
+
+    if (command == "stats" || command == "staty") {
+      try {
+        const NickNameAndServer = message ? message.split(", ") : [null, null];
+        const stats = await getStats(
+          extra.channel,
+          NickNameAndServer[0],
+          NickNameAndServer[1] && NickNameAndServer[1].toUpperCase()
+        );
+
+        ComfyJS.Say(stats, extra.channel);
       } catch (err) {
         console.log(`Error when use !mecz on twitch (${err})`);
       }

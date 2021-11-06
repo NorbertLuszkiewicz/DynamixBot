@@ -42,7 +42,7 @@ const tftMatchList = async (streamer, nickname, server) => {
   if (nickname) {
     const { response } = await api.Summoner.getByName(
       nickname,
-      server ? serverNameToServerId[server] : "EUROPE"
+      server ? serverNameToServerId[server] : "EUW1"
     );
 
     matchList = await api.Match.listWithDetails(
@@ -170,6 +170,7 @@ const getStats = async(streamer, nickname, server) => {
       data.activeRiotAccount.puuid,
       region[data.activeRiotAccount.server],
     );
+    console.log(response)
   }
 }
 
@@ -266,4 +267,4 @@ const itemIdToName = {
   27: "ZZR"
 };
 
-module.exports = { addTftUser, tftMatchList, checkActiveRiotAccount, getMatch };
+module.exports = { addTftUser, tftMatchList, checkActiveRiotAccount, getMatch, getStats };
