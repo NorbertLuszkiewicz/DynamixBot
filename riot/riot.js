@@ -25,8 +25,8 @@ const addTftUser = async (name, server, streamer) => {
     const { response } = await api.Summoner.getByName(name, server);
 
     const newRiotAccountList = data.riotAccountList
-      ? [...data.riotAccountList, { name, server, puuid: response.puuid }]
-      : [{ name, server, puuid: response.puuid }];
+      ? [...data.riotAccountList, { name, server, puuid: response.puuid, id:  response.id}]
+      : [{ name, server, puuid: response.puuid, id: response.id}];
 
     await updateUser({
       streamer,
@@ -180,7 +180,7 @@ const checkActiveRiotAccount = async () => {
 
     streamers.forEach(async streamer => {
       if (streamer.riotAccountList) {
-        streamer.riotAccountList.forEach(async ({ puuid, server, name }) => {
+        streamer.riotAccountList.forEach(async ({ puuid, server, name, id }) => {
           const lastMatch = await api.Match.listWithDetails(
             puuid,
             region[server],
@@ -197,6 +197,7 @@ const checkActiveRiotAccount = async () => {
                 name,
                 server,
                 puuid,
+                id,
                 date: lastMatch[0].info.game_datetime
               }
             });
