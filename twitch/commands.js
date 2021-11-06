@@ -1,6 +1,6 @@
 const ComfyJS = require("comfy.js");
 const { getWeather } = require("./twitch");
-const { tftMatchList, getMatch, getStats } = require("../riot/riot.js");
+const { tftMatchList, getMatch, getStats , getRank} = require("../riot/riot.js");
 const { currentlyPlaying, nextSong } = require("../spotify");
 const { songPlayingNow, timeRequest } = require("../streamElements");
 
@@ -115,8 +115,21 @@ const commands = () =>
         console.log(`Error when use !staty on twitch (${err})`);
       }
     }
+    
+    if (command === "top" || command === "ranking" || command === "rank") {
+      try {
+        const stats = await getRank(
+          extra.channel,
+          message
+        );
 
-    if (command == "next" && (flags.mod || flags.broadcaster)) {
+        ComfyJS.Say(stats, extra.channel);
+      } catch (err) {
+        console.log(`Error when use !top on twitch (${err})`);
+      }
+    }
+
+    if (command === "next" && (flags.mod || flags.broadcaster)) {
       const { isPlayingNow } = await songPlayingNow(extra.channel);
       if (isPlayingNow) {
         ComfyJS.Say("!skip", extra.channel);

@@ -205,6 +205,15 @@ const getStats = async (streamer, nickname, server) => {
   }
 };
 
+const getRank = async (streamer, server) => {
+  const top = api.League.getMasterLeague(
+      server ? serverNameToServerId[server] : "EUW1"
+    )
+  
+  console.log(top)
+  return ""
+};
+
 const checkActiveRiotAccount = async () => {
   try {
     const streamers = await getAllUser();
@@ -306,5 +315,6 @@ module.exports = {
   tftMatchList,
   checkActiveRiotAccount,
   getMatch,
-  getStats
+  getStats,
+  getRank
 };
