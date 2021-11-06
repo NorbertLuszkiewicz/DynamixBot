@@ -103,8 +103,18 @@ const tftMatchList = async (streamer, nickname, server) => {
   return `${nickname ? nickname : streamer} nie zagrał dzisiaj żadnej gry`;
 };
 
-const getMatch = async (number, streamer) => {
+const getMatch = async (number, nickname , server, streamer) => {
   const [data] = await getUser(streamer);
+  let puuid = data.activeRiotAccount.puuid
+  
+  if(nickname){
+    const summoner = await api.Summoner.getByName(
+      nickname,
+      server ? serverNameToServerId[server] : "EUW1"
+    );
+    
+    puuid = summoner.response.puuid
+  }
 
   const { response } = await api.Match.list(
     data.activeRiotAccount.puuid,
@@ -118,7 +128,7 @@ const getMatch = async (number, streamer) => {
   );
 
   const myBoard = matchDetails.response.info.participants.find(item => {
-    return item.puuid === data.activeRiotAccount.puuid;
+    return item.puuid === puuid;
   });
 
   const correctTraits = myBoard.traits

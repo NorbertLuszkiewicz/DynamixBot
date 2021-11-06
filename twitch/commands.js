@@ -77,7 +77,13 @@ const commands = () =>
       parseInt(message) < 11
     ) {
       try {
-        const match = await getMatch(parseInt(message), extra.channel);
+        const NickNameAndServer = message.split(", ");
+        const match = await getMatch(
+          parseInt(NickNameAndServer[0]),
+          NickNameAndServer[1],
+          NickNameAndServer[2],
+          extra.channel
+        );
 
         ComfyJS.Say(match, extra.channel);
       } catch (err) {
