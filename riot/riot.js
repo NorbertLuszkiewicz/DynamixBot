@@ -38,7 +38,7 @@ const addTftUser = async (name, server, streamer) => {
 const tftMatchList = async (streamer, nickname, server) => {
   const [data] = await getUser(streamer);
   let matchList = "";
-  
+
   if (nickname) {
     const { response } = await api.Summoner.getByName(
       nickname,
@@ -50,7 +50,6 @@ const tftMatchList = async (streamer, nickname, server) => {
       server ? region[serverNameToServerId[server]] : "EUROPE",
       { count: 10 }
     );
-
   } else {
     matchList = await api.Match.listWithDetails(
       data.activeRiotAccount.puuid,
@@ -94,7 +93,7 @@ const tftMatchList = async (streamer, nickname, server) => {
     return matchListTwitch;
   }
 
-  return `${nickname ? nickname: streamer} nie zagrał dzisiaj żadnej gry`;
+  return `${nickname ? nickname : streamer} nie zagrał dzisiaj żadnej gry`;
 };
 
 const getMatch = async (number, streamer) => {
@@ -154,25 +153,26 @@ const getMatch = async (number, streamer) => {
   return message;
 };
 
-const getStats = async(streamer, nickname, server) => {
-    const [data] = await getUser(streamer);
-    let userData 
-  
-    if (nickname) {
+const getStats = async (streamer, nickname, server) => {
+  const [data] = await getUser(streamer);
+  let userData = "";
+
+  if (nickname) {
     const { response } = await api.Summoner.getByName(
       nickname,
-      server ? serverNameToServerId[server] : "EUW1"
+      server ? serverNameToServerId[server] : "EUROPE"
     );
-    console.log(response)
-
+    console.log(response);
+    return "asd";
   } else {
     const { response } = await api.Summoner.getByName(
       data.activeRiotAccount.puuid,
-      region[data.activeRiotAccount.server],
+      region[data.activeRiotAccount.server]
     );
-    console.log(response)
+    console.log(response);
+    return "asd";
   }
-}
+};
 
 const checkActiveRiotAccount = async () => {
   try {
@@ -189,7 +189,7 @@ const checkActiveRiotAccount = async () => {
 
           if (
             lastMatch[0].info.game_datetime >
-              (streamer.activeRiotAccount ? streamer.activeRiotAccount.date : 0)
+            (streamer.activeRiotAccount ? streamer.activeRiotAccount.date : 0)
           ) {
             await updateUser({
               streamer: streamer.streamer,
@@ -267,4 +267,10 @@ const itemIdToName = {
   27: "ZZR"
 };
 
-module.exports = { addTftUser, tftMatchList, checkActiveRiotAccount, getMatch, getStats };
+module.exports = {
+  addTftUser,
+  tftMatchList,
+  checkActiveRiotAccount,
+  getMatch,
+  getStats
+};
