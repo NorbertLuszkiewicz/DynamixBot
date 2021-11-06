@@ -162,14 +162,12 @@ const getStats = async (streamer, nickname, server) => {
       nickname,
       server ? serverNameToServerId[server] : "EUW1"
     );
-    console.log(response);
+    response.puuid
     return "asd";
   } else {
-    const { response } = await api.Summoner.getByName(
-      data.activeRiotAccount.puuid,
-      region[data.activeRiotAccount.server]
-    );
-    console.log(response);
+   data.activeRiotAccount.puuid
+    
+    
     return "asd";
   }
 };
