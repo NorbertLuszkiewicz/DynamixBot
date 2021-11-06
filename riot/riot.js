@@ -47,7 +47,7 @@ const tftMatchList = async (streamer, nickname, server) => {
     
     matchList = await api.Match.listWithDetails(
       response.puuid,
-       "EUW1",
+      server ? region[serverNameToServerId[server]] : "EUW1",
       { count: 10 }
     );
     console.log(matchList)
