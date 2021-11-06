@@ -38,14 +38,27 @@ const addTftUser = async (name, server, streamer) => {
 const tftMatchList = async (streamer, nickname, server) => {
   const [data] = await getUser(streamer);
 
-  const matchList = await api.Match.listWithDetails(
-    data.activeRiotAccount.puuid,
-    region[data.activeRiotAccount.server],
-    { count: 10 }
-  );
-  
-  
-  
+  let matchList;
+
+  if (nickname) {
+    const { response } = await api.Summoner.getByName(
+      nickname,
+      serverNameToServerId[server]
+    );
+
+    matchList = await api.Match.listWithDetails(
+      response.puuid,
+      server ? serverNameToServerId[server] : "EUW1",
+      { count: 10 }
+    );
+  } else {
+    matchList = await api.Match.listWithDetails(
+      data.activeRiotAccount.puuid,
+      region[data.activeRiotAccount.server],
+      { count: 10 }
+    );
+  }
+
   const now = new Date();
   const today = Date.parse(
     `${now.getMonth() + 1}, ${now.getDate()}, ${now.getFullYear()} UTC`
@@ -66,17 +79,6 @@ const tftMatchList = async (streamer, nickname, server) => {
       });
 
       const traits = myBoard.traits.sort((a, b) => b.num_units - a.num_units);
-
-      const emote = [
-        "EZ",
-        "kezmanGlad",
-        "kezmanGlad",
-        "kezmanGlad",
-        "Sadge ",
-        "Sadge ",
-        "Sadge ",
-        "kezmanWrr"
-      ];
 
       matchListTwitch =
         matchListTwitch +
@@ -197,6 +199,13 @@ const checkActiveRiotAccount = async () => {
       `Error while resetting last games in tft (${response.status} ${response.statusText})`
     );
   }
+};
+
+const serverNameToServerId = {
+  EUW: "EUW1",
+  EUNE: "EUN1",
+  NA: "NA1",
+  KR: "KR"
 };
 
 const itemIdToName = {
