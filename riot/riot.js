@@ -170,7 +170,7 @@ const getStats = async (streamer, nickname, server) => {
       server ? serverNameToServerId[server] : "EUW1"
     );
     const userInfo = userData.response[0]
-    message = `statystyki ${nickname} | ranga:${userInfo.tier}${userInfo.rank} ${userInfo.}`
+    message = `statystyki ${nickname} |${userInfo.tier}${userInfo.rank} ${userInfo.leaguePoints}LP ${userInfo.wins} wins`
     
 console.log(userData)
     return "asd";
