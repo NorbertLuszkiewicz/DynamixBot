@@ -103,30 +103,24 @@ const tftMatchList = async (streamer, nickname, server) => {
   return `${nickname ? nickname : streamer} nie zagrał dzisiaj żadnej gry`;
 };
 
-const getMatch = async (number, nickname , server, streamer) => {
+const getMatch = async (number, nickname, server, streamer) => {
   const [data] = await getUser(streamer);
-  let puuid = data.activeRiotAccount.puuid
-  let region = nickname ? "EUROPE" : region[data.activeRiotAccount.server]
-  
-  if(nickname){
+  let puuid = data.activeRiotAccount.puuid;
+  let region = nickname ? "EUROPE" : region[data.activeRiotAccount.server];
+
+  if (nickname) {
     const summoner = await api.Summoner.getByName(
       nickname,
       server ? serverNameToServerId[server] : "EUW1"
     );
-    region = server ? region[serverNameToServerId[server]] : "EUROPE"
-    puuid = summoner.response.puuid
+    region = server ? region[serverNameToServerId[server]] : "EUROPE";
+    puuid = summoner.response.puuid;
   }
 
-  const { response } = await api.Match.list(
-    puuid,
-    region
-  );
+  const { response } = await api.Match.list(puuid, region);
   const matchList = response;
 
-  const matchDetails = await api.Match.get(
-    matchList[number - 1],
-    region
-  );
+  const matchDetails = await api.Match.get(matchList[number - 1], region);
 
   const myBoard = matchDetails.response.info.participants.find(item => {
     return item.puuid === puuid;
@@ -206,12 +200,18 @@ const getStats = async (streamer, nickname, server) => {
 };
 
 const getRank = async (streamer, server) => {
-  const top = api.League.getMasterLeague(
-      server ? serverNameToServerId[server] : "EUW1"
-    )
+  const { response } = await api.League.getMasterLeague(
+    server ? serverNameToServerId[server] : "EUW1"
+  );
+  let message = "";
+  const sortedopRank =  response.entries.sort((a, b) => a.leaguePoints a.leaguePoints)
   
-  console.log(top)
-  return ""
+  response.entries.forEach((user, index) => {
+    message = `${message}, TOP${index + 1} ${user.summonerName} ${
+      user.leaguePoints
+    } LP`;
+  });
+  return message;
 };
 
 const checkActiveRiotAccount = async () => {
