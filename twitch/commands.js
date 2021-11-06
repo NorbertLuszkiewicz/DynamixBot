@@ -57,7 +57,9 @@ const commands = () =>
 
     if (command == "matches" || command == "mecze") {
       try {
-        const matchesList = await tftMatchList(extra.channel);
+        const NickNameAndServer = message ? message.split(" ") : [null, null]
+        
+        const matchesList = await tftMatchList(extra.channel, );
 
         ComfyJS.Say(`${matchesList}`, extra.channel);
       } catch (err) {
