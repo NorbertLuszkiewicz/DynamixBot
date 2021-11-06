@@ -50,14 +50,6 @@ const songPlayingNow = async streamer => {
     const player = await getSpotifyAreaData(streamer, "player");
     const playing = await getSpotifyAreaData(streamer, "playing");
 
-    console.log(
-      player,
-      "player",
-      playing,
-      "aaaa",
-      player.state == "playing" && playing != null
-    );
-
     return {
       isPlayingNow: player.state == "playing" && playing != null,
       title: playing && playing.title,

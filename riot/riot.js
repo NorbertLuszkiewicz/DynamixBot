@@ -44,10 +44,10 @@ const tftMatchList = async (streamer, nickname, server) => {
       nickname,
       server ? serverNameToServerId[server] : "EUW1"
     );
-
+    
     matchList = await api.Match.listWithDetails(
       response.puuid,
-      server ? serverNameToServerId[server] : "EUW1",
+       "EUW1",
       { count: 10 }
     );
     console.log(matchList)
@@ -167,16 +167,7 @@ const checkActiveRiotAccount = async () => {
             { count: 1 }
           );
 
-          const now = new Date();
-          const today = Date.parse(
-            `${now.getMonth() + 1}, ${now.getDate()}, ${now.getFullYear()} UTC`
-          );
-
-          const lastGameIsToday =
-            lastMatch[0].info && lastMatch[0].info.game_datetime - today < 0;
-
           if (
-            lastGameIsToday &&
             lastMatch[0].info.game_datetime >
               (streamer.activeRiotAccount ? streamer.activeRiotAccount.date : 0)
           ) {
