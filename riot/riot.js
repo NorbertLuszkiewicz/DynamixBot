@@ -204,14 +204,18 @@ const getRank = async (streamer, server) => {
     server ? serverNameToServerId[server] : "EUW1"
   );
   let message = "";
-  const sortedopRank =  response.entries.sort((a, b) => a.leaguePoints a.leaguePoints)
+  const sortedTopRank =  response.entries.sort((a, b) => b.leaguePoints - a.leaguePoints)
   
-  response.entries.forEach((user, index) => {
+  sortedTopRank.forEach((user, index) => {
     message = `${message}, TOP${index + 1} ${user.summonerName} ${
       user.leaguePoints
     } LP`;
+    
+    if(9 < sortedTopRank.length ? index == 9 : index == sortedTopRank.length){
+      return message;
+    }
   });
-  return message;
+  
 };
 
 const checkActiveRiotAccount = async () => {
