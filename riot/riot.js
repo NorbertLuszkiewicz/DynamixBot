@@ -212,7 +212,22 @@ const getRank = async (streamer, server) => {
   let message = "";
   let topRank = []
   
-  chall.entries.length > 10 ?
+  if(chall.entries.length > 10){
+    topRank = chall.entries.slice(0, 9)
+  }else{
+    topRank = chall.entries.length
+  }  
+  
+  if(topRank.lenght === 10 ){
+    
+  }else if(grand.entries.length > topRank.lenght){
+    topRank = [ ...topRank, ...chall.entries.slice(0, 9 - topRank.lenght)]
+  }else if(grand.entries.length > 10){
+    topRank = chall.entries.slice(0, 9)
+  }
+  
+  
+  
   
   const sortedTopRank =  response.entries.sort((a, b) => b.leaguePoints - a.leaguePoints)
   
