@@ -200,10 +200,20 @@ const getStats = async (streamer, nickname, server) => {
 };
 
 const getRank = async (streamer, server) => {
-  const { response } = await api.League.getMasterLeague(
+  const { response: master } = await api.League.getMasterLeague(
+    server ? serverNameToServerId[server] : "EUW1"
+  );  
+  const { response: grand } = await api.League.getGrandMasterLeague(
+    server ? serverNameToServerId[server] : "EUW1"
+  );  
+  const { response: chall } = await api.League.getChallengerLeague(
     server ? serverNameToServerId[server] : "EUW1"
   );
   let message = "";
+  let topRank = []
+  
+  chall.entries.length > 10 ?
+  
   const sortedTopRank =  response.entries.sort((a, b) => b.leaguePoints - a.leaguePoints)
   
   sortedTopRank.forEach((user, index) => {
