@@ -211,7 +211,7 @@ const getRank = async (streamer, server) => {
   } else {
     topRank = chall.entries;
   }
-
+console.log(topRank)
   if (topRank.lenght !== 10) {
     const { response: grand } = await api.League.getGrandMasterLeague(
       server ? serverNameToServerId[server] : "EUW1"
@@ -222,8 +222,11 @@ const getRank = async (streamer, server) => {
     }
     if (grand.entries.length <= 10 - topRank.lenght) {
       topRank = [...topRank, ...grand.entries];
+      
+      console.log(topRank, "aaaa")
     }
   }
+  console.log(topRank)
   if (topRank.lenght !== 10) {
     const { response: master } = await api.League.getMasterLeague(
       server ? serverNameToServerId[server] : "EUW1"
