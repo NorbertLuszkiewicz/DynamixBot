@@ -209,52 +209,43 @@ const getRank = async (streamer, server) => {
   if (chall.entries.length > 10) {
     topRank = chall.entries.slice(0, 9);
   } else {
+    console.log(chall.entries,"vvv")
     topRank = chall.entries;
   }
-console.log(topRank)
+
   if (topRank.lenght !== 10) {
     const { response: grand } = await api.League.getGrandMasterLeague(
       server ? serverNameToServerId[server] : "EUW1"
     );
-
-    if (grand.entries.length > 10 - topRank.lenght) {
+    console.log(grand.entries.length ,10 - topRank.lenght)
+    if (grand.entries.length > 10 - topRank.lenght) {    
       topRank = [...topRank, ...grand.entries.slice(0, 9 - topRank.lenght)];
-    }
-    if (grand.entries.length <= 10 - topRank.lenght) {
+    }else{
       topRank = [...topRank, ...grand.entries];
-      
-      console.log(topRank, "aaaa")
+
     }
   }
-  console.log(topRank)
+
   if (topRank.lenght !== 10) {
     const { response: master } = await api.League.getMasterLeague(
       server ? serverNameToServerId[server] : "EUW1"
     );
+    
+    console.log(master.entries.length > 10 - topRank.lenght, master.entries.length, topRank)
     if (master.entries.length > 10 - topRank.lenght) {
       topRank = [...topRank, ...master.entries.slice(0, 9 - topRank.lenght)];
     }
-    if (master.entries.length <= 10 - topRank.lenght) {
+    else{
       topRank = [...topRank, ...master.entries];
     }
   }
-  
-  console.log(topRank)
 
   const sortedTopRank = topRank.sort((a, b) => b.leaguePoints - a.leaguePoints);
 
   sortedTopRank.forEach((user, index) => {
-    message = `${message}, TOP${index + 1} ${user.summonerName} ${
+    message = `${message} TOP${index + 1} ${user.summonerName} ${
       user.leaguePoints
-    } LP`;
-
-    if (
-      9 < sortedTopRank.length - 1
-        ? index == 9
-        : index == sortedTopRank.length - 1
-    ) {
-      return message;
-    }
+    } LP, `;
   });
   return message;
 };
