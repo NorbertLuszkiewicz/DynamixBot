@@ -209,31 +209,27 @@ const getRank = async (streamer, server) => {
   if (chall.entries.length > 10) {
     topRank = chall.entries.slice(0, 9);
   } else {
-    console.log(chall.entries,"vvv")
     topRank = chall.entries;
   }
 
-  if (topRank.lenght !== 10) {
+  if (topRank.length !== 10) {
     const { response: grand } = await api.League.getGrandMasterLeague(
       server ? serverNameToServerId[server] : "EUW1"
     );
-    console.log(grand.entries.length ,10 - topRank.lenght)
-    if (grand.entries.length > 10 - topRank.lenght) {    
-      topRank = [...topRank, ...grand.entries.slice(0, 9 - topRank.lenght)];
+    if (grand.entries.length > 10 - topRank.length) {    
+      topRank = [...topRank, ...grand.entries.slice(0, 10 - topRank.length)];
     }else{
       topRank = [...topRank, ...grand.entries];
 
     }
   }
 
-  if (topRank.lenght !== 10) {
+  if (topRank.length !== 10) {
     const { response: master } = await api.League.getMasterLeague(
       server ? serverNameToServerId[server] : "EUW1"
     );
-    
-    console.log(master.entries.length > 10 - topRank.lenght, master.entries.length, topRank)
-    if (master.entries.length > 10 - topRank.lenght) {
-      topRank = [...topRank, ...master.entries.slice(0, 9 - topRank.lenght)];
+    if (master.entries.length > 10 - topRank.length) {
+      topRank = [...topRank, ...master.entries.slice(0, 10 - topRank.length)];
     }
     else{
       topRank = [...topRank, ...master.entries];
