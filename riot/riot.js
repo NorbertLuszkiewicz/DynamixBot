@@ -207,9 +207,9 @@ const getRank = async (streamer, server) => {
   let topRank = [];
 
   if (chall.entries.length > 10) {
-    topRank = chall.entries.slice(0, 9);
+    topRank = chall.entries.sort((a, b) => b.leaguePoints - a.leaguePoints).slice(0, 9);
   } else {
-    topRank = chall.entries;
+    topRank = chall.entries.sort((a, b) => b.leaguePoints - a.leaguePoints);
   }
 
   if (topRank.length !== 10) {
@@ -217,7 +217,7 @@ const getRank = async (streamer, server) => {
       server ? serverNameToServerId[server] : "EUW1"
     );
     if (grand.entries.length > 10 - topRank.length) {    
-      topRank = [...topRank, ...grand.entries.slice(0, 10 - topRank.length)];
+      topRank = [...topRank, ...grand.entries.sort((a, b) => b.leaguePoints - a.leaguePoints).slice(0, 10 - topRank.length)];
     }else{
       topRank = [...topRank, ...grand.entries];
 
@@ -229,7 +229,7 @@ const getRank = async (streamer, server) => {
       server ? serverNameToServerId[server] : "EUW1"
     );
     if (master.entries.length > 10 - topRank.length) {
-      topRank = [...topRank, ...master.entries.slice(0, 10 - topRank.length)];
+      topRank = [...topRank, ...master.entries.sort((a, b) => b.leaguePoints - a.leaguePoints).slice(0, 10 - topRank.length)];
     }
     else{
       topRank = [...topRank, ...master.entries];
