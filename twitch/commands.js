@@ -1,7 +1,7 @@
 const ComfyJS = require("comfy.js");
 const { getWeather } = require("./twitch");
 const { tftMatchList, getMatch, getStats , getRank} = require("../riot/riot.js");
-const { currentlyPlaying, nextSong } = require("../spotify");
+const { currentlyPlaying, nextSong , startSong} = require("../spotify");
 const { songPlayingNow, timeRequest } = require("../streamElements");
 
 const commands = () =>
@@ -170,6 +170,10 @@ const commands = () =>
 
     if (command === "dynamix" && (flags.mod || flags.broadcaster)) {
       ComfyJS.Say("Bot works!", extra.channel);
+    }
+    
+    if (command === "start" && user === "DynaM1X1") {
+      startSong(extra.channel);
     }
   });
 
