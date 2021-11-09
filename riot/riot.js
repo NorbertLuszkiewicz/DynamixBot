@@ -82,8 +82,6 @@ const tftMatchList = async (streamer, nickname, server) => {
         return item.puuid === puuid;
       });
 
-      console.log(todayMatchList);
-
       const traits = myBoard.traits.sort((a, b) => b.num_units - a.num_units);
 
       matchListTwitch =
