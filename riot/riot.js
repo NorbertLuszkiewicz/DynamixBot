@@ -104,21 +104,21 @@ const tftMatchList = async (streamer, nickname, server) => {
 const getMatch = async (number, nickname, server, streamer) => {
   const [data] = await getUser(streamer);
   let puuid = data.activeRiotAccount.puuid;
-  let region = nickname ? "EUROPE" : region[data.activeRiotAccount.server];
+  let gameRegion = nickname ? "EUROPE" : region[data.activeRiotAccount.server];
 
   if (nickname) {
     const summoner = await api.Summoner.getByName(
       nickname,
       server ? serverNameToServerId[server] : "EUW1"
     );
-    region = server ? region[serverNameToServerId[server]] : "EUROPE";
+    gameRegion = server ? region[serverNameToServerId[server]] : "EUROPE";
     puuid = summoner.response.puuid;
   }
 
-  const { response } = await api.Match.list(puuid, region);
+  const { response } = await api.Match.list(puuid, gameRegion);
   const matchList = response;
 
-  const matchDetails = await api.Match.get(matchList[number - 1], region);
+  const matchDetails = await api.Match.get(matchList[number - 1], gameRegion);
 
   const myBoard = matchDetails.response.info.participants.find(item => {
     return item.puuid === puuid;
