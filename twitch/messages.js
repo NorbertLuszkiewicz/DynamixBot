@@ -4,7 +4,7 @@ const {
   startSong,
   refreshDevices,
   changeVolumeOnTime,
-  setVolume,
+  setVolume
 } = require("../spotify");
 
 const {
@@ -22,13 +22,17 @@ let timeCooldownOgiii = 0;
 
 let timeoutVolume = { kezman22: null, dynam1x1: null };
 
-const setTimeoutVolume = async () =>{
-  try{
-    const allUsers = await getAllUser()
-    timeoutVolume = allUsers.reduce((acc, key) => ({ ...acc, [key.streamer]: null}), {})
+const setTimeoutVolume = async () => {
+  try {
+    const allUsers = await getAllUser();
+    timeoutVolume = allUsers.reduce(
+      (acc, key) => ({ ...acc, [key.streamer]: null }),
+      {}
+    );
+  } catch {
+    console.log("Error when call setTimeoutVolume");
   }
-  catch{console.log("Error when call setTimeoutVolume")}
-}
+};
 
 const messages = () => {
   ComfyJS.onChat = async (user, message, flags, self, extra) => {
@@ -158,13 +162,20 @@ const messages = () => {
     if (message === "device" && user === "DynaM1X1") {
       refreshDevices(extra.channel);
     }
-    
+
     //cyferki
-    
-      if (message.indexOf(" cyferki") !== "-1" && message.indexOf(" numerki") !== "-1" ) {
-      ComfyJS.Say(" skip", extra.channel);
+
+    if (
+      message.indexOf(" cyferki") !== -1 ||
+      message.indexOf(" numerki") !== -1 ||
+      message.indexOf(" liczby") !== -1
+    ) {
+      ComfyJS.Say(
+        user +
+          " to nakładka która pokazuje na kogo grałeś: https://www.metatft.com/download peepoGlad",
+        extra.channel
+      );
     }
-    
 
     // volume [value] command
     const isVolumeCommand = message.lastIndexOf("volume");
