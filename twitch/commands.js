@@ -81,7 +81,7 @@ const commands = () =>
         const match = await getMatch(
           parseInt(NickNameAndServer[0]),
           NickNameAndServer[1],
-          NickNameAndServer[2].toUpperCase(),
+          NickNameAndServer[2] && NickNameAndServer[2].toUpperCase(),
           extra.channel
         );
 
