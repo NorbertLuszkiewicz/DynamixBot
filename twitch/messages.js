@@ -158,6 +158,13 @@ const messages = () => {
     if (message === "device" && user === "DynaM1X1") {
       refreshDevices(extra.channel);
     }
+    
+    //cyferki
+    
+      if (message.indexOf(" cyferki") !== "-1" && message.indexOf(" numerki") !== "-1" ) {
+      ComfyJS.Say(" skip", extra.channel);
+    }
+    
 
     // volume [value] command
     const isVolumeCommand = message.lastIndexOf("volume");
