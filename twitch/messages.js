@@ -166,9 +166,13 @@ const messages = () => {
     //cyferki
 
     if (
-      message.indexOf(" cyferki") !== -1 ||
-      message.indexOf(" numerki") !== -1 ||
-      message.indexOf(" liczby") !== -1
+      (message.indexOf(" cyferki") !== -1 ||
+        message.indexOf(" numerki") !== -1 ||
+        message.indexOf(" numerki") !== -1 ||
+        message.indexOf(" numerki") !== -1 ||
+        message.indexOf(" liczby") !== -1) &&
+      user != "DynaM1X1" &&
+      user != "StreamElements"
     ) {
       ComfyJS.Say(
         user +
