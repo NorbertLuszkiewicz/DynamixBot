@@ -86,7 +86,7 @@ const messages = () => {
           message.lastIndexOf("do kolejki") != -1)
       ) {
         pauseSong(extra.channel);
-        timeRequest(extra.channel, "add");
+        await timeRequest(extra.channel, "add");
       }
 
       if (flags.customReward && extra.customRewardId === skipSongID) {

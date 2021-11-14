@@ -117,7 +117,7 @@ const timeRequest = async (streamer, action) => {
         playing = await getSpotifyAreaData(streamer, "playing");
 console.log("teraz ");
         !playing && startSong(streamer);
-      }, newEndTime + 1350 * (queue.length + 3));
+      }, newEndTime + 1450 * (queue.length + 3));
     }
     if (action === "skip") {
       if (playing) {
