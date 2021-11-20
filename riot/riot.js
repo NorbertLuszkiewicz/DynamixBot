@@ -207,7 +207,7 @@ const getRank = async (streamer, server) => {
   let topRank = [];
 
   if (chall.entries.length > 10) {
-    topRank = chall.entries.sort((a, b) => b.leaguePoints - a.leaguePoints).slice(0, 9);
+    topRank = chall.entries.sort((a, b) => b.leaguePoints - a.leaguePoints).slice(0, 10);
   } else {
     topRank = chall.entries.sort((a, b) => b.leaguePoints - a.leaguePoints);
   }
