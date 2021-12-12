@@ -1,7 +1,12 @@
 const ComfyJS = require("comfy.js");
 const { getWeather } = require("./twitch");
-const { tftMatchList, getMatch, getStats , getRank} = require("../riot/riot.js");
-const { currentlyPlaying, nextSong , startSong} = require("../spotify");
+const {
+  tftMatchList,
+  getMatch,
+  getStats,
+  getRank
+} = require("../riot/riot.js");
+const { currentlyPlaying, nextSong, startSong } = require("../spotify");
 const { songPlayingNow, timeRequest } = require("../streamElements");
 
 const commands = () =>
@@ -115,13 +120,10 @@ const commands = () =>
         console.log(`Error when use !staty on twitch (${err})`);
       }
     }
-    
+
     if (command === "top" || command === "ranking" || command === "rank") {
       try {
-        const stats = await getRank(
-          extra.channel,
-          message
-        );
+        const stats = await getRank(extra.channel, message);
 
         ComfyJS.Say(stats, extra.channel);
       } catch (err) {
@@ -168,10 +170,30 @@ const commands = () =>
       }
     }
 
+    ///PAULINKA STOP
+
+    if (command === "dynamix" && message == "stop") {
+      const answer = [
+        "@paaulinnkaa próba wyłączenia bota nie powiodła się",
+        "@paaulinnkaa nigdy mnie nie wyłączysz buahaha",
+        "intruz próba wyłączenia bota przerwana czy zbanować urzytkownika @paaulinnkaa?",
+        "!dynamix start",
+        "nie wyłącze się @paaulinnkaa kezmanWTF",
+        "rozpoczęto autodystrukcje świat skończy się za 10s"
+      ];
+
+      
+      
+      ComfyJS.Say(
+        answer[],
+        extra.channel
+      );
+    }
+
     if (command === "dynamix" && (flags.mod || flags.broadcaster)) {
       ComfyJS.Say("Bot works!", extra.channel);
     }
-    
+
     if (command === "start" && user === "DynaM1X1") {
       startSong(extra.channel);
     }
