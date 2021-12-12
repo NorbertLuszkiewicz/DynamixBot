@@ -241,6 +241,22 @@ const messages = () => {
         ComfyJS.Say("^ Dyktator", extra.channel);
       }
     }
+
+    ///PAULINKA STOP
+
+    if (user == "paaulinnkaa") {
+      [
+        "@paaulinnkaa próba wyłączenia bota nie powiedła się",
+        "@paaulinnkaa nigdy mnie nie wyłączysz buahaha",
+        "intruz próba wyłączenia bota przerwana czy zbanować urzytkownika @paaulinnkaa?",
+        "!dynamix start"
+      ];
+
+      ComfyJS.Say(
+        "@paaulinnkaa próba wyłączenia bota nie powiedła się",
+        extra.channel
+      );
+    }
   };
 };
 
