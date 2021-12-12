@@ -172,7 +172,7 @@ const commands = () =>
 
     ///PAULINKA STOP
 
-    if (command === "dynamix" && message == "stop") {
+    if (command === "dynamix" && message == "stop" && user == "paaulinnkaa") {
       const answer = [
         "@paaulinnkaa próba wyłączenia bota nie powiodła się",
         "@paaulinnkaa nigdy mnie nie wyłączysz buahaha",
@@ -182,15 +182,15 @@ const commands = () =>
         "rozpoczęto autodystrukcje świat skończy się za 10s"
       ];
 
-      
+      const randomNumber = Math.floor(Math.random() * (Math.floor(answer.length - 1) + 1))
       
       ComfyJS.Say(
-        answer[],
+        answer[randomNumber],
         extra.channel
       );
     }
 
-    if (command === "dynamix" && (flags.mod || flags.broadcaster)) {
+    if (command === "dynamix" && message !== "stop" && (flags.mod || flags.broadcaster)) {
       ComfyJS.Say("Bot works!", extra.channel);
     }
 
