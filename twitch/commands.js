@@ -123,7 +123,7 @@ const commands = () =>
 
     if (command === "top" || command === "ranking" || command === "rank") {
       try {
-        const stats = await getRank(extra.channel, message);
+        const stats = await getRank(extra.channel, message.toUpperCase());
 
         ComfyJS.Say(stats, extra.channel);
       } catch (err) {
