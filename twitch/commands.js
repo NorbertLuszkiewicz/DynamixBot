@@ -183,7 +183,7 @@ const commands = () =>
       ];
 
       const randomNumber = Math.floor(Math.random() * (Math.floor(answer.length - 1) + 1))
-      
+      console.log(randomNumber, answer[randomNumber])
       ComfyJS.Say(
         answer[randomNumber],
         extra.channel
