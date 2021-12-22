@@ -153,8 +153,10 @@ const commands = () =>
 
         description == "bezchmurnie" && (emote = "☀️");
         description == "pochmurnie" && (emote = "🌤️");
-        description == "zachmurzenie umiarkowane" && (emote = "🌥️");
+        description == "zachmurzenie małe" && (emote = "🌤️");
+        description == "zachmurzenie umiarkowane" && (emote = "🌥️");    
         description == "zachmurzenie duże" && (emote = "☁️");
+        description == "mgła" && (emote = "🌫️");
         description == "umiarkowane opady deszczu" && (emote = "🌧️");
 
         temp
@@ -183,7 +185,7 @@ const commands = () =>
       ];
 
       const randomNumber = Math.floor(Math.random() * (Math.floor(answer.length - 1) + 1))
-      c
+      
       ComfyJS.Say(
         answer[randomNumber],
         extra.channel
