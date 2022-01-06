@@ -191,6 +191,8 @@ const commands = () =>
         extra.channel
       );
     }
+    
+
 
     if (command === "dynamix" && message !== "stop" && (flags.mod || flags.broadcaster)) {
       ComfyJS.Say("Bot works!", extra.channel);

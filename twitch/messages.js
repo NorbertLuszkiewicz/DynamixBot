@@ -196,6 +196,31 @@ const messages = () => {
         extra.channel
       );
     }
+    
+        ///META
+    
+    const usedCo = message.toLowerCase().indexOf("co") !== -1
+    const usedMocne = message.toLowerCase().indexOf("mocne") !== -1 
+    const usedMecie = message.toLowerCase().indexOf("mecie") !== -1 
+    const usedDobre = message.toLowerCase().indexOf("dobre") !== -1 
+    const usedTeraz = message.toLowerCase().indexOf("teraz") !== -1  
+    const usedKaruzela = message.toLowerCase().indexOf("karuzela") !== -1  || message.toLowerCase().indexOf("karuzeli") !== -1 
+    const usedItem = message.toLowerCase().indexOf("item") !== -1  
+    
+
+    if (usedCo && (usedMocne || usedMecie || usedDobre ) && !usedKaruzela && !usedItem ) {
+      const answer = [
+        `@paaulinnkaa próba wyłączenia bota nie powiodła się`,
+
+      ];
+
+      const randomNumber = Math.floor(Math.random() * (Math.floor(answer.length - 1) + 1))
+      
+      ComfyJS.Say(
+        answer[randomNumber],
+        extra.channel
+      );
+    }
 
     // volume [value] command
     const isVolumeCommand = message.lastIndexOf("volume");
