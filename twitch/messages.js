@@ -204,14 +204,17 @@ const messages = () => {
     const usedMecie = message.toLowerCase().indexOf("mecie") !== -1 
     const usedDobre = message.toLowerCase().indexOf("dobre") !== -1 
     const usedTeraz = message.toLowerCase().indexOf("teraz") !== -1  
+    const usedSilne = message.toLowerCase().indexOf("teraz") !== -1  
     const usedKaruzela = message.toLowerCase().indexOf("karuzela") !== -1  || message.toLowerCase().indexOf("karuzeli") !== -1 
     const usedItem = message.toLowerCase().indexOf("item") !== -1  
+    const usedGrac = message.toLowerCase().indexOf("grac") !== -1  || message.toLowerCase().indexOf("grać") !== -1 
     
 
-    if (usedCo && (usedMocne || usedMecie || usedDobre ) && !usedKaruzela && !usedItem ) {
+    if (usedCo && (usedMocne || usedMecie || usedDobre || usedSilne || (usedTeraz && usedGrac) ) && !usedKaruzela && !usedItem ) {
       const answer = [
-        `@paaulinnkaa próba wyłączenia bota nie powiodła się`,
-
+        `@${user} aktualnie meta się tworzy więc nie wiadomo`,
+        `@${user} nie dawno wyszedł patch więc jeszcze nie wiemy`,
+        `@${user} na razie można spekulować popatrz na metatft to co grała topka`,
       ];
 
       const randomNumber = Math.floor(Math.random() * (Math.floor(answer.length - 1) + 1))
