@@ -4,7 +4,7 @@ const {
   tftMatchList,
   getMatch,
   getStats,
-  getRank
+  getRank,
 } = require("../riot/riot.js");
 const { currentlyPlaying, nextSong, startSong } = require("../spotify");
 const { songPlayingNow, timeRequest } = require("../streamElements");
@@ -29,7 +29,7 @@ const commands = () =>
             : "Nieznany tytuł utworu";
           let autor = "";
           if (spotifyData.item.artists.length > 0) {
-            spotifyData.item.artists.forEach(artist => {
+            spotifyData.item.artists.forEach((artist) => {
               autor += artist.name + ", ";
             });
           }
@@ -83,7 +83,7 @@ const commands = () =>
     ) {
       try {
         const NickNameAndServer = message.split(", ");
-        console.log(NickNameAndServer[0])
+        console.log(NickNameAndServer[0]);
         const match = await getMatch(
           NickNameAndServer[0] ? parseInt(NickNameAndServer[0]) : 999,
           NickNameAndServer[1],
@@ -96,10 +96,11 @@ const commands = () =>
         console.log(`Error when use !mecz on twitch (${err})`);
       }
     }
-    if (
-      (command == "match" || command == "mecz") && !message
-    ) {
-        ComfyJS.Say(`@${user} komenda !mecze pokazuje liste meczy z dzisiaj (miejsca o raz synergie) !mecz [nr] gdzie [nr] oznacza numer meczu licząc od najnowszego czyli !mecz 1 pokaze ostatnią gre (wyświetla dokładny com z itemami i synergiami)`, extra.channel);
+    if ((command == "match" || command == "mecz") && !message) {
+      ComfyJS.Say(
+        `@${user} komenda !mecze pokazuje liste meczy z dzisiaj (miejsca o raz synergie) !mecz [nr] gdzie [nr] oznacza numer meczu licząc od najnowszego czyli !mecz 1 pokaze ostatnią gre (wyświetla dokładny com z itemami i synergiami)`,
+        extra.channel
+      );
     }
 
     if (command == "next" && (flags.mod || flags.broadcaster)) {
@@ -149,7 +150,7 @@ const commands = () =>
 
     if (command == "weather" || command == "pogoda") {
       try {
-        const { temp, speed, description } = await getWeather(message);
+        const { temp, speed, description } = await getWeather(toPl(message));
         let emote = "";
 
         {
@@ -160,7 +161,7 @@ const commands = () =>
         description == "bezchmurnie" && (emote = "☀️");
         description == "pochmurnie" && (emote = "🌤️");
         description == "zachmurzenie małe" && (emote = "🌤️");
-        description == "zachmurzenie umiarkowane" && (emote = "🌥️");    
+        description == "zachmurzenie umiarkowane" && (emote = "🌥️");
         description == "zachmurzenie duże" && (emote = "☁️");
         description == "mgła" && (emote = "🌫️");
         description == "umiarkowane opady deszczu" && (emote = "🌧️");
@@ -187,18 +188,21 @@ const commands = () =>
         "intruz próba wyłączenia bota przerwana czy zbanować urzytkownika @paaulinnkaa?",
         "!dynamix start",
         "nie wyłącze się @paaulinnkaa kezmanWTF",
-        "rozpoczęto autodystrukcje świat skończy się za 10s"
+        "rozpoczęto autodystrukcje świat skończy się za 10s",
       ];
 
-      const randomNumber = Math.floor(Math.random() * (Math.floor(answer.length - 1) + 1))
-      
-      ComfyJS.Say(
-        answer[randomNumber],
-        extra.channel
+      const randomNumber = Math.floor(
+        Math.random() * (Math.floor(answer.length - 1) + 1)
       );
+
+      ComfyJS.Say(answer[randomNumber], extra.channel);
     }
 
-    if (command === "dynamix" && message !== "stop" && (flags.mod || flags.broadcaster)) {
+    if (
+      command === "dynamix" &&
+      message !== "stop" &&
+      (flags.mod || flags.broadcaster)
+    ) {
       ComfyJS.Say("Bot works!", extra.channel);
     }
 
@@ -207,6 +211,28 @@ const commands = () =>
     }
   });
 
+const toPl = (string) => {
+  return string
+    .replace(/ą/g, "a")
+    .replace(/Ą/g, "A")
+    .replace(/ć/g, "c")
+    .replace(/Ć/g, "C")
+    .replace(/ę/g, "e")
+    .replace(/Ę/g, "E")
+    .replace(/ł/g, "l")
+    .replace(/Ł/g, "L")
+    .replace(/ń/g, "n")
+    .replace(/Ń/g, "N")
+    .replace(/ó/g, "o")
+    .replace(/Ó/g, "O")
+    .replace(/ś/g, "s")
+    .replace(/Ś/g, "S")
+    .replace(/ż/g, "z")
+    .replace(/Ż/g, "Z")
+    .replace(/ź/g, "z")
+    .replace(/Ź/g, "Z");
+};
+
 module.exports = {
-  commands
+  commands,
 };
