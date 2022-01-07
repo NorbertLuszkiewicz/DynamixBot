@@ -79,12 +79,13 @@ const commands = () =>
     if (
       (command == "match" || command == "mecz") &&
       parseInt(message) > 0 &&
-      parseInt(message) < 11
+      parseInt(message) < 21
     ) {
       try {
         const NickNameAndServer = message.split(", ");
+        console.log(NickNameAndServer[0])
         const match = await getMatch(
-          parseInt(NickNameAndServer[0])? parseInt(NickNameAndServer[0]) : 0,
+          NickNameAndServer[0] ? parseInt(NickNameAndServer[0]) : 999,
           NickNameAndServer[1],
           NickNameAndServer[2] && NickNameAndServer[2].toUpperCase(),
           extra.channel
@@ -94,6 +95,11 @@ const commands = () =>
       } catch (err) {
         console.log(`Error when use !mecz on twitch (${err})`);
       }
+    }
+    if (
+      (command == "match" || command == "mecz") && !message
+    ) {
+        ComfyJS.Say(`@${user} komenda !mecze pokazuje liste meczy z dzisiaj (miejsca o raz synergie) !mecz [nr] gdzie [nr] oznacza numer meczu licząc od najnowszego czyli !mecz 1 pokaze ostatnią gre (wyświetla dokładny com z itemami i synergiami)`, extra.channel);
     }
 
     if (command == "next" && (flags.mod || flags.broadcaster)) {
@@ -191,8 +197,6 @@ const commands = () =>
         extra.channel
       );
     }
-    
-
 
     if (command === "dynamix" && message !== "stop" && (flags.mod || flags.broadcaster)) {
       ComfyJS.Say("Bot works!", extra.channel);
