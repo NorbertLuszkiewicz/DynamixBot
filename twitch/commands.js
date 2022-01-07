@@ -84,7 +84,7 @@ const commands = () =>
       try {
         const NickNameAndServer = message.split(", ");
         const match = await getMatch(
-          parseInt(NickNameAndServer[0]),
+          parseInt(NickNameAndServer[0])? parseInt(NickNameAndServer[0]) : 0,
           NickNameAndServer[1],
           NickNameAndServer[2] && NickNameAndServer[2].toUpperCase(),
           extra.channel

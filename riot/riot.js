@@ -102,6 +102,11 @@ const tftMatchList = async (streamer, nickname, server) => {
 };
 
 const getMatch = async (number, nickname, server, streamer) => {
+  console.log(number)
+  if(!number) {
+    return "@${user} komenda !mecze pokazuje liste meczy z dzisiaj (miejsca o raz synergie) !mecz [nr] gdzie [nr] oznacza numer meczu licząc od najnowszego czyli !mecz 1 pokaze ostatnią gre (wyświetla dokładny com z itemami i synergiami)"
+  }  
+  
   const [data] = await getUser(streamer);
   let puuid = data.activeRiotAccount.puuid;
   let gameRegion = nickname ? "EUROPE" : region[data.activeRiotAccount.server];
