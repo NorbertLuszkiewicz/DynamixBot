@@ -259,32 +259,32 @@ const messages = () => {
 
     //WOJTI SPAM NA IMIE
 
-    if (user == "traviscwat" && extra.channel == "simplywojtek") {
-      let now = Date.now();
+//     if (user == "traviscwat" && extra.channel == "simplywojtek") {
+//       let now = Date.now();
 
-      if (timeCooldownTravis < now) {
-        timeCooldownTravis = 5 * 60 * 1000 + now;
-        ComfyJS.Say("Travis UPOUPO", extra.channel);
-      }
-    }
+//       if (timeCooldownTravis < now) {
+//         timeCooldownTravis = 5 * 60 * 1000 + now;
+//         ComfyJS.Say("Travis UPOUPO", extra.channel);
+//       }
+//     }
 
-    if (user == "traviscwat" && extra.channel == "l2plelouch") {
-      let now = Date.now();
+//     if (user == "traviscwat" && extra.channel == "l2plelouch") {
+//       let now = Date.now();
 
-      if (timeCooldownTravis < now) {
-        timeCooldownTravis = 5 * 60 * 1000 + now;
-        ComfyJS.Say("^ Denciak", extra.channel);
-      }
-    }
+//       if (timeCooldownTravis < now) {
+//         timeCooldownTravis = 5 * 60 * 1000 + now;
+//         ComfyJS.Say("^ Denciak", extra.channel);
+//       }
+//     }
 
-    if (user == "og1ii" && extra.channel == "l2plelouch") {
-      let now = Date.now();
+//     if (user == "og1ii" && extra.channel == "l2plelouch") {
+//       let now = Date.now();
 
-      if (timeCooldownOgiii < now) {
-        timeCooldownOgiii = 5 * 60 * 1000 + now;
-        ComfyJS.Say("^ Dyktator", extra.channel);
-      }
-    }
+//       if (timeCooldownOgiii < now) {
+//         timeCooldownOgiii = 5 * 60 * 1000 + now;
+//         ComfyJS.Say("^ Dyktator", extra.channel);
+//       }
+//     }
   };
 };
 
