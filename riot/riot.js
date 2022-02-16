@@ -2,7 +2,7 @@ const { TftApi, Constants } = require("twisted");
 const {
   updateUser,
   getUser,
-  getAllUser
+  getAllUser,
 } = require("../controllers/UserController.js");
 
 const api = new TftApi();
@@ -11,14 +11,14 @@ const region = {
   EUW1: "EUROPE",
   EUN1: "EUROPE",
   NA1: "AMERICAS",
-  KR: "ASIA"
+  KR: "ASIA",
 };
 
 const addTftUser = async (name, server, streamer) => {
   const [data] = await getUser(streamer);
 
   const existThisAccount = data.riotAccountList.find(
-    riotAccount => riotAccount.name == name && riotAccount.server == server
+    (riotAccount) => riotAccount.name == name && riotAccount.server == server
   );
 
   if (!existThisAccount) {
@@ -27,13 +27,13 @@ const addTftUser = async (name, server, streamer) => {
     const newRiotAccountList = data.riotAccountList
       ? [
           ...data.riotAccountList,
-          { name, server, puuid: response.puuid, id: response.id }
+          { name, server, puuid: response.puuid, id: response.id },
         ]
       : [{ name, server, puuid: response.puuid, id: response.id }];
 
     await updateUser({
       streamer,
-      riotAccountList: newRiotAccountList
+      riotAccountList: newRiotAccountList,
     });
   }
 };
@@ -68,7 +68,7 @@ const tftMatchList = async (streamer, nickname, server) => {
   const today = Date.parse(
     `${now.getMonth() + 1}, ${now.getDate()}, ${now.getFullYear()} UTC`
   );
-  const todayMatchList = matchList.filter(match => {
+  const todayMatchList = matchList.filter((match) => {
     if (match.info.game_datetime > today) {
       return match;
     }
@@ -78,7 +78,7 @@ const tftMatchList = async (streamer, nickname, server) => {
     let matchListTwitch = `dzisiejsze gierki: `;
 
     todayMatchList.forEach((match, index) => {
-      const myBoard = match.info.participants.find(item => {
+      const myBoard = match.info.participants.find((item) => {
         return item.puuid === puuid;
       });
 
@@ -102,11 +102,11 @@ const tftMatchList = async (streamer, nickname, server) => {
 };
 
 const getMatch = async (number, nickname, server, streamer) => {
-  console.log(number)
-  if(!number) {
-    return "@${user} komenda !mecze pokazuje liste meczy z dzisiaj (miejsca o raz synergie) !mecz [nr] gdzie [nr] oznacza numer meczu licząc od najnowszego czyli !mecz 1 pokaze ostatnią gre (wyświetla dokładny com z itemami i synergiami)"
-  }  
-  
+  console.log(number);
+  if (!number) {
+    return "@${user} komenda !mecze pokazuje liste meczy z dzisiaj (miejsca o raz synergie) !mecz [nr] gdzie [nr] oznacza numer meczu licząc od najnowszego czyli !mecz 1 pokaze ostatnią gre (wyświetla dokładny com z itemami i synergiami)";
+  }
+
   const [data] = await getUser(streamer);
   let puuid = data.activeRiotAccount.puuid;
   let gameRegion = nickname ? "EUROPE" : region[data.activeRiotAccount.server];
@@ -125,19 +125,21 @@ const getMatch = async (number, nickname, server, streamer) => {
 
   const matchDetails = await api.Match.get(matchList[number - 1], gameRegion);
 
-  const myBoard = matchDetails.response.info.participants.find(item => {
+  const myBoard = matchDetails.response.info.participants.find((item) => {
     return item.puuid === puuid;
   });
-  
-  console.log(myBoard)
-  
-  const augments = []
-        myBoard.augments.map( augment => {
-      augments.push(augment.substr(13))
-  } )
+
+  const augments = [];
+  myBoard.augments.map((augment) => {
+    const correctAugment = augment.substr(13).replace(/([A-Z])/g, " $1");
+
+    augments.push(
+      correctAugment.charAt(0).toUpperCase() + correctAugment.slice(1)
+    );
+  });
 
   const correctTraits = myBoard.traits
-    .filter(trait => trait.tier_current > 0)
+    .filter((trait) => trait.tier_current > 0)
     .sort((a, b) => b.num_units - a.num_units);
 
   const correctUnits = myBoard.units
@@ -148,19 +150,19 @@ const getMatch = async (number, nickname, server, streamer) => {
   let message = `[Top${myBoard.placement}] Level: ${myBoard.level} | `;
   message = message + `${augments} | `;
 
-  correctTraits.forEach(trait => {
+  correctTraits.forEach((trait) => {
     message = message + `${trait.name.substr(5)}*${trait.num_units}, `;
   });
 
   message = message + "___________________________________________________";
 
-  correctUnits.forEach(unit => {
+  correctUnits.forEach((unit) => {
     let items = "";
 
     if (unit.items.length > 0) {
       items = [];
 
-      unit.items.forEach(item => {
+      unit.items.forEach((item) => {
         if (itemIdToName[item]) {
           items.push(itemIdToName[item]);
         }
@@ -189,12 +191,13 @@ const getStats = async (streamer, nickname, server) => {
       server ? serverNameToServerId[server] : "EUW1"
     );
     const userInfo = userData.response[0];
-    console.log(streamer, nickname, server)
-    
+    console.log(streamer, nickname, server);
+
     message = `statystyki gracza: ${response.name} | ${userInfo.tier}-${
       userInfo.rank
-    } ${userInfo.leaguePoints}LP ${userInfo.wins}wins ${userInfo.wins +
-      userInfo.losses}games`;
+    } ${userInfo.leaguePoints}LP ${userInfo.wins}wins ${
+      userInfo.wins + userInfo.losses
+    }games`;
 
     return message;
   } else {
@@ -205,9 +208,9 @@ const getStats = async (streamer, nickname, server) => {
     const userInfo = userData.response[0];
     message = `statystyki gracza: ${data.activeRiotAccount.name} | ${
       userInfo.tier
-    }-${userInfo.rank} ${userInfo.leaguePoints}LP ${
-      userInfo.wins
-    }wins ${userInfo.wins + userInfo.losses}games`;
+    }-${userInfo.rank} ${userInfo.leaguePoints}LP ${userInfo.wins}wins ${
+      userInfo.wins + userInfo.losses
+    }games`;
     return message;
   }
 };
@@ -220,7 +223,9 @@ const getRank = async (streamer, server) => {
   let topRank = [];
 
   if (chall.entries.length > 10) {
-    topRank = chall.entries.sort((a, b) => b.leaguePoints - a.leaguePoints).slice(0, 10);
+    topRank = chall.entries
+      .sort((a, b) => b.leaguePoints - a.leaguePoints)
+      .slice(0, 10);
   } else {
     topRank = chall.entries.sort((a, b) => b.leaguePoints - a.leaguePoints);
   }
@@ -229,11 +234,15 @@ const getRank = async (streamer, server) => {
     const { response: grand } = await api.League.getGrandMasterLeague(
       server ? serverNameToServerId[server] : "EUW1"
     );
-    if (grand.entries.length > 10 - topRank.length) {    
-      topRank = [...topRank, ...grand.entries.sort((a, b) => b.leaguePoints - a.leaguePoints).slice(0, 10 - topRank.length)];
-    }else{
+    if (grand.entries.length > 10 - topRank.length) {
+      topRank = [
+        ...topRank,
+        ...grand.entries
+          .sort((a, b) => b.leaguePoints - a.leaguePoints)
+          .slice(0, 10 - topRank.length),
+      ];
+    } else {
       topRank = [...topRank, ...grand.entries];
-
     }
   }
 
@@ -242,9 +251,13 @@ const getRank = async (streamer, server) => {
       server ? serverNameToServerId[server] : "EUW1"
     );
     if (master.entries.length > 10 - topRank.length) {
-      topRank = [...topRank, ...master.entries.sort((a, b) => b.leaguePoints - a.leaguePoints).slice(0, 10 - topRank.length)];
-    }
-    else{
+      topRank = [
+        ...topRank,
+        ...master.entries
+          .sort((a, b) => b.leaguePoints - a.leaguePoints)
+          .slice(0, 10 - topRank.length),
+      ];
+    } else {
       topRank = [...topRank, ...master.entries];
     }
   }
@@ -263,7 +276,7 @@ const checkActiveRiotAccount = async () => {
   try {
     const streamers = await getAllUser();
 
-    streamers.forEach(async streamer => {
+    streamers.forEach(async (streamer) => {
       if (streamer.riotAccountList) {
         streamer.riotAccountList.forEach(
           async ({ puuid, server, name, id }) => {
@@ -284,8 +297,8 @@ const checkActiveRiotAccount = async () => {
                   server,
                   puuid,
                   id,
-                  date: lastMatch[0].info.game_datetime
-                }
+                  date: lastMatch[0].info.game_datetime,
+                },
               });
             }
           }
@@ -304,7 +317,7 @@ const serverNameToServerId = {
   EUW: "EUW1",
   EUNE: "EUN1",
   NA: "NA1",
-  KR: "KR"
+  KR: "KR",
 };
 
 const itemIdToName = {
@@ -352,7 +365,7 @@ const itemIdToName = {
   77: "WM",
   17: "Zeke",
   67: "Zeph",
-  27: "ZZR"
+  27: "ZZR",
 };
 
 module.exports = {
@@ -361,5 +374,5 @@ module.exports = {
   checkActiveRiotAccount,
   getMatch,
   getStats,
-  getRank
+  getRank,
 };
