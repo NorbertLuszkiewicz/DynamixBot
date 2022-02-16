@@ -148,11 +148,13 @@ const getMatch = async (number, nickname, server, streamer) => {
     .sort((a, b) => b.items.length - a.items.length);
 
   let message = `[Top${myBoard.placement}] Level: ${myBoard.level} | `;
-  message = message + `${augments} | `;
+  
 
   correctTraits.forEach((trait) => {
     message = message + `${trait.name.substr(5)}*${trait.num_units}, `;
   });
+  
+  message = message + `| ${augments} `;
 
   message = message + "___________________________________________________";
 
