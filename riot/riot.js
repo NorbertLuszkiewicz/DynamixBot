@@ -203,7 +203,7 @@ const getStats = async (streamer, nickname, server) => {
 
     return message;
   } else {
-    console.log(      data.activeRiotAccount.id,
+    console.log(      data.activeRiotAccount,
       data.activeRiotAccount.server, "aa")
     
     const userData = await api.League.get(
