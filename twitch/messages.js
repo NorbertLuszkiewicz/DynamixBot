@@ -80,6 +80,8 @@ const messages = () => {
         ComfyJS.Say("!sr " + message, extra.channel);
       }
       
+      console.log(extra.customRewardId, rollID, data.rollID)
+      
       if (flags.customReward && extra.customRewardId === rollID) {
         ComfyJS.Say(`${user} rolls the dice and gets a ${randomIntFromInterval(1, 420)}!`, extra.channel);
       }

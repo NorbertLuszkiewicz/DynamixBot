@@ -106,6 +106,10 @@ const UserSchema = new Schema({
   matchList: {
     type: Array,
     default: [],
+  }, 
+  rollID: {
+    type: String,
+    default: null,
   },
 });
 
