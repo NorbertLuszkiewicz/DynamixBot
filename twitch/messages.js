@@ -84,17 +84,16 @@ const messages = () => {
         ComfyJS.Say(`${user} rolls the dice and gets a ${randomIntFromInterval(1, 420)}!`, extra.channel);
       }  
 
-    
       
       if (flags.customReward && extra.customRewardId === banID) {
         let number = randomIntFromInterval(1, 100)
 
         number == 1 && ComfyJS.Say(`/timeout ${user} 10`, extra.channel);
         number == 1 && ComfyJS.Say(`${user} brawo trafiłeś w 1% na 10s t/o OOOO`, extra.channel);
-        number > 1 && number < 90 &&  ComfyJS.Say(`/timeout ${user} 1800`, extra.channel);
-        number > 1 && number < 90 &&  ComfyJS.Say(`/timeout ${user} 1800`, extra.channel);
-        number > 89 && number < 100 &&  ComfyJS.Say(`/timeout ${user} 3600`, extra.channel);
-        number > 89 && number < 100 &&  ComfyJS.Say(`${user} brawo trafiłeś w 10% na 1h t/0 EZ`, extra.channel);
+        number > 1 && number < 89 &&  ComfyJS.Say(`/timeout ${user} 1800`, extra.channel);
+        number > 1 && number < 89 &&  ComfyJS.Say(`${user} brawo trafiłeś w 88% na 30min t/0 PeepoGlad`, extra.channel);
+        number > 88 && number < 100 &&  ComfyJS.Say(`/timeout ${user} 3600`, extra.channel);
+        number > 88 && number < 100 &&  ComfyJS.Say(`${user} brawo trafiłeś w 10% na 1h t/0 EZ`, extra.channel);
         number == 100 &&  ComfyJS.Say(`/ban ${user} ruretka KEKW`, extra.channel);
         number == 100 &&  ComfyJS.Say(`${user} brawo trafiłeś w 1% na perma KEKW`, extra.channel);
       }
