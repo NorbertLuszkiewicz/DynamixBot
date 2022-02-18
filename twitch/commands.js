@@ -11,7 +11,7 @@ const { songPlayingNow, timeRequest } = require("../streamElements");
 
 const commands = () =>
   (ComfyJS.onCommand = async (user, command, message, flags, extra) => {
-    if (command == "song") {
+    if (command == "song" && extra.channel !== "og1ii") {
       try {
         const spotifyData = await currentlyPlaying(extra.channel);
         const { isPlayingNow, title, link } = await songPlayingNow(
