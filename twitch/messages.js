@@ -38,7 +38,7 @@ const messages = () => {
   ComfyJS.onChat = async (user, message, flags, self, extra) => {
     try {
       const [data] = await getUser(extra.channel);
-      const { addSongID, skipSongID, volumeSongID } = await data;
+      const { addSongID, skipSongID, volumeSongID, rollID } = await data;
 
       if (flags.customReward && message === "add-song-award") {
         updateUser({
@@ -78,6 +78,10 @@ const messages = () => {
 
       if (flags.customReward && extra.customRewardId === addSongID) {
         ComfyJS.Say("!sr " + message, extra.channel);
+      }
+      
+      if (flags.customReward && extra.customRewardId === rollID) {
+        ComfyJS.Say(`${user} rolls the dice and gets a ${randomIntFromInterval(1, 420)}!`, extra.channel);
       }
 
       if (
@@ -287,6 +291,10 @@ const messages = () => {
 //     }
   };
 };
+
+function randomIntFromInterval(min, max) { // min and max included 
+  return Math.floor(Math.random() * (max - min + 1) + min)
+}
 
 module.exports = {
   messages,
