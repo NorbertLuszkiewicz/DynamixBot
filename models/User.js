@@ -110,6 +110,10 @@ const UserSchema = new Schema({
   rollID: {
     type: String,
     default: null,
+  }, 
+  banID: {
+    type: String,
+    default: null,
   },
 });
 

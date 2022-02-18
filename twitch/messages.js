@@ -38,7 +38,7 @@ const messages = () => {
   ComfyJS.onChat = async (user, message, flags, self, extra) => {
     try {
       const [data] = await getUser(extra.channel);
-      const { addSongID, skipSongID, volumeSongID, rollID } = await data;
+      const { addSongID, skipSongID, volumeSongID, rollID, banID } = await data;
 
       if (flags.customReward && message === "add-song-award") {
         updateUser({
@@ -80,10 +80,20 @@ const messages = () => {
         ComfyJS.Say("!sr " + message, extra.channel);
       }
       
-      console.log(extra.customRewardId, rollID, data.rollID)
-      
       if (flags.customReward && extra.customRewardId === rollID) {
         ComfyJS.Say(`${user} rolls the dice and gets a ${randomIntFromInterval(1, 420)}!`, extra.channel);
+      }  
+      
+              let number = randomIntFromInterval(1, 420)
+        console.log(number)
+      
+      if (flags.customReward && extra.customRewardId === banID) {
+        // let number = randomIntFromInterval(1, 420)
+        // console.log(number)
+        number == 1 && ComfyJS.Say(`/timeout ${user} 10`, extra.channel);
+        number > 1 && number < 51 &&  ComfyJS.Say(`/timeout ${user} 1800`, extra.channel);
+        number > 100 &&  &&  ComfyJS.Say(`/timeout ${user} 3600`, extra.channel);
+        number == 100 &&  ComfyJS.Say(`/ban ${user} ruretka KEKW`, extra.channel);
       }
 
       if (
