@@ -183,19 +183,19 @@ const messages = () => {
 
     //cyferki
 
-    if (
-      (message.indexOf(" cyferki") !== -1 ||
-        message.indexOf(" numerki") !== -1 ||
-        message.indexOf(" liczby") !== -1) &&
-      user != "DynaM1X1" &&
-      user != "StreamElements"
-    ) {
-      ComfyJS.Say(
-        user +
-          " to nakładka która pokazuje na kogo grałeś: https://www.metatft.com/download peepoGlad",
-        extra.channel
-      );
-    }  
+    // if (
+    //   (message.indexOf(" cyferki") !== -1 ||
+    //     message.indexOf(" numerki") !== -1 ||
+    //     message.indexOf(" liczby") !== -1) &&
+    //   user != "DynaM1X1" &&
+    //   user != "StreamElements"
+    // ) {
+    //   ComfyJS.Say(
+    //     user +
+    //       " to nakładka która pokazuje na kogo grałeś: https://www.metatft.com/download peepoGlad",
+    //     extra.channel
+    //   );
+    // }  
     
     //strzelanie do tosi
 
