@@ -223,7 +223,7 @@ const commands = () =>
       
       let number = randomInt(1,100)
       
-      ComfyJS.Say(`@${user} aktualnie jesteś w ${number}% swojej formy`, extra.channel)
+      ComfyJS.Say(`@${user} aktualnie jesteś w ${number}% swojej szczytowej formy`, extra.channel)
       
     }
 
