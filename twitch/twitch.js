@@ -121,7 +121,13 @@ const getHoroscope = async sign => {
 const getTranslateToken = async () => {
   try {
     const {data} = await axios.post(
-      `https://api.cognitive.microsoft.com/sts/v1.0/issueToken`
+      `https://api.cognitive.microsoft.com/sts/v1.0/issueToken`,      
+      {
+        headers: {
+          Authorization: `Ocp-Apim-Subscription-Key`,
+          "Ocp-Apim-Subscription-Key": `Ocp-Apim-Subscription-Key`,
+        }
+      }
     );
     
     console.log(data)
