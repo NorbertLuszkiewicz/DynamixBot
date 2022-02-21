@@ -3,12 +3,12 @@ const {
   addUser,
   getUser,
   updateUser,
-  getAllUser
+  getAllUser,
 } = require("../controllers/UserController.js");
 
 const TOKEN = "https://id.twitch.tv/oauth2/token";
 
-const addNewUser = async code => {
+const addNewUser = async (code) => {
   let accessToken;
   let refreshToken;
   const body = `grant_type=authorization_code&code=${code}&redirect_uri=https://dynamix-bot.glitch.me/register&client_id=${process.env.BOT_CLIENT_ID}&client_secret=${process.env.BOT_CLIENT_SECRET}`;
@@ -27,20 +27,20 @@ const addNewUser = async code => {
       await addUser({
         streamer: userName,
         twitchAccessToken: data.access_token,
-        twitchRefreshToken: data.refresh_token
+        twitchRefreshToken: data.refresh_token,
       });
     } else {
       await updateUser({
         streamer: userName,
         twitchAccessToken: data.access_token,
-        twitchRefreshToken: data.refresh_token
+        twitchRefreshToken: data.refresh_token,
       });
     }
 
     return {
       status: "success",
       name: userName,
-      token: data.access_token
+      token: data.access_token,
     };
   } catch (err) {
     console.log(`Error while getting first token (${err})`);
@@ -52,7 +52,7 @@ const refreshTwitchTokens = async () => {
   try {
     const streamers = await getAllUser();
 
-    streamers.forEach(async streamer => {
+    streamers.forEach(async (streamer) => {
       if (streamer.twitchAccessToken) {
         const [refreshToken] = await getUser(streamer.streamer);
 
@@ -67,7 +67,7 @@ const refreshTwitchTokens = async () => {
         await updateUser({
           streamer: streamer.streamer,
           twitchAccessToken: data.access_token,
-          twitchRefreshToken: data.refresh_token
+          twitchRefreshToken: data.refresh_token,
         });
       }
     });
@@ -78,13 +78,13 @@ const refreshTwitchTokens = async () => {
   }
 };
 
-const getStreamerData = async accessToken => {
+const getStreamerData = async (accessToken) => {
   try {
     const { data } = await axios.get("https://api.twitch.tv/helix/users", {
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        "Client-Id": "bhwlcwuvtg51226poslegrqdcm8naz"
-      }
+        "Client-Id": "bhwlcwuvtg51226poslegrqdcm8naz",
+      },
     });
 
     return data;
@@ -93,48 +93,54 @@ const getStreamerData = async accessToken => {
   }
 };
 
-const getWeather = async city => {
+const getWeather = async (city) => {
   try {
-    const {data} = await axios.get(
+    const { data } = await axios.get(
       `http://api.openweathermap.org/data/2.5/weather?q=${city}&lang=pl&appid=${process.env.WEATHER_TOKEN}`
     );
 
-    return {temp: data.main.temp, speed: data.wind.speed, description: data.weather[0].description};
+    return {
+      temp: data.main.temp,
+      speed: data.wind.speed,
+      description: data.weather[0].description,
+    };
   } catch (err) {
     console.log(`Error while getting weather ${err}`);
   }
 };
 
-const getHoroscope = async sign => {
+const getHoroscope = async (sign) => {
   try {
-    const {data} = await axios.post(
+    const { data } = await axios.post(
       `https://aztro.sameerkumar.website/?sign=${sign}&day=today`
     );
-    
-    getTranslateToken()
 
-    return data.description
+    getTranslateToken();
+
+    return data.description;
   } catch (err) {
     console.log(`Error while getting horoscope ${err}`);
   }
 };
 const getTranslateToken = async () => {
   try {
-    const {data} = await axios.post(
-      `https://api.cognitive.microsoft.com/sts/v1.0/issueToken`,      
+    const data = await axios.post(
+      `https://google-translate1.p.rapidapi.com/language/translate/v2`,
       {
         headers: {
-          Authorization: `Ocp-Apim-Subscription-Key`,
-          "Ocp-Apim-Subscription-Key": `Ocp-Apim-Subscription-Key`,
-        }
+          "content-type": "application/x-www-form-urlencoded",
+          "x-rapidapi-host": "google-translate1.p.rapidapi.com",
+          "x-rapidapi-key": "SIGN-UP-FOR-KEY",
+        },
+        data: { q: "Hello, world!", target: "pl", source: "en" },
       }
     );
-    
-    console.log(data)
 
-    return data
+    console.log(data);
+
+    return data;
   } catch (err) {
-    console.log(`Error while getting horoscope ${err}`);
+    console.log(`Error while getting translate ${err}`);
   }
 };
 
@@ -142,5 +148,5 @@ module.exports = {
   addNewUser,
   refreshTwitchTokens,
   getWeather,
-  getHoroscope
+  getHoroscope,
 };
