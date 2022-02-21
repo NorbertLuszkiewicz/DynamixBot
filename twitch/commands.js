@@ -189,18 +189,14 @@ const commands = () =>
         
         console.log("aassddddd", changeToEng[toPl(message)])
         
-        const { temp, speed, description } = await getHoroscope(changeToEng[toPl(message)]);
-        let emote = "";
+        const description = await getHoroscope(changeToEng[toPl(message)]);
 
-
-        // temp
-        //   ? ComfyJS.Say(
-        //       `@${user} Jest ${Math.round(
-        //         temp - 273
-        //       )} °C, ${description} ${emote} wiatr wieje z prędkością ${speed} km/h`,
-        //       extra.channel
-        //     )
-        //   : ComfyJS.Say(`@${user} Nie znaleziono`, extra.channel);
+        description
+          ? ComfyJS.Say(
+              `@${user} ${description}`,
+              extra.channel
+            )
+          : ComfyJS.Say(`@${user} Nie znaleziono`, extra.channel);
       } catch (err) {
         console.log(`Error when use !horoskop on twitch (${err})`);
       }

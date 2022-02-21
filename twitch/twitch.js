@@ -113,7 +113,7 @@ const getHoroscope = async sign => {
     
     console.log(data)
 
-    //return {temp: data.main.temp, speed: data.wind.speed, description: data.weather[0].description};
+    return data.description
   } catch (err) {
     console.log(`Error while getting horoscope ${err}`);
   }
