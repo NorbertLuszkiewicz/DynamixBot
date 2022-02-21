@@ -115,34 +115,12 @@ const getHoroscope = async (sign) => {
       `https://aztro.sameerkumar.website/?sign=${sign}&day=today`
     );
 
-    getTranslateToken();
-
     return data.description;
   } catch (err) {
     console.log(`Error while getting horoscope ${err}`);
   }
 };
-const getTranslateToken = async () => {
-  try {
-    const data = await axios.post(
-      `https://google-translate1.p.rapidapi.com/language/translate/v2`,
-      {
-        headers: {
-          "content-type": "application/x-www-form-urlencoded",
-          "x-rapidapi-host": "google-translate1.p.rapidapi.com",
-          "x-rapidapi-key": "SIGN-UP-FOR-KEY",
-        },
-        data: { q: "Hello, world!", target: "pl", source: "en" },
-      }
-    );
 
-    console.log(data);
-
-    return data;
-  } catch (err) {
-    console.log(`Error while getting translate ${err}`);
-  }
-};
 
 module.exports = {
   addNewUser,

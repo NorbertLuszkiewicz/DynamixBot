@@ -148,7 +148,7 @@ const commands = () =>
       }
     }
 
-    if (command == "weather" || command == "pogoda") {
+    if (command === "weather" || command === "pogoda") {
       try {
         const { temp, speed, description } = await getWeather(toPl(message));
         let emote = "";
@@ -179,7 +179,7 @@ const commands = () =>
       }
     }
 
-    if (command == "horoscope" || command == "horoskop") {
+    if (command === "horoscope" || command === "horoskop") {
       try {
         const changeToEng = {
           baran: "aries",
@@ -205,6 +205,19 @@ const commands = () =>
       } catch (err) {
         console.log(`Error when use !horoskop on twitch (${err})`);
       }
+    }
+    
+    if (command === "kutas" || command === "penis") {
+      
+      let number = randomInt(1,9)
+      let emote = ""
+      
+      number < 4 && (emote = "PepeLaugh")
+      number > 6 && (emote = "VisLaud ")
+      
+
+      ComfyJS.Say(`@${user} ${"=".repeat([number])} `, extra.channel)
+      
     }
 
     ///PAULINKA STOP
@@ -238,6 +251,10 @@ const commands = () =>
       startSong(extra.channel);
     }
   });
+
+function randomInt(min, max) { // min and max included 
+  return Math.floor(Math.random() * (max - min + 1) + min)
+}
 
 const toPl = (string) => {
   return string
