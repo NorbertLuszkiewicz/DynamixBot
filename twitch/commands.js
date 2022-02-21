@@ -178,24 +178,29 @@ const commands = () =>
         console.log(`Error when use !pogoda on twitch (${err})`);
       }
     }
-    
-        if (command == "horoscope" || command == "horoskop") {
+
+    if (command == "horoscope" || command == "horoskop") {
       try {
-                
         const changeToEng = {
-          baran: "aries",byk: "taurus",bliźnięta: "gemini", rak: "cancer",lew: "leo",panna: "virgo",waga: "libra",skorpion: "scorpio", strzelec: "sagittarius",koziorożec: "capricorn",wodnik: "aquarius",ryby: "pisces", ryba: "pisces"
-        }
-        
-        
-        console.log("aassddddd", changeToEng[toPl(message)])
-        
+          baran: "aries",
+          byk: "taurus",
+          bliźnięta: "gemini",
+          rak: "cancer",
+          lew: "leo",
+          panna: "virgo",
+          waga: "libra",
+          skorpion: "scorpio",
+          strzelec: "sagittarius",
+          koziorożec: "capricorn",
+          wodnik: "aquarius",
+          ryby: "pisces",
+          ryba: "pisces",
+        };
+
         const description = await getHoroscope(changeToEng[toPl(message)]);
 
         description
-          ? ComfyJS.Say(
-              `@${user} ${description}`,
-              extra.channel
-            )
+          ? ComfyJS.Say(`@${user} ${description}`, extra.channel)
           : ComfyJS.Say(`@${user} Nie znaleziono`, extra.channel);
       } catch (err) {
         console.log(`Error when use !horoskop on twitch (${err})`);
