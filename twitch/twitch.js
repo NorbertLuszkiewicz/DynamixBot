@@ -111,9 +111,22 @@ const getHoroscope = async sign => {
       `https://aztro.sameerkumar.website/?sign=${sign}&day=today`
     );
     
-    console.log(data)
+    getTranslateToken()
 
     return data.description
+  } catch (err) {
+    console.log(`Error while getting horoscope ${err}`);
+  }
+};
+const getTranslateToken = async () => {
+  try {
+    const {data} = await axios.post(
+      `https://api.cognitive.microsoft.com/sts/v1.0/issueToken`
+    );
+    
+    console.log(data)
+
+    return data
   } catch (err) {
     console.log(`Error while getting horoscope ${err}`);
   }
