@@ -213,10 +213,17 @@ const commands = () =>
       let emote = ""
       
       number < 4 && (emote = "PepeLaugh")
+      number >= 4 && number <= 6 && (emote = "kezmanGlad")
       number > 6 && (emote = "VisLaud ")
       
-
-      ComfyJS.Say(`@${user} ${"=".repeat([number])} `, extra.channel)
+      ComfyJS.Say(`@${user} 8${"=".repeat([number])}D ${emote}`, extra.channel)
+      
+    }    
+    if (command === "forma") {
+      
+      let number = randomInt(1,100)
+      
+      ComfyJS.Say(`@${user} aktualnie jesteś w ${number}% swojej formy`, extra.channel)
       
     }
 
