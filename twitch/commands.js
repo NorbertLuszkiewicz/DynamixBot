@@ -1,5 +1,5 @@
 const ComfyJS = require("comfy.js");
-const { getWeather } = require("./twitch");
+const { getWeather, getHoroscope } = require("./twitch");
 const {
   tftMatchList,
   getMatch,
@@ -179,14 +179,19 @@ const commands = () =>
       }
     }
     
-        if (command == "weather" || command == "horoskop") {
+        if (command == "horoscope" || command == "horoskop") {
       try {
-        const { temp, speed, description } = await getWeather(changeToEng[message]);
-        let emote = "";
-        
+                
         const changeToEng = {
-          baran: "aries",byk taurus, gemini, cancer,lew: "leo", virgo, libra,skorpion: "scorpio", strzelec: "sagittarius",koziorożec: capricorn,wodnik: "aquarius",ryby: "pisces", ryba: "pisces"
+          baran: "aries",byk: "taurus",bliźnięta: "gemini", rak: "cancer",lew: "leo",panna: "virgo",waga: "libra",skorpion: "scorpio", strzelec: "sagittarius",koziorożec: "capricorn",wodnik: "aquarius",ryby: "pisces", ryba: "pisces"
         }
+        
+        
+        console.log("aassddddd", changeToEng[toPl(message)])
+        
+        const { temp, speed, description } = await getHoroscope(changeToEng[toPl(message)]);
+        let emote = "";
+
 
         // temp
         //   ? ComfyJS.Say(
@@ -197,7 +202,7 @@ const commands = () =>
         //     )
         //   : ComfyJS.Say(`@${user} Nie znaleziono`, extra.channel);
       } catch (err) {
-        console.log(`Error when use !pogoda on twitch (${err})`);
+        console.log(`Error when use !horoskop on twitch (${err})`);
       }
     }
 

@@ -107,7 +107,7 @@ const getWeather = async city => {
 
 const getHoroscope = async sign => {
   try {
-    const {data} = await axios.get(
+    const {data} = await axios.post(
       `https://aztro.sameerkumar.website/?sign=${sign}&day=today`
     );
     
