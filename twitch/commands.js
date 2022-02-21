@@ -178,6 +178,28 @@ const commands = () =>
         console.log(`Error when use !pogoda on twitch (${err})`);
       }
     }
+    
+        if (command == "weather" || command == "horoskop") {
+      try {
+        const { temp, speed, description } = await getWeather(changeToEng[message]);
+        let emote = "";
+        
+        const changeToEng = {
+          baran: "aries",byk taurus, gemini, cancer,lew: "leo", virgo, libra,skorpion: "scorpio", strzelec: "sagittarius",koziorożec: capricorn,wodnik: "aquarius",ryby: "pisces", ryba: "pisces"
+        }
+
+        // temp
+        //   ? ComfyJS.Say(
+        //       `@${user} Jest ${Math.round(
+        //         temp - 273
+        //       )} °C, ${description} ${emote} wiatr wieje z prędkością ${speed} km/h`,
+        //       extra.channel
+        //     )
+        //   : ComfyJS.Say(`@${user} Nie znaleziono`, extra.channel);
+      } catch (err) {
+        console.log(`Error when use !pogoda on twitch (${err})`);
+      }
+    }
 
     ///PAULINKA STOP
 

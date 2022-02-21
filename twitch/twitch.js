@@ -95,7 +95,6 @@ const getStreamerData = async accessToken => {
 
 const getWeather = async city => {
   try {
-    console.log(city)
     const {data} = await axios.get(
       `http://api.openweathermap.org/data/2.5/weather?q=${city}&lang=pl&appid=${process.env.WEATHER_TOKEN}`
     );
@@ -106,8 +105,23 @@ const getWeather = async city => {
   }
 };
 
+const getHoroscope = async sign => {
+  try {
+    const {data} = await axios.get(
+      `https://aztro.sameerkumar.website/?sign=${sign}&day=today`
+    );
+    
+    console.log(data)
+
+    //return {temp: data.main.temp, speed: data.wind.speed, description: data.weather[0].description};
+  } catch (err) {
+    console.log(`Error while getting horoscope ${err}`);
+  }
+};
+
 module.exports = {
   addNewUser,
   refreshTwitchTokens,
-  getWeather
+  getWeather,
+  getHoroscope
 };
