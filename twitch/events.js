@@ -16,6 +16,34 @@ const events = () => {
     );
   };
 
+  const thanks = [
+    "",
+    "pierwszy subik VisLaud mam nadzieje ze zostaniesz z nami na dłużej peepoLove",
+    "fajnie ze dałeś suba akurat tutaj peepoLove",
+    "subik VisLaud",
+    "kolejny miesiąc z nami OOOO",
+    "sub BRUHBRUH",
+    "pół roczny subik peepoLove",
+    "dał suba VisLaud",
+    "kolejny miesiąc z nami peepoLove",
+    "dał suba VisLaud",
+    "dziesięć miesiecy wspierania streamera BRUHBRUH",
+    "dał suba peepoLove prawie rok z nami kezmanGlad",
+    "to już roczek BRUHBRUH",
+    "subik VisLaud",
+    "kolejny misąc z nami OOOO",
+    "sub BRUHBRUH",
+    "kolejny miesiąc z nami peepoLove",
+    "dał suba VisLaud",
+    "półtora roku z nami peepoLove koksem jesteś nie zmieniaj się",
+    "VisLaud",
+    "kochany wic dał suba kezmanGlad",
+    "piekny jesteś ze dajesz subika akurat tu peepoLove",
+    "VisLaud",
+    "dał subika OOOO jeszcze miesiąc i 2 lata BRUHBRUH",
+    "dwa lata z nami BRUHBRUH",
+  ];
+
   ComfyJS.onSubGift = (
     gifterUser,
     streakMonths,
@@ -27,13 +55,13 @@ const events = () => {
     if (extra.channel == "og1ii") {
       ComfyJS.Say("og1iiBusiness Yoink", extra.channel);
     } else {
-      ComfyJS.Say("gratuluje suba " + recipientUser, extra.channel);
+      ComfyJS.Say(
+        gifterUser +
+          " dzięki za zgiftowanie suba na ten piękny stream peepoLove i gratuluje suba " +
+          recipientUser,
+        extra.channel
+      );
     }
-
-    ComfyJS.Say(
-      "/chant @" + gifterUser + " dzięki za gifta peepoLove ",
-      extra.channel
-    );
   };
 
   ComfyJS.onResub = (
@@ -47,28 +75,23 @@ const events = () => {
     if (extra.channel == "og1ii") {
       ComfyJS.Say("og1iiBusiness Yoink", extra.channel);
     } else {
-      ComfyJS.Say(user + " VisLaud", extra.channel);
+      ComfyJS.Say(
+        `${user} ${
+          thanks[cumulativeMonths] ? thanks[cumulativeMonths] : "VisLaud"
+        }`,
+        extra.channel
+      );
     }
-
-    ComfyJS.Say(
-      "/chant @" + user + " dzięki za suba peepoLove ",
-      extra.channel
-    );
   };
 
   ComfyJS.onSub = (user, message, subTierInfo, extra) => {
     if (extra.channel == "og1ii") {
       ComfyJS.Say("og1iiBusiness Yoink", extra.channel);
     } else {
-      ComfyJS.Say(user + " VisLaud", extra.channel);
+      ComfyJS.Say(`${user} ${thanks[1]}`, extra.channel);
     }
-
-    ComfyJS.Say(
-      "/chant @" + user + " dzięki za suba peepoLove ",
-      extra.channel
-    );
   };
 };
 module.exports = {
-  events
+  events,
 };
