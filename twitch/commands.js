@@ -223,6 +223,7 @@ const commands = () =>
     if (command === "slots" ){
       
      const emotes = [
+       "",
         "VisLaud", 
         "EZ", 
         "peepoGlad", 
@@ -236,9 +237,20 @@ const commands = () =>
       let number2 = randomInt(1,7)
       let number3= randomInt(1,7)
       console.log(number1,number2,number3)
+      
+      let result = `__________________________________________________
+      --------------[ ${emotes[number1]} , ${emotes[number2]} , ${emotes[number3]} ]/
+      __________________________________________________
+      `
+      
+      const isWin = number1 === number2 === number3
+      const isSemiWin = number1 === number2 || number1 === number3 || number2 === number3
+      let winMessage = "przegrałeś PepeLaugh"
+      isSemiWin && (winMessage = "prawie prawie PauseChamp")
+      isWin && (winMessage = "wygrałeś BRUHBRUH")
 
       
-      ComfyJS.Say(`@${user} odpala maszyne `, extra.channel)
+      ComfyJS.Say(`@${user} odpala maszyne ${result} ${winMessage}`, extra.channel)
       
     } 
     
