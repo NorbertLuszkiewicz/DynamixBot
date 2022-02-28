@@ -222,13 +222,23 @@ const commands = () =>
     
     if (command === "slots" ){
       
+     const emotes = [
+        "VisLaud", 
+        "EZ", 
+        "peepoGlad", 
+        "Kappa", 
+        "okok", 
+        "BOOBA", 
+        "kezmanStare", 
+      ]
+      
       let number1 = randomInt(1,7)
       let number2 = randomInt(1,7)
       let number3= randomInt(1,7)
       console.log(number1,number2,number3)
 
       
-      ComfyJS.Say(`@ `, extra.channel)
+      ComfyJS.Say(`@${user} odpala maszyne `, extra.channel)
       
     } 
     
