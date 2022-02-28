@@ -218,7 +218,20 @@ const commands = () =>
       
       ComfyJS.Say(`@${user} 8${"=".repeat([number])}D ${emote}`, extra.channel)
       
-    }    
+    }  
+    
+    if (command === "slots" ){
+      
+      let number1 = randomInt(1,7)
+      let number2 = randomInt(1,7)
+      let number3= randomInt(1,7)
+      console.log(number1,number2,number3)
+
+      
+      ComfyJS.Say(`@ `, extra.channel)
+      
+    } 
+    
     if (command === "forma") {
       
       let number = randomInt(1,100)
