@@ -38,7 +38,7 @@ const messages = () => {
   ComfyJS.onChat = async (user, message, flags, self, extra) => {
     try {
       const [data] = await getUser(extra.channel);
-      const { addSongID, skipSongID, volumeSongID, rollID, banID } = await data;
+      const { addSongID, skipSongID, volumeSongID, rollID, banID, slotsID } = await data;
 
       if (flags.customReward && message === "add-song-award") {
         updateUser({
@@ -97,6 +97,38 @@ const messages = () => {
         number == 100 &&  ComfyJS.Say(`/ban ${user} ruretka KEKW`, extra.channel);
         number == 100 &&  ComfyJS.Say(`${user} brawo trafiłeś w 1% na perma KEKW`, extra.channel);
       }
+      
+       if (flags.customReward && extra.customRewardId === slotsID) {
+      const emotes = [
+        "",
+        "VisLaud",
+        "EZ",
+        "peepoGlad",
+        "Kappa",
+        "okok",
+        "BOOBA",
+        "kezmanStare",
+      ];
+
+      let number1 = randomInt(1, 7);
+      let number2 = randomInt(1, 7);
+      let number3 = randomInt(1, 7);
+
+      let result = `__________________________________________________
+      --------------[ ${emotes[number1]} , ${emotes[number2]} , ${emotes[number3]} ]/
+      __________________________________________________
+      `;
+
+      const isWin = number1 === number2 && number2 === number3;
+      const isSemiWin =
+        number1 === number2 || number1 === number3 || number2 === number3;
+      let winMessage = "przegrałeś PepeLaugh";
+      isSemiWin && (winMessage = "prawie prawie PauseChamp");
+      isWin && (winMessage = "wygrałeś BRUHBRUH");
+     
+        ComfyJS.Say(`${result} @${user} ${winMessage}`, extra.channel);
+      
+    }
 
       if (
         user === "StreamElements" &&
@@ -303,8 +335,16 @@ const messages = () => {
 //         ComfyJS.Say("^ Dyktator", extra.channel);
 //       }
 //     }
+    
+       
   };
 };
+
+
+function randomInt(min, max) {
+  // min and max included
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
 
 function randomIntFromInterval(min, max) { // min and max included 
   return Math.floor(Math.random() * (max - min + 1) + min)

@@ -114,6 +114,10 @@ const UserSchema = new Schema({
   banID: {
     type: String,
     default: null,
+  }, 
+  slotsID: {
+    type: String,
+    default: null,
   },
 });
 
