@@ -236,7 +236,6 @@ const commands = () =>
       let number1 = randomInt(1,7)
       let number2 = randomInt(1,7)
       let number3= randomInt(1,7)
-      console.log(number1,number2,number3)
       
       let result = `__________________________________________________
       --------------[ ${emotes[number1]} , ${emotes[number2]} , ${emotes[number3]} ]/
