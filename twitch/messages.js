@@ -114,7 +114,7 @@ const messages = () => {
       let number2 = randomInt(1, 7);
       let number3 = randomInt(1, 7);
 
-      let result = `__________________________________________________
+      let result = `____________________PREMIUM____________________
       --------------[ ${emotes[number1]} , ${emotes[number2]} , ${emotes[number3]} ]/
       __________________________________________________
       `;
