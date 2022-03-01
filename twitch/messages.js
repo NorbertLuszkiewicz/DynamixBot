@@ -4,13 +4,13 @@ const {
   startSong,
   refreshDevices,
   changeVolumeOnTime,
-  setVolume
+  setVolume,
 } = require("../spotify");
 
 const {
   getAllUser,
   updateUser,
-  getUser
+  getUser,
 } = require("../controllers/UserController.js");
 
 const { songPlayingNow, timeRequest } = require("../streamElements");
@@ -38,12 +38,13 @@ const messages = () => {
   ComfyJS.onChat = async (user, message, flags, self, extra) => {
     try {
       const [data] = await getUser(extra.channel);
-      const { addSongID, skipSongID, volumeSongID, rollID, banID, slotsID } = await data;
+      const { addSongID, skipSongID, volumeSongID, rollID, banID, slotsID } =
+        await data;
 
       if (flags.customReward && message === "add-song-award") {
         updateUser({
           streamer: extra.channel,
-          addSongID: extra.customRewardId
+          addSongID: extra.customRewardId,
         });
 
         ComfyJS.Say(
@@ -54,7 +55,7 @@ const messages = () => {
       if (flags.customReward && message === "skip-song-award") {
         updateUser({
           streamer: extra.channel,
-          skipSongID: extra.customRewardId
+          skipSongID: extra.customRewardId,
         });
 
         ComfyJS.Say(
@@ -67,7 +68,7 @@ const messages = () => {
 
         updateUser({
           streamer: extra.channel,
-          volumeSongID: newVolumeSongID
+          volumeSongID: newVolumeSongID,
         });
 
         ComfyJS.Say(
@@ -79,56 +80,87 @@ const messages = () => {
       if (flags.customReward && extra.customRewardId === addSongID) {
         ComfyJS.Say("!sr " + message, extra.channel);
       }
-      
-      if (flags.customReward && extra.customRewardId === rollID) {
-        ComfyJS.Say(`${user} rolls the dice and gets a ${randomIntFromInterval(1, 420)}!`, extra.channel);
-      }  
 
-      
+      if (flags.customReward && extra.customRewardId === rollID) {
+        ComfyJS.Say(
+          `${user} rolls the dice and gets a ${randomIntFromInterval(1, 420)}!`,
+          extra.channel
+        );
+      }
+
       if (flags.customReward && extra.customRewardId === banID) {
-        let number = randomIntFromInterval(1, 100)
+        let number = randomIntFromInterval(1, 100);
 
         number == 1 && ComfyJS.Say(`/timeout ${user} 10`, extra.channel);
-        number == 1 && ComfyJS.Say(`${user} brawo trafiłeś w 1% na 10s t/o OOOO`, extra.channel);
-        number > 1 && number < 89 &&  ComfyJS.Say(`/timeout ${user} 1800`, extra.channel);
-        number > 1 && number < 89 &&  ComfyJS.Say(`${user} brawo trafiłeś w 88% na 30min t/0 PeepoGlad`, extra.channel);
-        number > 88 && number < 100 &&  ComfyJS.Say(`/timeout ${user} 3600`, extra.channel);
-        number > 88 && number < 100 &&  ComfyJS.Say(`${user} brawo trafiłeś w 10% na 1h t/0 EZ`, extra.channel);
-        number == 100 &&  ComfyJS.Say(`/ban ${user} ruretka KEKW`, extra.channel);
-        number == 100 &&  ComfyJS.Say(`${user} brawo trafiłeś w 1% na perma KEKW`, extra.channel);
+        number == 1 &&
+          ComfyJS.Say(
+            `${user} brawo trafiłeś w 1% na 10s t/o OOOO`,
+            extra.channel
+          );
+        number > 1 &&
+          number < 89 &&
+          ComfyJS.Say(`/timeout ${user} 1800`, extra.channel);
+        number > 1 &&
+          number < 89 &&
+          ComfyJS.Say(
+            `${user} brawo trafiłeś w 88% na 30min t/0 PeepoGlad`,
+            extra.channel
+          );
+        number > 88 &&
+          number < 100 &&
+          ComfyJS.Say(`/timeout ${user} 3600`, extra.channel);
+        number > 88 &&
+          number < 100 &&
+          ComfyJS.Say(
+            `${user} brawo trafiłeś w 10% na 1h t/0 EZ`,
+            extra.channel
+          );
+        number == 100 &&
+          ComfyJS.Say(`/ban ${user} ruretka KEKW`, extra.channel);
+        number == 100 &&
+          ComfyJS.Say(
+            `${user} brawo trafiłeś w 1% na perma KEKW`,
+            extra.channel
+          );
       }
-      
-       if (flags.customReward && slotsID.find(slots => slots.id === extra.customRewardId)) {
-      const emotes = [
-        "",
-        "VisLaud",
-        "EZ",
-        "peepoGlad",
-        "Kappa",
-        "okok",
-        "BOOBA",
-        "kezmanStare",
-      ];
 
-      let number1 = randomInt(1, 7);
-      let number2 = randomInt(1, 7);
-      let number3 = randomInt(1, 7);
+      let reward = slotsID.find((slots) => slots.id === extra.customRewardId);
 
-      let result = `____________________PREMIUM____________________
+      if (flags.customReward && reward) {
+        const emotes = [
+          "",
+          "VisLaud",
+          "EZ",
+          "peepoGlad",
+          "Kappa",
+          "okok",
+          "BOOBA",
+          "kezmanStare",
+          "catJAM",
+          "SUSSY",
+          "OOOO",
+        ];
+
+        const maxNumber = reward ? reward.emotes : 7;
+
+        let number1 = randomInt(1, maxNumber);
+        let number2 = randomInt(1, maxNumber);
+        let number3 = randomInt(1, maxNumber);
+
+        let result = `____________________PREMIUM____________________
       --------------[ ${emotes[number1]} , ${emotes[number2]} , ${emotes[number3]} ]/
       __________________________________________________
       `;
 
-      const isWin = number1 === number2 && number2 === number3;
-      const isSemiWin =
-        number1 === number2 || number1 === number3 || number2 === number3;
-      let winMessage = "przegrałeś PepeLaugh";
-      isSemiWin && (winMessage = "prawie prawie PauseChamp");
-      isWin && (winMessage = "wygrałeś BRUHBRUH");
-     
+        const isWin = number1 === number2 && number2 === number3;
+        const isSemiWin =
+          number1 === number2 || number1 === number3 || number2 === number3;
+        let winMessage = "przegrałeś PepeLaugh";
+        isSemiWin && (winMessage = "prawie prawie PauseChamp");
+        isWin && (winMessage = "wygrałeś BRUHBRUH");
+
         ComfyJS.Say(`${result} @${user} ${winMessage}`, extra.channel);
-      
-    }
+      }
 
       if (
         user === "StreamElements" &&
@@ -158,7 +190,7 @@ const messages = () => {
             max: null,
             minSR: null,
             maxSR: null,
-            time: null
+            time: null,
           };
 
       if (volumeSongID && flags.customReward && extra.customRewardId === id) {
@@ -179,7 +211,7 @@ const messages = () => {
 
         await updateUser({
           streamer: extra.channel,
-          maxVolumeTime: newMaxVolumeTime
+          maxVolumeTime: newMaxVolumeTime,
         });
 
         clearTimeout(timeoutVolume[extra.channel]);
@@ -227,8 +259,8 @@ const messages = () => {
     //       " to nakładka która pokazuje na kogo grałeś: https://www.metatft.com/download peepoGlad",
     //     extra.channel
     //   );
-    // }  
-    
+    // }
+
     //strzelanie do tosi
 
     if (
@@ -237,43 +269,36 @@ const messages = () => {
       user != "DynaM1X1" &&
       user != "StreamElements"
     ) {
-      ComfyJS.Say(
-        `l2plelTosia overGun ${user}`,
-        extra.channel
-      );
-      ComfyJS.Say(
-        `/timeout ${user} 60`,
-        extra.channel
-      );
+      ComfyJS.Say(`l2plelTosia overGun ${user}`, extra.channel);
+      ComfyJS.Say(`/timeout ${user} 60`, extra.channel);
     }
-    
-        ///META
-    
-//     const usedCo = message.toLowerCase().indexOf("co") !== -1
-//     const usedMocne = message.toLowerCase().indexOf("mocne") !== -1 
-//     const usedMecie = message.toLowerCase().indexOf("mecie") !== -1 
-//     const usedDobre = message.toLowerCase().indexOf("dobre") !== -1 
-//     const usedTeraz = message.toLowerCase().indexOf("teraz") !== -1  
-//     const usedSilne = message.toLowerCase().indexOf("teraz") !== -1  
-//     const usedKaruzela = message.toLowerCase().indexOf("karuzela") !== -1  || message.toLowerCase().indexOf("karuzeli") !== -1 
-//     const usedItem = message.toLowerCase().indexOf("item") !== -1  
-//     const usedGrac = message.toLowerCase().indexOf("grac") !== -1  || message.toLowerCase().indexOf("grać") !== -1 
-    
 
-//     if (usedCo && (usedMocne || usedMecie || usedDobre || usedSilne || (usedTeraz && usedGrac) ) && !usedKaruzela && !usedItem ) {
-//       const answer = [
-//         `@${user} aktualnie meta się tworzy więc nie wiadomo`,
-//         `@${user} nie dawno wyszedł patch więc jeszcze nie wiemy`,
-//         `@${user} na razie można spekulować popatrz na metatft to co grała topka`,
-//       ];
+    ///META
 
-//       const randomNumber = Math.floor(Math.random() * (Math.floor(answer.length - 1) + 1))
-      
-//       ComfyJS.Say(
-//         answer[randomNumber],
-//         extra.channel
-//       );
-//     }
+    //     const usedCo = message.toLowerCase().indexOf("co") !== -1
+    //     const usedMocne = message.toLowerCase().indexOf("mocne") !== -1
+    //     const usedMecie = message.toLowerCase().indexOf("mecie") !== -1
+    //     const usedDobre = message.toLowerCase().indexOf("dobre") !== -1
+    //     const usedTeraz = message.toLowerCase().indexOf("teraz") !== -1
+    //     const usedSilne = message.toLowerCase().indexOf("teraz") !== -1
+    //     const usedKaruzela = message.toLowerCase().indexOf("karuzela") !== -1  || message.toLowerCase().indexOf("karuzeli") !== -1
+    //     const usedItem = message.toLowerCase().indexOf("item") !== -1
+    //     const usedGrac = message.toLowerCase().indexOf("grac") !== -1  || message.toLowerCase().indexOf("grać") !== -1
+
+    //     if (usedCo && (usedMocne || usedMecie || usedDobre || usedSilne || (usedTeraz && usedGrac) ) && !usedKaruzela && !usedItem ) {
+    //       const answer = [
+    //         `@${user} aktualnie meta się tworzy więc nie wiadomo`,
+    //         `@${user} nie dawno wyszedł patch więc jeszcze nie wiemy`,
+    //         `@${user} na razie można spekulować popatrz na metatft to co grała topka`,
+    //       ];
+
+    //       const randomNumber = Math.floor(Math.random() * (Math.floor(answer.length - 1) + 1))
+
+    //       ComfyJS.Say(
+    //         answer[randomNumber],
+    //         extra.channel
+    //       );
+    //     }
 
     // volume [value] command
     const isVolumeCommand = message.lastIndexOf("volume");
@@ -309,48 +334,46 @@ const messages = () => {
 
     //WOJTI SPAM NA IMIE
 
-//     if (user == "traviscwat" && extra.channel == "simplywojtek") {
-//       let now = Date.now();
+    //     if (user == "traviscwat" && extra.channel == "simplywojtek") {
+    //       let now = Date.now();
 
-//       if (timeCooldownTravis < now) {
-//         timeCooldownTravis = 5 * 60 * 1000 + now;
-//         ComfyJS.Say("Travis UPOUPO", extra.channel);
-//       }
-//     }
+    //       if (timeCooldownTravis < now) {
+    //         timeCooldownTravis = 5 * 60 * 1000 + now;
+    //         ComfyJS.Say("Travis UPOUPO", extra.channel);
+    //       }
+    //     }
 
-//     if (user == "traviscwat" && extra.channel == "l2plelouch") {
-//       let now = Date.now();
+    //     if (user == "traviscwat" && extra.channel == "l2plelouch") {
+    //       let now = Date.now();
 
-//       if (timeCooldownTravis < now) {
-//         timeCooldownTravis = 5 * 60 * 1000 + now;
-//         ComfyJS.Say("^ Denciak", extra.channel);
-//       }
-//     }
+    //       if (timeCooldownTravis < now) {
+    //         timeCooldownTravis = 5 * 60 * 1000 + now;
+    //         ComfyJS.Say("^ Denciak", extra.channel);
+    //       }
+    //     }
 
-//     if (user == "og1ii" && extra.channel == "l2plelouch") {
-//       let now = Date.now();
+    //     if (user == "og1ii" && extra.channel == "l2plelouch") {
+    //       let now = Date.now();
 
-//       if (timeCooldownOgiii < now) {
-//         timeCooldownOgiii = 5 * 60 * 1000 + now;
-//         ComfyJS.Say("^ Dyktator", extra.channel);
-//       }
-//     }
-    
-       
+    //       if (timeCooldownOgiii < now) {
+    //         timeCooldownOgiii = 5 * 60 * 1000 + now;
+    //         ComfyJS.Say("^ Dyktator", extra.channel);
+    //       }
+    //     }
   };
 };
-
 
 function randomInt(min, max) {
   // min and max included
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-function randomIntFromInterval(min, max) { // min and max included 
-  return Math.floor(Math.random() * (max - min + 1) + min)
+function randomIntFromInterval(min, max) {
+  // min and max included
+  return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
 module.exports = {
   messages,
-  setTimeoutVolume
+  setTimeoutVolume,
 };

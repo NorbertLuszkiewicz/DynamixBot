@@ -116,7 +116,7 @@ const UserSchema = new Schema({
     default: null,
   }, 
   slotsID: {
-    type: String,
+    type: Array,
     default: null,
   },
 });
