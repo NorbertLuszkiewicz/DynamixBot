@@ -2,6 +2,7 @@ const ComfyJS = require("comfy.js");
 const { messages, setTimeoutVolume } = require("./messages");
 const { events } = require("./events");
 const { commands } = require("./commands");
+const { rewords } = require("./rewords");
 const { getAllUser } = require("../controllers/UserController.js");
 
 const twitchCommands = async () => {
@@ -9,6 +10,7 @@ const twitchCommands = async () => {
     messages();
     events();
     commands();
+    rewords()
     setTimeoutVolume()
     
     const allStreamers = await getAllUser();
