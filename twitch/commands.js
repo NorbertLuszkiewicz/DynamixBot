@@ -9,6 +9,8 @@ const {
 const { currentlyPlaying, nextSong, startSong } = require("../spotify");
 const { songPlayingNow, timeRequest } = require("../streamElements");
 
+let users = {};
+
 const commands = () =>
   (ComfyJS.onCommand = async (user, command, message, flags, extra) => {
     if (command == "song" && extra.channel !== "og1ii") {
@@ -206,59 +208,72 @@ const commands = () =>
         console.log(`Error when use !horoskop on twitch (${err})`);
       }
     }
-    
+
     if (command === "kutas" || command === "penis") {
-      
-      let number = randomInt(1,9)
-      let emote = ""
-      
-      number < 4 && (emote = "PepeLaugh")
-      number >= 4 && number <= 6 && (emote = "kezmanGlad")
-      number > 6 && (emote = "VisLaud ")
-      
-      ComfyJS.Say(`@${user} 8${"=".repeat([number])}D ${emote}`, extra.channel)
-      
-    }  
-    
-    if (command === "slots" ){
-      
-     const emotes = [
-       "",
-        "VisLaud", 
-        "EZ", 
-        "peepoGlad", 
-        "Kappa", 
-        "okok", 
-        "BOOBA", 
-        "kezmanStare", 
-      ]
-      
-      let number1 = randomInt(1,7)
-      let number2 = randomInt(1,7)
-      let number3= randomInt(1,7)
-      
+      let number = randomInt(1, 9);
+      let emote = "";
+
+      number < 4 && (emote = "PepeLaugh");
+      number >= 4 && number <= 6 && (emote = "kezmanGlad");
+      number > 6 && (emote = "VisLaud ");
+
+      ComfyJS.Say(`@${user} 8${"=".repeat([number])}D ${emote}`, extra.channel);
+    }
+
+    if (command === "slots") {
+      const emotes = [
+        "",
+        "VisLaud",
+        "EZ",
+        "peepoGlad",
+        "Kappa",
+        "okok",
+        "BOOBA",
+        "kezmanStare",
+      ];
+
+      let number1 = randomInt(1, 7);
+      let number2 = randomInt(1, 7);
+      let number3 = randomInt(1, 7);
+
       let result = `__________________________________________________
       --------------[ ${emotes[number1]} , ${emotes[number2]} , ${emotes[number3]} ]/
       __________________________________________________
-      `
-      
-      const isWin = number1 === number2 && number2 === number3
-      const isSemiWin = number1 === number2 || number1 === number3 || number2 === number3
-      let winMessage = "przegrałeś PepeLaugh"
-      isSemiWin && (winMessage = "prawie prawie PauseChamp")
-      isWin && (winMessage = "wygrałeś BRUHBRUH")
+      `;
 
-      
-      ComfyJS.Say(`${result} @${user} ${winMessage}`, extra.channel)
-      
-    } 
-    
+      const isWin = number1 === number2 && number2 === number3;
+      const isSemiWin =
+        number1 === number2 || number1 === number3 || number2 === number3;
+      let winMessage = "przegrałeś PepeLaugh";
+      isSemiWin && (winMessage = "prawie prawie PauseChamp");
+      isWin && (winMessage = "wygrałeś BRUHBRUH");
+
+      const now = new Date().getTime();
+
+      const seySlots = () => {
+        ComfyJS.Say(`${result} @${user} ${winMessage}`, extra.channel);
+      };
+
+      const checkDate = (time) => {
+        if (time <= now) {
+          users[user + extra.channel] = time + (60 * 1000 * 5);
+          seySlots();
+        }
+      };
+
+      const timeForUser = users[user + extra.channel];
+      timeForUser ? checkDate(timeForUser) : checkDate(now);
+
+      console.log(users);
+    }
+
     if (command === "forma") {
-      
-      let number = randomInt(1,100)
-      
-      ComfyJS.Say(`@${user} aktualnie jesteś w ${number}% swojej szczytowej formy`, extra.channel)
-      
+      let number = randomInt(1, 100);
+
+      ComfyJS.Say(
+        `@${user} aktualnie jesteś w ${number}% swojej szczytowej formy`,
+        extra.channel
+      );
     }
 
     ///PAULINKA STOP
@@ -293,8 +308,9 @@ const commands = () =>
     }
   });
 
-function randomInt(min, max) { // min and max included 
-  return Math.floor(Math.random() * (max - min + 1) + min)
+function randomInt(min, max) {
+  // min and max included
+  return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
 const toPl = (string) => {
