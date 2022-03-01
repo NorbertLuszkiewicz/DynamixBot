@@ -98,7 +98,7 @@ const messages = () => {
         number == 100 &&  ComfyJS.Say(`${user} brawo trafiłeś w 1% na perma KEKW`, extra.channel);
       }
       
-       if (flags.customReward && extra.customRewardId === slotsID) {
+       if (flags.customReward && slotsID.find(slots => slots.id === extra.customRewardId)) {
       const emotes = [
         "",
         "VisLaud",
