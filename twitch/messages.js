@@ -125,8 +125,6 @@ const messages = () => {
       }
 
       let reward = slotsID.find((slots) => slots.id === extra.customRewardId);
-      
-      
 
       if (flags.customReward && reward) {
         const emotes = [
@@ -135,7 +133,7 @@ const messages = () => {
           "EZ",
           "peepoGlad",
           "Kappa",
-          "okok", 
+          "okok",
           "BOOBA",
           "kezmanStare",
           "catJAM",
@@ -148,8 +146,8 @@ const messages = () => {
         let number1 = randomInt(1, maxNumber);
         let number2 = randomInt(1, maxNumber);
         let number3 = randomInt(1, maxNumber);
-        
-        console.log(maxNumber, number1, number2, number3)
+
+        console.log(maxNumber, number1, number2, number3);
 
         let result = `____________________PREMIUM____________________
       --------------[ ${emotes[number1]} | ${emotes[number2]} | ${emotes[number3]} ]/
@@ -164,13 +162,23 @@ const messages = () => {
         isWin && (winMessage = "wygrałeś BRUHBRUH");
 
         ComfyJS.Say(`${result} @${user} ${winMessage}`, extra.channel);
-        
-        console.log(reward.withBan && !isWin && !isSemiWin, "aaasss")
-        
-        if(reward.withBan && !isWin && !isSemiWin){
+
+        console.log(reward.withBan && !isWin && !isSemiWin, "aaasss");
+
+        if (reward.withBan && !isWin && !isSemiWin) {
           ComfyJS.Say(`/timeout ${user} 600`, extra.channel);
         }
 
+        let slitsIDChanged = slotsID.map((item) => {
+          if (item.id === "2222") {
+            item.times += 1;
+            isWin && (item.wins += 1);
+          }
+
+          return item;
+        });
+        
+        console.log(slitsIDChanged)
       }
 
       if (
