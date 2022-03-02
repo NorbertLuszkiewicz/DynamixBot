@@ -147,8 +147,6 @@ const messages = () => {
         let number2 = randomInt(1, maxNumber);
         let number3 = randomInt(1, maxNumber);
 
-        console.log(maxNumber, number1, number2, number3);
-
         let result = `____________________PREMIUM____________________
       --------------[ ${emotes[number1]} | ${emotes[number2]} | ${emotes[number3]} ]/
       __________________________________________________
@@ -162,8 +160,6 @@ const messages = () => {
         isWin && (winMessage = "wygrałeś BRUHBRUH");
 
         ComfyJS.Say(`${result} @${user} ${winMessage}`, extra.channel);
-
-        console.log(reward.withBan && !isWin && !isSemiWin, "aaasss");
 
         if (reward.withBan && !isWin && !isSemiWin) {
           ComfyJS.Say(`/timeout ${user} 600`, extra.channel);
