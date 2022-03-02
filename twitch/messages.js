@@ -170,15 +170,19 @@ const messages = () => {
         }
 
         let slitsIDChanged = slotsID.map((item) => {
-          if (item.id === "2222") {
+          if (item.id === reward.id) {
             item.times += 1;
             isWin && (item.wins += 1);
+
           }
 
           return item;
         });
         
-        console.log(slitsIDChanged)
+        updateUser({
+          streamer: extra.channel,
+          slotsID: slitsIDChanged,
+        });      
       }
 
       if (
