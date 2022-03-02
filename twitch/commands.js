@@ -220,7 +220,7 @@ const commands = () =>
       ComfyJS.Say(`@${user} 8${"=".repeat([number])}D ${emote}`, extra.channel);
     }
 
-    if (command === "slots") {
+    if (command === "slots" && extra.channel !== "kezman22") {
       const emotes = [
         "",
         "VisLaud",

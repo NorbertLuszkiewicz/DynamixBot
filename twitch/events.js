@@ -44,26 +44,6 @@ const events = () => {
     "dwa lata z nami BRUHBRUH",
   ];
 
-  ComfyJS.onSubGift = (
-    gifterUser,
-    streakMonths,
-    recipientUser,
-    senderCount,
-    subTierInfo,
-    extra
-  ) => {
-    if (extra.channel == "og1ii") {
-      ComfyJS.Say("og1iiBusiness Yoink", extra.channel);
-    } else {
-      ComfyJS.Say(
-        gifterUser +
-          " dzięki za zgiftowanie suba na ten piękny stream peepoLove i gratuluje suba " +
-          recipientUser,
-        extra.channel
-      );
-    }
-  };
-
   ComfyJS.onResub = (
     user,
     message,
