@@ -246,8 +246,6 @@ const messages = () => {
     if (message === "pause" && user === "DynaM1X1") {
       pauseSong(extra.channel);
     }
-    
-    console.log(message, extra.channel)
 
     if (message === "device" && user === "DynaM1X1") {
       refreshDevices(extra.channel);

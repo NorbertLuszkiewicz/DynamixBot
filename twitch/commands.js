@@ -256,7 +256,7 @@ const commands = () =>
 
       const checkDate = (time) => {
         if (time <= now) {
-          users[user + extra.channel] = time + (60 * 1000 * 5);
+          users[user + extra.channel] = time + (60 * 1000 * 3);
           seySlots();
         }
       };

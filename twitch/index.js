@@ -16,6 +16,7 @@ const twitchCommands = async () => {
     const allStreamers = await getAllUser();
 
     const TWITCHCHANNELS = allStreamers.map(streamer => streamer.streamer);
+
     const TWITCHUSER = "dynam1x1";
     const OAUTH = process.env.OAUTH;
 
