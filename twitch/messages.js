@@ -125,6 +125,8 @@ const messages = () => {
       }
 
       let reward = slotsID.find((slots) => slots.id === extra.customRewardId);
+      
+      
 
       if (flags.customReward && reward) {
         const emotes = [
@@ -133,7 +135,7 @@ const messages = () => {
           "EZ",
           "peepoGlad",
           "Kappa",
-          "okok",
+          "okok", 
           "BOOBA",
           "kezmanStare",
           "catJAM",
@@ -244,6 +246,8 @@ const messages = () => {
     if (message === "pause" && user === "DynaM1X1") {
       pauseSong(extra.channel);
     }
+    
+    console.log(message, extra.channel)
 
     if (message === "device" && user === "DynaM1X1") {
       refreshDevices(extra.channel);
