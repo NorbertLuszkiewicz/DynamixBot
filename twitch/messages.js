@@ -163,10 +163,7 @@ const messages = () => {
 
         ComfyJS.Say(`${result} @${user} ${winMessage}`, extra.channel);
         
-         updateUser({
-          streamer: extra.channel,
-          slotsID: [...slotsID,],
-        });
+
       }
 
       if (
