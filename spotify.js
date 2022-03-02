@@ -8,8 +8,8 @@ const {
 const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
 const AUTHORIZE = "https://accounts.spotify.com/authorize";
-const TOKEN = "https://accounts.spotify.com/api/token";
-const PLAY = "https://api.spotify.com/v1/me/player/play";
+const TOKEN = "https://accounts.spotify.com/api/token"; 
+const PLAY = "https://api.spotify.com/v1/me/player/play"; 
 const PAUSE = "https://api.spotify.com/v1/me/player/pause";
 const NEXT = "https://api.spotify.com/v1/me/player/next";
 const VOLUME = "https://api.spotify.com/v1/me/player/volume";
