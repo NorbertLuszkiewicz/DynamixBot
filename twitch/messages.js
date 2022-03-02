@@ -162,6 +162,11 @@ const messages = () => {
         isWin && (winMessage = "wygrałeś BRUHBRUH");
 
         ComfyJS.Say(`${result} @${user} ${winMessage}`, extra.channel);
+        
+         updateUser({
+          streamer: extra.channel,
+          slotsID: [...slotsID,],
+        });
       }
 
       if (
