@@ -237,7 +237,7 @@ const commands = () =>
       let number3 = randomInt(1, 7);
 
       let result = `__________________________________________________
-      --------------[ ${emotes[number1]} , ${emotes[number2]} , ${emotes[number3]} ]/
+      --------------[ ${emotes[number1]} | ${emotes[number2]} | ${emotes[number3]} ]/
       __________________________________________________
       `;
 
