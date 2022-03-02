@@ -165,6 +165,11 @@ const messages = () => {
 
         ComfyJS.Say(`${result} @${user} ${winMessage}`, extra.channel);
         
+        if(reward.withBan && !isWin && !isSemiWin){
+          ComfyJS.Say(`/timeout ${user} 600`, extra.channel);
+        }else if(reward.withBan && isWin){
+          ComfyJS.Say(`${user} 600`, extra.channel);
+        }
 
       }
 

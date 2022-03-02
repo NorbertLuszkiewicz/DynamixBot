@@ -10,7 +10,7 @@ const api = new TftApi();
 const region = {
   EUW1: "EUROPE",
   EUN1: "EUROPE",
-  NA1: "AMERICAS",
+  NA1: "AMERICAS", 
   KR: "ASIA",
 };
 
