@@ -91,7 +91,7 @@ const pauseSong = async streamer => {
           Authorization: `Bearer ${spotifyAccessToken}`
         }
       }
-    );
+    ); 
   } catch ({ response }) {
     console.log(
       `Error while stopping song (${response.status} ${response.statusText})`
