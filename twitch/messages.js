@@ -146,6 +146,8 @@ const messages = () => {
         let number1 = randomInt(1, maxNumber);
         let number2 = randomInt(1, maxNumber);
         let number3 = randomInt(1, maxNumber);
+        
+        console.log(maxNumber, number1, number2, number3)
 
         let result = `____________________PREMIUM____________________
       --------------[ ${emotes[number1]} , ${emotes[number2]} , ${emotes[number3]} ]/
