@@ -190,26 +190,22 @@ async function routes(fastify, options) {
   fastify.put("/slots", async (req, res) => {
     res.header("Access-Control-Allow-Origin", "https://dynamix-bot.pl");
     res.header("Access-Control-Allow-Methods", "PUT");
-    
-    console.log(req.body,"aaaaa")
 
-    const name = req.body.name;
-    const emotes = req.body.emotes;
-    const withBan = req.body.withBan;
-    const user = req.body.user;
+    const {name, emotes, withBan, user} = req.body
+
+
 
     const newSlots = { name, id: null, withBan, emotes, times: 0, wins: 0 };
     console.log(newSlots < "aaaa")
 
     try {
-      const [user] = await getUser(user);
-      
-      console.log(user, "gggg")
+      const [data] = await getUser(user);
 
-      if (user.slotsID && user.slotsID.length > 0) {
+
+      if (data.slotsID && data.slotsID.length > 0) {
         await updateUser({
           streamer: user,
-          slotsID: [...user.slotsID, newSlots],
+          slotsID: [...data.slotsID, newSlots],
         });
       } else {
         await updateUser({
