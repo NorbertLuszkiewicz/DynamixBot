@@ -8,6 +8,7 @@ const getChessUser = async (name, streamer) => {
     const userStatsAllData = await chessAPI.getPlayerStats(name);
     const userInfo = body
     const userStats = userStatsAllData.body
+    const now = new Date()
 
     const bulletData = userStats.chess_bullet ? `| BULLET: ${userStats.chess_bullet.last.rating}`: ""
     const blitzData = userStats.chess_blitz ? `| BLITZ: ${userStats.chess_blitz.last.rating}`: ""
@@ -16,7 +17,7 @@ const getChessUser = async (name, streamer) => {
     const bestRapidGame = (userStats.chess_rapid && userStats.chess_rapid.best.game) ? `| gra o najwyższy ranking rapid: ${userStats.chess_rapid.best.game}`: ""
     
     const gry = await chessAPI.getPlayerCurrentDailyChess(name)
-    const gryZMiesiąca = await chessAPI.getPlayerMonthlyArchives(name)
+    const gryZMiesiąca = await chessAPI.getPlayerCompleteMonthlyArchives(name,now.getFullYear() ,now.getMonth()+1, )
     
     
     const userInfoToReturn = `staty: ${userInfo.username} ${rapidData} ${blitzData} ${bulletData} ${tacticsData} ${bestRapidGame}` 
