@@ -283,6 +283,8 @@ const commands = () =>
           message,
           extra.channel
         );
+        
+        
 
         ComfyJS.Say("playerInfo", extra.channel);
       } catch (err) {
