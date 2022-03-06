@@ -8,6 +8,7 @@ const {
 } = require("../riot/riot.js");
 const { currentlyPlaying, nextSong, startSong } = require("../spotify");
 const { songPlayingNow, timeRequest } = require("../streamElements");
+const { getChessUser } = require("../chess");
 
 let users = {};
 
@@ -85,7 +86,7 @@ const commands = () =>
     ) {
       try {
         const NickNameAndServer = message.split(", ");
-        console.log(NickNameAndServer[0]);
+
         const match = await getMatch(
           NickNameAndServer[0] ? parseInt(NickNameAndServer[0]) : 999,
           NickNameAndServer[1],
@@ -277,12 +278,16 @@ const commands = () =>
     }
     
     if (command === "user" || command === "szachista" ) {
-      let number = randomInt(1, 100);
+      try {
+        const playerInfo = await getChessUser(
+          message,
+          extra.channel
+        );
 
-      ComfyJS.Say(
-        `@${user} aktualnie jesteś w ${number}% swojej szczytowej formy`,
-        extra.channel
-      );
+        ComfyJS.Say(match, extra.channel);
+      } catch (err) {
+        console.log(`Error when use !mecz on twitch (${err})`);
+      }
     }
 
     ///PAULINKA STOP
