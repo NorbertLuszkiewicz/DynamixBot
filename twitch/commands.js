@@ -286,7 +286,7 @@ const commands = () =>
         
         
 
-        ComfyJS.Say("playerInfo", extra.channel);
+        ComfyJS.Say(`@${user} ${playerInfo}`, extra.channel);
       } catch (err) {
         console.log(`Error when use !user on twitch (${err})`);
       }

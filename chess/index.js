@@ -4,19 +4,21 @@ let chessAPI = new ChessWebAPI();
 
 const getChessUser = async (name, streamer) => {
   try {
-    const {body} = await chessAPI.getPlayer("DynaM1X1");
-    const userStatsAllData = await chessAPI.getPlayerStats("DynaM1X1");
+    const {body} = await chessAPI.getPlayer(name);
+    const userStatsAllData = await chessAPI.getPlayerStats(name);
     const userInfo = body
     const userStats = userStatsAllData.body
 
-    const buletData = userStats.chess_bullet ? `najwyżej: ${userStats.chess_bullet.best.rating}, aktualnie: ${userStats.chess_bullet.}`
-    const blitzData = 
-    const rapidData = 
-    const tacticsData = 
+    const buletData = userStats.chess_bullet ? `| RAPID: najwyżej: ${userStats.chess_bullet.best.rating}, aktualnie: ${userStats.chess_bullet.last.rating}`: ""
+    const blitzData = userStats.chess_blitz ? `| BLITZ: najwyżej: ${userStats.chess_blitz.best.rating}, aktualnie: ${userStats.chess_blitz.last.rating}`: ""
+    const rapidData = userStats.chess_rapid ? `| BULET: najwyżej: ${userStats.chess_rapid.best.rating}, aktualnie: ${userStats.chess_rapid.last.rating}`: ""
+    const tacticsData = userStats.chess_bullet ? `| ZADANIA: najwyżej: ${userStats.tactics.highest}`: ""
     
-    const userInfoToReturn = `statystyki konta:${userInfo.username}| "`
+    const userInfoToReturn = `statystyki konta: ${userInfo.username} ${rapidData} ${blitzData} ${rapidData} ${tacticsData}` 
+    
+    console.log(userInfo, userStats, userInfoToReturn)
 
-    return userInfo;
+    return userInfoToReturn;
   }catch(err) {
     console.log(`Error while getting chess player (${err})`);
   }
