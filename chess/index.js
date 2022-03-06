@@ -1,23 +1,19 @@
 const axios = require("axios");
-const ChessWebAPI = require('chess-web-api');
+const ChessWebAPI = require("chess-web-api");
 const chessAPI = new ChessWebAPI();
 
 const getChessUser = async (name, streamer) => {
   try {
-    const {data} = await chessAPI.getPlayer('andyruwruw')
-    
-    console.log(data)
-    
-     return data;
-  }
-  catch(err){
-         console.log(
-      `Error while getting chess player (${err})`
-    );
-  }
-  //const [data] = await getUser(streamer);
+    const data = await chessAPI.getPlayer("andyruwruw");
 
+    console.log(data);
 
+    return data;
+  }catch(err) {
+    console.log(`Error while getting chess player (${err})`);
+  }
+};
+//const [data] = await getUser(streamer);
 
 //   if (!existThisAccount) {
 //     const { response } = await api.Summoner.getByName(name, server);
@@ -30,7 +26,6 @@ const getChessUser = async (name, streamer) => {
 //       : [{ name, server, puuid: response.puuid, id: response.id }];
 
 //   }
-};
 
 // const currentlyPlaying = async streamer => {
 //   try {
@@ -52,5 +47,5 @@ const getChessUser = async (name, streamer) => {
 // };
 
 module.exports = {
-getChessUser
+  getChessUser,
 };

@@ -181,7 +181,7 @@ const commands = () =>
         console.log(`Error when use !pogoda on twitch (${err})`);
       }
     }
-
+  
     if (command === "horoscope" || command === "horoskop") {
       try {
         const changeToEng = {
@@ -284,9 +284,9 @@ const commands = () =>
           extra.channel
         );
 
-        ComfyJS.Say(match, extra.channel);
+        ComfyJS.Say("playerInfo", extra.channel);
       } catch (err) {
-        console.log(`Error when use !mecz on twitch (${err})`);
+        console.log(`Error when use !user on twitch (${err})`);
       }
     }
 
