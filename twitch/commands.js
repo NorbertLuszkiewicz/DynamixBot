@@ -290,8 +290,8 @@ const commands = () =>
       } catch (err) {
         console.log(`Error when use !user on twitch (${err})`);
       }    
-      
-    if (command === "chesslast" || command === "szachista" ) {
+    }
+    if (command === "chesslast" ) {
       try {
         const gameInfo = await getLastGame(
           message,

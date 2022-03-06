@@ -53,8 +53,7 @@ const getLastGame = async (name, streamer) => {
         )
     }
     
-    const lastGameResponse = games.length === 0 ? `ostatnia gierka: ${lastGame.url}` : "niestety nie można wysłać ostatniej gry"
-
+    const lastGameResponse = games.length !== 0 ? `ostatnia gierka: ${lastGame.url}` : "niestety nie można wysłać ostatniej gry"
 
     return lastGameResponse;
   } catch (err) {
