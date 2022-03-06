@@ -52,7 +52,7 @@ const messages = () => {
           extra.channel
         );
       }
-      
+
       if (flags.customReward && message === "skip-song-award") {
         updateUser({
           streamer: extra.channel,
@@ -64,20 +64,9 @@ const messages = () => {
           extra.channel
         );
       }
-      
-      let slots = slotsID.find((slots) => slots.name.toLowerCase() === message.toLowerCase())
-      
-      if (flags.customReward && slots) {
-        const updateSlots = [slotsID];
-        let slitsIDChanged = slotsID.map((item) => {
-          if (item.name === slots.name) {
-            item.times += 1;
-           
 
-          }
-
-          return item;
-        });
+      if (flags.customReward && message === "add-song-award") {
+        let newVolumeSongID = volumeSongID;
 
         updateUser({
           streamer: extra.channel,
@@ -88,18 +77,28 @@ const messages = () => {
           "Włączono automatyczą zmiane głosności przy zakupie tej nagrody",
           extra.channel
         );
-      }   
-      
-      if (flags.customReward && message === "add-song-award") {
-        let newVolumeSongID = volumeSongID;
+      }
+
+      const slots = slotsID.find(
+        (slots) => slots.name.toLowerCase() === message.toLowerCase()
+      );
+
+      if (flags.customReward && slots) {
+        const updateSlots = slotsID.map((item) => {
+          if (item.name.toLowerCase() === slots.name.toLowerCase()) {
+            item.id = extra.customRewardId;
+          }
+
+          return item;
+        });
 
         updateUser({
           streamer: extra.channel,
-          volumeSongID: newVolumeSongID,
+          slotsID: updateSlots,
         });
 
         ComfyJS.Say(
-          `Włączono Slots dla nagrody "${sdf}""`,
+          `Włączono Slots dla nagrody "${slots.name}"`,
           extra.channel
         );
       }
@@ -196,16 +195,15 @@ const messages = () => {
           if (item.id === reward.id) {
             item.times += 1;
             isWin && (item.wins += 1);
-
           }
 
           return item;
         });
-        
+
         updateUser({
           streamer: extra.channel,
           slotsID: slitsIDChanged,
-        });      
+        });
       }
 
       if (
