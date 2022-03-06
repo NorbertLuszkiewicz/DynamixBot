@@ -190,6 +190,8 @@ async function routes(fastify, options) {
   fastify.put("/slots", async (req, res) => {
     res.header("Access-Control-Allow-Origin", "https://dynamix-bot.pl");
     res.header("Access-Control-Allow-Methods", "PUT");
+    
+    console.log(req.body,"aaaaa")
 
     const name = req.body.name;
     const emotes = req.body.emotes;
@@ -197,11 +199,14 @@ async function routes(fastify, options) {
     const user = req.body.user;
 
     const newSlots = { name, id: null, withBan, emotes, times: 0, wins: 0 };
+    console.log(newSlots < "aaaa")
 
     try {
-      const [user] = await getUser(name);
+      const [user] = await getUser(user);
+      
+      console.log(user, "gggg")
 
-      if (user.slotsID) {
+      if (user.slotsID && user.slotsID.length > 0) {
         await updateUser({
           streamer: user,
           slotsID: [...user.slotsID, newSlots],
@@ -213,6 +218,7 @@ async function routes(fastify, options) {
         });
       }
     } catch(err) {
+      console.log(err,"aaasssss")
       fastify.log.error("Error when add slots award");
       res.status(400).send({
         message: "Something went wrong",
