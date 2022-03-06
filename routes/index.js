@@ -193,7 +193,7 @@ async function routes(fastify, options) {
 
     const { name, emotes, withBan, user } = req.body;
 
-    const newSlots = { name, id: null, withBan, emotes, times: 0, wins: 0 };
+    const newSlots = { name, id: null, withBan, emotes: emotes.parseInt(), times: 0, wins: 0 };
 
     try {
       const [data] = await getUser(user);
