@@ -15,12 +15,12 @@ const getChessUser = async (name, streamer) => {
     const tacticsData = userStats.chess_bullet ? `| ZADANIA: najwyżej ${userStats.tactics.highest.rating}`: ""
     const bestRapidGame = (userStats.chess_rapid && userStats.chess_rapid.best.game) ? `| gra o najwyższy ranking rapid: ${userStats.chess_rapid.best.game}`: ""
     
-    
+    const gry = await chessAPI.getPlayerCurrentDailyChess(name)
     
     
     const userInfoToReturn = `staty: ${userInfo.username} ${rapidData} ${blitzData} ${bulletData} ${tacticsData} ${bestRapidGame}` 
     
-    console.log(userInfo, userStats, userInfoToReturn)
+    console.log(gry.body)
 
     return userInfoToReturn;
   }catch(err) {

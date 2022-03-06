@@ -212,7 +212,7 @@ async function routes(fastify, options) {
           slotsID: [newSlots],
         });
       }
-    } catch {
+    } catch(err) {
       fastify.log.error("Error when add slots award");
       res.status(400).send({
         message: "Something went wrong",
