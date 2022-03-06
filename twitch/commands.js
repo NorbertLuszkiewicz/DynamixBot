@@ -8,7 +8,7 @@ const {
 } = require("../riot/riot.js");
 const { currentlyPlaying, nextSong, startSong } = require("../spotify");
 const { songPlayingNow, timeRequest } = require("../streamElements");
-const { getChessUser } = require("../chess");
+const { getChessUser, getLastGame } = require("../chess");
 
 let users = {};
 
@@ -277,7 +277,7 @@ const commands = () =>
       );
     }
     
-    if (command === "user" || command === "szachista" ) {
+    if (command === "chessuser" || command === "szachista" ) {
       try {
         const playerInfo = await getChessUser(
           message,
@@ -287,6 +287,20 @@ const commands = () =>
         
 
         ComfyJS.Say(`@${user} ${playerInfo}`, extra.channel);
+      } catch (err) {
+        console.log(`Error when use !user on twitch (${err})`);
+      }    
+      
+    if (command === "chesslast" || command === "szachista" ) {
+      try {
+        const gameInfo = await getLastGame(
+          message,
+          extra.channel
+        );
+        
+        
+
+        ComfyJS.Say(`@${user} ${gameInfo}`, extra.channel);
       } catch (err) {
         console.log(`Error when use !user on twitch (${err})`);
       }

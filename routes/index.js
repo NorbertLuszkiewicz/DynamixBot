@@ -191,16 +191,12 @@ async function routes(fastify, options) {
     res.header("Access-Control-Allow-Origin", "https://dynamix-bot.pl");
     res.header("Access-Control-Allow-Methods", "PUT");
 
-    const {name, emotes, withBan, user} = req.body
-
-
+    const { name, emotes, withBan, user } = req.body;
 
     const newSlots = { name, id: null, withBan, emotes, times: 0, wins: 0 };
 
-
     try {
       const [data] = await getUser(user);
-
 
       if (data.slotsID && data.slotsID.length > 0) {
         await updateUser({
@@ -213,8 +209,7 @@ async function routes(fastify, options) {
           slotsID: [newSlots],
         });
       }
-    } catch(err) {
-
+    } catch (err) {
       fastify.log.error("Error when add slots award");
       res.status(400).send({
         message: "Something went wrong",
