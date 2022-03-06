@@ -275,6 +275,15 @@ const commands = () =>
         extra.channel
       );
     }
+    
+    if (command === "user" || command === "szachista" ) {
+      let number = randomInt(1, 100);
+
+      ComfyJS.Say(
+        `@${user} aktualnie jesteś w ${number}% swojej szczytowej formy`,
+        extra.channel
+      );
+    }
 
     ///PAULINKA STOP
 

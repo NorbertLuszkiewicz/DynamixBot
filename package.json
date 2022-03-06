@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "axios": "^0.22.0",
+    "chess-web-api": "^1.1.2",
     "comfy.js": "^1.1.10",
     "express": "^4.17.1",
     "fastify": "^3.14.1",
