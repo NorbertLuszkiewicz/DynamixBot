@@ -4,12 +4,17 @@ let chessAPI = new ChessWebAPI();
 
 const getChessUser = async (name, streamer) => {
   try {
-    const {body} = await chessAPI.getPlayer("andyruwruw");
-    const userStatsAllData = await chessAPI.getPlayerStats("andyruwruw");
+    const {body} = await chessAPI.getPlayer("DynaM1X1");
+    const userStatsAllData = await chessAPI.getPlayerStats("DynaM1X1");
     const userInfo = body
     const userStats = userStatsAllData.body
 
-    console.log(userInfo,userStats);
+    const buletData = userStats.chess_bullet ? `najwyżej: ${userStats.chess_bullet.best.rating}, aktualnie: ${userStats.chess_bullet.}`
+    const blitzData = 
+    const rapidData = 
+    const tacticsData = 
+    
+    const userInfoToReturn = `statystyki konta:${userInfo.username}| "`
 
     return userInfo;
   }catch(err) {
