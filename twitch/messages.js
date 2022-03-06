@@ -52,6 +52,7 @@ const messages = () => {
           extra.channel
         );
       }
+      
       if (flags.customReward && message === "skip-song-award") {
         updateUser({
           streamer: extra.channel,
@@ -63,8 +64,20 @@ const messages = () => {
           extra.channel
         );
       }
-      if (message === "change-volume-song-award") {
-        let newVolumeSongID = volumeSongID;
+      
+      let slots = slotsID.find((slots) => slots.name.toLowerCase() === message.toLowerCase())
+      
+      if (flags.customReward && slots) {
+        const updateSlots = [slotsID];
+        let slitsIDChanged = slotsID.map((item) => {
+          if (item.name === slots.name) {
+            item.times += 1;
+           
+
+          }
+
+          return item;
+        });
 
         updateUser({
           streamer: extra.channel,
@@ -73,6 +86,20 @@ const messages = () => {
 
         ComfyJS.Say(
           "Włączono automatyczą zmiane głosności przy zakupie tej nagrody",
+          extra.channel
+        );
+      }   
+      
+      if (flags.customReward && message === "add-song-award") {
+        let newVolumeSongID = volumeSongID;
+
+        updateUser({
+          streamer: extra.channel,
+          volumeSongID: newVolumeSongID,
+        });
+
+        ComfyJS.Say(
+          `Włączono Slots dla nagrody "${sdf}""`,
           extra.channel
         );
       }
