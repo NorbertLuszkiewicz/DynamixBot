@@ -196,7 +196,7 @@ async function routes(fastify, options) {
 
 
     const newSlots = { name, id: null, withBan, emotes, times: 0, wins: 0 };
-    console.log(newSlots < "aaaa")
+
 
     try {
       const [data] = await getUser(user);
@@ -214,7 +214,7 @@ async function routes(fastify, options) {
         });
       }
     } catch(err) {
-      console.log(err,"aaasssss")
+
       fastify.log.error("Error when add slots award");
       res.status(400).send({
         message: "Something went wrong",
