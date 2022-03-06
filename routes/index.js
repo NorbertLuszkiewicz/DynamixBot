@@ -5,14 +5,14 @@ const {
   refreshAccessToken,
   changeVolumeOnTime,
   currentlyPlaying,
-  setTimeoutVolume
+  setTimeoutVolume,
 } = require("../spotify");
 const { getUser, updateUser } = require("../controllers/UserController.js");
 const { addNewUser, refreshTwitchTokens } = require("../twitch/twitch.js");
 const { addTftUser } = require("../riot/riot.js");
 
 async function routes(fastify, options) {
-  fastify.get("/", function(req, res) {
+  fastify.get("/", function (req, res) {
     res.send("");
   });
 
@@ -36,7 +36,7 @@ async function routes(fastify, options) {
       "user-read-playback-position",
       "user-read-recently-played",
       "user-follow-read",
-      "user-follow-modify"
+      "user-follow-modify",
     ];
 
     res.redirect(
@@ -99,17 +99,17 @@ async function routes(fastify, options) {
         user.twitchAccessToken === token
           ? res.send(user)
           : res.status(401).send({
-              message: "Unauthorized"
+              message: "Unauthorized",
             });
       } else {
         res.status(404).send({
-          message: "This user dosn't exist"
+          message: "This user dosn't exist",
         });
       }
     } catch {
       fastify.log.error("Error when get account");
       res.status(400).send({
-        message: "Not Found"
+        message: "Not Found",
       });
     }
   });
@@ -126,12 +126,12 @@ async function routes(fastify, options) {
       await updateUser({
         streamer: user,
         clientSongRequestID: clientID,
-        clientSongRequestSecret: token
+        clientSongRequestSecret: token,
       });
     } catch {
       fastify.log.error("Error when get account");
       res.status(400).send({
-        message: "Something went wrong"
+        message: "Something went wrong",
       });
     }
   });
@@ -159,13 +159,13 @@ async function routes(fastify, options) {
           max,
           minSR,
           maxSR,
-          time
-        }
+          time,
+        },
       });
     } catch {
       fastify.log.error("Error when get account");
       res.status(400).send({
-        message: "Something went wrong"
+        message: "Something went wrong",
       });
     }
   });
@@ -179,12 +179,43 @@ async function routes(fastify, options) {
     const user = req.body.user;
 
     try {
-      addTftUser(name, server, user)
-
+      addTftUser(name, server, user);
     } catch {
       fastify.log.error("Error when add riot account");
       res.status(400).send({
-        message: "Something went wrong"
+        message: "Something went wrong",
+      });
+    }
+  });
+  fastify.put("/slots", async (req, res) => {
+    res.header("Access-Control-Allow-Origin", "https://dynamix-bot.pl");
+    res.header("Access-Control-Allow-Methods", "PUT");
+
+    const name = req.body.name;
+    const emotes = req.body.emotes;
+    const withBan = req.body.withBan;
+    const user = req.body.user;
+
+    const newSlots = { name, id: null, withBan, emotes, times: 0, wins: 0 };
+
+    try {
+      const [user] = await getUser(name);
+
+      if (user.slotsID) {
+        await updateUser({
+          streamer: user,
+          slotsID: [...user.slotsID, newSlots],
+        });
+      } else {
+        await updateUser({
+          streamer: user,
+          slotsID: [newSlots],
+        });
+      }
+    } catch {
+      fastify.log.error("Error when add slots award");
+      res.status(400).send({
+        message: "Something went wrong",
       });
     }
   });
