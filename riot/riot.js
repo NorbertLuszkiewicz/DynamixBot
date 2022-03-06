@@ -203,15 +203,14 @@ const getStats = async (streamer, nickname, server) => {
 
     return message;
   } else {
-    console.log(      data.activeRiotAccount,
-      data.activeRiotAccount.server, "aa")
+
     
     const userData = await api.League.get(
       data.activeRiotAccount.id,
       data.activeRiotAccount.server
     );
     const userInfo = userData.response[0];
-    console.log(userData,userInfo, "bb")
+    
     
     message = `statystyki gracza: ${data.activeRiotAccount.name} | ${
       userInfo.tier

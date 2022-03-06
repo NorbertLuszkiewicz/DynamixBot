@@ -1,17 +1,17 @@
 const axios = require("axios");
 const ChessWebAPI = require("chess-web-api");
-const chessAPI = new ChessWebAPI();
+let chessAPI = new ChessWebAPI();
 
 const getChessUser = async (name, streamer) => {
-  try {
-    const data = await chessAPI.getPlayer("andyruwruw");
+//   try {
+//     const data = await chessAPI.getPlayer("andyruwruw");
 
-    console.log(data);
+//     console.log(data);
 
-    return data;
-  }catch(err) {
-    console.log(`Error while getting chess player (${err})`);
-  }
+//     return data;
+//   }catch(err) {
+//     console.log(`Error while getting chess player (${err})`);
+//   }
 };
 //const [data] = await getUser(streamer);
 
