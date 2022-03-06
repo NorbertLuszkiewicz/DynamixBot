@@ -9,16 +9,16 @@ const getChessUser = async (name, streamer) => {
     const userInfo = body
     const userStats = userStatsAllData.body
 
-    const buletData = userStats.chess_bullet ? `| RAPID: ${userStats.chess_bullet.last.rating}`: ""
+    const bulletData = userStats.chess_bullet ? `| BULLET: ${userStats.chess_bullet.last.rating}`: ""
     const blitzData = userStats.chess_blitz ? `| BLITZ: ${userStats.chess_blitz.last.rating}`: ""
-    const rapidData = userStats.chess_rapid ? `| BULET: ${userStats.chess_rapid.last.rating}`: ""
-    const tacticsData = userStats.chess_bullet ? `| ZADANIA: najwyżej:${userStats.tactics.highest.rating}`: ""
+    const rapidData = userStats.chess_rapid ? `| RAPID: ${userStats.chess_rapid.last.rating}`: ""
+    const tacticsData = userStats.chess_bullet ? `| ZADANIA: najwyżej ${userStats.tactics.highest.rating}`: ""
     const bestRapidGame = (userStats.chess_rapid && userStats.chess_rapid.best.game) ? `| gra o najwyższy ranking rapid: ${userStats.chess_rapid.best.game}`: ""
     
     
     
     
-    const userInfoToReturn = `staty: ${userInfo.username} ${rapidData} ${blitzData} ${rapidData} ${tacticsData} ${bestRapidGame}` 
+    const userInfoToReturn = `staty: ${userInfo.username} ${rapidData} ${blitzData} ${bulletData} ${tacticsData} ${bestRapidGame}` 
     
     console.log(userInfo, userStats, userInfoToReturn)
 
