@@ -183,7 +183,7 @@ const messages = () => {
           number1 === number2 || number1 === number3 || number2 === number3;
         let winMessage = "przegrałeś PepeLaugh";
         isSemiWin && (winMessage = "prawie prawie PauseChamp");
-        isWin && (winMessage = "wygrałeś BRUHBRUH");
+        isWin && (winMessage = "wygrałeś BRUHBRUH @" + extra.channel);
 
         ComfyJS.Say(`${result} @${user} ${winMessage}`, extra.channel);
 
