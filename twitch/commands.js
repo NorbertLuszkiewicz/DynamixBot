@@ -312,7 +312,7 @@ const commands = () =>
       const answer = [
         "@paaulinnkaa próba wyłączenia bota nie powiodła się",
         "@paaulinnkaa nigdy mnie nie wyłączysz buahaha",
-        "intruz próba wyłączenia bota przerwana czy zbanować urzytkownika @paaulinnkaa?",
+        "intruz próba wyłączenia bota przerwana czy zbanować użytkownika @paaulinnkaa?",
         "!dynamix start",
         "nie wyłącze się @paaulinnkaa kezmanWTF",
         "rozpoczęto autodystrukcje świat skończy się za 10s",
