@@ -275,21 +275,20 @@ const commands = () =>
       message.length === 5 &&
       allWord.includes(message)
     ) {
-      let isWin = false
-       usersWordle[user + extra.channel] ? usersWordle[user + extra.channel]
+      let isWin = false;
+      usersWordle[user + extra.channel]
+        ? usersWordle[user + extra.channel]
         : (usersWordle[user + extra.channel] = {
             time: null,
             finalWord: "",
             messages: [],
             colorRow: [],
           });
-      
-      //console.log(usersWordle[user + extra.channel], "111userData")
 
       const number = randomInt(1, literalnieWord.length);
-      let finalWord = usersWordle[user + extra.channel].finalWord  ? usersWordle[user + extra.channel].finalWord : literalnieWord[number];
-      
-      //console.log(usersWordle[user + extra.channel],usersWordle[user + extra.channel].finalWord ,literalnieWord[number], "222finalWord")
+      let finalWord = usersWordle[user + extra.channel].finalWord
+        ? usersWordle[user + extra.channel].finalWord
+        : literalnieWord[number];
 
       let wordleResult = () => {
         const colorResult = [];
@@ -302,8 +301,10 @@ const commands = () =>
             colorResult.push("⬜");
           }
         }
-        isWin = JSON.stringify(colorResult) == JSON.stringify(["🟩","🟩","🟩","🟩","🟩"])
-        console.log(isWin)
+        isWin =
+          JSON.stringify(colorResult) ==
+          JSON.stringify(["🟩", "🟩", "🟩", "🟩", "🟩"]);
+        console.log(isWin);
 
         return colorResult.join(" ");
       };
@@ -313,41 +314,48 @@ const commands = () =>
         wordleResult() + "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"
       );
       usersWordle[user + extra.channel].finalWord = finalWord;
-      
-      //console.log(usersWordle[user + extra.channel], "333userData")
 
       const now = new Date().getTime();
 
       let result = `__________________________________________________
       ${usersWordle[user + extra.channel].colorRow.join(" ")} 
-      ${usersWordle[user + extra.channel].messages} `;
-      
-      
+      ${usersWordle[user + extra.channel].messages} @${user} ${
+        isWin ? "wygrałeś BRUHBRUH " : ""
+      }
+       ${
+         !isWin && usersWordle[user + extra.channel].messages.length === 5
+           ? "przegrałeś PepeLaugh to była ostatnia próba"
+           : ""
+       }`;
 
       const seySlots = () => {
-        ComfyJS.Say(`${result} @${user} ${isWin ? "wygrałeś BRUHBRUH " :''}`, extra.channel);
-        
-        if(usersWordle[user + extra.channel].messages.length === 5 || isWin){
+        ComfyJS.Say(`${result}`, extra.channel);
+
+        if (usersWordle[user + extra.channel].messages.length === 5 || isWin) {
           usersWordle[user + extra.channel] = {
             time: null,
             finalWord: "",
             messages: [],
             colorRow: [],
-          }
+          };
         }
       };
 
       const changeUserData = (time) => {
         if (time <= now) {
-          usersWordle[user + extra.channel].time = time + 60 * 1000 * 3*0;
+          usersWordle[user + extra.channel].time = time + 60 * 1000 * 3;
           seySlots();
         }
       };
 
-      const timeForUser = usersWordle[user + extra.channel] ? usersWordle[user + extra.channel].time : null;
-      timeForUser ? changeUserData(usersWordle[user + extra.channel].time) : changeUserData(now);
+      const timeForUser = usersWordle[user + extra.channel]
+        ? usersWordle[user + extra.channel].time
+        : null;
+      timeForUser
+        ? changeUserData(usersWordle[user + extra.channel].time)
+        : changeUserData(now);
 
-      console.log(user +" " +extra.channel, finalWord);
+      console.log(user + " " + extra.channel, finalWord);
     }
 
     if (
