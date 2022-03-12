@@ -26549,5 +26549,8 @@ const literalnieWord = [
   "laska",
   "lekko",
   "laser",
+  "lalka",
   "leśny",
+  "lepki",
+  "liana",
 ];
