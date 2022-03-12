@@ -269,7 +269,8 @@ const commands = () =>
       timeForUser ? checkDate(timeForUser) : checkDate(now);
     }
 
-    if (command === "wordle") {
+    if (command === "wordle" && message.length === 5) {
+
       let userData = usersWordle[user + extra.channel];
       ("🟩🟨⬜");
       allWord, literalnieWord;
@@ -280,28 +281,26 @@ const commands = () =>
         : literalnieWord[literalnieWord.length].toLowerCase();
 
       let wordleResult = () => {
-        
-        const colorResult = []
+        const colorResult = [];
         for (let i = 0; i < finalWord.length; i++) {
-          if (message.indexOf(finalWord[i]) !== -1 ) {
-            colorResult.push("🟨")
-          }      else if (message.indexOf(finalWord[i]) !== -1 ) {
-            colorResult.push("🟨")
-          }   else if (message.indexOf(finalWord[i]) !== -1 ) {
-            colorResult.push("🟨")
-          }
+          if (message.charAt(i) === finalWord.charAt(i)) {
+            colorResult.push("🟩");
+          } else if (message.indexOf(finalWord[i]) !== -1) {
+            colorResult.push("🟨");
+          } else {
+            colorResult.push("⬜");
+          } 
         }
+        
+        return colorResult
 
-        if (finalWord.indexOf("psa") ) {
-          console.log("Ala ma psa");
-        }
-        finalWord.return;
       };
 
       let result = `__________________________________________________
-      --------------[ ${emotes[number1]} | ${emotes[number2]} | ${emotes[number3]} ]/
-      __________________________________________________
-      `;
+      ${wordleResult()} ${message} 
+      ${message} ${wordleResult()}
+      ${message} ${wordleResult()}
+      __________________________________________________`;
 
       const now = new Date().getTime();
 
@@ -313,7 +312,7 @@ const commands = () =>
         if (time <= now) {
           userData.time = time + 60 * 1000 * 3;
           userData.user = user + extra.channel;
-          userData.lastMessage = wordleResult;
+          userData.lastMessage = result;
           userData.finalWord = finalWord;
           seySlots();
         }
