@@ -270,15 +270,14 @@ const commands = () =>
       console.log(users);
     }
 
-    if (command === "wordle" && message.length === 5) {
+    if (command === "wordle" && message.length === 5 && allWord.includes(message)) {
       let userData = usersWordle[user + extra.channel];
       userData ? userData : { messages: [], colorRow:[] }
-
+      allWord
       const number = randomInt(1, literalnieWord.length);
-      let finalWord;
-      finalWord = userData.finalWord
-        ? userData.finalWord.toLowerCase()
-        : literalnieWord[literalnieWord.length].toLowerCase();
+      let finalWord = userData
+        ? userData.finalWord
+        : literalnieWord[number];
 
       let wordleResult = () => {
         const colorResult = [];
@@ -323,6 +322,10 @@ const commands = () =>
       };
 
       console.log(usersWordle);
+    }
+    if (command === "wordle" && (message.length !== 5 || !allWord.includes(message))) {
+      console.log(message.length, allWord[message])
+      ComfyJS.Say(`@${user} Podałeś słowo, które nie zawiera 5 znaków albo nie znaleziono go w słowniku`, extra.channel);
     }
 
     if (command === "forma") {
