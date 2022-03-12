@@ -267,6 +267,7 @@ const commands = () =>
 
       const timeForUser = users[user + extra.channel];
       timeForUser ? checkDate(timeForUser) : checkDate(now);
+      console.log(users);
     }
 
     if (command === "wordle" && message.length === 5) {
