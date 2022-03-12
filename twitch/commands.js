@@ -284,13 +284,17 @@ const commands = () =>
             messages: [],
             colorRow: [],
           });
+      
+      console.log(userData, "111userData")
 
       const number = randomInt(1, literalnieWord.length);
       let finalWord = userData ? userData.finalWord : literalnieWord[number];
+      
+      console.log(finalWord, "222finalWord")
 
       let wordleResult = () => {
         const colorResult = [];
-        for (let i = 0; i < finalWord.length; i++) {
+        for (let i = 0; i < 5; i++) {
           if (message.charAt(i) === finalWord.charAt(i)) {
             colorResult.push("🟩");
           } else if (message.indexOf(finalWord[i]) !== -1) {
@@ -303,12 +307,22 @@ const commands = () =>
         return colorResult;
       };
 
+      userData.messages.push(message);
+      userData.colorRow.push(
+        wordleResult() + "_________________________________"
+      );
+      userData.finalWord = finalWord;
+      
+      console.log(userData, "333userData")
+
       const now = new Date().getTime();
 
       let result = `__________________________________________________
       ${userData.colorRow} 
       ${userData.messages}
       __________________________________________________`;
+      
+      
 
       const seySlots = () => {
         ComfyJS.Say(`${result} @${user}`, extra.channel);
@@ -317,11 +331,6 @@ const commands = () =>
       const changeUserData = (time) => {
         if (time <= now) {
           userData.time = time + 60 * 1000 * 3;
-          userData.messages.push(message);
-          userData.colorRow.push(
-            wordleResult() + "_________________________________"
-          );
-          userData.finalWord = finalWord;
           seySlots();
         }
       };
@@ -329,9 +338,9 @@ const commands = () =>
       const timeForUser = userData ? userData.time : null;
       timeForUser ? changeUserData(userData.time) : changeUserData(now);
 
-      console.log(usersWordle);
+      console.log(usersWordle, wordleResult(), finalWord);
     }
-    
+
     if (
       command === "wordle" &&
       (message.length !== 5 || !allWord.includes(message))
