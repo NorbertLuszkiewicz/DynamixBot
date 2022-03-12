@@ -12,7 +12,7 @@ const { getChessUser, getLastGame } = require("../chess");
 const { allWord, literalnieWord } = require("../literalnie");
 
 let users = {};
-let usersW = {};
+let usersWordle = {};
 
 const commands = () =>
   (ComfyJS.onCommand = async (user, command, message, flags, extra) => {
@@ -260,6 +260,7 @@ const commands = () =>
       const checkDate = (time) => {
         if (time <= now) {
           users[user + extra.channel] = time + (60 * 1000 * 3);
+
           seySlots();
         }
       };
@@ -269,10 +270,13 @@ const commands = () =>
     }
     
     if (command === "wordle" ) { 
+      let userData = usersWordle[user + extra.channel]
       "🟩🟨⬜"
       allWord, literalnieWord
       const number = randomInt(1, literalnieWord.length );
       const finalWord = literalnieWord[literalnieWord.length];
+      
+      let wordleResult = ""
 
       let result = `__________________________________________________
       --------------[ ${emotes[number1]} | ${emotes[number2]} | ${emotes[number3]} ]/
@@ -286,17 +290,21 @@ const commands = () =>
         ComfyJS.Say(`${result} @${user}`, extra.channel);
       };
 
-      const checkDate = (time) => {
+      const changeUserData = (time) => {
         if (time <= now) {
-          users[user + extra.channel] = time + (60 * 1000 * 3);
+                  
+          userData.time = time + (60 * 1000 * 3);
+          userData.user = user + extra.channel
+          userData.lastMessage = wordleResult
           seySlots();
         }
+
       };
 
-      const timeForUser = users[user + extra.channel];
-      timeForUser ? checkDate(timeForUser) : checkDate(now);
+      const timeForUser = userData.time
+      timeForUser ? changeUserData(timeForUser) : changeUserData(now);
 
-      console.log(users);
+      console.log(usersWordle);
     }
 
     if (command === "forma") {
