@@ -271,10 +271,9 @@ const commands = () =>
     }
 
     if (command === "wordle" && message.length === 5) {
-
       let userData = usersWordle[user + extra.channel];
-      ("🟩🟨⬜");
-      allWord, literalnieWord;
+      userData ? userData : { messages: [], colorRow:[] }
+
       const number = randomInt(1, literalnieWord.length);
       let finalWord;
       finalWord = userData.finalWord
@@ -290,30 +289,20 @@ const commands = () =>
             colorResult.push("🟨");
           } else {
             colorResult.push("⬜");
-          } 
+          }
         }
-        
-        return colorResult
 
+        return colorResult;
       };
-
-      let result = `__________________________________________________
-      ${wordleResult()} ${message} 
-      ${message} ${wordleResult()}
-      ${message} ${wordleResult()}
-      __________________________________________________`;
 
       const now = new Date().getTime();
-
-      const seySlots = () => {
-        ComfyJS.Say(`${result} @${user}`, extra.channel);
-      };
 
       const changeUserData = (time) => {
         if (time <= now) {
           userData.time = time + 60 * 1000 * 3;
           userData.user = user + extra.channel;
-          userData.lastMessage = result;
+          userData.messages.push(message);
+          userData.colorRow.push(wordleResult()+"_________________________________");
           userData.finalWord = finalWord;
           seySlots();
         }
@@ -321,6 +310,17 @@ const commands = () =>
 
       const timeForUser = userData.time;
       timeForUser ? changeUserData(userData.time) : changeUserData(now);
+
+
+
+      let result = `__________________________________________________
+      ${userData.colorRow } 
+      ${userData.messages}
+      __________________________________________________`;
+
+      const seySlots = () => {
+        ComfyJS.Say(`${result} @${user}`, extra.channel);
+      };
 
       console.log(usersWordle);
     }
