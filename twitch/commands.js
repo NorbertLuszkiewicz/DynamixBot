@@ -183,7 +183,7 @@ const commands = () =>
         console.log(`Error when use !pogoda on twitch (${err})`);
       }
     }
-  
+
     if (command === "horoscope" || command === "horoskop") {
       try {
         const changeToEng = {
@@ -259,7 +259,7 @@ const commands = () =>
 
       const checkDate = (time) => {
         if (time <= now) {
-          users[user + extra.channel] = time + (60 * 1000 * 3);
+          users[user + extra.channel] = time + 60 * 1000 * 3;
 
           seySlots();
         }
@@ -268,29 +268,40 @@ const commands = () =>
       const timeForUser = users[user + extra.channel];
       timeForUser ? checkDate(timeForUser) : checkDate(now);
     }
-    
-    if (command === "wordle" ) { 
-      let userData = usersWordle[user + extra.channel]
-      "🟩🟨⬜"
-      allWord, literalnieWord
-      const number = randomInt(1, literalnieWord.length );
-      let finalWord 
-      finalWord = userData.finalWord ? userData.finalWord.toLowerCase() : literalnieWord[literalnieWord.length].toLowerCase();
-      
-      let wordleResult = ()=>{
-        if (finalWord.indexOf("psa") !== -1) {
-    console.log("Ala ma psa");
-}
-        finalWord.
+
+    if (command === "wordle") {
+      let userData = usersWordle[user + extra.channel];
+      ("🟩🟨⬜");
+      allWord, literalnieWord;
+      const number = randomInt(1, literalnieWord.length);
+      let finalWord;
+      finalWord = userData.finalWord
+        ? userData.finalWord.toLowerCase()
+        : literalnieWord[literalnieWord.length].toLowerCase();
+
+      let wordleResult = () => {
         
-        return
-      }
+        const colorResult = []
+        for (let i = 0; i < finalWord.length; i++) {
+          if (message.indexOf(finalWord[i]) !== -1 ) {
+            colorResult.push("🟨")
+          }      else if (message.indexOf(finalWord[i]) !== -1 ) {
+            colorResult.push("🟨")
+          }   else if (message.indexOf(finalWord[i]) !== -1 ) {
+            colorResult.push("🟨")
+          }
+        }
+
+        if (finalWord.indexOf("psa") ) {
+          console.log("Ala ma psa");
+        }
+        finalWord.return;
+      };
 
       let result = `__________________________________________________
       --------------[ ${emotes[number1]} | ${emotes[number2]} | ${emotes[number3]} ]/
       __________________________________________________
       `;
-
 
       const now = new Date().getTime();
 
@@ -300,17 +311,15 @@ const commands = () =>
 
       const changeUserData = (time) => {
         if (time <= now) {
-                  
-          userData.time = time + (60 * 1000 * 3);
-          userData.user = user + extra.channel
-          userData.lastMessage = wordleResult
-          userData.finalWord = finalWord
+          userData.time = time + 60 * 1000 * 3;
+          userData.user = user + extra.channel;
+          userData.lastMessage = wordleResult;
+          userData.finalWord = finalWord;
           seySlots();
         }
-
       };
 
-      const timeForUser = userData.time
+      const timeForUser = userData.time;
       timeForUser ? changeUserData(userData.time) : changeUserData(now);
 
       console.log(usersWordle);
@@ -324,29 +333,19 @@ const commands = () =>
         extra.channel
       );
     }
-    
-    if (command === "chessuser" || command === "szachista" ) {
+
+    if (command === "chessuser" || command === "szachista") {
       try {
-        const playerInfo = await getChessUser(
-          message,
-          extra.channel
-        );
-        
-        
+        const playerInfo = await getChessUser(message, extra.channel);
 
         ComfyJS.Say(`@${user} ${playerInfo}`, extra.channel);
       } catch (err) {
         console.log(`Error when use !user on twitch (${err})`);
-      }    
+      }
     }
-    if (command === "chesslast" ) {
+    if (command === "chesslast") {
       try {
-        const gameInfo = await getLastGame(
-          message,
-          extra.channel
-        );
-        
-        
+        const gameInfo = await getLastGame(message, extra.channel);
 
         ComfyJS.Say(`@${user} ${gameInfo}`, extra.channel);
       } catch (err) {
