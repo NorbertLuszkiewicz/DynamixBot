@@ -275,6 +275,7 @@ const commands = () =>
       message.length === 5 &&
       allWord.includes(message)
     ) {
+      let isWin = false
        usersWordle[user + extra.channel] ? usersWordle[user + extra.channel]
         : (usersWordle[user + extra.channel] = {
             time: null,
@@ -301,13 +302,14 @@ const commands = () =>
             colorResult.push("⬜");
           }
         }
+        isWin = colorResult == ["🟩","🟩","🟩","🟩","🟩"]
 
         return colorResult.join(" ");
       };
 
       usersWordle[user + extra.channel].messages.push(message);
       usersWordle[user + extra.channel].colorRow.push(
-        wordleResult() + "_______________________________"
+        wordleResult() + "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"
       );
       usersWordle[user + extra.channel].finalWord = finalWord;
       
@@ -317,13 +319,21 @@ const commands = () =>
 
       let result = `__________________________________________________
       ${usersWordle[user + extra.channel].colorRow} 
-      ${usersWordle[user + extra.channel].messages}
-      __________________________________________________`;
+      ${usersWordle[user + extra.channel].messages} `;
       
       
 
       const seySlots = () => {
-        ComfyJS.Say(`${result} @${user}`, extra.channel);
+        ComfyJS.Say(`${result} @${user} ${isWin ? "wygrałeś BRUHBRUH " :''}`, extra.channel);
+        
+        if(usersWordle[user + extra.channel].messages.length === 5 && isWin){
+          usersWordle[user + extra.channel] = {
+            time: null,
+            finalWord: "",
+            messages: [],
+            colorRow: [],
+          }
+        }
       };
 
       const changeUserData = (time) => {
