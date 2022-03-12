@@ -304,7 +304,6 @@ const commands = () =>
         isWin =
           JSON.stringify(colorResult) ==
           JSON.stringify(["🟩", "🟩", "🟩", "🟩", "🟩"]);
-        console.log(isWin);
 
         return colorResult.join(" ");
       };
@@ -333,20 +332,16 @@ const commands = () =>
 
         if (usersWordle[user + extra.channel].messages.length === 5 || isWin) {
           usersWordle[user + extra.channel] = {
-            time: null,
+            time: now + 60 * 1000 * 10,
             finalWord: "",
             messages: [],
             colorRow: [],
           };
         }
       };
-
+ 
       const changeUserData = (time) => {
         if (time <= now) {
-          console.log(time,now, isWin, usersWordle[user + extra.channel].messages.length === 5)
-          if(isWin||usersWordle[user + extra.channel].messages.length === 5){
-            usersWordle[user + extra.channel].time = time + 60 * 1000 * 10;
-          }
           
           seySlots();
         }
