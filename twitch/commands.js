@@ -285,12 +285,12 @@ const commands = () =>
             colorRow: [],
           });
       
-      console.log(userData, "111userData")
+      console.log(usersWordle[user + extra.channel], "111userData")
 
       const number = randomInt(1, literalnieWord.length);
-      let finalWord = userData ? userData.finalWord : literalnieWord[number];
+      let finalWord = usersWordle[user + extra.channel].finalWord ? usersWordle[user + extra.channel].finalWord : literalnieWord[number];
       
-      console.log(finalWord, "222finalWord")
+      console.log(usersWordle[user + extra.channel],usersWordle[user + extra.channel].finalWord ,literalnieWord[number], "222finalWord")
 
       let wordleResult = () => {
         const colorResult = [];
@@ -304,22 +304,22 @@ const commands = () =>
           }
         }
 
-        return colorResult;
+        return colorResult.join(" ");
       };
 
-      userData.messages.push(message);
-      userData.colorRow.push(
-        wordleResult() + "_________________________________"
+      usersWordle[user + extra.channel].messages.push(message);
+      usersWordle[user + extra.channel].colorRow.push(
+        wordleResult() + "_______________________________"
       );
-      userData.finalWord = finalWord;
+      usersWordle[user + extra.channel].finalWord = finalWord;
       
-      console.log(userData, "333userData")
+      console.log(usersWordle[user + extra.channel], "333userData")
 
       const now = new Date().getTime();
 
       let result = `__________________________________________________
-      ${userData.colorRow} 
-      ${userData.messages}
+      ${usersWordle[user + extra.channel].colorRow} 
+      ${usersWordle[user + extra.channel].messages}
       __________________________________________________`;
       
       
@@ -330,13 +330,13 @@ const commands = () =>
 
       const changeUserData = (time) => {
         if (time <= now) {
-          userData.time = time + 60 * 1000 * 3;
+          usersWordle[user + extra.channel].time = time + 60 * 1000 * 3;
           seySlots();
         }
       };
 
-      const timeForUser = userData ? userData.time : null;
-      timeForUser ? changeUserData(userData.time) : changeUserData(now);
+      const timeForUser = usersWordle[user + extra.channel] ? usersWordle[user + extra.channel].time : null;
+      timeForUser ? changeUserData(usersWordle[user + extra.channel].time) : changeUserData(now);
 
       console.log(usersWordle, wordleResult(), finalWord);
     }
