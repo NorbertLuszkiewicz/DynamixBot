@@ -286,7 +286,7 @@ const commands = () =>
       //console.log(usersWordle[user + extra.channel], "111userData")
 
       const number = randomInt(1, literalnieWord.length);
-      let finalWord = usersWordle[user + extra.channel] ? usersWordle[user + extra.channel].finalWord : literalnieWord[number];
+      let finalWord = usersWordle[user + extra.channel].finalWord  ? usersWordle[user + extra.channel].finalWord : literalnieWord[number];
       
       //console.log(usersWordle[user + extra.channel],usersWordle[user + extra.channel].finalWord ,literalnieWord[number], "222finalWord")
 
@@ -295,7 +295,7 @@ const commands = () =>
         for (let i = 0; i < 5; i++) {
           if (message.charAt(i) === finalWord.charAt(i)) {
             colorResult.push("🟩");
-          } else if (message.indexOf(finalWord[i]) !== -1) {
+          } else if (finalWord.indexOf(message[i]) !== -1) {
             colorResult.push("🟨");
           } else {
             colorResult.push("⬜");
@@ -328,7 +328,7 @@ const commands = () =>
 
       const changeUserData = (time) => {
         if (time <= now) {
-          usersWordle[user + extra.channel].time = time + 60 * 1000 * 3;
+          usersWordle[user + extra.channel].time = time + 60 * 1000 * 3*0;
           seySlots();
         }
       };
