@@ -275,22 +275,20 @@ const commands = () =>
       message.length === 5 &&
       allWord.includes(message)
     ) {
-      let userData = usersWordle[user + extra.channel];
-      userData
-        ? userData
-        : (userData = {
+       usersWordle[user + extra.channel] ? usersWordle[user + extra.channel]
+        : (usersWordle[user + extra.channel] = {
             time: null,
             finalWord: "",
             messages: [],
             colorRow: [],
           });
       
-      console.log(usersWordle[user + extra.channel], "111userData")
+      //console.log(usersWordle[user + extra.channel], "111userData")
 
       const number = randomInt(1, literalnieWord.length);
-      let finalWord = usersWordle[user + extra.channel].finalWord ? usersWordle[user + extra.channel].finalWord : literalnieWord[number];
+      let finalWord = usersWordle[user + extra.channel] ? usersWordle[user + extra.channel].finalWord : literalnieWord[number];
       
-      console.log(usersWordle[user + extra.channel],usersWordle[user + extra.channel].finalWord ,literalnieWord[number], "222finalWord")
+      //console.log(usersWordle[user + extra.channel],usersWordle[user + extra.channel].finalWord ,literalnieWord[number], "222finalWord")
 
       let wordleResult = () => {
         const colorResult = [];
@@ -313,7 +311,7 @@ const commands = () =>
       );
       usersWordle[user + extra.channel].finalWord = finalWord;
       
-      console.log(usersWordle[user + extra.channel], "333userData")
+      //console.log(usersWordle[user + extra.channel], "333userData")
 
       const now = new Date().getTime();
 
