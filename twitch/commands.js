@@ -290,19 +290,20 @@ const commands = () =>
         ComfyJS.Say(`${result} @${user}`, extra.channel);
       };
 
-      const changeUserData = (time) => {
+      const changeUserData = (time, isFirst) => {
         if (time <= now) {
                   
           userData.time = time + (60 * 1000 * 3);
           userData.user = user + extra.channel
           userData.lastMessage = wordleResult
+          isFirst && (userData.finalWord = finalWord)
           seySlots();
         }
 
       };
 
       const timeForUser = userData.time
-      timeForUser ? changeUserData(timeForUser) : changeUserData(now);
+      timeForUser ? changeUserData(userData.time, !userData.finalWord) : changeUserData(now,!userData.finalWord);
 
       console.log(usersWordle);
     }
