@@ -274,9 +274,17 @@ const commands = () =>
       "🟩🟨⬜"
       allWord, literalnieWord
       const number = randomInt(1, literalnieWord.length );
-      const finalWord = literalnieWord[literalnieWord.length];
+      let finalWord 
+      finalWord = userData.finalWord ? userData.finalWord.toLowerCase() : literalnieWord[literalnieWord.length].toLowerCase();
       
-      let wordleResult = ""
+      let wordleResult = ()=>{
+        if (finalWord.indexOf("psa") !== -1) {
+    console.log("Ala ma psa");
+}
+        finalWord.
+        
+        return
+      }
 
       let result = `__________________________________________________
       --------------[ ${emotes[number1]} | ${emotes[number2]} | ${emotes[number3]} ]/
@@ -290,20 +298,20 @@ const commands = () =>
         ComfyJS.Say(`${result} @${user}`, extra.channel);
       };
 
-      const changeUserData = (time, isFirst) => {
+      const changeUserData = (time) => {
         if (time <= now) {
                   
           userData.time = time + (60 * 1000 * 3);
           userData.user = user + extra.channel
           userData.lastMessage = wordleResult
-          isFirst && (userData.finalWord = finalWord)
+          userData.finalWord = finalWord
           seySlots();
         }
 
       };
 
       const timeForUser = userData.time
-      timeForUser ? changeUserData(userData.time, !userData.finalWord) : changeUserData(now,!userData.finalWord);
+      timeForUser ? changeUserData(userData.time) : changeUserData(now);
 
       console.log(usersWordle);
     }
