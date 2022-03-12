@@ -9,8 +9,10 @@ const {
 const { currentlyPlaying, nextSong, startSong } = require("../spotify");
 const { songPlayingNow, timeRequest } = require("../streamElements");
 const { getChessUser, getLastGame } = require("../chess");
+const { allWord, literalnieWord } = require("../literalnie");
 
 let users = {};
+let usersW = {};
 
 const commands = () =>
   (ComfyJS.onCommand = async (user, command, message, flags, extra) => {
@@ -264,30 +266,24 @@ const commands = () =>
 
       const timeForUser = users[user + extra.channel];
       timeForUser ? checkDate(timeForUser) : checkDate(now);
-
-      console.log(users);
     }
     
     if (command === "wordle" ) { 
-
-      let number = randomInt(1, 7);
+      "🟩🟨⬜"
+      allWord, literalnieWord
+      const number = randomInt(1, literalnieWord.length );
+      const finalWord = literalnieWord[literalnieWord.length];
 
       let result = `__________________________________________________
       --------------[ ${emotes[number1]} | ${emotes[number2]} | ${emotes[number3]} ]/
       __________________________________________________
       `;
 
-      const isWin = number1 === number2 && number2 === number3;
-      const isSemiWin =
-        number1 === number2 || number1 === number3 || number2 === number3;
-      let winMessage = "przegrałeś PepeLaugh";
-      isSemiWin && (winMessage = "prawie prawie PauseChamp");
-      isWin && (winMessage = "wygrałeś BRUHBRUH");
 
       const now = new Date().getTime();
 
       const seySlots = () => {
-        ComfyJS.Say(`${result} @${user} ${winMessage}`, extra.channel);
+        ComfyJS.Say(`${result} @${user}`, extra.channel);
       };
 
       const checkDate = (time) => {
