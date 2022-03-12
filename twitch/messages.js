@@ -174,7 +174,7 @@ const messages = () => {
         let number3 = randomInt(1, maxNumber);
 
         let result = `____________________PREMIUM____________________
-      --------------[ ${emotes[number1]} | ${emotes[number2]} | ${emotes[number3]} ]/
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[ ${emotes[number1]} | ${emotes[number2]} | ${emotes[number3]} ]/
       __________________________________________________
       `;
 

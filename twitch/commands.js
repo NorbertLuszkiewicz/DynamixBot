@@ -240,7 +240,7 @@ const commands = () =>
       let number3 = randomInt(1, 7);
 
       let result = `__________________________________________________
-      --------------[ ${emotes[number1]} | ${emotes[number2]} | ${emotes[number3]} ]/
+      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[ ${emotes[number1]} | ${emotes[number2]} | ${emotes[number3]} ]/
       __________________________________________________
       `;
 
@@ -302,14 +302,15 @@ const commands = () =>
             colorResult.push("⬜");
           }
         }
-        isWin = colorResult == ["🟩","🟩","🟩","🟩","🟩"]
+        isWin = JSON.stringify(colorResult) == JSON.stringify(["🟩","🟩","🟩","🟩","🟩"])
+        console.log(isWin)
 
         return colorResult.join(" ");
       };
 
       usersWordle[user + extra.channel].messages.push(message);
       usersWordle[user + extra.channel].colorRow.push(
-        wordleResult() + "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"
+        wordleResult() + "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"
       );
       usersWordle[user + extra.channel].finalWord = finalWord;
       
@@ -318,7 +319,7 @@ const commands = () =>
       const now = new Date().getTime();
 
       let result = `__________________________________________________
-      ${usersWordle[user + extra.channel].colorRow} 
+      ${usersWordle[user + extra.channel].colorRow.join(" ")} 
       ${usersWordle[user + extra.channel].messages} `;
       
       
@@ -326,7 +327,7 @@ const commands = () =>
       const seySlots = () => {
         ComfyJS.Say(`${result} @${user} ${isWin ? "wygrałeś BRUHBRUH " :''}`, extra.channel);
         
-        if(usersWordle[user + extra.channel].messages.length === 5 && isWin){
+        if(usersWordle[user + extra.channel].messages.length === 5 || isWin){
           usersWordle[user + extra.channel] = {
             time: null,
             finalWord: "",
@@ -346,7 +347,7 @@ const commands = () =>
       const timeForUser = usersWordle[user + extra.channel] ? usersWordle[user + extra.channel].time : null;
       timeForUser ? changeUserData(usersWordle[user + extra.channel].time) : changeUserData(now);
 
-      console.log(usersWordle, wordleResult(), finalWord);
+      console.log(user +" " +extra.channel, finalWord);
     }
 
     if (
