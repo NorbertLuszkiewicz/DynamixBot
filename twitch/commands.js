@@ -270,9 +270,7 @@ const commands = () =>
     
     if (command === "wordle" ) { 
 
-      let number1 = randomInt(1, 7);
-      let number2 = randomInt(1, 7);
-      let number3 = randomInt(1, 7);
+      let number = randomInt(1, 7);
 
       let result = `__________________________________________________
       --------------[ ${emotes[number1]} | ${emotes[number2]} | ${emotes[number3]} ]/
