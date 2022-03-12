@@ -26683,4 +26683,16 @@ const literalnieWord = [
   "zarys",
   "zawór",
   "złoty",
+  "zorza",
+  "zwoje",
+  "żabka",
+  "żagle",
+  "żebra",
+  "żmija",
+  "żółta",
 ];
+
+module.exports = {
+  allWord,
+  literalnieWord
+};
