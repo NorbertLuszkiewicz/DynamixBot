@@ -343,14 +343,17 @@ const commands = () =>
 
       const changeUserData = (time) => {
         if (time <= now) {
-          usersWordle[user + extra.channel].time = time + 60 * 1000 * 3;
+          console.log(time,now, isWin, usersWordle[user + extra.channel].messages.length === 5)
+          if(isWin||usersWordle[user + extra.channel].messages.length === 5){
+            usersWordle[user + extra.channel].time = time + 60 * 1000 * 10;
+          }
+          
           seySlots();
         }
       };
 
-      const timeForUser = usersWordle[user + extra.channel]
-        ? usersWordle[user + extra.channel].time
-        : null;
+      const timeForUser = usersWordle[user + extra.channel].time
+
       timeForUser
         ? changeUserData(usersWordle[user + extra.channel].time)
         : changeUserData(now);
