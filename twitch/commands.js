@@ -270,14 +270,23 @@ const commands = () =>
       console.log(users);
     }
 
-    if (command === "wordle" && message.length === 5 && allWord.includes(message)) {
+    if (
+      command === "wordle" &&
+      message.length === 5 &&
+      allWord.includes(message)
+    ) {
       let userData = usersWordle[user + extra.channel];
-      userData ? userData : { messages: [], colorRow:[] }
-      allWord
+      userData
+        ? userData
+        : (userData = {
+            time: null,
+            finalWord: "",
+            messages: [],
+            colorRow: [],
+          });
+
       const number = randomInt(1, literalnieWord.length);
-      let finalWord = userData
-        ? userData.finalWord
-        : literalnieWord[number];
+      let finalWord = userData ? userData.finalWord : literalnieWord[number];
 
       let wordleResult = () => {
         const colorResult = [];
@@ -296,24 +305,8 @@ const commands = () =>
 
       const now = new Date().getTime();
 
-      const changeUserData = (time) => {
-        if (time <= now) {
-          userData.time = time + 60 * 1000 * 3;
-          userData.user = user + extra.channel;
-          userData.messages.push(message);
-          userData.colorRow.push(wordleResult()+"_________________________________");
-          userData.finalWord = finalWord;
-          seySlots();
-        }
-      };
-
-      const timeForUser = userData.time;
-      timeForUser ? changeUserData(userData.time) : changeUserData(now);
-
-
-
       let result = `__________________________________________________
-      ${userData.colorRow } 
+      ${userData.colorRow} 
       ${userData.messages}
       __________________________________________________`;
 
@@ -321,11 +314,33 @@ const commands = () =>
         ComfyJS.Say(`${result} @${user}`, extra.channel);
       };
 
+      const changeUserData = (time) => {
+        if (time <= now) {
+          userData.time = time + 60 * 1000 * 3;
+          userData.messages.push(message);
+          userData.colorRow.push(
+            wordleResult() + "_________________________________"
+          );
+          userData.finalWord = finalWord;
+          seySlots();
+        }
+      };
+
+      const timeForUser = userData ? userData.time : null;
+      timeForUser ? changeUserData(userData.time) : changeUserData(now);
+
       console.log(usersWordle);
     }
-    if (command === "wordle" && (message.length !== 5 || !allWord.includes(message))) {
-      console.log(message.length, allWord[message])
-      ComfyJS.Say(`@${user} Podałeś słowo, które nie zawiera 5 znaków albo nie znaleziono go w słowniku`, extra.channel);
+    
+    if (
+      command === "wordle" &&
+      (message.length !== 5 || !allWord.includes(message))
+    ) {
+      console.log(message.length, allWord[message]);
+      ComfyJS.Say(
+        `@${user} Podałeś słowo, które nie zawiera 5 znaków albo nie znaleziono go w słowniku`,
+        extra.channel
+      );
     }
 
     if (command === "forma") {
