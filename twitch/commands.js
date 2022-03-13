@@ -271,9 +271,9 @@ const commands = () =>
     }
     const now = new Date().getTime();
     const canWrite = usersWordle[user + extra.channel]
-      ? usersWordle[user + extra.channel].time <= now
+      ? !usersWordle[user + extra.channel].time
       : true;
-    console.log(canWrite,usersWordle[user + extra.channel]&& usersWordle[user + extra.channel].time, now,"aaaasss")
+    console.log(canWrite,usersWordle[user + extra.channel] && usersWordle[user + extra.channel].time, now,"aaaasss")
 
     if (
       command === "wordle" &&
@@ -336,7 +336,7 @@ const commands = () =>
 
         if (usersWordle[user + extra.channel].messages.length === 5 || isWin) {
           usersWordle[user + extra.channel] = {
-            time: now + 60 * 1000 * 10,
+            time: now + 60 * 1000 * 1,
             finalWord: "",
             messages: [],
             colorRow: [],
