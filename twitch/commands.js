@@ -267,13 +267,13 @@ const commands = () =>
 
       const timeForUser = users[user + extra.channel];
       timeForUser ? checkDate(timeForUser) : checkDate(now);
-      console.log(users);
+      
     }
     const now = new Date().getTime();
     const canWrite = usersWordle[user + extra.channel]
-      ? !usersWordle[user + extra.channel].time
+      ? usersWordle[user + extra.channel].time <= now
       : true;
-    console.log(canWrite,usersWordle[user + extra.channel] && usersWordle[user + extra.channel].time, now,"aaaasss")
+    
 
     if (
       command === "wordle" &&
@@ -336,7 +336,7 @@ const commands = () =>
 
         if (usersWordle[user + extra.channel].messages.length === 5 || isWin) {
           usersWordle[user + extra.channel] = {
-            time: now + 60 * 1000 * 1,
+            time: now + 60 * 1000 * 10,
             finalWord: "",
             messages: [],
             colorRow: [],
@@ -363,7 +363,7 @@ const commands = () =>
       command === "wordle" &&
       (message.length !== 5 || !allWord.includes(message))
     ) {
-      console.log(message.length, allWord[message]);
+      
       ComfyJS.Say(
         `@${user} Podałeś słowo, które nie zawiera 5 znaków albo nie znaleziono go w słowniku`,
         extra.channel
