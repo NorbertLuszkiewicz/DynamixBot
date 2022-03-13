@@ -269,11 +269,16 @@ const commands = () =>
       timeForUser ? checkDate(timeForUser) : checkDate(now);
       console.log(users);
     }
+    const now = new Date().getTime();
+    const canWrite = usersWordle[user + extra.channel]
+      ? usersWordle[user + extra.channel].time <= now
+      : true;
 
     if (
       command === "wordle" &&
       message.length === 5 &&
-      allWord.includes(message)
+      allWord.includes(message) &&
+      canWrite
     ) {
       let isWin = false;
       usersWordle[user + extra.channel]
@@ -314,8 +319,6 @@ const commands = () =>
       );
       usersWordle[user + extra.channel].finalWord = finalWord;
 
-      const now = new Date().getTime();
-
       let result = `__________________________________________________
       ${usersWordle[user + extra.channel].colorRow.join(" ")} 
       ${usersWordle[user + extra.channel].messages} @${user} ${
@@ -339,15 +342,14 @@ const commands = () =>
           };
         }
       };
- 
+
       const changeUserData = (time) => {
         if (time <= now) {
-          
           seySlots();
         }
       };
 
-      const timeForUser = usersWordle[user + extra.channel].time
+      const timeForUser = usersWordle[user + extra.channel].time;
 
       timeForUser
         ? changeUserData(usersWordle[user + extra.channel].time)
