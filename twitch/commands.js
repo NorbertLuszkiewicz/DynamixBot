@@ -273,6 +273,7 @@ const commands = () =>
     const canWrite = usersWordle[user + extra.channel]
       ? usersWordle[user + extra.channel].time <= now
       : true;
+    console.log(canWrite,usersWordle[user + extra.channel]&& usersWordle[user + extra.channel].time, now,"aaaasss")
 
     if (
       command === "wordle" &&
