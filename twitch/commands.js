@@ -278,7 +278,7 @@ const commands = () =>
     if (
       command === "wordle" &&
       message.length === 5 &&
-      allWord.includes(message) &&
+      allWord.includes(message.toLowerCase()) &&
       canWrite
     ) {
       let isWin = false;
@@ -361,7 +361,7 @@ const commands = () =>
 
     if (
       command === "wordle" &&
-      (message.length !== 5 || !allWord.includes(message))
+      (message.length !== 5 || !allWord.includes(message.toLowerCase()))
     ) {
       
       ComfyJS.Say(
