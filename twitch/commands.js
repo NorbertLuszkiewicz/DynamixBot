@@ -16,7 +16,7 @@ let usersWordle = {};
 
 const commands = () =>
   (ComfyJS.onCommand = async (user, command, message, flags, extra) => {
-    if (command == "song" && extra.channel !== "og1ii") {
+    if ((command == "song" || command == "coleci" )&& extra.channel !== "og1ii") {
       try {
         const spotifyData = await currentlyPlaying(extra.channel);
         const { isPlayingNow, title, link } = await songPlayingNow(
