@@ -361,7 +361,17 @@ const commands = () =>
 
     if (
       command === "wordle" &&
-      (message.length !== 5 || !allWord.includes(message.toLowerCase()))
+      (message.length === 0 || !allWord.includes(message.toLowerCase()))
+    ) {
+      
+      ComfyJS.Say(
+        `@${user} Musisz znaleźć ukryte 5 literowe słowo, żółte oznacza, że litera znajduje się w haśle, ale na innej pozycji, a zielone, że litera znajduje się na tej pozycji`,
+        extra.channel
+      );
+    }
+    if (
+      command === "wordle" &&
+      ((message.length !== 5 && message.length > 0)|| !allWord.includes(message.toLowerCase()))
     ) {
       
       ComfyJS.Say(
