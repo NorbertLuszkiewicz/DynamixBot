@@ -16,7 +16,10 @@ let usersWordle = {};
 
 const commands = () =>
   (ComfyJS.onCommand = async (user, command, message, flags, extra) => {
-    if ((command == "song" || command == "coleci" )&& extra.channel !== "og1ii") {
+    if (
+      (command == "song" || command == "coleci") &&
+      extra.channel !== "og1ii"
+    ) {
       try {
         const spotifyData = await currentlyPlaying(extra.channel);
         const { isPlayingNow, title, link } = await songPlayingNow(
@@ -267,13 +270,11 @@ const commands = () =>
 
       const timeForUser = users[user + extra.channel];
       timeForUser ? checkDate(timeForUser) : checkDate(now);
-      
     }
     const now = new Date().getTime();
     const canWrite = usersWordle[user + extra.channel]
       ? usersWordle[user + extra.channel].time <= now
       : true;
-    
 
     if (
       command === "wordle" &&
@@ -363,17 +364,13 @@ const commands = () =>
       command === "wordle" &&
       (message.length === 0 || !allWord.includes(message.toLowerCase()))
     ) {
-      
       ComfyJS.Say(
         `@${user} Musisz znaleźć ukryte 5 literowe słowo, żółte oznacza, że litera znajduje się w haśle, ale na innej pozycji, a zielone, że litera znajduje się na tej pozycji`,
         extra.channel
       );
     }
-    if (
-      command === "wordle" &&
-      ((message.length !== 5 && message.length > 0)|| !allWord.includes(message.toLowerCase()))
-    ) {
-      
+    if (command === "wordle" && message) {
+      console.log("aaaaa", message.length);
       ComfyJS.Say(
         `@${user} Podałeś słowo, które nie zawiera 5 znaków albo nie znaleziono go w słowniku`,
         extra.channel
