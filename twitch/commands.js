@@ -360,17 +360,17 @@ const commands = () =>
       console.log(user + " " + extra.channel, finalWord);
     }
 
-    if (
-      command === "wordle" &&
-      (message.length === 0 || !allWord.includes(message.toLowerCase()))
-    ) {
+    if (command === "wordle" && !message) {
       ComfyJS.Say(
         `@${user} Musisz znaleźć ukryte 5 literowe słowo, żółte oznacza, że litera znajduje się w haśle, ale na innej pozycji, a zielone, że litera znajduje się na tej pozycji`,
         extra.channel
       );
     }
-    if (command === "wordle" && message) {
-      console.log("aaaaa", message.length);
+    if (
+      command === "wordle" &&
+      message &&
+      !allWord.includes(message.toLowerCase())
+    ) {
       ComfyJS.Say(
         `@${user} Podałeś słowo, które nie zawiera 5 znaków albo nie znaleziono go w słowniku`,
         extra.channel
