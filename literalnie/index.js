@@ -26661,6 +26661,7 @@ const literalnieWord = [
   "szpik",
   "szkic",
   "szkło",
+  "szyba",
   "szyja",
   "szyna",
   "ślina",
