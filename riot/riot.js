@@ -19,7 +19,7 @@ const addTftUser = async (name, server, streamer) => {
 
   const existThisAccount = data.riotAccountList.find(
     (riotAccount) => riotAccount.name == name && riotAccount.server == server
-  );
+  ); 
 
   if (!existThisAccount) {
     const { response } = await api.Summoner.getByName(name, server);
