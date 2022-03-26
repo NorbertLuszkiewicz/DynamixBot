@@ -473,6 +473,20 @@ const commands = () =>
       if (command === "start" && user === "DynaM1X1") {
         startSong(extra.channel);
       }
+      
+      if (command === "on" && (flags.mod || flags.broadcaster)) {
+      const isWeather = (message === "weather" || message === "pogoda")
+        
+        commandSwitch.map(item => {
+          console.log(item)
+        })
+        
+        
+        // updateUser({
+        //   streamer: extra.channel,
+        //   commandSwitch: ,
+        // });
+      }
     } catch (err) {
       console.log("Error when use commands" + err);
     }
