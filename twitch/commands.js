@@ -25,10 +25,7 @@ const commands = () =>
       const [data] = await getUser(extra.channel);
       const { commandSwitch } = await data;
 
-      if (
-        (command == "song" || command == "coleci") &&
-        extra.channel !== "og1ii"
-      ) {
+      if ((command == "song" || command == "coleci") && commandSwitch.song) {
         try {
           const spotifyData = await currentlyPlaying(extra.channel);
           const { isPlayingNow, title, link } = await songPlayingNow(
@@ -59,7 +56,10 @@ const commands = () =>
         }
       }
 
-      if (command == "playlist" || command == "playlista") {
+      if (
+        (command == "playlist" || command == "playlista") &&
+        commandSwitch.song
+      ) {
         try {
           const spotifyData = await currentlyPlaying(extra.channel);
 
@@ -77,7 +77,7 @@ const commands = () =>
         }
       }
 
-      if (command == "matches" || command == "mecze") {
+      if ((command == "matches" || command == "mecze") && commandSwitch.tft) {
         try {
           const NickNameAndServer = message
             ? message.split(", ")
@@ -98,7 +98,8 @@ const commands = () =>
       if (
         (command == "match" || command == "mecz") &&
         parseInt(message) > 0 &&
-        parseInt(message) < 21
+        parseInt(message) < 21 &&
+        commandSwitch.tft
       ) {
         try {
           const NickNameAndServer = message.split(", ");
@@ -115,7 +116,11 @@ const commands = () =>
           console.log(`Error when use !mecz on twitch (${err})`);
         }
       }
-      if ((command == "match" || command == "mecz") && !message) {
+      if (
+        (command == "match" || command == "mecz") &&
+        !message &&
+        commandSwitch.tft
+      ) {
         ComfyJS.Say(
           `@${user} komenda !mecze pokazuje liste meczy z dzisiaj (miejsca o raz synergie) !mecz [nr] gdzie [nr] oznacza numer meczu licząc od najnowszego czyli !mecz 1 pokaze ostatnią gre (wyświetla dokładny comp z itemami i synergiami)`,
           extra.channel
@@ -132,7 +137,7 @@ const commands = () =>
         }
       }
 
-      if (command == "stats" || command == "staty") {
+      if ((command == "stats" || command == "staty") && commandSwitch.tft) {
         try {
           const NickNameAndServer = message
             ? message.split(", ")
@@ -149,7 +154,10 @@ const commands = () =>
         }
       }
 
-      if (command === "top" || command === "ranking" || command === "rank") {
+      if (
+        (command === "top" || command === "ranking" || command === "rank") &&
+        commandSwitch.tft
+      ) {
         try {
           const stats = await getRank(extra.channel, message.toUpperCase());
 
@@ -169,7 +177,10 @@ const commands = () =>
         }
       }
 
-      if (command === "weather" || command === "pogoda") {
+      if (
+        (command === "weather" || command === "pogoda") &&
+        commandSwitch.weather
+      ) {
         try {
           const { temp, speed, description } = await getWeather(toPl(message));
           let emote = "";
@@ -200,7 +211,10 @@ const commands = () =>
         }
       }
 
-      if (command === "horoscope" || command === "horoskop") {
+      if (
+        command === "horoscope" ||
+        (command === "horoskop" && commandSwitch.weather)
+      ) {
         try {
           const changeToEng = {
             baran: "aries",
@@ -242,7 +256,7 @@ const commands = () =>
         );
       }
 
-      if (command === "slots" && extra.channel !== "kezman22") {
+      if (command === "slots" && commandSwitch.slots) {
         const emotes = [
           "",
           "VisLaud",
@@ -296,7 +310,8 @@ const commands = () =>
         command === "wordle" &&
         message.length === 5 &&
         allWord.includes(message.toLowerCase()) &&
-        canWrite
+        canWrite &&
+        commandSwitch.wordle
       ) {
         let isWin = false;
         usersWordle[user + extra.channel]
@@ -379,7 +394,7 @@ const commands = () =>
         console.log(user + " " + extra.channel, finalWord);
       }
 
-      if (command === "wordle" && !message) {
+      if (command === "wordle" && !message && commandSwitch.wordle) {
         ComfyJS.Say(
           `@${user} Musisz znaleźć ukryte 5 literowe słowo, żółte oznacza, że litera znajduje się w haśle, ale na innej pozycji, a zielone, że litera znajduje się na tej pozycji`,
           extra.channel
@@ -388,7 +403,8 @@ const commands = () =>
       if (
         command === "wordle" &&
         message &&
-        !allWord.includes(message.toLowerCase())
+        !allWord.includes(message.toLowerCase()) &&
+        commandSwitch.wordle
       ) {
         ComfyJS.Say(
           `@${user} Podałeś słowo, które nie zawiera 5 znaków albo nie znaleziono go w słowniku`,
@@ -405,7 +421,10 @@ const commands = () =>
         );
       }
 
-      if (command === "chessuser" || command === "szachista") {
+      if (
+        (command === "chessuser" || command === "szachista") &&
+        commandSwitch.chess
+      ) {
         try {
           const playerInfo = await getChessUser(message, extra.channel);
 
@@ -414,7 +433,7 @@ const commands = () =>
           console.log(`Error when use !user on twitch (${err})`);
         }
       }
-      if (command === "chesslast") {
+      if (command === "chesslast" && commandSwitch.chess) {
         try {
           const gameInfo = await getLastGame(message, extra.channel);
 
