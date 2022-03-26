@@ -473,15 +473,35 @@ const commands = () =>
       if (command === "start" && user === "DynaM1X1") {
         startSong(extra.channel);
       }
-      
+
       if (command === "on" && (flags.mod || flags.broadcaster)) {
-      const isWeather = (message === "weather" || message === "pogoda")
+        let newComandSwitch = { ...commandSwitch };
+
+        if (message === "weather" || message === "pogoda") {
+          newComandSwitch.weather = true;
+        }
         
-        commandSwitch.map(item => {
-          console.log(item)
-        })
+        if (message === "tft" || message === "stats" || message === "ranking" || message === "mecze" || message === "mecz") {
+          newComandSwitch.tft = true;
+        }
+                
+        if (message === "chess" ||command === "chessuser" || command === "szachista" || chesslast) {
+          newComandSwitch.weather = true;
+        }
+                
+        if (message === "weather" || message === "pogoda") {
+          newComandSwitch.weather = true;
+        }
+                
+        if (message === "weather" || message === "pogoda") {
+          newComandSwitch.weather = true;
+        }
         
-        
+                
+        if (message === "weather" || message === "pogoda") {
+          newComandSwitch.weather = true;
+        }
+
         // updateUser({
         //   streamer: extra.channel,
         //   commandSwitch: ,
