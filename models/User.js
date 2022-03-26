@@ -119,6 +119,10 @@ const UserSchema = new Schema({
     type: Array,
     default: null,
   },
+    commandSwitch: {
+    type: {name: String, server: String, date: Number, puuid: String, id: String},
+    default: null,
+  },
 });
 
 mongoose.model("user", UserSchema);
