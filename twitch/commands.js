@@ -474,38 +474,68 @@ const commands = () =>
         startSong(extra.channel);
       }
 
-      if (command === "on" && (flags.mod || flags.broadcaster)) {
-        let newComandSwitch = { ...commandSwitch };
+      if ((command === "on" || command === "off") && (flags.mod || flags.broadcaster)) {
+        let newComandSwitch = commandSwitch;
+        
+        const isOn = command === "on"
+        const onOffMessage = isOn ? "Włączono" : "Wyłączono"
 
-        if (message === "weather" || message === "pogoda" || message === "horoskop") {
-          newComandSwitch.weather = true;
-          ComfyJS.Say(`Włączono komendy pogoda i horoskop` , extra.channel);
+        if (
+          message === "weather" ||
+          message === "pogoda" ||
+          message === "horoskop"
+        ) {
+          newComandSwitch.weather = isOn;
+          ComfyJS.Say(`${onOffMessage} komendy pogoda i horoskop`, extra.channel);
         }
-        
-        if (message === "tft" || message === "stats" || message === "ranking" || message === "mecze" || message === "mecz" || message === "rank" || message === "match" || message === "matches") {
-          newComandSwitch.tft = true;
-           ComfyJS.Say(`Włączono komendy tft: stats, ranking, mecze, mecz` , extra.channel);
+
+        if (
+          message === "tft" ||
+          message === "stats" ||
+          message === "ranking" ||
+          message === "mecze" ||
+          message === "mecz" ||
+          message === "rank" ||
+          message === "match" ||
+          message === "matches"
+        ) {
+          newComandSwitch.tft = isOn;
+          ComfyJS.Say(
+            `${onOffMessage} komendy tft: stats, ranking, mecze, mecz`,
+            extra.channel
+          );
         }
-                
-        if (message === "chess" ||command === "chessuser" || command === "szachista" || command === "chesslast") {
-          newComandSwitch.chess = true;
-         ComfyJS.Say(`Włączono komendy chess: chessuser, chesslast` , extra.channel);
+
+        if (
+          message === "chess" ||
+          command === "chessuser" ||
+          command === "szachista" ||
+          command === "chesslast"
+        ) {
+          newComandSwitch.chess = isOn;
+          ComfyJS.Say(
+            `${onOffMessage} komendy chess: chessuser, chesslast`,
+            extra.channel
+          );
         }
-                
-        if (message === "wordle" ) {
-          newComandSwitch.wordle = true;
-          ComfyJS.Say(`Włączono komende wordle` , extra.channel);
+
+        if (message === "wordle") {
+          newComandSwitch.wordle = isOn;
+          ComfyJS.Say(`${onOffMessage} komende wordle`, extra.channel);
         }
-                
-        if (message === "slots" ) {
-          newComandSwitch.slots = true;
-           ComfyJS.Say(`Włączono komende slots` , extra.channel);
+
+        if (message === "slots") {
+          newComandSwitch.slots = isOn;
+          ComfyJS.Say(`${onOffMessage} komende slots`, extra.channel);
         }
-        
-                
-        if (message === "song" || message === "playlist" || message === "playlista") {
-          newComandSwitch.song = true;
-          ComfyJS.Say(`Włączono komendy song, playlist` , extra.channel);
+
+        if (
+          message === "song" ||
+          message === "playlist" ||
+          message === "playlista"
+        ) {
+          newComandSwitch.song = isOn;
+          ComfyJS.Say(`${onOffMessage} komendy song, playlist`, extra.channel);
         }
 
         updateUser({
