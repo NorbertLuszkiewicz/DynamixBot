@@ -120,8 +120,8 @@ const UserSchema = new Schema({
     default: null,
   },
     commandSwitch: {
-    type: {name: String, server: String, date: Number, puuid: String, id: String},
-    default: null,
+    type: {weather: Boolean, tft: Boolean, chess: Boolean, wordle: Boolean, slots: Boolean, song: Boolean},
+    default: {weather: true, tft: true, chess: true, wordle: true, slots: true, song: true},
   },
 });
 
