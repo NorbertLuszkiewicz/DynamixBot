@@ -477,35 +477,41 @@ const commands = () =>
       if (command === "on" && (flags.mod || flags.broadcaster)) {
         let newComandSwitch = { ...commandSwitch };
 
-        if (message === "weather" || message === "pogoda") {
+        if (message === "weather" || message === "pogoda" || message === "horoskop") {
           newComandSwitch.weather = true;
+          ComfyJS.Say(`Włączono komendy pogoda i horoskop` , extra.channel);
         }
         
-        if (message === "tft" || message === "stats" || message === "ranking" || message === "mecze" || message === "mecz") {
+        if (message === "tft" || message === "stats" || message === "ranking" || message === "mecze" || message === "mecz" || message === "rank" || message === "match" || message === "matches") {
           newComandSwitch.tft = true;
+           ComfyJS.Say(`Włączono komendy tft: stats, ranking, mecze, mecz` , extra.channel);
         }
                 
-        if (message === "chess" ||command === "chessuser" || command === "szachista" || chesslast) {
-          newComandSwitch.weather = true;
+        if (message === "chess" ||command === "chessuser" || command === "szachista" || command === "chesslast") {
+          newComandSwitch.chess = true;
+         ComfyJS.Say(`Włączono komendy chess: chessuser, chesslast` , extra.channel);
         }
                 
-        if (message === "weather" || message === "pogoda") {
-          newComandSwitch.weather = true;
+        if (message === "wordle" ) {
+          newComandSwitch.wordle = true;
+          ComfyJS.Say(`Włączono komende wordle` , extra.channel);
         }
                 
-        if (message === "weather" || message === "pogoda") {
-          newComandSwitch.weather = true;
+        if (message === "slots" ) {
+          newComandSwitch.slots = true;
+           ComfyJS.Say(`Włączono komende slots` , extra.channel);
         }
         
                 
-        if (message === "weather" || message === "pogoda") {
-          newComandSwitch.weather = true;
+        if (message === "song" || message === "playlist" || message === "playlista") {
+          newComandSwitch.song = true;
+          ComfyJS.Say(`Włączono komendy song, playlist` , extra.channel);
         }
 
-        // updateUser({
-        //   streamer: extra.channel,
-        //   commandSwitch: ,
-        // });
+        updateUser({
+          streamer: extra.channel,
+          commandSwitch: newComandSwitch,
+        });
       }
     } catch (err) {
       console.log("Error when use commands" + err);
