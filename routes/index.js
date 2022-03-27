@@ -72,7 +72,10 @@ async function routes(fastify, options) {
   fastify.get("/register", async (req, res) => {
     const code = req.query.code;
     const state = req.query.state;
-    const redirectUrl = state === "c3ab8aa609ea11e793ae92361f002671" ? "https://dynamix-bot.pl/": "http://localhost:3000/"
+    const redirectUrl =
+      state === "c3ab8aa609ea11e793ae92361f002671"
+        ? "https://dynamix-bot.pl/"
+        : "http://localhost:3000/";
 
     try {
       const callback = await addNewUser(code);
@@ -195,7 +198,14 @@ async function routes(fastify, options) {
 
     const { name, emotes, withBan, user } = req.body;
 
-    const newSlots = { name, id: null, withBan, emotes: emotes.parseInt(), times: 0, wins: 0 };
+    const newSlots = {
+      name,
+      id: null,
+      withBan,
+      emotes: emotes.parseInt(),
+      times: 0,
+      wins: 0,
+    };
 
     try {
       const [data] = await getUser(user);
@@ -222,17 +232,16 @@ async function routes(fastify, options) {
     res.header("Access-Control-Allow-Origin", "https://dynamix-bot.pl");
     res.header("Access-Control-Allow-Methods", "PUT");
 
-    const { user, body} = req.body;
-    console.log(user, body)
+    const { user, body } = req.body;
+    console.log(user, body);
 
     try {
       const [data] = await getUser(user);
-     
-        // await updateUser({
-        //   streamer: user,
-        //   slotsID: body,
-        // });
-      
+
+      await updateUser({
+        streamer: user,
+        commandSwitch: body,
+      });
     } catch (err) {
       fastify.log.error("Error when change command switch award");
       res.status(400).send({
