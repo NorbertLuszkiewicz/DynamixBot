@@ -71,14 +71,15 @@ async function routes(fastify, options) {
 
   fastify.get("/register", async (req, res) => {
     const code = req.query.code;
-    const isProd = req.query.isProd;
+    const state = req.query.state;
+    const redirectUrl = state === "c3ab8aa609ea11e793ae92361f002671" ? "https://dynamix-bot.pl/": "http://localhost:3000/"
 
     try {
       const callback = await addNewUser(code);
 
       callback.status == "success"
         ? res.redirect(
-            `http://localhost:3000/dashboard?name=${callback.name}&token=${callback.token}`
+            `${redirectUrl}dashboard?name=${callback.name}&token=${callback.token}`
           )
         : res.send("Something went wrong");
     } catch {
