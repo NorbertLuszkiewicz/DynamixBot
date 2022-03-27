@@ -71,13 +71,14 @@ async function routes(fastify, options) {
 
   fastify.get("/register", async (req, res) => {
     const code = req.query.code;
+    const isProd = req.query.isProd;
 
     try {
       const callback = await addNewUser(code);
 
       callback.status == "success"
         ? res.redirect(
-            `https://dynamix-bot.pl/dashboard?name=${callback.name}&token=${callback.token}`
+            `http://localhost:3000/dashboard?name=${callback.name}&token=${callback.token}`
           )
         : res.send("Something went wrong");
     } catch {
@@ -86,7 +87,7 @@ async function routes(fastify, options) {
   });
 
   fastify.get("/account", async (req, res) => {
-    res.header("Access-Control-Allow-Origin", "https://dynamix-bot.pl");
+    res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Methods", "GET");
 
     const name = req.query.name;
