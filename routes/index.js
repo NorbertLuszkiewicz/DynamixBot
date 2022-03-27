@@ -229,7 +229,7 @@ async function routes(fastify, options) {
     }
   });
   fastify.put("/command_switch", async (req, res) => {
-    res.header("Access-Control-Allow-Origin", "https://dynamix-bot.pl");
+    res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Methods", "PUT");
 
     const { user, body } = req.body;
