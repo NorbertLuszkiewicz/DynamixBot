@@ -1,7 +1,9 @@
 
-const is = async (name, server, streamer) => {
-  const [data] = await getUser(streamer);
-
+const isBlockedVideo = async (url, streamer) => {
+  
+  let id = url.slice(url.lastIndexOf("v=") + 1)
+  id = url.slice(url.lastIndexOf("v=") + 1)
+  
   const existThisAccount = data.riotAccountList.find(
     (riotAccount) => riotAccount.name == name && riotAccount.server == server
   ); 
