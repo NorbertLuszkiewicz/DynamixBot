@@ -8,10 +8,25 @@ const isBlockedVideo = async (url, streamer) => {
     const { data } = await axios.get(
       `https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${id}&key=${process.env.YT_ID_TOKEN}`
     );
-    console.log(data);
-    const resultData = {isVideo: data.pageInfo.totalResults,isBlocked:data.items[0].contentDetails.regionRestriction.blocked }
 
-    // return data;
+    const isVideo = data.pageInfo && data.pageInfo.totalResults;
+    let isBlocked = false;
+
+    if (
+      data.items[0] &&
+      data.items[0].contentDetails &&
+      data.items[0].contentDetails.regionRestriction &&
+      data.items[0].contentDetails.regionRestriction.blocked &&
+      data.items[0].contentDetails.regionRestriction.blocked.includes("PL")
+    ) {
+      isBlocked = true;
+    }
+
+    const resultData = { isVideo, isBlocked };
+
+    (!isVideo || isBlocked) && console.log(`This song is blocked (${url}, ${resultData}`);
+
+    return resultData;
   } catch (err) {
     console.log(`Error while getting youtube video (${err} )`);
   }
