@@ -3,6 +3,7 @@ const { messages, setTimeoutVolume } = require("./messages");
 const { events } = require("./events");
 const { commands } = require("./commands");
 const { getAllUser } = require("../controllers/UserController.js");
+const { isBlockedVideo } = require("../youtube");
 
 const twitchCommands = async () => {
   try {
@@ -10,6 +11,7 @@ const twitchCommands = async () => {
     events();
     commands();
     setTimeoutVolume()
+    isBlockedVideo("https://www.youtube.com/watch?v=Py9paavgZ-0&ab_channel=AxwellIngrossoVEVO","")
     
     const allStreamers = await getAllUser();
 
