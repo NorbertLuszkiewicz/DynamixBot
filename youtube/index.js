@@ -1,54 +1,42 @@
-
 const axios = require("axios");
 
 const isBlockedVideo = async (url, streamer) => {
-    try {
-  
-  let id = url.slice(url.lastIndexOf("v=") + 2)
-  id = id.slice(0, id.indexOf("&"))
+  try {
+    let id = url.slice(url.lastIndexOf("v=") + 2);
+    id = id.slice(0, id.indexOf("&"));
 
-
-    const  data  = await axios.get(
-      `${url}songrequest/${clientSongRequestID}/${area}`,
-      {
-        headers: {
-          Authorization: `Bearer ${clientSongRequestSecret}`
-        }
-      }
+    const { data } = await axios.get(
+      `https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${id}&key=${process.env.YT_ID_TOKEN}`
     );
-      console.log(data)
+    console.log(data);
+    const resultData = {isVideo: data.pageInfo.totalResults,isBlocked:data.items[0].contentDetails.regionRestriction.blocked }
 
-    return data;
+    // return data;
   } catch (err) {
-    console.log(
-      `Error while getting youtube video (${err} )`
-    );
+    console.log(`Error while getting youtube video (${err} )`);
   }
 
-  
-//   const existThisAccount = data.riotAccountList.find(
-//     (riotAccount) => riotAccount.name == name && riotAccount.server == server
-//   ); 
+  //   const existThisAccount = data.riotAccountList.find(
+  //     (riotAccount) => riotAccount.name == name && riotAccount.server == server
+  //   );
 
-//   if (!existThisAccount) {
-//     const { response } = await api.Summoner.getByName(name, server);
+  //   if (!existThisAccount) {
+  //     const { response } = await api.Summoner.getByName(name, server);
 
-//     const newRiotAccountList = data.riotAccountList
-//       ? [
-//           ...data.riotAccountList,
-//           { name, server, puuid: response.puuid, id: response.id },
-//         ]
-//       : [{ name, server, puuid: response.puuid, id: response.id }];
+  //     const newRiotAccountList = data.riotAccountList
+  //       ? [
+  //           ...data.riotAccountList,
+  //           { name, server, puuid: response.puuid, id: response.id },
+  //         ]
+  //       : [{ name, server, puuid: response.puuid, id: response.id }];
 
-//     await updateUser({
-//       streamer,
-//       riotAccountList: newRiotAccountList,
-//     });
-//   }
+  //     await updateUser({
+  //       streamer,
+  //       riotAccountList: newRiotAccountList,
+  //     });
+  //   }
 };
 
-
-
 module.exports = {
-isBlockedVideo
+  isBlockedVideo,
 };
