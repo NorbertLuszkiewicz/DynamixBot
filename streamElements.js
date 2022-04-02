@@ -150,8 +150,21 @@ const timeRequest = async (streamer, action) => {
   }
 };
 
+
+const removeBlockedSong = async streamer => {
+  try {
+    const queue = await getSpotifyAreaData(streamer, "queue");
+    const playing = await getSpotifyAreaData(streamer, "playing");
+    console.log(queue,"" ,playing)
+
+  } catch (err) {
+    console.log(`Error while checking what song playing now ${err}`);
+  }
+};
+
 module.exports = {
   songPlayingNow,
   timeRequest,
-  setTimeoutVolume
+  setTimeoutVolume,
+  removeBlockedSong
 };

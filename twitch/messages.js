@@ -13,7 +13,7 @@ const {
   getUser,
 } = require("../controllers/UserController.js");
 
-const { songPlayingNow, timeRequest } = require("../streamElements");
+const { songPlayingNow, timeRequest, removeBlockedSong } = require("../streamElements");
 
 const ComfyJS = require("comfy.js");
 
@@ -40,6 +40,10 @@ const messages = () => {
       const [data] = await getUser(extra.channel);
       const { addSongID, skipSongID, volumeSongID, rollID, banID, slotsID } =
         await data;
+      
+      if(message === "removeSong"){
+        removeBlockedSong(extra.channel)
+      }
 
       if (flags.customReward && message === "add-song-award") {
         updateUser({
