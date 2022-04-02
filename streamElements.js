@@ -154,13 +154,25 @@ const timeRequest = async (streamer, action) => {
 
 const removeBlockedSong = async streamer => {
   try {
+    console.log(queue,"playing: " ,playing)
+    const [user] = await getUser(streamer);
+    const { clientSongRequestID, clientSongRequestSecret } = user;
     const queue = await getSpotifyAreaData(streamer, "queue");
     const playing = await getSpotifyAreaData(streamer, "playing");
+    const removeSong = (song)=> axios.delete(
+      `${url}songrequest/${clientSongRequestID}/queue/${song}`,
+      {
+        headers: {
+          Authorization: `Bearer ${clientSongRequestSecret}`
+        }
+      });
+    
     
     if(queue.length > 0){}
     
     if(playing){
-      isBlockedVideo(null, streamer, playing._id)
+      const 
+      removeSong() 
     }
     
     
