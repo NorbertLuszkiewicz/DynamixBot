@@ -155,7 +155,11 @@ const removeBlockedSong = async streamer => {
   try {
     const queue = await getSpotifyAreaData(streamer, "queue");
     const playing = await getSpotifyAreaData(streamer, "playing");
-    console.log(queue,"" ,playing)
+    
+    if(queue.length > 0){}
+    
+    
+    console.log(queue,"playing: " ,playing)
 
   } catch (err) {
     console.log(`Error while checking what song playing now ${err}`);
