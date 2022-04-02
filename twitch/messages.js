@@ -40,10 +40,7 @@ const messages = () => {
       const [data] = await getUser(extra.channel);
       const { addSongID, skipSongID, volumeSongID, rollID, banID, slotsID } =
         await data;
-      
-      if(message === "removeSong"){
-        removeBlockedSong(extra.channel)
-      }
+
 
       if (flags.customReward && message === "add-song-award") {
         updateUser({
@@ -216,8 +213,8 @@ const messages = () => {
           message.lastIndexOf("do kolejki") != -1)
       ) {
         pauseSong(extra.channel);
-        removeBlockedSong(extra.channel)
         await timeRequest(extra.channel, "add");
+        removeBlockedSong(extra.channel)
       }
 
       if (flags.customReward && extra.customRewardId === skipSongID) {
