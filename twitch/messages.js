@@ -216,6 +216,7 @@ const messages = () => {
           message.lastIndexOf("do kolejki") != -1)
       ) {
         pauseSong(extra.channel);
+        removeBlockedSong(extra.channel)
         await timeRequest(extra.channel, "add");
       }
 
