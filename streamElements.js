@@ -4,7 +4,7 @@ const { isBlockedVideo } = require("./youtube");
 const {
   getAllUser,
   updateUser,
-  getUser
+  getUser,
 } = require("./controllers/UserController.js");
 
 const url = "https://api.streamelements.com/kappa/v2/";
@@ -33,8 +33,8 @@ const getSpotifyAreaData = async (streamer, area) => {
       `${url}songrequest/${clientSongRequestID}/${area}`,
       {
         headers: {
-          Authorization: `Bearer ${clientSongRequestSecret}`
-        }
+          Authorization: `Bearer ${clientSongRequestSecret}`,
+        },
       }
     );
 
@@ -46,16 +46,16 @@ const getSpotifyAreaData = async (streamer, area) => {
   }
 };
 
-const songPlayingNow = async streamer => {
+const songPlayingNow = async (streamer) => {
   try {
     const player = await getSpotifyAreaData(streamer, "player");
     const playing = await getSpotifyAreaData(streamer, "playing");
-    console.log(player, playing)
+    console.log(player, playing);
 
     return {
       isPlayingNow: player.state == "playing" && playing != null,
       title: playing && playing.title,
-      link: playing && `https://www.youtube.com/watch?v=${playing.videoId}`
+      link: playing && `https://www.youtube.com/watch?v=${playing.videoId}`,
     };
   } catch (err) {
     console.log(`Error while checking what song playing now ${err}`);
@@ -79,7 +79,7 @@ const timeRequest = async (streamer, action) => {
 
         await updateUser({
           streamer: streamer,
-          endTime: newEndTime + now
+          endTime: newEndTime + now,
         });
       }
 
@@ -88,7 +88,7 @@ const timeRequest = async (streamer, action) => {
 
         await updateUser({
           streamer: streamer,
-          endTime: newEndTime + now
+          endTime: newEndTime + now,
         });
       }
 
@@ -98,17 +98,17 @@ const timeRequest = async (streamer, action) => {
 
           await updateUser({
             streamer: streamer,
-            endTime: newEndTime + now
+            endTime: newEndTime + now,
           });
         } else {
           let allQueueTimes = 0;
-          queue.forEach(song => (allQueueTimes += song.duration));
+          queue.forEach((song) => (allQueueTimes += song.duration));
 
           newEndTime = (allQueueTimes + playing.duration) * 1000;
 
           await updateUser({
             streamer: streamer,
-            endTime: newEndTime + now
+            endTime: newEndTime + now,
           });
         }
       }
@@ -125,20 +125,19 @@ const timeRequest = async (streamer, action) => {
       if (playing) {
         let timeOfSongsInQueue = 0;
         queue.length > 0
-          ? queue.forEach(song => (timeOfSongsInQueue += song.duration))
+          ? queue.forEach((song) => (timeOfSongsInQueue += song.duration))
           : (timeOfSongsInQueue = 0);
 
         const timeOfAllSongs = (playing.duration + timeOfSongsInQueue) * 1000;
 
         await updateUser({
           streamer: streamer,
-          endTime: timeOfAllSongs + now
+          endTime: timeOfAllSongs + now,
         });
 
         clearTimeout(timeoutVolume[streamer]);
 
         timeoutVolume[streamer] = setTimeout(async () => {
-          
           playing = await getSpotifyAreaData(streamer, "playing");
           !playing && startSong(streamer);
         }, timeOfAllSongs + 1000 * (queue.length + 1));
@@ -151,33 +150,38 @@ const timeRequest = async (streamer, action) => {
   }
 };
 
-
-const removeBlockedSong = async streamer => {
+const removeBlockedSong = async (streamer) => {
   try {
-    console.log(queue,"playing: " ,playing)
+    //console.log(queue, "playing: ", playing);
     const [user] = await getUser(streamer);
     const { clientSongRequestID, clientSongRequestSecret } = user;
     const queue = await getSpotifyAreaData(streamer, "queue");
     const playing = await getSpotifyAreaData(streamer, "playing");
-    const removeSong = (song)=> axios.delete(
-      `${url}songrequest/${clientSongRequestID}/queue/${song}`,
-      {
+    const removeSong = (song) =>
+      axios.delete(`${url}songrequest/${clientSongRequestID}/queue/${song}`, {
         headers: {
-          Authorization: `Bearer ${clientSongRequestSecret}`
+          Authorization: `Bearer ${clientSongRequestSecret}`,
+        },
+      });
+
+    if (queue.length > 0) {
+      queue.forEach( async(song) => {
+        const isBlocked = await isBlockedVideo(null, streamer, playing.videoId);
+        console.log(isBlocked);
+        if (!isBlocked.isVideo || isBlocked.isBlocked) {
+          removeSong(playing._id);
         }
       });
-    
-    
-    if(queue.length > 0){}
-    
-    if(playing){
-      const 
-      removeSong() 
     }
-    
-    
-    console.log(queue,"playing: " ,playing)
 
+    if (playing) {
+      const isBlocked = await isBlockedVideo(null, streamer, playing.videoId);
+      if (!isBlocked.isVideo || isBlocked.isBlocked) {
+        removeSong(playing._id);
+      }
+    }
+
+   // console.log(queue, "playing: ", playing);
   } catch (err) {
     console.log(`Error while checking what song playing now ${err}`);
   }
@@ -187,5 +191,5 @@ module.exports = {
   songPlayingNow,
   timeRequest,
   setTimeoutVolume,
-  removeBlockedSong
+  removeBlockedSong,
 };
