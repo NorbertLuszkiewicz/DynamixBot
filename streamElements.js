@@ -166,10 +166,10 @@ const removeBlockedSong = async (streamer) => {
 
     if (queue.length > 0) {
       queue.forEach( async(song) => {
-        const isBlocked = await isBlockedVideo(null, streamer, playing.videoId);
+        const isBlocked = await isBlockedVideo(null, streamer, song.videoId);
         console.log(isBlocked);
         if (!isBlocked.isVideo || isBlocked.isBlocked) {
-          removeSong(playing._id);
+          removeSong(song._id);
         }
       });
     }
