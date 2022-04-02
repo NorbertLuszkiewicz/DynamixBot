@@ -1,9 +1,12 @@
 const axios = require("axios");
 
-const isBlockedVideo = async (url, streamer) => {
+const isBlockedVideo = async (url, streamer, urlId) => {
   try {
-    let id = url.slice(url.lastIndexOf("v=") + 2);
-    id = id.slice(0, id.indexOf("&"));
+    let id = urlId;
+    if (url) {
+      id = url.slice(url.lastIndexOf("v=") + 2);
+      id = id.slice(0, id.indexOf("&"));
+    }
 
     const { data } = await axios.get(
       `https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${id}&key=${process.env.YT_ID_TOKEN}`
@@ -24,7 +27,8 @@ const isBlockedVideo = async (url, streamer) => {
 
     const resultData = { isVideo, isBlocked };
 
-    (!isVideo || isBlocked) && console.log(`This song is blocked (${url}, ${resultData}`);
+    (!isVideo || isBlocked) &&
+      console.log(`This song is blocked (${url}, ${resultData}`);
 
     return resultData;
   } catch (err) {

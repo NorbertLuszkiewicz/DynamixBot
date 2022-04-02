@@ -1,5 +1,6 @@
 const axios = require("axios");
 const { startSong } = require("./spotify");
+const { isBlockedVideo } = require("./youtube");
 const {
   getAllUser,
   updateUser,
@@ -157,6 +158,10 @@ const removeBlockedSong = async streamer => {
     const playing = await getSpotifyAreaData(streamer, "playing");
     
     if(queue.length > 0){}
+    
+    if(playing){
+      isBlockedVideo(null, streamer, playing._id)
+    }
     
     
     console.log(queue,"playing: " ,playing)
