@@ -1,4 +1,5 @@
 const ComfyJS = require("comfy.js");
+const axios = require("axios");
 const { messages, setTimeoutVolume } = require("./messages");
 const { events } = require("./events");
 const { commands } = require("./commands");
@@ -11,7 +12,15 @@ const setLiveStreamers = () => {
     setTimeout(async () => {
       const allStreamers = await getAllUser();
       
+      const { data } = await axios.get(`https://api.twitch.tv/helix/streams`, {
+      headers: {
+ 
+        Authorization: `Bearer ${process.env.OAUTH}`,
+        "Client-Id": `Bearer ${process.env.CLIENT_ID}`
+      }
+    });
       
+      console.log(data)
       
       
     }, 30000);
@@ -26,6 +35,7 @@ const twitchCommands = async () => {
     events();
     commands();
     setTimeoutVolume();
+    setLiveStreamers()
 
     const allStreamers = await getAllUser();
 
