@@ -12,8 +12,8 @@ const setLiveStreamers = async() => {
 
       const { data } = await axios.get(`https://api.twitch.tv/helix/streams`, {
       headers: {
-        Authorization: `Bearer ${process.env.OAUTH}`,
-        "Client-Id": `${process.env.CLIENT_ID}`
+        Authorization: `Bearer k9qiwghj0nuhjfq3pzzrla57r1hzo4`,
+        "Client-Id": `bhwlcwuvtg51226poslegrqdcm8naz`
       }
     });
       
