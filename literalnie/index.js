@@ -26518,6 +26518,7 @@ const literalnieWord = [
   "hałdy",
   "harem",
   "harfa",
+  "hiena",
   "hydra",
   "ideał",
   "idole",
