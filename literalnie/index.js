@@ -13182,7 +13182,7 @@ const allWord = [
   "mżysz",
   "nabab",
   "nabaj",
-  "nabak",
+  "bak",
   "nabaw",
   "nabić",
   "nabij",
