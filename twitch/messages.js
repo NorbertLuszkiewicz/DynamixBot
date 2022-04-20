@@ -42,7 +42,7 @@ const messages = () => {
         await data;
 
 
-      if (flags.customReward && message === "add-song-award") {
+      if (flags.customReward && message === "add-song-award" && (flags.mod || flags.broadcaster)) {
         updateUser({
           streamer: extra.channel,
           addSongID: extra.customRewardId,
@@ -54,7 +54,7 @@ const messages = () => {
         );
       }
 
-      if (flags.customReward && message === "skip-song-award") {
+      if (flags.customReward && message === "skip-song-award" && (flags.mod || flags.broadcaster)) {
         updateUser({
           streamer: extra.channel,
           skipSongID: extra.customRewardId,
@@ -66,7 +66,7 @@ const messages = () => {
         );
       }
 
-      if (flags.customReward && message === "add-song-award") {
+      if (flags.customReward && message === "change-volume-song-award" && (flags.mod || flags.broadcaster)) {
         let newVolumeSongID = volumeSongID;
 
         updateUser({
@@ -84,7 +84,7 @@ const messages = () => {
         (slots) => slots.name.toLowerCase() === message.toLowerCase()
       );
 
-      if (flags.customReward && slots) {
+      if (flags.customReward && slots && (flags.mod || flags.broadcaster)) {
         const updateSlots = slotsID.map((item) => {
           if (item.name.toLowerCase() === slots.name.toLowerCase()) {
             item.id = extra.customRewardId;
