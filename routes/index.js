@@ -250,9 +250,9 @@ async function routes(fastify, options) {
     }
   });
   
-    fastify.path("/slot_remove", async (req, res) => {
+    fastify.put("/slot_remove", async (req, res) => {
     res.header("Access-Control-Allow-Origin", "https://dynamix-bot.pl");
-    res.header("Access-Control-Allow-Methods", "PATH");
+    res.header("Access-Control-Allow-Methods", "PUT");
 
     const { id, streamer } = req.body;
 
