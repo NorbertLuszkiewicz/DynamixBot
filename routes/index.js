@@ -256,14 +256,14 @@ async function routes(fastify, options) {
 
     const { id, streamer } = req.body;
 
-
+ console.log(id, streamer,"aaaa")
     try {
       const [data] = await getUser(streamer);
       
-      const newSlotsList = data.slotsID.map(slot => {
+      const newSlotsList = data.slotsID.filter(slot => {
         return slot.id !== id
       })
-      console.log(newSlotsList)
+      console.log(newSlotsList,"aass")
 
       // await updateUser({
       //   streamer: streamer,

@@ -5,26 +5,6 @@ const { events } = require("./events");
 const { commands } = require("./commands");
 const { getAllUser } = require("../controllers/UserController.js");
 
-let liveStreamers = [];
-
-const setLiveStreamers = async() => {
-  try {
-
-      const { data } = await axios.get(`https://api.twitch.tv/helix/streams`, {
-      headers: {
-        Authorization: `Bearer k9qiwghj0nuhjfq3pzzrla57r1hzo4`,
-        "Client-Id": `32ovsc0zfextlpzyn8u6l2phbbkr3z`
-      }
-    });
-      
-      console.log(data)
-    
-  } catch (err) {
-    console.log(`Error when getting liveStreamers ${err}`);
-  }
-};
-
-    //setTimeout(setLiveStreamers(), 3000);
 
 const twitchCommands = async () => {
   try {
@@ -32,7 +12,7 @@ const twitchCommands = async () => {
     events();
     commands();
     setTimeoutVolume();
-    setLiveStreamers()
+    
 
     const allStreamers = await getAllUser();
 
