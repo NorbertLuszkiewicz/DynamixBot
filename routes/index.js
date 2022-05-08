@@ -263,11 +263,12 @@ async function routes(fastify, options) {
       const newSlotsList = data.slotsID.map(slot => {
         return slot.id !== id
       })
+      console.log(newSlotsList)
 
-      await updateUser({
-        streamer: streamer,
-        slotsID: newSlotsList,
-      });
+      // await updateUser({
+      //   streamer: streamer,
+      //   slotsID: newSlotsList,
+      // });
     } catch (err) {
       fastify.log.error("Error when delete slot");
       res.status(400).send({
