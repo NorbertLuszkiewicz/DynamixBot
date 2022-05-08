@@ -206,8 +206,9 @@ async function routes(fastify, options) {
       times: 0,
       wins: 0,
     };
-
+    console.log("asdasdasd1")
     try {
+      console.log("asdasdasd")
       const [data] = await getUser(user);
 
       if (data.slotsID && data.slotsID.length > 0) {
