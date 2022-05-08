@@ -196,17 +196,17 @@ async function routes(fastify, options) {
     res.header("Access-Control-Allow-Origin", "https://dynamix-bot.pl");
     res.header("Access-Control-Allow-Methods", "PUT");
 
+    
     const { name, emotes, withBan, user } = req.body;
-
+console.log("asdasdasd",  )
     const newSlots = {
       name,
       id: null,
       withBan,
-      emotes: emotes.parseInt(),
+      emotes: parseInt(emotes),
       times: 0,
       wins: 0,
     };
-    console.log("asdasdasd1")
     try {
       console.log("asdasdasd")
       const [data] = await getUser(user);
