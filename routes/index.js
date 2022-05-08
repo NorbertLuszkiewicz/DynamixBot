@@ -228,12 +228,12 @@ async function routes(fastify, options) {
       });
     }
   });
+  
   fastify.put("/command_switch", async (req, res) => {
     res.header("Access-Control-Allow-Origin", "https://dynamix-bot.pl");
     res.header("Access-Control-Allow-Methods", "PUT");
 
     const { user, body } = req.body;
-    console.log(user, body);
 
     try {
       const [data] = await getUser(user);
@@ -244,6 +244,32 @@ async function routes(fastify, options) {
       });
     } catch (err) {
       fastify.log.error("Error when change command switch award");
+      res.status(400).send({
+        message: "Something went wrong",
+      });
+    }
+  });
+  
+    fastify.path("/slot_remove", async (req, res) => {
+    res.header("Access-Control-Allow-Origin", "https://dynamix-bot.pl");
+    res.header("Access-Control-Allow-Methods", "PATH");
+
+    const { id, streamer } = req.body;
+
+
+    try {
+      const [data] = await getUser(streamer);
+      
+      const newSlotsList = data.slotsID.map(slot => {
+        return slot.id !== id
+      })
+
+      await updateUser({
+        streamer: streamer,
+        slotsID: newSlotsList,
+      });
+    } catch (err) {
+      fastify.log.error("Error when delete slot");
       res.status(400).send({
         message: "Something went wrong",
       });
