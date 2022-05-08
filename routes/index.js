@@ -256,19 +256,19 @@ async function routes(fastify, options) {
 
     const { id, streamer } = req.body;
 
- console.log(id, streamer,"aaaa")
+
     try {
       const [data] = await getUser(streamer);
       
       const newSlotsList = data.slotsID.filter(slot => {
-        return slot.id !== id
+        return slot.name !== id
       })
-      console.log(newSlotsList,"aass")
+     
 
-      // await updateUser({
-      //   streamer: streamer,
-      //   slotsID: newSlotsList,
-      // });
+      await updateUser({
+        streamer: streamer,
+        slotsID: newSlotsList,
+      });
     } catch (err) {
       fastify.log.error("Error when delete slot");
       res.status(400).send({
