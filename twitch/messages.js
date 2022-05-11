@@ -13,7 +13,11 @@ const {
   getUser,
 } = require("../controllers/UserController.js");
 
-const { songPlayingNow, timeRequest, removeBlockedSong } = require("../streamElements");
+const {
+  songPlayingNow,
+  timeRequest,
+  removeBlockedSong,
+} = require("../streamElements");
 
 const ComfyJS = require("comfy.js");
 
@@ -41,8 +45,11 @@ const messages = () => {
       const { addSongID, skipSongID, volumeSongID, rollID, banID, slotsID } =
         await data;
 
-
-      if (flags.customReward && message === "add-song-award" && (flags.mod || flags.broadcaster)) {
+      if (
+        flags.customReward &&
+        message === "add-song-award" &&
+        (flags.mod || flags.broadcaster)
+      ) {
         updateUser({
           streamer: extra.channel,
           addSongID: extra.customRewardId,
@@ -54,7 +61,11 @@ const messages = () => {
         );
       }
 
-      if (flags.customReward && message === "skip-song-award" && (flags.mod || flags.broadcaster)) {
+      if (
+        flags.customReward &&
+        message === "skip-song-award" &&
+        (flags.mod || flags.broadcaster)
+      ) {
         updateUser({
           streamer: extra.channel,
           skipSongID: extra.customRewardId,
@@ -66,7 +77,11 @@ const messages = () => {
         );
       }
 
-      if (flags.customReward && message === "change-volume-song-award" && (flags.mod || flags.broadcaster)) {
+      if (
+        flags.customReward &&
+        message === "change-volume-song-award" &&
+        (flags.mod || flags.broadcaster)
+      ) {
         let newVolumeSongID = volumeSongID;
 
         updateUser({
@@ -214,7 +229,7 @@ const messages = () => {
       ) {
         pauseSong(extra.channel);
         await timeRequest(extra.channel, "add");
-        removeBlockedSong(extra.channel)
+        removeBlockedSong(extra.channel);
       }
 
       if (flags.customReward && extra.customRewardId === skipSongID) {
@@ -290,19 +305,12 @@ const messages = () => {
     if (message === "device" && user === "DynaM1X1") {
       refreshDevices(extra.channel);
     }
-    
+
     //usuwa Xd
 
-    // if (
-    //   (message === "Xd" &&
-
-    // ) {
-    //   ComfyJS.Say(
-    //     user +
-    //       " to nakładka która pokazuje na kogo grałeś: https://www.metatft.com/download peepoGlad",
-    //     extra.channel
-    //   );
-    // }
+    if (message.indexOf("Xd") !== -1 && extra.channel == "kezman22") {
+      ComfyJS.Say("/timeout " + user + " 1", extra.channel);
+    }
 
     //cyferki
 
