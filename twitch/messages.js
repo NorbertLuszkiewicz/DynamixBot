@@ -290,6 +290,19 @@ const messages = () => {
     if (message === "device" && user === "DynaM1X1") {
       refreshDevices(extra.channel);
     }
+    
+    //usuwa Xd
+
+    // if (
+    //   (message === "Xd" &&
+
+    // ) {
+    //   ComfyJS.Say(
+    //     user +
+    //       " to nakładka która pokazuje na kogo grałeś: https://www.metatft.com/download peepoGlad",
+    //     extra.channel
+    //   );
+    // }
 
     //cyferki
 
