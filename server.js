@@ -10,9 +10,10 @@ const {
 const { refreshTwitchTokens } = require("./twitch/twitch.js");
 const { twitchCommands } = require("./twitch/index.js");
 const { tftMatchList, checkActiveRiotAccount,addTftUser } = require("./riot/riot.js");
-
+const {runner} = require("./tiktokDiscordBot")
 
 //Initial functions
+runner()
 twitchCommands();
 setTimeoutVolume();
 setTimeoutVolumeStreamElements();
