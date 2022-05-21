@@ -28,9 +28,11 @@ const runner = () => {
       )
         return;
       if (msg.content == matched[0] && msg.deletable) msg.delete();
+      const tiktokPosition = msg.content.indexOf("tiktok")
+      const tiktokUrl = tiktokPosition ? `\n ${msg.content.slice(tiktokPosition)}` : ""
      
       msg.channel.send(
-        `TikTok shared by ${msg.author.tag}\n${config_1.WorkerHost}${url.pathname} \n /${msg.content.slice(12)}/`
+        `TikTok shared by ${msg.author.tag}\n${config_1.WorkerHost}${url.pathname} ${tiktokUrl}`
       );
     }
   });
