@@ -12,6 +12,7 @@ const runner = () => {
   const client = new discord_js_1.default.Client();
 
   client.on("message", (msg) => {
+    
     if (msg.author.id == client.user.id) return;
     if (msg.guild && config_1.GuildBlacklist.includes(msg.guild.id)) return;
     const matched = config_1.URLRegex.exec(msg.content);
@@ -27,8 +28,9 @@ const runner = () => {
       )
         return;
       if (msg.content == matched[0] && msg.deletable) msg.delete();
+     
       msg.channel.send(
-        `TikTok shared by ${msg.author.tag}\n${config_1.WorkerHost}${url.pathname}`
+        `TikTok shared by ${msg.author.tag}\n${config_1.WorkerHost}${url.pathname} \n /${msg.content.slice(12)}/`
       );
     }
   });
