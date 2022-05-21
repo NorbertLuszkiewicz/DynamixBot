@@ -1,7 +1,7 @@
 {
-  "name": "hello-node",
-  "version": "0.0.1",
-  "description": "A simple Node app built on fastify, instantly up and running.",
+  "name": "dynamix-bot",
+  "version": "0.7.1",
+  "description": "A simple bot",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
@@ -27,7 +27,7 @@
     "xmlhttprequest": "^1.8.0"
   },
   "engines": {
-    "node": "12.x"
+    "node": "16.14.2"
   },
   "repository": {
     "url": "https://glitch.com/edit/#!/glitch-hello-node"
