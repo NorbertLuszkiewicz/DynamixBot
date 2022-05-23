@@ -27,9 +27,9 @@ const runner = () => {
       )
         return;
       if (msg.content == matched[0] && msg.deletable) msg.delete();
-      const tiktokPosition = msg.content.indexOf("tiktok");
+      const tiktokPosition = msg.content.indexOf("vm.tiktok") >= 0 ? msg.content.indexOf("vm.tiktok") : msg.content.indexOf("tiktok");
       const tiktoklinkPlusRest = msg.content.slice(tiktokPosition);
-      const tiktokUrl = tiktokPosition
+      const tiktokUrl = tiktokPosition >= 0
         ? `\n ${tiktoklinkPlusRest.slice(0, tiktoklinkPlusRest.indexOf(" "))}`
         : "";
 
