@@ -1,7 +1,7 @@
 "use strict";
 
 const runner = () => {
-  console.log("tictok bot start")
+  
   var __importDefault =
     (this && this.__importDefault) ||
     function (mod) {
@@ -40,6 +40,7 @@ const runner = () => {
       );
     }
   });
+  
   client.login(config_1.DiscordToken);
   //# sourceMappingURL=index.js.map
 };
