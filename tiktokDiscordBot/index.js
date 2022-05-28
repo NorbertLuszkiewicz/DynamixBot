@@ -9,7 +9,7 @@ const runner = () => {
   Object.defineProperty(exports, "__esModule", { value: true });
 const discord = require("discord.js");
   const config_1 = require("./config");
-  const client = new discord.Client();
+  const client = new discord.Client({ intents: [discord.Intents.FLAGS.GUILDS] });
 
   client.on("ready", () => {
     console.log(`Logged in as ${client.user.tag}!`);
