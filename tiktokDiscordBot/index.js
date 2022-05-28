@@ -1,3 +1,10 @@
+
+const {Client, Intents} = require("discord.js");
+
+const flags = [Intents.FLAGS.GUILDS, Intents.GUILD_MESSAGES]
+
+
+
 const runner = () => {
   var __importDefault =
     (this && this.__importDefault) ||
@@ -5,18 +12,16 @@ const runner = () => {
       return mod && mod.__esModule ? mod : { default: mod };
     };
   Object.defineProperty(exports, "__esModule", { value: true });
-  const discord = require("discord.js");
+
   const config_1 = require("./config");
-  const client = new discord.Client({
-    intents: [discord.Intents.FLAGS.GUILDS],
-  });
+  const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.GUILD_MESSAGES] });
 
   client.on("ready", () => {
     console.log(`Logged in as ${client.user.tag}!`);
   });
 
-  client.on("interactionCreate", async (msg) => {
-    console.log(msg);
+  client.on("interactionCreate",  (msg) => {
+    console.log(`${msg.user.tag} in #${msg.channel.name} triggered an interaction.`);
     if (msg.author.id == client.user.id) return;
     if (msg.guild && config_1.GuildBlacklist.includes(msg.guild.id)) return;
     const matched = config_1.URLRegex.exec(msg.content);
@@ -42,7 +47,7 @@ const runner = () => {
           ? `\n ${tiktoklinkPlusRest.slice(0, tiktoklinkPlusRest.indexOf(" "))}`
           : "";
 
-      await msg.reply(
+       msg.reply(
         `TikTok shared by ${msg.author.tag}\n${config_1.WorkerHost}${url.pathname} ${tiktokUrl}`
       );
     }
