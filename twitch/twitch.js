@@ -53,24 +53,23 @@ const refreshTwitchTokens = async () => {
     const streamers = await getAllUser();
 
     streamers.forEach(async (streamer) => {
-      
       if (streamer.twitchAccessToken) {
         const [refreshToken] = await getUser(streamer.streamer);
-        
 
         const body = `grant_type=refresh_token&refresh_token=${encodeURIComponent(
           refreshToken.twitchRefreshToken
         )}&client_id=${process.env.BOT_CLIENT_ID}&client_secret=${
           process.env.BOT_CLIENT_SECRET
         }`;
-console.log(body,"aaaa")
-//         const { data } = await axios.post(`${TOKEN}`, body, {});
 
-//         await updateUser({
-//           streamer: streamer.streamer,
-//           twitchAccessToken: data.access_token,
-//           twitchRefreshToken: data.refresh_token,
-//         });
+        // const { data } = await axios.post(`${TOKEN}`, body, {});
+
+        console.log(body, "aaaa");
+        //         await updateUser({
+        //           streamer: streamer.streamer,
+        //           twitchAccessToken: data.access_token,
+        //           twitchRefreshToken: data.refresh_token,
+        //         });
       }
     });
 
@@ -122,7 +121,6 @@ const getHoroscope = async (sign) => {
     console.log(`Error while getting horoscope ${err}`);
   }
 };
-
 
 module.exports = {
   addNewUser,
