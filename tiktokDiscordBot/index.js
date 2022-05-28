@@ -13,6 +13,7 @@ const runner = () => {
   const client = new discord_js_1.default.Client();
 
   client.on("message", (msg) => {
+
     if (msg.author.id == client.user.id) return;
     if (msg.guild && config_1.GuildBlacklist.includes(msg.guild.id)) return;
     const matched = config_1.URLRegex.exec(msg.content);

@@ -11,7 +11,7 @@ const { getUser, updateUser } = require("../controllers/UserController.js");
 const { addNewUser, refreshTwitchTokens } = require("../twitch/twitch.js");
 const { addTftUser } = require("../riot/riot.js");
 
-async function routes(fastify, options) {
+async function routes(fastify, options) { 
   fastify.get("/", function (req, res) {
     res.send("");
   });
