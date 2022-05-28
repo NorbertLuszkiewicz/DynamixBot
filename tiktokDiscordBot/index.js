@@ -14,13 +14,13 @@ const runner = () => {
   Object.defineProperty(exports, "__esModule", { value: true });
 
   const config_1 = require("./config");
-  const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.GUILD_MESSAGES] });
+  const client = new Client({ intents: [ Intents.FLAGS.GUILDS] });
 
   client.on("ready", () => {
     console.log(`Logged in as ${client.user.tag}!`);
   });
 
-  client.on("interactionCreate",  (msg) => {
+  client.on("interactionCreate", async (msg) => {
     console.log(`${msg.user.tag} in #${msg.channel.name} triggered an interaction.`);
     if (msg.author.id == client.user.id) return;
     if (msg.guild && config_1.GuildBlacklist.includes(msg.guild.id)) return;
@@ -47,7 +47,7 @@ const runner = () => {
           ? `\n ${tiktoklinkPlusRest.slice(0, tiktoklinkPlusRest.indexOf(" "))}`
           : "";
 
-       msg.reply(
+      await msg.reply(
         `TikTok shared by ${msg.author.tag}\n${config_1.WorkerHost}${url.pathname} ${tiktokUrl}`
       );
     }
