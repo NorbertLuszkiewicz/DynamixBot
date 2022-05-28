@@ -1,19 +1,21 @@
-"use strict";
+
 
 const runner = () => {
-  
   var __importDefault =
     (this && this.__importDefault) ||
     function (mod) {
       return mod && mod.__esModule ? mod : { default: mod };
     };
   Object.defineProperty(exports, "__esModule", { value: true });
-  const discord_js_1 = __importDefault(require("discord.js"));
+const discord = require("discord.js");
   const config_1 = require("./config");
-  const client = new discord_js_1.default.Client();
+  const client = new discord.Client();
+
+  client.on("ready", () => {
+    console.log(`Logged in as ${client.user.tag}!`);
+  });
 
   client.on("message", (msg) => {
-
     if (msg.author.id == client.user.id) return;
     if (msg.guild && config_1.GuildBlacklist.includes(msg.guild.id)) return;
     const matched = config_1.URLRegex.exec(msg.content);
@@ -29,18 +31,22 @@ const runner = () => {
       )
         return;
       if (msg.content == matched[0] && msg.deletable) msg.delete();
-      const tiktokPosition = msg.content.indexOf("vm.tiktok") >= 0 ? msg.content.indexOf("vm.tiktok") : msg.content.indexOf("tiktok");
+      const tiktokPosition =
+        msg.content.indexOf("vm.tiktok") >= 0
+          ? msg.content.indexOf("vm.tiktok")
+          : msg.content.indexOf("tiktok");
       const tiktoklinkPlusRest = msg.content.slice(tiktokPosition);
-      const tiktokUrl = tiktokPosition >= 0
-        ? `\n ${tiktoklinkPlusRest.slice(0, tiktoklinkPlusRest.indexOf(" "))}`
-        : "";
+      const tiktokUrl =
+        tiktokPosition >= 0
+          ? `\n ${tiktoklinkPlusRest.slice(0, tiktoklinkPlusRest.indexOf(" "))}`
+          : "";
 
       msg.channel.send(
         `TikTok shared by ${msg.author.tag}\n${config_1.WorkerHost}${url.pathname} ${tiktokUrl}`
       );
     }
   });
-  
+
   client.login(config_1.DiscordToken);
   //# sourceMappingURL=index.js.map
 };
