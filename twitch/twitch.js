@@ -61,15 +61,21 @@ const refreshTwitchTokens = async () => {
         )}&client_id=${process.env.BOT_CLIENT_ID}&client_secret=${
           process.env.BOT_CLIENT_SECRET
         }`;
+  console.log(body)
+        
+        const { data } = await axios.post(`${TOKEN}`, body, {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        
+      }
+    });
 
-//         const { data } = await axios.post(`${TOKEN}`, body, {});
-
-//         await updateUser({
-//           streamer: streamer.streamer,
-//           twitchAccessToken: data.access_token,
-//           twitchRefreshToken: data.refresh_token,
-//         });
-//       }
+        await updateUser({
+          streamer: streamer.streamer,
+          twitchAccessToken: data.access_token,
+          twitchRefreshToken: data.refresh_token,
+        });
+      }
     });
 
     console.log("reset twitch token");
