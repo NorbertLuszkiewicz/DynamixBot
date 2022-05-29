@@ -69,7 +69,7 @@ const refreshTwitchTokens = async () => {
 //           twitchAccessToken: data.access_token,
 //           twitchRefreshToken: data.refresh_token,
 //         });
-      }
+//       }
     });
 
     console.log("reset twitch token");
