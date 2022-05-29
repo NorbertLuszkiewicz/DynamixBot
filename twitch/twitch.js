@@ -53,7 +53,8 @@ const refreshTwitchTokens = async () => {
     const streamers = await getAllUser();
 
     streamers.forEach(async (streamer) => {
-      if (streamer.twitchAccessToken) {
+      try{
+           if (streamer.twitchAccessToken) {
         const [refreshToken] = await getUser(streamer.streamer);
 
         const body = `grant_type=refresh_token&refresh_token=${encodeURIComponent(
@@ -61,14 +62,13 @@ const refreshTwitchTokens = async () => {
         )}&client_id=${process.env.BOT_CLIENT_ID}&client_secret=${
           process.env.BOT_CLIENT_SECRET
         }`;
-  console.log(body)
-        
+        console.log(body);
+
         const { data } = await axios.post(`${TOKEN}`, body, {
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-        
-      }
-    });
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+        });
 
         await updateUser({
           streamer: streamer.streamer,
@@ -76,6 +76,8 @@ const refreshTwitchTokens = async () => {
           twitchRefreshToken: data.refresh_token,
         });
       }
+      }catch(err){console.log(err)}
+   
     });
 
     console.log("reset twitch token");
