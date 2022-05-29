@@ -53,8 +53,8 @@ const runner = () => {
     }
   });
 
-//   client.on("message", (msg) => {
-//     console.log(msg);
+  client.on("messageCreate", (msg) => {
+    console.log(msg);
 //     if (msg.author.id == client.user.id) return;
 //     if (msg.guild && config_1.GuildBlacklist.includes(msg.guild.id)) return;
 //     const matched = config_1.URLRegex.exec(msg.content);
@@ -83,8 +83,8 @@ const runner = () => {
 //       msg.channel.send(
 //         `TikTok shared by ${msg.author.tag}\n${config_1.WorkerHost}${url.pathname} ${tiktokUrl}`
 //       );
-//     }
-//   });
+// }
+  });
 
   client.login(config_1.DiscordToken);
   //# sourceMappingURL=index.js.map
