@@ -309,6 +309,8 @@ const messages = () => {
     //usuwa Xd
 
     if (message.indexOf("Xd") !== -1 && extra.channel == "kezman22") {
+      
+      if( x.indexOf("Xd") !== -1)
       ComfyJS.Say("/timeout " + user + " 1", extra.channel);
     }
 
