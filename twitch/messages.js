@@ -308,10 +308,14 @@ const messages = () => {
 
     //usuwa Xd
 
-    if (message.indexOf("Xd") !== -1 && extra.channel == "kezman22") {
-      
-      if( x.indexOf("Xd") !== -1)
-      ComfyJS.Say("/timeout " + user + " 1", extra.channel);
+    if (extra.channel == "kezman22") {
+      const splitMessage = message.split(" ");
+
+      splitMessage.forEach((x) => {
+        if (x.indexOf("Xd") !== -1 && x.length > 2 || x.indexOf("X d") !== -1) {
+          ComfyJS.Say("/timeout " + user + " 1", extra.channel);
+        }
+      });
     }
 
     //cyferki
