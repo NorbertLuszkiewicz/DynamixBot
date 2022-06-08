@@ -312,7 +312,10 @@ const messages = () => {
       const splitMessage = message.split(" ");
 
       splitMessage.forEach((x) => {
-        if (x.indexOf("Xd") !== -1 && x.length > 2 || x.indexOf("X d") !== -1) {
+        if (
+          (x.indexOf("Xd") !== -1 && x.length > 2) ||
+          x.indexOf("X d") !== -1
+        ) {
           ComfyJS.Say("/timeout " + user + " 1", extra.channel);
         }
       });
@@ -348,51 +351,64 @@ const messages = () => {
 
     ///META
 
-        const usedCo = message.toLowerCase().indexOf("co") !== -1
-        const usedMocne = message.toLowerCase().indexOf("mocne") !== -1
-        const usedMecie = message.toLowerCase().indexOf("mecie") !== -1
-        const usedDobre = message.toLowerCase().indexOf("dobre") !== -1
-        const usedTeraz = message.toLowerCase().indexOf("teraz") !== -1
-        const usedSilne = message.toLowerCase().indexOf("silne") !== -1
-        const usedKaruzela = message.toLowerCase().indexOf("karuzela") !== -1  || message.toLowerCase().indexOf("karuzeli") !== -1
-        const usedItem = message.toLowerCase().indexOf("item") !== -1
-        const usedGrac = message.toLowerCase().indexOf("grac") !== -1  || message.toLowerCase().indexOf("grać") !== -1
+    const usedCo = message.toLowerCase().indexOf("co") !== -1;
+    const usedMocne = message.toLowerCase().indexOf("mocne") !== -1;
+    const usedMecie = message.toLowerCase().indexOf("mecie") !== -1;
+    const usedDobre = message.toLowerCase().indexOf("dobre") !== -1;
+    const usedOP = message.toLowerCase().indexOf("op") !== -1;
+    const usedTeraz = message.toLowerCase().indexOf("teraz") !== -1;
+    const usedSilne = message.toLowerCase().indexOf("silne") !== -1;
+    const usedKaruzela =
+      message.toLowerCase().indexOf("karuzela") !== -1 ||
+      message.toLowerCase().indexOf("karuzeli") !== -1;
+    const usedItem = message.toLowerCase().indexOf("item") !== -1;
+    const usedGrac =
+      message.toLowerCase().indexOf("grac") !== -1 ||
+      message.toLowerCase().indexOf("grać") !== -1;
 
-        if (usedCo && (usedTeraz && usedGrac) && (usedMocne || usedMecie || usedDobre || usedSilne ) && !usedKaruzela && !usedItem ) {
-          const answer = [
-            `@${user} aktualnie meta się tworzy więc nie wiadomo`,
-            `@${user} nie dawno wyszedł patch więc jeszcze nie wiemy`,
-            `@${user} na razie można spekulować popatrz na metatft, oraz na to co grała topka`,
-          ];
+    if (
+      usedCo &&
+      usedTeraz &&
+      usedGrac &&
+      (usedMocne || usedMecie || usedDobre || usedSilne|| usedOP) &&
+      !usedKaruzela &&
+      !usedItem
+    ) {
+      const answer = [
+        `@${user} aktualnie meta się tworzy więc nie wiadomo`,
+        `@${user} nie dawno wyszedł patch więc jeszcze nie wiemy`,
+        `@${user} na razie można spekulować popatrz na metatft, oraz na to co grała topka`,
+      ];
 
-          const randomNumber = Math.floor(Math.random() * (Math.floor(answer.length - 1) + 1))
+      const randomNumber = Math.floor(
+        Math.random() * (Math.floor(answer.length - 1) + 1)
+      );
 
-          ComfyJS.Say(
-            answer[randomNumber],
-            extra.channel
-          );
-        }
-    
-    
+      ComfyJS.Say(answer[randomNumber], extra.channel);
+    }
+
     ///JUŻ NA LIVE
 
-        const usedJuż = message.toLowerCase().indexOf("już") !== -1
-        const usedLive = message.toLowerCase().indexOf("live") !== -1
-        const usedPBE = message.toLowerCase().indexOf("pbe") !== -1
-        const usedPath = message.toLowerCase().indexOf("path") !== -1
-        const usedPatch = message.toLowerCase().indexOf("patch") !== -1
-        const usedSet = message.toLowerCase().indexOf("set") !== -1
-        const usedDalej = message.toLowerCase().indexOf("dalej") !== -1
+    const usedJuż = message.toLowerCase().indexOf("już") !== -1;
+    const usedJuz = message.toLowerCase().indexOf("juz") !== -1;
+    const usedLive = message.toLowerCase().indexOf("live") !== -1;
+    const usedPBE = message.toLowerCase().indexOf("pbe") !== -1;
+    const usedPath = message.toLowerCase().indexOf("path") !== -1;
+    const usedPatch = message.toLowerCase().indexOf("patch") !== -1;
+    const usedSet = message.toLowerCase().indexOf("set") !== -1;
+    const usedDalej = message.toLowerCase().indexOf("dalej") !== -1;
+    const usedtoJużLive = message.toLowerCase().indexOf("to już live") !== -1;
+    const usedtoJuzLive = message.toLowerCase().indexOf("to juz live") !== -1;
 
-
-        if ((usedJuż||usedDalej) && (usedLive||usedPBE) && (usedPath||usedPath||usedSet)||  ) {
-
-
-          ComfyJS.Say(
-            `@${user} tak już na live`,
-            extra.channel
-          );
-        }
+    if (
+      ((usedJuż || usedDalej|| usedJuz) &&
+        (usedLive || usedPBE) &&
+        (usedPath || usedPath || usedSet)) ||
+      usedtoJużLive ||
+      usedtoJuzLive
+    ) {
+      ComfyJS.Say(`@${user} tak już na live`, extra.channel);
+    }
 
     // volume [value] command
     const isVolumeCommand = message.lastIndexOf("volume");
