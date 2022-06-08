@@ -348,30 +348,30 @@ const messages = () => {
 
     ///META
 
-    //     const usedCo = message.toLowerCase().indexOf("co") !== -1
-    //     const usedMocne = message.toLowerCase().indexOf("mocne") !== -1
-    //     const usedMecie = message.toLowerCase().indexOf("mecie") !== -1
-    //     const usedDobre = message.toLowerCase().indexOf("dobre") !== -1
-    //     const usedTeraz = message.toLowerCase().indexOf("teraz") !== -1
-    //     const usedSilne = message.toLowerCase().indexOf("teraz") !== -1
-    //     const usedKaruzela = message.toLowerCase().indexOf("karuzela") !== -1  || message.toLowerCase().indexOf("karuzeli") !== -1
-    //     const usedItem = message.toLowerCase().indexOf("item") !== -1
-    //     const usedGrac = message.toLowerCase().indexOf("grac") !== -1  || message.toLowerCase().indexOf("grać") !== -1
+        const usedCo = message.toLowerCase().indexOf("co") !== -1
+        const usedMocne = message.toLowerCase().indexOf("mocne") !== -1
+        const usedMecie = message.toLowerCase().indexOf("mecie") !== -1
+        const usedDobre = message.toLowerCase().indexOf("dobre") !== -1
+        const usedTeraz = message.toLowerCase().indexOf("teraz") !== -1
+        const usedSilne = message.toLowerCase().indexOf("silne") !== -1
+        const usedKaruzela = message.toLowerCase().indexOf("karuzela") !== -1  || message.toLowerCase().indexOf("karuzeli") !== -1
+        const usedItem = message.toLowerCase().indexOf("item") !== -1
+        const usedGrac = message.toLowerCase().indexOf("grac") !== -1  || message.toLowerCase().indexOf("grać") !== -1
 
-    //     if (usedCo && (usedMocne || usedMecie || usedDobre || usedSilne || (usedTeraz && usedGrac) ) && !usedKaruzela && !usedItem ) {
-    //       const answer = [
-    //         `@${user} aktualnie meta się tworzy więc nie wiadomo`,
-    //         `@${user} nie dawno wyszedł patch więc jeszcze nie wiemy`,
-    //         `@${user} na razie można spekulować popatrz na metatft to co grała topka`,
-    //       ];
+        if (usedCo && (usedTeraz && usedGrac) && (usedMocne || usedMecie || usedDobre || usedSilne ) && !usedKaruzela && !usedItem ) {
+          const answer = [
+            `@${user} aktualnie meta się tworzy więc nie wiadomo`,
+            `@${user} nie dawno wyszedł patch więc jeszcze nie wiemy`,
+            `@${user} na razie można spekulować popatrz na metatft, oraz na to co grała topka`,
+          ];
 
-    //       const randomNumber = Math.floor(Math.random() * (Math.floor(answer.length - 1) + 1))
+          const randomNumber = Math.floor(Math.random() * (Math.floor(answer.length - 1) + 1))
 
-    //       ComfyJS.Say(
-    //         answer[randomNumber],
-    //         extra.channel
-    //       );
-    //     }
+          ComfyJS.Say(
+            answer[randomNumber],
+            extra.channel
+          );
+        }
 
     // volume [value] command
     const isVolumeCommand = message.lastIndexOf("volume");
