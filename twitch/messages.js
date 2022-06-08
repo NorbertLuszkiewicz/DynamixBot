@@ -362,6 +362,7 @@ const messages = () => {
       message.toLowerCase().indexOf("karuzela") !== -1 ||
       message.toLowerCase().indexOf("karuzeli") !== -1;
     const usedItem = message.toLowerCase().indexOf("item") !== -1;
+    const usedcoMocne = message.toLowerCase().indexOf("co mocne") !== -1;
     const usedGrac =
       message.toLowerCase().indexOf("grac") !== -1 ||
       message.toLowerCase().indexOf("grać") !== -1;
@@ -373,6 +374,7 @@ const messages = () => {
       (usedMocne || usedMecie || usedDobre || usedSilne|| usedOP) &&
       !usedKaruzela &&
       !usedItem
+      || usedcoMocne
     ) {
       const answer = [
         `@${user} aktualnie meta się tworzy więc nie wiadomo`,
