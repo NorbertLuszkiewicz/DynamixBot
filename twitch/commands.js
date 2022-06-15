@@ -412,14 +412,14 @@ const commands = () =>
         );
       }
 
-      if (command === "forma") {
-        let number = randomInt(1, 100);
+//       if (command === "forma") {
+//         let number = randomInt(1, 100);
 
-        ComfyJS.Say(
-          `@${user} aktualnie jesteś w ${number}% swojej szczytowej formy`,
-          extra.channel
-        );
-      }
+//         ComfyJS.Say(
+//           `@${user} aktualnie jesteś w ${number}% swojej szczytowej formy`,
+//           extra.channel
+//         );
+//       }
 
       if (
         (command === "chessuser" || command === "szachista") &&
