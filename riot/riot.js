@@ -14,6 +14,69 @@ const region = {
   KR: "ASIA",
 };
 
+const getLolMatchStats = async (streamer, nickname, server) => {
+  const [data] = await getUser(streamer);
+  let matchList = "";
+  let puuid = "";
+
+  if (nickname) {
+    const { response } = await api.Summoner.getByName(
+      nickname,
+      server ? serverNameToServerId[server] : "EUW1"
+    );
+
+    matchList = await api.Match.listWithDetails(
+      response.puuid,
+      server ? region[serverNameToServerId[server]] : "EUROPE",
+      { count: 10 }
+    );
+    puuid = response.puuid;
+  } else {
+    matchList = await api.Match.listWithDetails(
+      data.activeRiotAccount.puuid,
+      region[data.activeRiotAccount.server],
+      { count: 10 }
+    );
+    puuid = data.activeRiotAccount.puuid;
+  }
+
+  const now = new Date();
+  const today = Date.parse(
+    `${now.getMonth() + 1}, ${now.getDate()}, ${now.getFullYear()} UTC`
+  );
+  const todayMatchList = matchList.filter((match) => {
+    if (match.info.game_datetime > today) {
+      return match;
+    }
+  });
+
+  if (todayMatchList.length > 0) {
+    let matchListTwitch = `dzisiejsze gierki: `;
+
+    todayMatchList.forEach((match, index) => {
+      const myBoard = match.info.participants.find((item) => {
+        return item.puuid === puuid;
+      });
+
+      const traits = myBoard.traits.sort((a, b) => b.num_units - a.num_units);
+
+      matchListTwitch =
+        matchListTwitch +
+        `${index + 1}[Top${myBoard.placement}]${
+          traits[0].num_units
+        }${traits[0].name.substr(5)}|${
+          traits[1].num_units
+        }${traits[1].name.substr(5)}|${
+          traits[2].num_units
+        }${traits[2].name.substr(5)} `;
+    });
+
+    return matchListTwitch;
+  }
+
+  return `${nickname ? nickname : streamer} nie zagrał dzisiaj żadnej gry`;
+};
+
 const addTftUser = async (name, server, streamer) => {
   const [data] = await getUser(streamer);
 
