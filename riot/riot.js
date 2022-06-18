@@ -1,4 +1,4 @@
-const { TftApi, Constants } = require("twisted");
+const { TftApi, Constants, LolApi } = require("twisted");
 const {
   updateUser,
   getUser,
@@ -6,6 +6,7 @@ const {
 } = require("../controllers/UserController.js");
 
 const api = new TftApi();
+const apiLol = new LolApi();
 
 const region = {
   EUW1: "EUROPE",
@@ -20,19 +21,19 @@ const getLolMatchStats = async (streamer, nickname, server) => {
   let puuid = "";
 
   if (nickname) {
-    const { response } = await api.Summoner.getByName(
+    const { response } = await LolApi.Summoner.getByName(
       nickname,
       server ? serverNameToServerId[server] : "EUW1"
     );
 
-    matchList = await api.Match.listWithDetails(
+    matchList = await LolApi.Match.listWithDetails(
       response.puuid,
       server ? region[serverNameToServerId[server]] : "EUROPE",
-      { count: 10 }
+      { count: 20 }
     );
     puuid = response.puuid;
   } else {
-    matchList = await api.Match.listWithDetails(
+    matchList = await LolApi.Match.listWithDetails(
       data.activeRiotAccount.puuid,
       region[data.activeRiotAccount.server],
       { count: 10 }
