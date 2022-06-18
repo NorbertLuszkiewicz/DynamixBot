@@ -184,8 +184,8 @@ const messages = () => {
           "BRUHBRUH",
           "overD",
           "zyzzBass",
-          "OOOO",
-          "OOOO",
+          "LIKE",
+          "Sadge",
         ];
 
         const maxNumber = reward ? reward.emotes : 7;
