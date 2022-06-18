@@ -42,6 +42,18 @@ const events = () => {
     "VisLaud",
     "dał subika OOOO jeszcze miesiąc i 2 lata BRUHBRUH",
     "dwa lata z nami BRUHBRUH",
+    "dwa lata z nami BRUHBRUH",
+    "dwa lata z nami BRUHBRUH",
+    "dwa lata z nami BRUHBRUH",
+    "dwa lata z nami BRUHBRUH",
+    "dwa lata z nami BRUHBRUH",
+    "dwa lata z nami BRUHBRUH",
+    "dwa lata z nami BRUHBRUH",
+    "dwa lata z nami BRUHBRUH",
+    "dwa lata z nami BRUHBRUH",
+    "dwa lata z nami BRUHBRUH",
+    "dwa lata z nami BRUHBRUH",
+    "trzy lata z nami OOOO ",
   ];
 
   ComfyJS.onResub = (
