@@ -181,6 +181,11 @@ const messages = () => {
           "catJAM",
           "SUSSY",
           "OOOO",
+          "BRUHBRUH",
+          "overD",
+          "zyzzBass",
+          "OOOO",
+          "OOOO",
         ];
 
         const maxNumber = reward ? reward.emotes : 7;
