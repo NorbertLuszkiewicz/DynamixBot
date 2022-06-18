@@ -47,13 +47,13 @@ const events = () => {
     "dwa lata z nami BRUHBRUH",
     "dwa lata z nami BRUHBRUH",
     "dwa lata z nami BRUHBRUH",
+    "30 miesięcy suba BRUHBRUH",
     "dwa lata z nami BRUHBRUH",
     "dwa lata z nami BRUHBRUH",
     "dwa lata z nami BRUHBRUH",
     "dwa lata z nami BRUHBRUH",
     "dwa lata z nami BRUHBRUH",
-    "dwa lata z nami BRUHBRUH",
-    "trzy lata z nami OOOO ",
+    "trzy lata z nami OOOO",
   ];
 
   ComfyJS.onResub = (
