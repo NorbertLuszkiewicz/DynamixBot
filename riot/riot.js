@@ -8,7 +8,7 @@ const {
 const api = new TftApi();
 const apiLol = new LolApi();
 
-const region = {
+const region = { 
   EUW1: "EUROPE",
   EUN1: "EUROPE",
   NA1: "AMERICAS", 
