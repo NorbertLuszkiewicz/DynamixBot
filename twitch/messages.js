@@ -194,6 +194,10 @@ const messages = () => {
         let number2 = randomInt(1, maxNumber);
         let number3 = randomInt(1, maxNumber);
 
+        if (reward.id == "2ac9a80d-9891-492a-b803-d55616873244") {
+          number3 = number2;
+        }
+
         let result = `____________________PREMIUM____________________
       ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[ ${emotes[number1]} | ${emotes[number2]} | ${emotes[number3]} ]/
       __________________________________________________
@@ -208,7 +212,14 @@ const messages = () => {
 
         ComfyJS.Say(`${result} @${user} ${winMessage}`, extra.channel);
 
-        if (reward.withBan && !isWin) {
+        if (!isWin && reward.id == "2ac9a80d-9891-492a-b803-d55616873244") {
+          ComfyJS.Say(`/timeout ${user} 600`, extra.channel);
+        } else if (
+          isWin &&
+          reward.id == "2ac9a80d-9891-492a-b803-d55616873244"
+        ) {
+          ComfyJS.Say(`/timeout ${message} 600`, extra.channel);
+        } else if (reward.withBan && !isWin) {
           if (!isSemiWin && maxNumber > 3) {
             ComfyJS.Say(`/timeout ${user} 600`, extra.channel);
           }
