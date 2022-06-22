@@ -52,7 +52,7 @@ const events = () => {
     "kochany wic dał suba kezmanGlad",
     "wydał milion złotych na streamera Porvalo",
     "piekny jesteś ze dajesz subika akurat tu peepoLove",
-    "za chwię 3 lata subskrybowania tego kanału VisLaud",
+    "za chwilę 3 lata subskrybowania tego kanału VisLaud",
     "trzy lata z nami OOOO",
   ];
 
