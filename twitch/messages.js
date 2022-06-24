@@ -248,7 +248,9 @@ const messages = () => {
         (message.lastIndexOf("to the queue") != -1 ||
           message.lastIndexOf("do kolejki") != -1)
       ) {
-        pauseSong(extra.channel);
+        if (extra.channel !== "overpow") {
+          pauseSong(extra.channel);
+        }
         await timeRequest(extra.channel, "add");
         removeBlockedSong(extra.channel);
       }
