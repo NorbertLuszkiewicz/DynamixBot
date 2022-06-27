@@ -33,7 +33,12 @@ const commands = () =>
           );
 
           if (isPlayingNow) {
-            ComfyJS.Say(`@${user} ${title} ${userAdded && ' | dodano przez '+ userAdded+ ' '} ${link} `, extra.channel);
+            ComfyJS.Say(
+              `@${user} ${title} ${
+                userAdded && " | dodano przez " + userAdded + " "
+              } ${link} `,
+              extra.channel
+            );
           } else {
             let url = spotifyData.item.external_urls.spotify
               ? spotifyData.item.external_urls.spotify
@@ -246,22 +251,24 @@ const commands = () =>
           console.log(`Error when use !horoskop on twitch (${err})`);
         }
       }
-      if (
-          command === "lastWinners" ||
-          command === "wins"
-        ) {
-          const slots = data.slotsID
-          let result
-          
-          slots.forEach(slot => {
-            result = result + `nazwa: ${slot.name} wynik: (${slot.wins}/${slot.times}) ${slots.lastWinners && 'ostatnio wygrali: ('+slots.lastWinners+')'} |`
-          })
-          
-          console.log(slots)
+      if (command === "lastWinners" || command === "wins") {
+        const slots = data.slotsID;
+        let result = "";
 
-         // ComfyJS.Say(`${onOffMessage} komendy song, playlist`, extra.channel);
-        }
-      
+        slots.forEach((slot) => {
+          result =
+            result +
+            ` nazwa: ${slot.name} wynik: (${slot.wins}/${slot.times}) ${
+              slots.lastWinners
+                ? "ostatnio wygrali: (" + slots.lastWinners + ")"
+                : ""
+            } |`;
+        });
+
+        console.log(slots);
+
+        ComfyJS.Say(result, extra.channel);
+      }
 
       if (command === "slots" && commandSwitch.slots) {
         const emotes = [
@@ -550,8 +557,6 @@ const commands = () =>
           newComandSwitch.song = isOn;
           ComfyJS.Say(`${onOffMessage} komendy song, playlist`, extra.channel);
         }
-        
-
 
         updateUser({
           streamer: extra.channel,
