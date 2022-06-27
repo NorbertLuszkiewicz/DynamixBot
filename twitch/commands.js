@@ -197,12 +197,14 @@ const commands = () =>
           description == "zachmurzenie duże" && (emote = "☁️");
           description == "mgła" && (emote = "🌫️");
           description == "umiarkowane opady deszczu" && (emote = "🌧️");
+          
+          if(message.toLowerCase() !="Niger" & )
 
           temp
             ? ComfyJS.Say(
                 `@${user} Jest ${Math.round(
                   temp - 273
-                )} °C, ${description} ${emote} wiatr wieje z prędkością ${speed} km/h`,
+                )} °C, ${description} ${emote} wiatr wieje z prędkością ${speed} km/h (${message})`,
                 extra.channel
               )
             : ComfyJS.Say(`@${user} Nie znaleziono`, extra.channel);
