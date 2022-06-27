@@ -28,12 +28,12 @@ const commands = () =>
       if ((command == "song" || command == "coleci") && commandSwitch.song) {
         try {
           const spotifyData = await currentlyPlaying(extra.channel);
-          const { isPlayingNow, title, link } = await songPlayingNow(
+          const { isPlayingNow, title, link, userAdded } = await songPlayingNow(
             extra.channel
           );
 
           if (isPlayingNow) {
-            ComfyJS.Say(`@${user} ${title} ${link}`, extra.channel);
+            ComfyJS.Say(`@${user} ${title} ${userAdded && ' | dodano przez '+ userAdded+ ' '} ${link} `, extra.channel);
           } else {
             let url = spotifyData.item.external_urls.spotify
               ? spotifyData.item.external_urls.spotify

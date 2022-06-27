@@ -50,12 +50,12 @@ const songPlayingNow = async (streamer) => {
   try {
     const player = await getSpotifyAreaData(streamer, "player");
     const playing = await getSpotifyAreaData(streamer, "playing");
-    console.log(player, playing);
 
     return {
       isPlayingNow: player.state == "playing" && playing != null,
       title: playing && playing.title,
       link: playing && `https://www.youtube.com/watch?v=${playing.videoId}`,
+      userAdded: playing?.user?.username
     };
   } catch (err) {
     console.log(`Error while checking what song playing now ${err}`);
