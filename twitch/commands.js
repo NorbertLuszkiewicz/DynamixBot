@@ -548,6 +548,16 @@ const commands = () =>
           newComandSwitch.song = isOn;
           ComfyJS.Say(`${onOffMessage} komendy song, playlist`, extra.channel);
         }
+        
+        if (
+          message === "lastWinners" ||
+          message === "wins"
+        ) {
+          const slots = 
+                lastWinners
+          newComandSwitch.song = isOn;
+          ComfyJS.Say(`${onOffMessage} komendy song, playlist`, extra.channel);
+        }
 
         updateUser({
           streamer: extra.channel,

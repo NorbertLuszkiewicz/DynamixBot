@@ -231,7 +231,16 @@ const messages = () => {
         let slitsIDChanged = slotsID.map((item) => {
           if (item.id === reward.id) {
             item.times += 1;
-            isWin && (item.wins += 1);
+            if(isWin){
+              item.wins += 1
+              if(item.lastWinners){
+                item.lastWinners.push(user)
+                item.lastWinners.length > 3 && item.lastWinners.splice(0, 1)
+              }else{
+                item.lastWinners = [user]
+              }
+            };
+            
           }
 
           return item;
