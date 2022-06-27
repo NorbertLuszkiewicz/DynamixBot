@@ -246,20 +246,22 @@ const commands = () =>
           console.log(`Error when use !horoskop on twitch (${err})`);
         }
       }
+      if (
+          command === "lastWinners" ||
+          command === "wins"
+        ) {
+          const slots = data.slotsID
+          let result
+          
+          slots.forEach(slot => {
+            result = result + `nazwa: ${slot.name} wynik: (${slot.wins}/${slot.times}) ${slots.lastWinners && 'ostatnio wygrali: ('+slots.lastWinners+')'} |`
+          })
+          
+          console.log(slots)
 
-      if (command === "kutas" || command === "penis") {
-        let number = randomInt(1, 9);
-        let emote = "";
-
-        number < 4 && (emote = "PepeLaugh");
-        number >= 4 && number <= 6 && (emote = "kezmanGlad");
-        number > 6 && (emote = "VisLaud ");
-
-        ComfyJS.Say(
-          `@${user} 8${"=".repeat([number])}D ${emote}`,
-          extra.channel
-        );
-      }
+         // ComfyJS.Say(`${onOffMessage} komendy song, playlist`, extra.channel);
+        }
+      
 
       if (command === "slots" && commandSwitch.slots) {
         const emotes = [
@@ -549,15 +551,7 @@ const commands = () =>
           ComfyJS.Say(`${onOffMessage} komendy song, playlist`, extra.channel);
         }
         
-        if (
-          message === "lastWinners" ||
-          message === "wins"
-        ) {
-          const slots = 
-                lastWinners
-          newComandSwitch.song = isOn;
-          ComfyJS.Say(`${onOffMessage} komendy song, playlist`, extra.channel);
-        }
+
 
         updateUser({
           streamer: extra.channel,
