@@ -197,17 +197,20 @@ const commands = () =>
           description == "zachmurzenie duże" && (emote = "☁️");
           description == "mgła" && (emote = "🌫️");
           description == "umiarkowane opady deszczu" && (emote = "🌧️");
-          
-          if(message.toLowerCase() !="Niger" & )
 
-          temp
-            ? ComfyJS.Say(
-                `@${user} Jest ${Math.round(
-                  temp - 273
-                )} °C, ${description} ${emote} wiatr wieje z prędkością ${speed} km/h (${message})`,
-                extra.channel
-              )
-            : ComfyJS.Say(`@${user} Nie znaleziono`, extra.channel);
+          if (
+            message.toLowerCase() != "niger" &&
+            message.toLowerCase() != "nigger"
+          ) {
+            temp
+              ? ComfyJS.Say(
+                  `@${user} Jest ${Math.round(
+                    temp - 273
+                  )} °C, ${description} ${emote} wiatr wieje z prędkością ${speed} km/h (${message})`,
+                  extra.channel
+                )
+              : ComfyJS.Say(`@${user} Nie znaleziono`, extra.channel);
+          }
         } catch (err) {
           console.log(`Error when use !pogoda on twitch (${err})`);
         }
@@ -414,14 +417,14 @@ const commands = () =>
         );
       }
 
-//       if (command === "forma") {
-//         let number = randomInt(1, 100);
+      //       if (command === "forma") {
+      //         let number = randomInt(1, 100);
 
-//         ComfyJS.Say(
-//           `@${user} aktualnie jesteś w ${number}% swojej szczytowej formy`,
-//           extra.channel
-//         );
-//       }
+      //         ComfyJS.Say(
+      //           `@${user} aktualnie jesteś w ${number}% swojej szczytowej formy`,
+      //           extra.channel
+      //         );
+      //       }
 
       if (
         (command === "chessuser" || command === "szachista") &&
@@ -476,11 +479,14 @@ const commands = () =>
         startSong(extra.channel);
       }
 
-      if ((command === "on" || command === "off") && (flags.mod || flags.broadcaster)) {
+      if (
+        (command === "on" || command === "off") &&
+        (flags.mod || flags.broadcaster)
+      ) {
         let newComandSwitch = commandSwitch;
-        
-        const isOn = command === "on"
-        const onOffMessage = isOn ? "Włączono" : "Wyłączono"
+
+        const isOn = command === "on";
+        const onOffMessage = isOn ? "Włączono" : "Wyłączono";
 
         if (
           message === "weather" ||
@@ -488,7 +494,10 @@ const commands = () =>
           message === "horoskop"
         ) {
           newComandSwitch.weather = isOn;
-          ComfyJS.Say(`${onOffMessage} komendy pogoda i horoskop`, extra.channel);
+          ComfyJS.Say(
+            `${onOffMessage} komendy pogoda i horoskop`,
+            extra.channel
+          );
         }
 
         if (
