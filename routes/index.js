@@ -198,7 +198,6 @@ async function routes(fastify, options) {
 
     
     const { name, emotes, withBan, user } = req.body;
-console.log("asdasdasd",  )
     const newSlots = {
       name,
       id: null,
@@ -208,7 +207,6 @@ console.log("asdasdasd",  )
       wins: 0,
     };
     try {
-      console.log("asdasdasd")
       const [data] = await getUser(user);
 
       if (data.slotsID && data.slotsID.length > 0) {

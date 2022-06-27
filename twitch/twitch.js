@@ -62,7 +62,7 @@ const refreshTwitchTokens = async () => {
         )}&client_id=${process.env.BOT_CLIENT_ID}&client_secret=${
           process.env.BOT_CLIENT_SECRET
         }`;
-        console.log(body);
+      
 
         const { data } = await axios.post(`${TOKEN}`, body, {
           headers: {

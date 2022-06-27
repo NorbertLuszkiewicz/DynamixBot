@@ -166,7 +166,7 @@ const tftMatchList = async (streamer, nickname, server) => {
 };
 
 const getMatch = async (number, nickname, server, streamer) => {
-  console.log(number);
+  
   if (!number) {
     return "@${user} komenda !mecze pokazuje liste meczy z dzisiaj (miejsca o raz synergie) !mecz [nr] gdzie [nr] oznacza numer meczu licząc od najnowszego czyli !mecz 1 pokaze ostatnią gre (wyświetla dokładny com z itemami i synergiami)";
   }
@@ -257,7 +257,7 @@ const getStats = async (streamer, nickname, server) => {
       server ? serverNameToServerId[server] : "EUW1"
     );
     const userInfo = userData.response[0];
-    console.log(streamer, nickname, server);
+    
 
     message = `statystyki gracza: ${response.name} | ${userInfo.tier}-${
       userInfo.rank
@@ -375,7 +375,7 @@ const checkActiveRiotAccount = async () => {
         );
       }
     });
-    console.log("reset last games in tft");
+
   } catch ({ response }) {
     console.log(
       `Error while resetting last games in tft (${response.status} ${response.statusText})`

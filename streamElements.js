@@ -152,7 +152,6 @@ const timeRequest = async (streamer, action) => {
 
 const removeBlockedSong = async (streamer) => {
   try {
-    //console.log(queue, "playing: ", playing);
     const [user] = await getUser(streamer);
     const { clientSongRequestID, clientSongRequestSecret } = user;
     const queue = await getSpotifyAreaData(streamer, "queue");
@@ -180,8 +179,6 @@ const removeBlockedSong = async (streamer) => {
         removeSong(playing._id);
       }
     }
-
-   // console.log(queue, "playing: ", playing);
   } catch (err) {
     console.log(`Error while checking what song playing now ${err}`);
   }

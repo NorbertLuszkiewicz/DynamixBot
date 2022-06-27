@@ -27,9 +27,6 @@ const isBlockedVideo = async (url, streamer, urlId) => {
 
     const resultData = { isVideo, isBlocked };
 
-    (!isVideo || isBlocked) &&
-      console.log(`This song is blocked (${url}, ${resultData}`);
-
     return resultData;
   } catch (err) {
     console.log(`Error while getting youtube video (${err} )`);
