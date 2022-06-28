@@ -35,7 +35,7 @@ const commands = () =>
           if (isPlayingNow) {
             ComfyJS.Say(
               `@${user} ${title} ${
-                userAdded && " | dodano przez " + userAdded + " "
+                userAdded && " | dodał/a " + userAdded + " "
               } ${link} `,
               extra.channel
             );
