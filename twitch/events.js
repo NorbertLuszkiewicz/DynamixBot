@@ -44,7 +44,7 @@ const events = () => {
     "dwa lata z nami BRUHBRUH",
     "wywalił kolejne pieniądze na streamera Porvalo",
     "zaiwestował w stream peepoLove",
-    "kupił subskrybuje peepoLove",
+    "kupił subskrybcje peepoLove",
     "subik OOOO",
     "kolejny miesiąc z nami peepoLove",
     "30 miesięcy suba BRUHBRUH",
