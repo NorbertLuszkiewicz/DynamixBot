@@ -259,8 +259,8 @@ const commands = () =>
           result =
             result +
             ` nazwa: ${slot.name} wynik: (${slot.wins}/${slot.times}) ${
-              slots.lastWinners
-                ? "ostatnio wygrali: (" + slots.lastWinners + ")"
+              slot.lastWinners
+                ? "ostatnio wygrali: (" + slot.lastWinners + ")"
                 : ""
             } |`;
         });
