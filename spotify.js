@@ -2,14 +2,14 @@ const axios = require("axios");
 const {
   getAllUser,
   updateUser,
-  getUser
+  getUser,
 } = require("./controllers/UserController.js");
 
 const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
 const AUTHORIZE = "https://accounts.spotify.com/authorize";
-const TOKEN = "https://accounts.spotify.com/api/token"; 
-const PLAY = "https://api.spotify.com/v1/me/player/play"; 
+const TOKEN = "https://accounts.spotify.com/api/token";
+const PLAY = "https://api.spotify.com/v1/me/player/play";
 const PAUSE = "https://api.spotify.com/v1/me/player/pause";
 const NEXT = "https://api.spotify.com/v1/me/player/next";
 const VOLUME = "https://api.spotify.com/v1/me/player/volume";
@@ -18,13 +18,17 @@ const DEVICES = "https://api.spotify.com/v1/me/player/devices";
 
 let timeoutVolume = { kezman22: null, dynam1x1: null };
 
-const setTimeoutVolume = async () =>{
-  try{
-    const allUsers = await getAllUser()
-    timeoutVolume = allUsers.reduce((acc, key) => ({ ...acc, [key.streamer]: null}), {})
+const setTimeoutVolume = async () => {
+  try {
+    const allUsers = await getAllUser();
+    timeoutVolume = allUsers.reduce(
+      (acc, key) => ({ ...acc, [key.streamer]: null }),
+      {}
+    );
+  } catch {
+    console.log("Error when call setTimeoutVolume");
   }
-  catch{console.log("Error when call setTimeoutVolume")}
-}
+};
 
 const addSpotify = async (streamer, code) => {
   let accessToken;
@@ -37,8 +41,8 @@ const addSpotify = async (streamer, code) => {
         "Content-Type": "application/x-www-form-urlencoded",
         Authorization: `Basic ${Buffer.from(
           clientId + ":" + clientSecret
-        ).toString("base64")}`
-      }
+        ).toString("base64")}`,
+      },
     });
     data.access_token && (accessToken = data.access_token);
     data.refresh_token && (refreshToken = data.refresh_token);
@@ -46,7 +50,7 @@ const addSpotify = async (streamer, code) => {
     await updateUser({
       streamer: streamer,
       spotifyAccessToken: data.access_token,
-      spotifyRefreshToken: data.refresh_token
+      spotifyRefreshToken: data.refresh_token,
     });
 
     return "success";
@@ -56,7 +60,7 @@ const addSpotify = async (streamer, code) => {
   }
 };
 
-const startSong = async streamer => {
+const startSong = async (streamer) => {
   const [user] = await getUser(streamer);
   const { spotifyAccessToken, device } = user;
 
@@ -67,8 +71,8 @@ const startSong = async streamer => {
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${spotifyAccessToken}`
-        }
+          Authorization: `Bearer ${spotifyAccessToken}`,
+        },
       }
     );
   } catch ({ response }) {
@@ -78,7 +82,7 @@ const startSong = async streamer => {
   }
 };
 
-const pauseSong = async streamer => {
+const pauseSong = async (streamer) => {
   try {
     const [user] = await getUser(streamer);
     const { spotifyAccessToken, device } = user;
@@ -88,10 +92,10 @@ const pauseSong = async streamer => {
       {},
       {
         headers: {
-          Authorization: `Bearer ${spotifyAccessToken}`
-        }
+          Authorization: `Bearer ${spotifyAccessToken}`,
+        },
       }
-    ); 
+    );
   } catch ({ response }) {
     console.log(
       `Error while stopping song (${response.status} ${response.statusText})`
@@ -99,7 +103,7 @@ const pauseSong = async streamer => {
   }
 };
 
-const nextSong = async streamer => {
+const nextSong = async (streamer) => {
   try {
     const [user] = await getUser(streamer);
     const { spotifyAccessToken, device } = user;
@@ -108,8 +112,8 @@ const nextSong = async streamer => {
       {},
       {
         headers: {
-          Authorization: `Bearer ${spotifyAccessToken}`
-        }
+          Authorization: `Bearer ${spotifyAccessToken}`,
+        },
       }
     );
   } catch ({ response }) {
@@ -130,8 +134,8 @@ const changeVolumeOnTime = async (streamer, min, max, time) => {
       {},
       {
         headers: {
-          Authorization: `Bearer ${spotifyAccessToken}`
-        }
+          Authorization: `Bearer ${spotifyAccessToken}`,
+        },
       }
     );
 
@@ -147,7 +151,7 @@ const changeVolumeOnTime = async (streamer, min, max, time) => {
 
     await updateUser({
       streamer: streamer,
-      maxVolumeTime: newMaxVolumeTime
+      maxVolumeTime: newMaxVolumeTime,
     });
 
     clearTimeout(timeoutVolume[streamer]);
@@ -159,8 +163,8 @@ const changeVolumeOnTime = async (streamer, min, max, time) => {
             {},
             {
               headers: {
-                Authorization: `Bearer ${spotifyAccessToken}`
-              }
+                Authorization: `Bearer ${spotifyAccessToken}`,
+              },
             }
           );
         } catch ({ response }) {
@@ -189,8 +193,8 @@ const setVolume = async (streamer, value) => {
       {},
       {
         headers: {
-          Authorization: `Bearer ${spotifyAccessToken}`
-        }
+          Authorization: `Bearer ${spotifyAccessToken}`,
+        },
       }
     );
   } catch ({ response }) {
@@ -204,7 +208,7 @@ const refreshAccessToken = async () => {
   try {
     const streamers = await getAllUser();
 
-    streamers.forEach(async streamer => {
+    streamers.forEach(async (streamer) => {
       if (streamer.streamer != "og1ii" && streamer.spotifyRefreshToken) {
         const body = `grant_type=refresh_token&refresh_token=${streamer.spotifyRefreshToken}&client_id=${clientId}`;
 
@@ -213,14 +217,14 @@ const refreshAccessToken = async () => {
             "Content-Type": "application/x-www-form-urlencoded",
             Authorization: `Basic ${Buffer.from(
               clientId + ":" + clientSecret
-            ).toString("base64")}`
-          }
+            ).toString("base64")}`,
+          },
         });
 
         await updateUser({
           streamer: streamer.streamer,
           spotifyAccessToken: data.access_token,
-          spotifyRefreshToken: data.refresh_token
+          spotifyRefreshToken: data.refresh_token,
         });
       }
     });
@@ -232,15 +236,15 @@ const refreshAccessToken = async () => {
   }
 };
 
-const currentlyPlaying = async streamer => {
+const currentlyPlaying = async (streamer) => {
   try {
     const [user] = await getUser(streamer);
     const { spotifyAccessToken } = user;
 
     const { data } = await axios.get(`${PLAYER}?market=US`, {
       headers: {
-        Authorization: `Bearer ${spotifyAccessToken}`
-      }
+        Authorization: `Bearer ${spotifyAccessToken}`,
+      },
     });
 
     return data;
@@ -251,19 +255,19 @@ const currentlyPlaying = async streamer => {
   }
 };
 
-const refreshDevices = async streamer => {
+const refreshDevices = async (streamer) => {
   try {
     const [user] = await getUser(streamer);
     const { spotifyAccessToken } = user;
 
     const { data } = await axios.get(DEVICES, {
       headers: {
-        Authorization: `Bearer ${spotifyAccessToken}`
-      }
+        Authorization: `Bearer ${spotifyAccessToken}`,
+      },
     });
     console.log("devices", data);
-    const device = data.devices.find(element => element.is_active)
-      ? data.devices.find(element => element.is_active)
+    const device = data.devices.find((element) => element.is_active)
+      ? data.devices.find((element) => element.is_active)
       : data.devices[0];
 
     await updateUser({
@@ -271,7 +275,9 @@ const refreshDevices = async streamer => {
       device: device.id,
     });
   } catch ({ response }) {
-    console.log(`Error while getting devices (${response.status} ${response.statusText})`);
+    console.log(
+      `Error while getting devices (${response.status} ${response.statusText})`
+    );
   }
 };
 
