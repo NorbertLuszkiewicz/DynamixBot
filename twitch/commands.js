@@ -2,6 +2,7 @@ const ComfyJS = require("comfy.js");
 const { getWeather, getHoroscope } = require("./twitch");
 const {
   tftMatchList,
+  getLolMatchStats,
   getMatch,
   getStats,
   getRank,
@@ -481,6 +482,13 @@ const commands = () =>
         message !== "stop" &&
         (flags.mod || flags.broadcaster)
       ) {
+        ComfyJS.Say("Bot works!", extra.channel);
+      }
+      if (
+        command === "test" &&
+        (flags.mod || flags.broadcaster)
+      ) {
+        getLolMatchStats()
         ComfyJS.Say("Bot works!", extra.channel);
       }
 

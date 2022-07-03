@@ -26,17 +26,17 @@ const getLolMatchStats = async (streamer, nickname, server) => {
       server ? serverNameToServerId[server] : "EUW1"
     );
 
-    matchList = await LolApi.Match.listWithDetails(
+    matchList = await LolApi.MatchV5.list(
       response.puuid,
       server ? region[serverNameToServerId[server]] : "EUROPE",
       { count: 20 }
     );
     puuid = response.puuid;
   } else {
-    matchList = await LolApi.Match.listWithDetails(
+    matchList = await LolApi.MatchV5.list(
       data.activeRiotAccount.puuid,
       region[data.activeRiotAccount.server],
-      { count: 10 }
+      { count: 20 }
     );
     puuid = data.activeRiotAccount.puuid;
   }
@@ -53,29 +53,29 @@ const getLolMatchStats = async (streamer, nickname, server) => {
   
   console.log("asdddd",matchList, "asdadsdd")
 
-  if (todayMatchList.length > 0) {
-    let matchListTwitch = `dzisiejsze gierki: `;
+//   if (todayMatchList.length > 0) {
+//     let matchListTwitch = `dzisiejsze gierki: `;
 
-    todayMatchList.forEach((match, index) => {
-      const myBoard = match.info.participants.find((item) => {
-        return item.puuid === puuid;
-      });
+//     todayMatchList.forEach((match, index) => {
+//       const myBoard = match.info.participants.find((item) => {
+//         return item.puuid === puuid;
+//       });
 
-      const traits = myBoard.traits.sort((a, b) => b.num_units - a.num_units);
+//       const traits = myBoard.traits.sort((a, b) => b.num_units - a.num_units);
 
-      matchListTwitch =
-        matchListTwitch +
-        `${index + 1}[Top${myBoard.placement}]${
-          traits[0].num_units
-        }${traits[0].name.substr(5)}|${
-          traits[1].num_units
-        }${traits[1].name.substr(5)}|${
-          traits[2].num_units
-        }${traits[2].name.substr(5)} `;
-    });
+//       matchListTwitch =
+//         matchListTwitch +
+//         `${index + 1}[Top${myBoard.placement}]${
+//           traits[0].num_units
+//         }${traits[0].name.substr(5)}|${
+//           traits[1].num_units
+//         }${traits[1].name.substr(5)}|${
+//           traits[2].num_units
+//         }${traits[2].name.substr(5)} `;
+//     });
 
-    return matchListTwitch;
-  }
+//     return matchListTwitch;
+//   }
 
   return `${nickname ? nickname : streamer} nie zagrał dzisiaj żadnej gry`;
 };
