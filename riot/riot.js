@@ -50,6 +50,8 @@ const getLolMatchStats = async (streamer, nickname, server) => {
       return match;
     }
   });
+  
+  console.log("asdddd",matchList, "asdadsdd")
 
   if (todayMatchList.length > 0) {
     let matchListTwitch = `dzisiejsze gierki: `;
@@ -441,6 +443,7 @@ const itemIdToName = {
 module.exports = {
   addTftUser,
   tftMatchList,
+  getLolMatchStats,
   checkActiveRiotAccount,
   getMatch,
   getStats,
