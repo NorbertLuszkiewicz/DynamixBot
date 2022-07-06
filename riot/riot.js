@@ -29,14 +29,14 @@ const getLolMatchStats = async (streamer, nickname, server) => {
     matchList = await LolApi.MatchV5.list(
       response.puuid,
       server ? region[serverNameToServerId[server]] : "EUROPE",
-      { count: 20 }
+      { queue: 450 }
     );
     puuid = response.puuid;
   } else {
     matchList = await LolApi.MatchV5.list(
       data.activeRiotAccount.puuid,
       region[data.activeRiotAccount.server],
-      { count: 20 }
+      { queue: 450 }
     );
     puuid = data.activeRiotAccount.puuid;
   }
