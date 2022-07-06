@@ -21,19 +21,20 @@ const getLolMatchStats = async (streamer, nickname, server) => {
   let puuid = "";
 
   if (nickname) {
-    const { response } = await LolApi.Summoner.getByName(
+    const { response } = await apiLol.Summoner.getByName(
       nickname,
       server ? serverNameToServerId[server] : "EUW1"
     );
 
-    matchList = await LolApi.MatchV5.list(
+    matchList = await apiLol.MatchV5.list(
       response.puuid,
       server ? region[serverNameToServerId[server]] : "EUROPE",
       { queue: 450 }
     );
     puuid = response.puuid;
   } else {
-    matchList = await LolApi.MatchV5.list(
+    console.log(data)
+    matchList = await apiLol.MatchV5.list(
       data.activeRiotAccount.puuid,
       region[data.activeRiotAccount.server],
       { queue: 450 }
