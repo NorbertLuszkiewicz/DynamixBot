@@ -63,6 +63,29 @@ const songPlayingNow = async (streamer) => {
   }
 };
 
+const setSongAsPlay = async (streamer) => {
+  try {
+    const [user] = await getUser(streamer);
+    const { clientSongRequestID, clientSongRequestSecret } = user;
+
+    const { data } = await axios.post(
+      `${url}songrequest/${clientSongRequestID}/player/play`,
+      {
+        headers: {
+          Authorization: `Bearer ${clientSongRequestSecret}`,
+          'Content-Type': 'application/json'
+        },
+      }
+    );
+
+    return data;
+  } catch ({ response }) {
+    console.log(
+      `Error while setSongAsPlay (${response.status} ${response.statusText})`
+    );
+  }
+};
+
 const timeRequest = async (streamer, action) => {
   try {
     let playing = await getSpotifyAreaData(streamer, "playing");
@@ -190,4 +213,5 @@ module.exports = {
   timeRequest,
   setTimeoutVolume,
   removeBlockedSong,
+  setSongAsPlay
 };

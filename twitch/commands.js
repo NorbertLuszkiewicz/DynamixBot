@@ -8,7 +8,7 @@ const {
   getRank,
 } = require("../riot/riot.js");
 const { currentlyPlaying, nextSong, startSong } = require("../spotify");
-const { songPlayingNow, timeRequest } = require("../streamElements");
+const { songPlayingNow, timeRequest, setSongAsPlay } = require("../streamElements");
 const { getChessUser, getLastGame } = require("../chess");
 const { allWord, literalnieWord } = require("../literalnie");
 const {
@@ -494,6 +494,9 @@ const commands = () =>
 
       if (command === "start" && user === "DynaM1X1") {
         startSong(extra.channel);
+      }
+      if (command === "srplay" && user === "DynaM1X1") {
+        setSongAsPlay(extra.channel);
       }
 
       if (
