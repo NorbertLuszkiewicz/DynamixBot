@@ -33,7 +33,7 @@ const commands = () =>
             extra.channel
           );
 
-          if (isPlayingNow) {
+          if (isPlayingNow || (extra.channel = "overpow")) {
             ComfyJS.Say(
               `@${user} ${title} ${
                 userAdded && " | dodał/a " + userAdded + " "
