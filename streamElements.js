@@ -73,7 +73,7 @@ const setSongAsPlay = async (streamer) => {
       {
         headers: {
           Authorization: `Bearer ${clientSongRequestSecret}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/x-www-form-urlencoded'
         },
       }
     );
