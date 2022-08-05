@@ -87,12 +87,11 @@ const setSongAsPlay = async (streamer) => {
 
 const getHistorySR = async (clientSongRequestID, clientSongRequestSecret, limit = 100, offset = 0) => {
   try {
-    const { data } = await axios.post(
+    const { data } = await axios.get(
       `${url}songrequest/${clientSongRequestID}/history?limit=${limit}&offset=${offset}`,
       {
         headers: {
           Authorization: `Bearer ${clientSongRequestSecret}`,
-          'Content-Type': 'application/x-www-form-urlencoded'
         },
       }
     );
@@ -208,7 +207,6 @@ const removeBlockedSong = async (streamer) => {
     if (queue.length > 0) {
       queue.forEach( async(song) => {
         const isBlocked = await isBlockedVideo(null, streamer, song.videoId);
-        console.log(isBlocked);
         if (!isBlocked.isVideo || isBlocked.isBlocked) {
           removeSong(song._id);
         }
@@ -229,11 +227,14 @@ const removeBlockedSong = async (streamer) => {
       const historyList = [];
       const fistPage = await getHistorySR(clientSongRequestID, clientSongRequestSecret, 100, 0)
       const secondPage = await getHistorySR(clientSongRequestID, clientSongRequestSecret, 100, 100)
-      fistPage.forEach( x => historyList.push(x.videoId))
+      fistPage.forEach( x => {historyList.push(x.videoId); console.log(x)})
       secondPage.forEach( x =>  historyList.push(x.videoId))
-
+        console.log(historyList, "aaaasss")
       queue.forEach( async(song) => {
+
+        
         if (historyList.find(x => x === song.videoId)){
+          console.log(song._id, "aaaasss")
           removeSong(song._id)
         }
       });
