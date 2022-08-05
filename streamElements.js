@@ -85,6 +85,7 @@ const setSongAsPlay = async (streamer) => {
   }
 };
 
+
 const timeRequest = async (streamer, action) => {
   try {
     let playing = await getSpotifyAreaData(streamer, "playing");
