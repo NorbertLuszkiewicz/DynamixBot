@@ -85,11 +85,8 @@ const setSongAsPlay = async (streamer) => {
   }
 };
 
-const getHistorySR = async (streamer, limit = 100, offset = 0) => {
+const getHistorySR = async (clientSongRequestID, clientSongRequestSecret, limit = 100, offset = 0) => {
   try {
-    const [user] = await getUser(streamer);
-    const { clientSongRequestID, clientSongRequestSecret } = user;
-
     const { data } = await axios.post(
       `${url}songrequest/${clientSongRequestID}/history?limit=${limit}&offset=${offset}`,
       {
@@ -230,8 +227,8 @@ const removeBlockedSong = async (streamer) => {
 
     if (streamer.toLowerCase() === "dynam1x1") {
       const historyList = [];
-      const fistPage = await getHistorySR(streamer, 100, 0)
-      const secondPage = await getHistorySR(streamer, 100, 100)
+      const fistPage = await getHistorySR(clientSongRequestID, clientSongRequestSecret, 100, 0)
+      const secondPage = await getHistorySR(clientSongRequestID, clientSongRequestSecret, 100, 100)
       fistPage.forEach( x => historyList.push(x.videoId))
       secondPage.forEach( x =>  historyList.push(x.videoId))
 
