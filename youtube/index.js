@@ -16,11 +16,8 @@ const isBlockedVideo = async (url, streamer, urlId) => {
     let isBlocked = false;
 
     if (
-      data.items[0] &&
-      data.items[0].contentDetails &&
-      data.items[0].contentDetails.regionRestriction &&
-      data.items[0].contentDetails.regionRestriction.blocked &&
-      data.items[0].contentDetails.regionRestriction.blocked.includes("PL")
+      data?.items[0]?.contentDetails?.regionRestriction?.blocked?.includes("PL") ||
+      data?.items[0]?.contentDetails?.contentRating?.ytRating ===  'ytAgeRestricted'
     ) {
       isBlocked = true;
     }
