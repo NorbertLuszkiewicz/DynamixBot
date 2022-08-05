@@ -68,7 +68,7 @@ const setSongAsPlay = async (streamer) => {
     const [user] = await getUser(streamer);
     const { clientSongRequestID, clientSongRequestSecret } = user;
 
-    const { data } = await axios.post(
+     await axios.post(
       `${url}songrequest/${clientSongRequestID}/player/play`,
       {
         headers: {
@@ -78,7 +78,6 @@ const setSongAsPlay = async (streamer) => {
       }
     );
 
-    return data;
   } catch ({ response }) {
     console.log(
       `Error while setSongAsPlay (${response.status} ${response.statusText})`
