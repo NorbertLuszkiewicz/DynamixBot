@@ -85,6 +85,27 @@ const setSongAsPlay = async (streamer) => {
   }
 };
 
+const getHistorySR = async (streamer, limit = 100, offset = 0) => {
+  try {
+    const [user] = await getUser(streamer);
+    const { clientSongRequestID, clientSongRequestSecret } = user;
+
+    const { data } = await axios.post(
+      `${url}songrequest/${clientSongRequestID}/history?limit=${limit}&offset=${offset}`,
+      {
+        headers: {
+          Authorization: `Bearer ${clientSongRequestSecret}`,
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+      }
+    );
+      return data?.history
+  } catch ({ response }) {
+    console.log(
+      `Error while getHistorySR (${response.status} ${response.statusText})`
+    );
+  }
+};
 
 const timeRequest = async (streamer, action) => {
   try {
@@ -203,6 +224,24 @@ const removeBlockedSong = async (streamer) => {
         removeSong(playing._id);
       }
     }
+    
+    
+    //for overpow for now changed global in the future
+
+    if (streamer.toLowerCase() === "dynam1x1") {
+      const historyList = [];
+      const fistPage = await getHistorySR(streamer, 100, 0)
+      const secondPage = await getHistorySR(streamer, 100, 100)
+      fistPage.forEach( x => historyList.push(x.videoId))
+      secondPage.forEach( x =>  historyList.push(x.videoId))
+
+      queue.forEach( async(song) => {
+        if (historyList.find(x => x === song.videoId)){
+          removeSong(song._id)
+        }
+      });
+    }
+    
   } catch (err) {
     console.log(`Error while checking what song playing now ${err}`);
   }
