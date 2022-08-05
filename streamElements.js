@@ -223,18 +223,16 @@ const removeBlockedSong = async (streamer) => {
     
     //for overpow for now changed global in the future
 
-    if (streamer.toLowerCase() === "dynam1x1") {
+    if (streamer.toLowerCase() === "overpow") {
       const historyList = [];
       const fistPage = await getHistorySR(clientSongRequestID, clientSongRequestSecret, 100, 0)
       const secondPage = await getHistorySR(clientSongRequestID, clientSongRequestSecret, 100, 100)
-      fistPage.forEach( x => {historyList.push(x.videoId); console.log(x)})
-      secondPage.forEach( x =>  historyList.push(x.videoId))
-        console.log(historyList, "aaaasss")
+      
+      fistPage.forEach( x => historyList.push(x.song.videoId))
+      secondPage.forEach( x =>  historyList.push(x.song.videoId))
+      
       queue.forEach( async(song) => {
-
-        
         if (historyList.find(x => x === song.videoId)){
-          console.log(song._id, "aaaasss")
           removeSong(song._id)
         }
       });
