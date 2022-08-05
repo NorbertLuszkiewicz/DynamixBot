@@ -223,20 +223,20 @@ const removeBlockedSong = async (streamer) => {
     
     //for overpow for now changed global in the future
 
-    if (streamer.toLowerCase() === "overpow") {
-      const historyList = [];
-      const fistPage = await getHistorySR(clientSongRequestID, clientSongRequestSecret, 100, 0)
-      const secondPage = await getHistorySR(clientSongRequestID, clientSongRequestSecret, 100, 100)
+//     if (streamer.toLowerCase() === "overpow") {
+//       const historyList = [];
+//       const fistPage = await getHistorySR(clientSongRequestID, clientSongRequestSecret, 100, 0)
+//       const secondPage = await getHistorySR(clientSongRequestID, clientSongRequestSecret, 100, 100)
       
-      fistPage.forEach( x => historyList.push(x.song.videoId))
-      secondPage.forEach( x =>  historyList.push(x.song.videoId))
+//       fistPage.forEach( x => historyList.push(x.song.videoId))
+//       secondPage.forEach( x =>  historyList.push(x.song.videoId))
       
-      queue.forEach( async(song) => {
-        if (historyList.find(x => x === song.videoId)){
-          removeSong(song._id)
-        }
-      });
-    }
+//       queue.forEach( async(song) => {
+//         if (historyList.find(x => x === song.videoId)){
+//           removeSong(song._id)
+//         }
+//       });
+//     }
     
   } catch (err) {
     console.log(`Error while checking what song playing now ${err}`);
