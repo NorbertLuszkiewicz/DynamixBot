@@ -265,7 +265,7 @@ const messages = () => {
         const removedSongList = await removeBlockedSong(extra.channel);
 
         console.log(removedSongList, "bbbb")
-        if (removedSongList.lenght > 0) {
+        if (removedSongList.length > 0) {
           removedSongList.forEach((x) => {
             ComfyJS.Say(`@${x.user} ${x.title} | ${x.reason}`, extra.channel);
           });
