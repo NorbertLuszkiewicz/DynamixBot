@@ -231,16 +231,15 @@ const messages = () => {
         let slitsIDChanged = slotsID.map((item) => {
           if (item.id === reward.id) {
             item.times += 1;
-            if(isWin){
-              item.wins += 1
-              if(item.lastWinners){
-                item.lastWinners.push(user)
-                item.lastWinners.length > 3 && item.lastWinners.splice(0, 1)
-              }else{
-                item.lastWinners = [user]
+            if (isWin) {
+              item.wins += 1;
+              if (item.lastWinners) {
+                item.lastWinners.push(user);
+                item.lastWinners.length > 3 && item.lastWinners.splice(0, 1);
+              } else {
+                item.lastWinners = [user];
               }
-            };
-            
+            }
           }
 
           return item;
@@ -261,7 +260,16 @@ const messages = () => {
           pauseSong(extra.channel);
         }
         await timeRequest(extra.channel, "add");
-        removeBlockedSong(extra.channel);
+        //removeBlockedSong(extra.channel);
+
+        const removedSongList = await removeBlockedSong(extra.channel);
+
+        console.log(removedSongList, "bbbb")
+        if (removedSongList.lenght > 0) {
+          removedSongList.forEach((x) => {
+            ComfyJS.Say(`@${x.user} ${x.title} | ${x.reason}`, extra.channel);
+          });
+        }
       }
 
       if (flags.customReward && extra.customRewardId === skipSongID) {

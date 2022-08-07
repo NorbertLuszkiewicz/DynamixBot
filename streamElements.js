@@ -194,7 +194,7 @@ const timeRequest = async (streamer, action) => {
 
 const removeBlockedSong = async (streamer) => {
   try {
-    const removedSongList = []
+    const removedSongList = [];
     const [user] = await getUser(streamer);
     const { clientSongRequestID, clientSongRequestSecret } = user;
     const queue = await getSpotifyAreaData(streamer, "queue");
@@ -211,7 +211,11 @@ const removeBlockedSong = async (streamer) => {
         const isBlocked = await isBlockedVideo(null, streamer, song.videoId);
         if (!isBlocked.isVideo || isBlocked.isBlocked) {
           removeSong(song._id);
-          removedSongList.push({user: song.user.username, title: song.title, reason: "ta piosenka jest zablokowana przez yt"})
+          removedSongList.push({
+            user: song.user.username,
+            title: song.title,
+            reason: "usunięto z kolejki: ta piosenka jest zablokowana przez yt",
+          });
         }
       });
     }
@@ -220,7 +224,11 @@ const removeBlockedSong = async (streamer) => {
       const isBlocked = await isBlockedVideo(null, streamer, playing.videoId);
       if (!isBlocked.isVideo || isBlocked.isBlocked) {
         removeSong(playing._id);
-        removedSongList.push({user: playing.user.username, title: playing.title, reason: "ta piosenka jest zablokowana przez yt"})
+        removedSongList.push({
+          user: playing.user.username,
+          title: playing.title,
+          reason: "usunięto z kolejki: ta piosenka jest zablokowana przez yt",
+        });
       }
     }
 
@@ -246,23 +254,32 @@ const removeBlockedSong = async (streamer) => {
 
       queue.slice(-3).forEach(async (song) => {
         if (song.source !== "tip") {
-
           if (historyList.find((x) => x === song.videoId)) {
             removeSong(song._id);
-            removedSongList.push({user: song.user.username, title: song.title, reason: "usunięto z kolejki: "})
+            removedSongList.push({
+              user: song.user.username,
+              title: song.title,
+              reason: "usunięto z kolejki: ten utwór był niedawno puszczany",
+            });
           }
-          
+
           if (queue.length > 4) {
             const queueVideoIdList = queue.slice(0, -3).map((x) => x.videoId);
-            console.log(queue, queueVideoIdList, queue.slice(-3));
             if (queueVideoIdList.find((x) => x === song.videoId)) {
               removeSong(song._id);
-              removedSongList.push({user: song.user.username, title: song.title, reason: "usunięto z kolejki: ten utwór jest już w kolejce"})
+              removedSongList.push({
+                user: song.user.username,
+                title: song.title,
+                reason: "usunięto z kolejki: ten utwór jest już w kolejce",
+              });
             }
           }
         }
       });
     }
+    console.log(removedSongList,"aaa")
+    
+    return removedSongList;
   } catch (err) {
     console.log(`Error while checking what song playing now ${err}`);
   }
