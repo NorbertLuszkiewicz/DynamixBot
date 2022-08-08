@@ -131,10 +131,10 @@ const getHoroscope = async (sign) => {
 
 const changeBadWords = (message) => {
   message.toLowerCase()
-    .replace("nigger", "psa")
-    .replace("kota", "psa")
-    .replace("kota", "psa")
-    .replace("kota", "psa")
+    .replace(/nigger/g, "ni**er")
+    .replace("niga", "n**a")
+    .replace("czarnuch", "cz***uch")
+    .replace("cwel", "c++l")
     .replace("kota", "psa")
     .replace("kota", "psa")
     .replace("kota", "psa")
