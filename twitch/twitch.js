@@ -53,31 +53,31 @@ const refreshTwitchTokens = async () => {
     const streamers = await getAllUser();
 
     streamers.forEach(async (streamer) => {
-      try{
-           if (streamer.twitchAccessToken) {
-        const [refreshToken] = await getUser(streamer.streamer);
+      try {
+        if (streamer.twitchAccessToken) {
+          const [refreshToken] = await getUser(streamer.streamer);
 
-        const body = `grant_type=refresh_token&refresh_token=${encodeURIComponent(
-          refreshToken.twitchRefreshToken
-        )}&client_id=${process.env.BOT_CLIENT_ID}&client_secret=${
-          process.env.BOT_CLIENT_SECRET
-        }`;
-      
+          const body = `grant_type=refresh_token&refresh_token=${encodeURIComponent(
+            refreshToken.twitchRefreshToken
+          )}&client_id=${process.env.BOT_CLIENT_ID}&client_secret=${
+            process.env.BOT_CLIENT_SECRET
+          }`;
 
-        const { data } = await axios.post(`${TOKEN}`, body, {
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-        });
+          const { data } = await axios.post(`${TOKEN}`, body, {
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+          });
 
-        await updateUser({
-          streamer: streamer.streamer,
-          twitchAccessToken: data.access_token,
-          twitchRefreshToken: data.refresh_token,
-        });
+          await updateUser({
+            streamer: streamer.streamer,
+            twitchAccessToken: data.access_token,
+            twitchRefreshToken: data.refresh_token,
+          });
+        }
+      } catch (err) {
+        console.log(err);
       }
-      }catch(err){console.log(err)}
-   
     });
 
     console.log("reset twitch token");
@@ -127,6 +127,29 @@ const getHoroscope = async (sign) => {
   } catch (err) {
     console.log(`Error while getting horoscope ${err}`);
   }
+};
+
+const changeBadWords = (message) => {
+  message.toLowerCase()
+    .replace("nigger", "psa")
+    .replace("kota", "psa")
+    .replace("kota", "psa")
+    .replace("kota", "psa")
+    .replace("kota", "psa")
+    .replace("kota", "psa")
+    .replace("kota", "psa")
+    .replace("kota", "psa")
+    .replace("kota", "psa")
+    .replace("kota", "psa")
+    .replace("kota", "psa")
+    .replace("kota", "psa")
+    .replace("kota", "psa")
+    .replace("kota", "psa")
+    .replace("kota", "psa")
+    .replace("kota", "psa")
+    .replace("kota", "psa")
+    .replace("kota", "psa")
+    .replace("kota", "psa");
 };
 
 module.exports = {
