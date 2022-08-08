@@ -252,7 +252,7 @@ const removeBlockedSong = async (streamer) => {
       fistPage.forEach((x) => historyList.push(x.song.videoId));
       secondPage.forEach((x) => historyList.push(x.song.videoId));
 
-      queue.slice(-2).forEach(async (song) => {
+      queue.forEach(async (song) => {
         if (song.source !== "tip") {
           if (historyList.find((x) => x === song.videoId)) {
             removeSong(song._id);
@@ -263,8 +263,8 @@ const removeBlockedSong = async (streamer) => {
             });
           }
 
-          if (queue.length > 3) {
-            const queueVideoIdList = queue.slice(0, -2).map((x) => x.videoId);
+          if (queue.length > 2) {
+            const queueVideoIdList = queue.slice(0, -3).map((x) => x.videoId);
             if (queueVideoIdList.find((x) => x === song.videoId)) {
               removeSong(song._id);
               removedSongList.push({
@@ -277,7 +277,6 @@ const removeBlockedSong = async (streamer) => {
         }
       });
     }
-    console.log(removedSongList,"aaa")
     
     return removedSongList;
   } catch (err) {
