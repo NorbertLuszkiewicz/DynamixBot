@@ -130,26 +130,15 @@ const getHoroscope = async (sign) => {
 };
 
 const changeBadWords = (message) => {
-  message.toLowerCase()
+  const correctMessage = message
+    .toLowerCase()
     .replace(/nigger/g, "ni**er")
     .replace("niga", "n**a")
+    .replace("nigga", "n***a")
     .replace("czarnuch", "cz***uch")
-    .replace("cwel", "c++l")
-    .replace("kota", "psa")
-    .replace("kota", "psa")
-    .replace("kota", "psa")
-    .replace("kota", "psa")
-    .replace("kota", "psa")
-    .replace("kota", "psa")
-    .replace("kota", "psa")
-    .replace("kota", "psa")
-    .replace("kota", "psa")
-    .replace("kota", "psa")
-    .replace("kota", "psa")
-    .replace("kota", "psa")
-    .replace("kota", "psa")
-    .replace("kota", "psa")
-    .replace("kota", "psa");
+    .replace("cwel", "c++l");
+
+  return correctMessage == message.toLowerCase() ? message : correctMessage;
 };
 
 module.exports = {
@@ -157,4 +146,5 @@ module.exports = {
   refreshTwitchTokens,
   getWeather,
   getHoroscope,
+  changeBadWords
 };

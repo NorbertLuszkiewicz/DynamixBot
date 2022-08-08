@@ -1,5 +1,5 @@
 const ComfyJS = require("comfy.js");
-const { getWeather, getHoroscope } = require("./twitch");
+const { getWeather, getHoroscope, changeBadWords } = require("./twitch");
 const {
   tftMatchList,
   getLolMatchStats,
@@ -154,7 +154,7 @@ const commands = () =>
             NickNameAndServer[1] && NickNameAndServer[1].toUpperCase()
           );
 
-          ComfyJS.Say(stats, extra.channel);
+          ComfyJS.Say(changeBadWords(stats), extra.channel);
         } catch (err) {
           console.log(`Error when use !staty on twitch (${err})`);
         }
@@ -167,7 +167,7 @@ const commands = () =>
         try {
           const stats = await getRank(extra.channel, message.toUpperCase());
 
-          ComfyJS.Say(stats, extra.channel);
+          ComfyJS.Say(changeBadWords(stats), extra.channel);
         } catch (err) {
           console.log(`Error when use !top on twitch (${err})`);
         }
@@ -212,7 +212,7 @@ const commands = () =>
               ? ComfyJS.Say(
                   `@${user} Jest ${Math.round(
                     temp - 273
-                  )} °C, ${description} ${emote} wiatr wieje z prędkością ${speed} km/h (${message})`,
+                  )} °C, ${description} ${emote} wiatr wieje z prędkością ${speed} km/h (${changeBadWords(message)})`,
                   extra.channel
                 )
               : ComfyJS.Say(`@${user} Nie znaleziono`, extra.channel);
@@ -268,7 +268,7 @@ const commands = () =>
 
         console.log(slots);
 
-        ComfyJS.Say(result, extra.channel);
+        ComfyJS.Say(changeBadWords(result), extra.channel);
       }
 
       if (command === "slots" && commandSwitch.slots) {
@@ -379,7 +379,7 @@ const commands = () =>
        }`;
 
         const seySlots = () => {
-          ComfyJS.Say(`${result}`, extra.channel);
+          ComfyJS.Say(`${changeBadWords(result)}`, extra.channel);
 
           if (
             usersWordle[user + extra.channel].messages.length === 5 ||
@@ -443,7 +443,7 @@ const commands = () =>
         try {
           const playerInfo = await getChessUser(message, extra.channel);
 
-          ComfyJS.Say(`@${user} ${playerInfo}`, extra.channel);
+          ComfyJS.Say(`@${changeBadWords(user)} ${changeBadWords(playerInfo)}`, extra.channel);
         } catch (err) {
           console.log(`Error when use !user on twitch (${err})`);
         }
@@ -452,7 +452,7 @@ const commands = () =>
         try {
           const gameInfo = await getLastGame(message, extra.channel);
 
-          ComfyJS.Say(`@${user} ${gameInfo}`, extra.channel);
+          ComfyJS.Say(`@${changeBadWords(user)} ${changeBadWords(gameInfo)}`, extra.channel);
         } catch (err) {
           console.log(`Error when use !user on twitch (${err})`);
         }
@@ -515,7 +515,7 @@ const commands = () =>
         ) {
           newComandSwitch.weather = isOn;
           ComfyJS.Say(
-            `${onOffMessage} komendy pogoda i horoskop`,
+            `${changeBadWords(onOffMessage)} komendy pogoda i horoskop`,
             extra.channel
           );
         }

@@ -19,6 +19,10 @@ const {
   removeBlockedSong,
 } = require("../streamElements");
 
+const {
+changeBadWords
+} = require("./twitch");
+
 const ComfyJS = require("comfy.js");
 
 let timeCooldownTravis = 0;
@@ -120,7 +124,7 @@ const messages = () => {
       }
 
       if (flags.customReward && extra.customRewardId === addSongID) {
-        ComfyJS.Say("!sr " + message, extra.channel);
+        ComfyJS.Say("!sr " + changeBadWords(message), extra.channel);
       }
 
       if (flags.customReward && extra.customRewardId === rollID) {
@@ -258,16 +262,13 @@ const messages = () => {
       ) {
         if (extra.channel !== "overpow") {
           pauseSong(extra.channel);
-        }
-        await timeRequest(extra.channel, "add");
-        //removeBlockedSong(extra.channel);
+        };
 
         const removedSongList = await removeBlockedSong(extra.channel);
 
-        console.log(removedSongList, "bbbb")
         if (removedSongList.length > 0) {
           removedSongList.forEach((x) => {
-            ComfyJS.Say(`@${x.user} ${x.title} | ${x.reason}`, extra.channel);
+            ComfyJS.Say(`@${changeBadWords(x.user)} ${ changeBadWords(x.title)} | ${x.reason}`, extra.channel);
           });
         }
       }
