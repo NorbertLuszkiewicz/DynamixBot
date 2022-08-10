@@ -234,49 +234,49 @@ const removeBlockedSong = async (streamer) => {
 
     //for overpow for now changed global in the future
 
-//     if (streamer.toLowerCase() === "overpow" || streamer.toLowerCase() === "dynam1x1") {
-//       const historyList = [];
-//       const fistPage = await getHistorySR(
-//         clientSongRequestID,
-//         clientSongRequestSecret,
-//         100,
-//         0
-//       );
-//       const secondPage = await getHistorySR(
-//         clientSongRequestID,
-//         clientSongRequestSecret,
-//         100,
-//         100
-//       );
+    if (streamer.toLowerCase() === "overpow" || streamer.toLowerCase() === "dynam1x1") {
+      const historyList = [];
+      const fistPage = await getHistorySR(
+        clientSongRequestID,
+        clientSongRequestSecret,
+        100,
+        0
+      );
+      const secondPage = await getHistorySR(
+        clientSongRequestID,
+        clientSongRequestSecret,
+        100,
+        100
+      );
 
-//       fistPage.forEach((x) => historyList.push(x.song.videoId));
-//       secondPage.forEach((x) => historyList.push(x.song.videoId));
+      fistPage.forEach((x) => historyList.push(x.song.videoId));
+      secondPage.forEach((x) => historyList.push(x.song.videoId));
 
-//       queue.forEach(async (song) => {
-//         if (song.source !== "tip") {
-//           if (historyList.find((x) => x === song.videoId)) {
-//             removeSong(song._id);
-//             removedSongList.push({
-//               user: song.user.username,
-//               title: song.title,
-//               reason: "usunięto z kolejki: ten utwór był niedawno puszczany",
-//             });
-//           }
+      queue.slice(-2).forEach(async (song) => {
+        if (song.source !== "tip") {
+          if (historyList.find((x) => x === song.videoId)) {
+            removeSong(song._id);
+            removedSongList.push({
+              user: song.user.username,
+              title: song.title,
+              reason: "usunięto z kolejki: ten utwór był niedawno puszczany",
+            });
+          }
 
-//           if (queue.length > 2) {
-//             const queueVideoIdList = queue.slice(0, -2).map((x) => x.videoId);
-//             if (queueVideoIdList.find((x) => x === song.videoId)) {
-//               removeSong(song._id);
-//               removedSongList.push({
-//                 user: song.user.username,
-//                 title: song.title,
-//                 reason: "usunięto z kolejki: ten utwór jest już w kolejce",
-//               });
-//             }
-//           }
-//         }
-//       });
-//     }
+          if (queue.length > 2) {
+            const queueVideoIdList = queue.slice(0, -2).map((x) => x.videoId);
+            if (queueVideoIdList.find((x) => x === song.videoId)) {
+              removeSong(song._id);
+              removedSongList.push({
+                user: song.user.username,
+                title: song.title,
+                reason: "usunięto z kolejki: ten utwór jest już w kolejce",
+              });
+            }
+          }
+        }
+      });
+    }
     
     return removedSongList;
   } catch (err) {
