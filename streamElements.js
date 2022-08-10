@@ -264,7 +264,7 @@ const removeBlockedSong = async (streamer) => {
 //           }
 
 //           if (queue.length > 2) {
-//             const queueVideoIdList = queue.slice(0, -3).map((x) => x.videoId);
+//             const queueVideoIdList = queue.slice(0, -2).map((x) => x.videoId);
 //             if (queueVideoIdList.find((x) => x === song.videoId)) {
 //               removeSong(song._id);
 //               removedSongList.push({
