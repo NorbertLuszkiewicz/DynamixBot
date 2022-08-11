@@ -496,7 +496,10 @@ const commands = () =>
         startSong(extra.channel);
       }
       if (command === "srplay" && user === "DynaM1X1") {
-        setSongAsPlay(extra.channel);
+        setSongAsPlay(extra.channel, "play");
+      } 
+      if (command === "srstop" && user === "DynaM1X1") {
+        setSongAsPlay(extra.channel, "pause");
       }
 
       if (
