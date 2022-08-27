@@ -30,7 +30,7 @@ const getLolMatchStats = async (streamer, nickname, server) => {
       matchList = await apiLol.MatchV5.list(
       response.puuid,
       server ? region[serverNameToServerId[server]] : "EUROPE",
-      { queue: 450 }
+      { count: 10 }
     );
 //   if (nickname) {
 //     const { response } = await apiLol.Summoner.getByName(
@@ -64,7 +64,7 @@ const getLolMatchStats = async (streamer, nickname, server) => {
 //     }
 //   });
   
-  console.log("asdddd",response, "asdadsdd")
+  console.log("asdddd",matchList, "asdadsdd")
 
 //   if (todayMatchList.length > 0) {
 //     let matchListTwitch = `dzisiejsze gierki: `;
