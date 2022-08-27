@@ -7,13 +7,13 @@ const {
 
 const api = new TftApi();
 const apiLol = new LolApi({
-  key: process.env.RIOT_API_KEY_LOL
+  key: process.env.RIOT_API_KEY_LOL,
 });
 
-const region = { 
+const region = {
   EUW1: "EUROPE",
   EUN1: "EUROPE",
-  NA1: "AMERICAS", 
+  NA1: "AMERICAS",
   KR: "ASIA",
 };
 
@@ -21,74 +21,65 @@ const getLolMatchStats = async (streamer, nickname, server) => {
   const [data] = await getUser(streamer);
   let matchList = "";
   let puuid = "";
-  
-      const { response } = await apiLol.Summoner.getByName(
+
+  if (nickname) {
+    const { response } = await apiLol.Summoner.getByName(
       nickname,
       server ? serverNameToServerId[server] : "EUW1"
     );
 
-      matchList = await apiLol.MatchV5.list(
+    const matchIdList = await apiLol.MatchV5.list(
       response.puuid,
       server ? region[serverNameToServerId[server]] : "EUROPE",
       { count: 10 }
     );
-//   if (nickname) {
-//     const { response } = await apiLol.Summoner.getByName(
-//       nickname,
-//       server ? serverNameToServerId[server] : "EUW1"
-//     );
+    matchList = matchIdList.response;
+    puuid = response.puuid;
+  } else {
+    const matchIdList = await apiLol.MatchV5.list(
+      data.activeRiotAccount.puuid,
+      region[data.activeRiotAccount.server],
+      { count: 10 }
+    );
+    matchList = matchIdList.response;
+    puuid = data.activeRiotAccount.puuid;
+  }
+  const match = (await api.MatchV5.get(matchList[0], server ? region[serverNameToServerId[server]] : "EUROPE")).response
+  // const now = new Date();
+  // const today = Date.parse(
+  //   `${now.getMonth() + 1}, ${now.getDate()}, ${now.getFullYear()} UTC`
+  // );
+  // const todayMatchList = matchList.filter((match) => {
+  //   if (match.info.game_datetime > today) {
+  //     return match;
+  //   }
+  // });
 
-//     matchList = await apiLol.MatchV5.list(
-//       response.puuid,
-//       server ? region[serverNameToServerId[server]] : "EUROPE",
-//       { queue: 450 }
-//     );
-//     puuid = response.puuid;
-//   } else {
-//     console.log(data)
-//     matchList = await apiLol.MatchV5.list(
-//       data.activeRiotAccount.puuid,
-//       region[data.activeRiotAccount.server],
-//       { queue: 450 }
-//     );
-//     puuid = data.activeRiotAccount.puuid;
-//   }
+  console.log("asdddd", matchList, "asdadsdd");
 
-//   const now = new Date();
-//   const today = Date.parse(
-//     `${now.getMonth() + 1}, ${now.getDate()}, ${now.getFullYear()} UTC`
-//   );
-//   const todayMatchList = matchList.filter((match) => {
-//     if (match.info.game_datetime > today) {
-//       return match;
-//     }
-//   });
-  
-  console.log("asdddd",matchList, "asdadsdd")
+  //   if (todayMatchList.length > 0) {
+  //     let matchListTwitch = `dzisiejsze gierki: `;
 
-//   if (todayMatchList.length > 0) {
-//     let matchListTwitch = `dzisiejsze gierki: `;
+  //     todayMatchList.forEach((match, index) => {
+  //       const myBoard = match.info.participants.find((item) => {
+  //         return item.puuid === puuid;
+  //       });
 
-//     todayMatchList.forEach((match, index) => {
-//       const myBoard = match.info.participants.find((item) => {
-//         return item.puuid === puuid;
-//       });
+  //       const traits = myBoard.traits.sort((a, b) => b.num_units - a.num_units);
 
-//       const traits = myBoard.traits.sort((a, b) => b.num_units - a.num_units);
+  //       matchListTwitch =
+  //         matchListTwitch +
+  //         `${index + 1}[Top${myBoard.placement}]${
+  //           traits[0].num_units
+  //         }${traits[0].name.substr(5)}|${
+  //           traits[1].num_units
+  //         }${traits[1].name.substr(5)}|${
+  //           traits[2].num_units
+  //         }${traits[2].name.substr(5)} `;
+  //     });
 
-//       matchListTwitch =
-//         matchListTwitch +
-//         `${index + 1}[Top${myBoard.placement}]${
-//           traits[0].num_units
-//         }${traits[0].name.substr(5)}|${
-//           traits[1].num_units
-//         }${traits[1].name.substr(5)}|${
-//           traits[2].num_units
-//         }${traits[2].name.substr(5)} `;
-//     });
-
-//     return matchListTwitch;
-//   }
+  //     return matchListTwitch;
+  //   }
 
   return `${nickname ? nickname : streamer} nie zagrał dzisiaj żadnej gry`;
 };
@@ -98,7 +89,7 @@ const addTftUser = async (name, server, streamer) => {
 
   const existThisAccount = data.riotAccountList.find(
     (riotAccount) => riotAccount.name == name && riotAccount.server == server
-  ); 
+  );
 
   if (!existThisAccount) {
     const { response } = await api.Summoner.getByName(name, server);
@@ -181,7 +172,6 @@ const tftMatchList = async (streamer, nickname, server) => {
 };
 
 const getMatch = async (number, nickname, server, streamer) => {
-  
   if (!number) {
     return "@${user} komenda !mecze pokazuje liste meczy z dzisiaj (miejsca o raz synergie) !mecz [nr] gdzie [nr] oznacza numer meczu licząc od najnowszego czyli !mecz 1 pokaze ostatnią gre (wyświetla dokładny com z itemami i synergiami)";
   }
@@ -227,12 +217,11 @@ const getMatch = async (number, nickname, server, streamer) => {
     .sort((a, b) => b.items.length - a.items.length);
 
   let message = `[Top${myBoard.placement}] Level: ${myBoard.level} | `;
-  
 
   correctTraits.forEach((trait) => {
     message = message + `${trait.name.substr(5)}*${trait.num_units}, `;
   });
-  
+
   message = message + `| ${augments} `;
 
   message = message + "___________________________________________________";
@@ -272,7 +261,6 @@ const getStats = async (streamer, nickname, server) => {
       server ? serverNameToServerId[server] : "EUW1"
     );
     const userInfo = userData.response[0];
-    
 
     message = `statystyki gracza: ${response.name} | ${userInfo.tier}-${
       userInfo.rank
@@ -282,15 +270,12 @@ const getStats = async (streamer, nickname, server) => {
 
     return message;
   } else {
-
-    
     const userData = await api.League.get(
       data.activeRiotAccount.id,
       data.activeRiotAccount.server
     );
     const userInfo = userData.response[0];
-    
-    
+
     message = `statystyki gracza: ${data.activeRiotAccount.name} | ${
       userInfo.tier
     }-${userInfo.rank} ${userInfo.leaguePoints}LP ${userInfo.wins}wins ${
@@ -390,7 +375,6 @@ const checkActiveRiotAccount = async () => {
         );
       }
     });
-
   } catch ({ response }) {
     console.log(
       `Error while resetting last games in tft (${response.status} ${response.statusText})`
