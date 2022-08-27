@@ -19,8 +19,8 @@ const region = {
 
 const getLolMatchStats = async (streamer, nickname, server) => {
   const [data] = await getUser(streamer);
-  let matchList = "";
-  let matchIdList = "";
+  let matchList = [];
+  let matchIdList = [];
   let puuid = "";
 
   if (nickname) {
@@ -44,8 +44,8 @@ const getLolMatchStats = async (streamer, nickname, server) => {
     
     puuid = data.activeRiotAccount.puuid;
   }
-  matchIdList.forEach(x=> {})
-  
+  matchIdList = matchIdList.maps(x=> {})
+   
   
   const match = (await apiLol.MatchV5.get(matchList[0], server ? region[serverNameToServerId[server]] : "EUROPE")).response
   // const now = new Date();
