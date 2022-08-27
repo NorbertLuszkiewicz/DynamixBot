@@ -21,28 +21,38 @@ const getLolMatchStats = async (streamer, nickname, server) => {
   const [data] = await getUser(streamer);
   let matchList = "";
   let puuid = "";
-
-  if (nickname) {
-    const { response } = await apiLol.Summoner.getByName(
+  
+      const { response } = await apiLol.Summoner.getByName(
       nickname,
       server ? serverNameToServerId[server] : "EUW1"
     );
 
-    matchList = await apiLol.MatchV5.list(
+      matchList = await apiLol.MatchV5.list(
       response.puuid,
       server ? region[serverNameToServerId[server]] : "EUROPE",
       { queue: 450 }
     );
-    puuid = response.puuid;
-  } else {
-    console.log(data)
-    matchList = await apiLol.MatchV5.list(
-      data.activeRiotAccount.puuid,
-      region[data.activeRiotAccount.server],
-      { queue: 450 }
-    );
-    puuid = data.activeRiotAccount.puuid;
-  }
+//   if (nickname) {
+//     const { response } = await apiLol.Summoner.getByName(
+//       nickname,
+//       server ? serverNameToServerId[server] : "EUW1"
+//     );
+
+//     matchList = await apiLol.MatchV5.list(
+//       response.puuid,
+//       server ? region[serverNameToServerId[server]] : "EUROPE",
+//       { queue: 450 }
+//     );
+//     puuid = response.puuid;
+//   } else {
+//     console.log(data)
+//     matchList = await apiLol.MatchV5.list(
+//       data.activeRiotAccount.puuid,
+//       region[data.activeRiotAccount.server],
+//       { queue: 450 }
+//     );
+//     puuid = data.activeRiotAccount.puuid;
+//   }
 
 //   const now = new Date();
 //   const today = Date.parse(
@@ -54,7 +64,7 @@ const getLolMatchStats = async (streamer, nickname, server) => {
 //     }
 //   });
   
-  console.log("asdddd",matchList, "asdadsdd")
+  console.log("asdddd",response, "asdadsdd")
 
 //   if (todayMatchList.length > 0) {
 //     let matchListTwitch = `dzisiejsze gierki: `;
