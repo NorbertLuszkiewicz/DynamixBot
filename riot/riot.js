@@ -20,6 +20,7 @@ const region = {
 const getLolMatchStats = async (streamer, nickname, server) => {
   const [data] = await getUser(streamer);
   let matchList = "";
+  let matchIdList = "";
   let puuid = "";
 
   if (nickname) {
@@ -28,22 +29,24 @@ const getLolMatchStats = async (streamer, nickname, server) => {
       server ? serverNameToServerId[server] : "EUW1"
     );
 
-    const matchIdList = await apiLol.MatchV5.list(
+    matchIdList = (await apiLol.MatchV5.list(
       response.puuid,
       server ? region[serverNameToServerId[server]] : "EUROPE",
       { count: 10 }
-    );
-    matchList = matchIdList.response;
+    )).response;
     puuid = response.puuid;
   } else {
-    const matchIdList = await apiLol.MatchV5.list(
+    matchIdList = (await apiLol.MatchV5.list(
       data.activeRiotAccount.puuid,
       region[data.activeRiotAccount.server],
       { count: 10 }
-    );
-    matchList = matchIdList.response;
+    )).response;
+    
     puuid = data.activeRiotAccount.puuid;
   }
+  matchIdList.forEach(x=> {})
+  
+  
   const match = (await apiLol.MatchV5.get(matchList[0], server ? region[serverNameToServerId[server]] : "EUROPE")).response
   // const now = new Date();
   // const today = Date.parse(
