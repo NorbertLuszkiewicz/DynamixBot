@@ -44,10 +44,10 @@ const getLolMatchStats = async (streamer, nickname, server) => {
     
     puuid = data.activeRiotAccount.puuid;
   }
-  matchList = await matchIdList.map(async x=> (await apiLol.MatchV5.get(x, server ? region[serverNameToServerId[server]] : "EUROPE")).response)
+  matchIdList.forEach(async x=> matchList.push((await apiLol.MatchV5.get(x, server ? region[serverNameToServerId[server]] : "EUROPE")).response) )
    
   
-  const match = (await apiLol.MatchV5.get(matchList[0], server ? region[serverNameToServerId[server]] : "EUROPE")).response
+ // const match = (await apiLol.MatchV5.get(matchList[0], server ? region[serverNameToServerId[server]] : "EUROPE")).response
   // const now = new Date();
   // const today = Date.parse(
   //   `${now.getMonth() + 1}, ${now.getDate()}, ${now.getFullYear()} UTC`
