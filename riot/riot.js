@@ -6,7 +6,9 @@ const {
 } = require("../controllers/UserController.js");
 
 const api = new TftApi();
-const apiLol = new LolApi();
+const apiLol = new LolApi({
+  key: process.env.RIOT_API_KEY_LOL
+});
 
 const region = { 
   EUW1: "EUROPE",
@@ -42,15 +44,15 @@ const getLolMatchStats = async (streamer, nickname, server) => {
     puuid = data.activeRiotAccount.puuid;
   }
 
-  const now = new Date();
-  const today = Date.parse(
-    `${now.getMonth() + 1}, ${now.getDate()}, ${now.getFullYear()} UTC`
-  );
-  const todayMatchList = matchList.filter((match) => {
-    if (match.info.game_datetime > today) {
-      return match;
-    }
-  });
+//   const now = new Date();
+//   const today = Date.parse(
+//     `${now.getMonth() + 1}, ${now.getDate()}, ${now.getFullYear()} UTC`
+//   );
+//   const todayMatchList = matchList.filter((match) => {
+//     if (match.info.game_datetime > today) {
+//       return match;
+//     }
+//   });
   
   console.log("asdddd",matchList, "asdadsdd")
 
