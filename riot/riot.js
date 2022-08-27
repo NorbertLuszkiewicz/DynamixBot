@@ -44,7 +44,7 @@ const getLolMatchStats = async (streamer, nickname, server) => {
     
     puuid = data.activeRiotAccount.puuid;
   }
-  matchList = matchIdList.maps(async x=> (await apiLol.MatchV5.get(x, server ? region[serverNameToServerId[server]] : "EUROPE")).response)
+  matchList = await matchIdList.map(async x=> (await apiLol.MatchV5.get(x, server ? region[serverNameToServerId[server]] : "EUROPE")).response)
    
   
   const match = (await apiLol.MatchV5.get(matchList[0], server ? region[serverNameToServerId[server]] : "EUROPE")).response
@@ -58,7 +58,7 @@ const getLolMatchStats = async (streamer, nickname, server) => {
   //   }
   // });
 
-  console.log("asdddd", match, "asdadsdd");
+  console.log("asdddd", matchList, "asdadsdd");
 
   //   if (todayMatchList.length > 0) {
   //     let matchListTwitch = `dzisiejsze gierki: `;
