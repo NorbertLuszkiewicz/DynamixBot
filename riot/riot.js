@@ -47,41 +47,36 @@ const getLolMatchStats = async (streamer, nickname, server) => {
   matchIdList.forEach(async x=> matchList.push((await apiLol.MatchV5.get(x, server ? region[serverNameToServerId[server]] : "EUROPE"))?.response?.info) )
    
   
-  // const now = new Date();
-  // const today = Date.parse(
-  //   `${now.getMonth() + 1}, ${now.getDate()}, ${now.getFullYear()} UTC`
-  // );
-  // const todayMatchList = matchList.filter((match) => {
-  //   if (match.info.game_datetime > today) {
-  //     return match;
-  //   }
-  // });
+  const now = new Date();
+  const today = Date.parse(
+    `${now.getMonth() + 1}, ${now.getDate()}, ${now.getFullYear()} UTC`
+  );
+  const todayMatchList = matchList.filter((match) => {
+    if (match.gameEndTimestamp > today) {
+      return match;
+    }
+  });
 
-  console.log("asdddd", matchList, "asdadsdd");
+  console.log("asdddd", matchList, "asdadsdd", todayMatchList) ;
+  
+  //   1. [WIN]MID|VEX(12,4,5)-20212dmg|(duo)
 
-  //   if (todayMatchList.length > 0) {
-  //     let matchListTwitch = `dzisiejsze gierki: `;
+    if (todayMatchList.length > 0) {
+      let matchListTwitch = `dzisiejsze gierki: `;
 
-  //     todayMatchList.forEach((match, index) => {
-  //       const myBoard = match.info.participants.find((item) => {
-  //         return item.puuid === puuid;
-  //       });
+      todayMatchList.forEach((match, index) => {
+        const myBoard = match.participants.find((item) => {
+          return item.puuid === puuid;
+        });
 
-  //       const traits = myBoard.traits.sort((a, b) => b.num_units - a.num_units);
+        const isWin = myBoard.win ? "WIN": "LOSE"
+        const position = myBoard.win
 
-  //       matchListTwitch =
-  //         matchListTwitch +
-  //         `${index + 1}[Top${myBoard.placement}]${
-  //           traits[0].num_units
-  //         }${traits[0].name.substr(5)}|${
-  //           traits[1].num_units
-  //         }${traits[1].name.substr(5)}|${
-  //           traits[2].num_units
-  //         }${traits[2].name.substr(5)} `;
-  //     });
 
-  //     return matchListTwitch;
-  //   }
+      });
+
+      return matchListTwitch;
+    }
 
   return `${nickname ? nickname : streamer} nie zagrał dzisiaj żadnej gry`;
 };

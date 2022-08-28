@@ -488,8 +488,8 @@ const commands = () =>
         command === "test" &&
         (flags.mod || flags.broadcaster)
       ) {
-        getLolMatchStats("dynam1x1","remigiusz","EUW")
-        ComfyJS.Say("Bot works!", extra.channel);
+        const respose = getLolMatchStats("dynam1x1","remigiusz","EUW")
+        ComfyJS.Say(respose, extra.channel);
       }
 
       if (command === "start" && user === "DynaM1X1") {
