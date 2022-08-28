@@ -488,7 +488,7 @@ const commands = () =>
         command === "test" &&
         (flags.mod || flags.broadcaster)
       ) {
-        const respose = getLolMatchStats("dynam1x1","remigiusz","EUW")
+        const respose = await getLolMatchStats("dynam1x1","remigiusz","EUW")
         ComfyJS.Say(respose, extra.channel);
       }
 
