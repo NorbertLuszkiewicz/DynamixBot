@@ -58,7 +58,9 @@ const getLolMatchStats = async (streamer, nickname, server) => {
     return (
       await apiLol.MatchV5.get(
         x,
-        server ? region[serverNameToServerId[server]] : region[data.activeRiotAccount?.server]
+        server
+          ? region[serverNameToServerId[server]]
+          : region[data.activeRiotAccount?.server]
       )
     )?.response?.info;
   });
@@ -375,6 +377,7 @@ const checkActiveRiotAccount = async () => {
               { count: 1 }
             );
             let summonerName;
+            let lastMatchLol;
 
             try {
               summonerName = (
@@ -389,16 +392,27 @@ const checkActiveRiotAccount = async () => {
                 })
               ).response;
               if (lastMatchLolId.length > 0) {
-                const lastMatchLol = await apiLol.MatchV5.get(
-                  lastMatchLolId[0],
-                  region[server],
-                );
-                console.log("asdasdasdasdasdasdasd", lastMatchLol, lastMatch);
+                try {
+                  lastMatchLol = (
+                    await apiLol.MatchV5.get(lastMatchLolId[0], region[server])
+                  ).response;
+                } catch (err) {}
               }
             }
+
+            const isLol =
+              lastMatchLol?.info?.gameEndTimestamp >
+              lastMatch[0]?.info?.game_datetime;
+
             if (
               lastMatch[0].info.game_datetime >
-              (streamer.activeRiotAccount ? streamer.activeRiotAccount.date : 0)
+                (streamer.activeRiotAccount
+                  ? streamer.activeRiotAccount.date
+                  : 0) ||
+              lastMatchLol?.info?.gameEndTimestamp >
+                (streamer.activeRiotAccount
+                  ? streamer.activeRiotAccount.date
+                  : 0)
             ) {
               await updateUser({
                 streamer: streamer.streamer,
@@ -407,6 +421,7 @@ const checkActiveRiotAccount = async () => {
                   server,
                   puuid,
                   id,
+                  isLol,
                   date: lastMatch[0].info.game_datetime,
                 },
               });
