@@ -389,11 +389,11 @@ const checkActiveRiotAccount = async () => {
                 })
               ).response;
               if (lastMatchLolId.length > 0) {
-                // const lastMatchLol = await apiLol.MatchV5.get(
-                //   lastMatchLolId[0],
-                //   region[server]
-                // );
-                console.log("asdasdasdasdasdasdasd", lastMatchLolId[0], region[server], lastMatch);
+                const lastMatchLol = await apiLol.MatchV5.get(
+                  lastMatchLolId[0],
+                  region[server],
+                );
+                console.log("asdasdasdasdasdasdasd", lastMatchLol, lastMatch);
               }
             }
             if (
