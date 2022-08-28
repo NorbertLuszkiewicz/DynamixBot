@@ -56,6 +56,7 @@ const getLolMatchStats = async (streamer, nickname, server) => {
   const today = Date.parse(
     `${now.getMonth() + 1}, ${now.getDate()}, ${now.getFullYear()} UTC`
   );
+  console.log(today, "asdasddddd", await matchList[0])
   const todayMatchList = matchList.filter((match) => {
     if (match.gameEndTimestamp > today) {
       return match;
