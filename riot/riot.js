@@ -374,10 +374,10 @@ const checkActiveRiotAccount = async () => {
               region[server],
               { count: 1 }
             );
-            const { response } = await apiLol.Summoner.getByName(
-              name,
-              server ? server : "EUW1"
-            );
+            // const summonerName = await apiLol.Summoner.getByName(
+            //   name,
+            //   server ? server : "EUW1"
+            // );
             // const lastMatchLolId = await apiLol.MatchV5.list(
             //   response.puuid,
             //   region[server],
