@@ -63,7 +63,7 @@ const getLolMatchStats = async (streamer, nickname, server) => {
     )?.response?.info;
   });
 
-  await Promise.all(matchList).then((matchList) => {
+  return Promise.all(matchList).then((matchList) => {
     const now = new Date();
     const today = Date.parse(
       `${now.getMonth() + 1}, ${now.getDate()}, ${now.getFullYear()} UTC`
@@ -94,19 +94,19 @@ const getLolMatchStats = async (streamer, nickname, server) => {
         const championName = myBoard.championName;
         const stats = `(${myBoard.kills},${myBoard.deaths},${myBoard.assists})`;
         const role = myBoard.role == "DUO" ? "duo" : "solo";
-        
-        console.log(stats)
+
+        console.log(stats);
 
         matchListTwitch = `${matchListTwitch} ${
           index + 1
-        }. [${isWin}]${position}|${championName}${stats}-${totalDamageDealtToChampions}dmg|(${role})`;
+        }nr[${isWin}]${position} | ${championName} ${stats} ${totalDamageDealtToChampions}dmg | (${role})`;
       });
-     console.log(matchListTwitch, "gdzc")
+      console.log(matchListTwitch, "gdzc");
       return matchListTwitch;
+    } else {
+      return `${nickname ? nickname : streamer} nie zagrał dzisiaj żadnej gry`;
     }
   });
-
-  return `${nickname ? nickname : streamer} nie zagrał dzisiaj żadnej gry`;
 };
 
 const addTftUser = async (name, server, streamer) => {
@@ -410,6 +410,13 @@ const checkActiveRiotAccount = async () => {
 const serverNameToServerId = {
   EUW: "EUW1",
   EUNE: "EUN1",
+  NA: "NA1",
+  KR: "KR",
+};
+
+const lolPosition = {
+  TOP: "EUW1",
+  JUNGLE: "EUN1",
   NA: "NA1",
   KR: "KR",
 };
