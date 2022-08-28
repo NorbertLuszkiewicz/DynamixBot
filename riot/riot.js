@@ -36,13 +36,18 @@ const getLolMatchStats = async (streamer, nickname, server) => {
     )).response;
     puuid = response.puuid;
   } else {
+    const { response } = await apiLol.Summoner.getByName(
+      data.activeRiotAccount?.name,
+      data.activeRiotAccount?.server ? data.activeRiotAccount.server : "EUW1"
+    );
+    
     matchIdList = (await apiLol.MatchV5.list(
-      data.activeRiotAccount.puuid,
+      response.puuid,
       region[data.activeRiotAccount.server],
       { count: 10 }
     )).response;
     
-    puuid = data.activeRiotAccount.puuid;
+    puuid = response.puuid;
   }
   matchIdList.forEach(async x=> matchList.push((await apiLol.MatchV5.get(x, server ? region[serverNameToServerId[server]] : "EUROPE"))?.response?.info) )
    
