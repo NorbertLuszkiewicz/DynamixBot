@@ -49,14 +49,14 @@ const getLolMatchStats = async (streamer, nickname, server) => {
     
     puuid = response.puuid;
   }
-  matchIdList.forEach(async x=> matchList.push((await apiLol.MatchV5.get(x, server ? region[serverNameToServerId[server]] : "EUROPE"))?.response?.info) )
+  await matchIdList.forEach(async x=> matchList.push((await apiLol.MatchV5.get(x, server ? region[serverNameToServerId[server]] : "EUROPE"))?.response?.info) )
    
   
   const now = new Date();
   const today = Date.parse(
     `${now.getMonth() + 1}, ${now.getDate()}, ${now.getFullYear()} UTC`
   );
-  console.log(today, "asdasddddd", await matchList[0])
+  await console.log(today, "asdasddddd",  matchList[0], matchList.length)
   const todayMatchList = matchList.filter((match) => {
     if (match.gameEndTimestamp > today) {
       return match;
