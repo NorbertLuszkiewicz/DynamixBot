@@ -414,6 +414,7 @@ const checkActiveRiotAccount = async () => {
                   ? streamer.activeRiotAccount.date
                   : 0)
             ) {
+              console.log(isLol, name)
               await updateUser({
                 streamer: streamer.streamer,
                 activeRiotAccount: {

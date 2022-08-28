@@ -88,11 +88,20 @@ const commands = () =>
           const NickNameAndServer = message
             ? message.split(", ")
             : [null, null];
-
-          const matchesList = await tftMatchList(
+          
+          let matchesList
+          if(){}
+          else{
+            matchesList = await tftMatchList(
             extra.channel,
             NickNameAndServer[0],
             NickNameAndServer[1] && NickNameAndServer[1].toUpperCase()
+          }
+          const respose = await getLolMatchStats(            extra.channel,
+            NickNameAndServer[0],
+            NickNameAndServer[1] && NickNameAndServer[1].toUpperCase())
+
+       
           );
 
           ComfyJS.Say(`${matchesList}`, extra.channel);
