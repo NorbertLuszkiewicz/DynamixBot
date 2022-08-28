@@ -414,7 +414,6 @@ const checkActiveRiotAccount = async () => {
                   ? streamer.activeRiotAccount.date
                   : 0)
             ) {
-              console.log(isLol, name)
               await updateUser({
                 streamer: streamer.streamer,
                 activeRiotAccount: {
@@ -423,7 +422,7 @@ const checkActiveRiotAccount = async () => {
                   puuid,
                   id,
                   isLol,
-                  date: lastMatch[0].info.game_datetime,
+                  date: isLol ? lastMatchLol?.info?.gameEndTimestamp : lastMatch[0].info.game_datetime,
                 },
               });
             }
