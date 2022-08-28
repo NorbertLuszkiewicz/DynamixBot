@@ -89,7 +89,7 @@ const getLolMatchStats = async (streamer, nickname, server) => {
         });
 
         const isWin = myBoard.win ? "WIN" : "LOSE";
-        const position = myBoard.teamPosition;
+        const position = lolPosition[myBoard.teamPosition];
         const totalDamageDealtToChampions = myBoard.totalDamageDealtToChampions;
         const championName = myBoard.championName;
         const stats = `(${myBoard.kills},${myBoard.deaths},${myBoard.assists})`;
@@ -99,7 +99,7 @@ const getLolMatchStats = async (streamer, nickname, server) => {
 
         matchListTwitch = `${matchListTwitch} ${
           index + 1
-        }nr[${isWin}]${position} | ${championName} ${stats} ${totalDamageDealtToChampions}dmg | (${role})`;
+        }nr[${isWin}]${position}|${championName}${stats} ${totalDamageDealtToChampions}dmg | (${role})`;
       });
       console.log(matchListTwitch, "gdzc");
       return matchListTwitch;
@@ -415,10 +415,11 @@ const serverNameToServerId = {
 };
 
 const lolPosition = {
-  TOP: "EUW1",
-  JUNGLE: "EUN1",
-  NA: "NA1",
-  KR: "KR",
+  TOP: "TOP",
+  JUNGLE: "JG",
+  MIDDLE: "MID",
+  BOTTOM: "ADC",
+  SUPPORT: "SUP",
 };
 
 const itemIdToName = {
