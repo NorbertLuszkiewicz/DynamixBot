@@ -374,17 +374,20 @@ const checkActiveRiotAccount = async () => {
               region[server],
               { count: 1 }
             );
-            const { response } = await apiLol.Summoner.getByName(name, region[server]);
-            const lastMatchLolId = await apiLol.MatchV5.list(
-              response.puuid,
-              region[server],
-              { count: 1 }
+            const { response } = await apiLol.Summoner.getByName(
+              name,
+              server ? server : "EUW1"
             );
-            const lastMatchLol = await apiLol.MatchV5.get(
-              lastMatchLolId[0],
-              region[serverNameToServerId[server]]
-            );
-            console.log("asdasdasdasdasdasdasd", lastMatchLol, lastMatch);
+            // const lastMatchLolId = await apiLol.MatchV5.list(
+            //   response.puuid,
+            //   region[server],
+            //   { count: 1 }
+            // );
+            // const lastMatchLol = await apiLol.MatchV5.get(
+            //   lastMatchLolId[0],
+            //   region[serverNameToServerId[server]]
+            // );
+            // console.log("asdasdasdasdasdasdasd", lastMatchLol, lastMatch);
 
             if (
               lastMatch[0].info.game_datetime >
