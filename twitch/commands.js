@@ -8,7 +8,11 @@ const {
   getRank,
 } = require("../riot/riot.js");
 const { currentlyPlaying, nextSong, startSong } = require("../spotify");
-const { songPlayingNow, timeRequest, setSongAsPlay } = require("../streamElements");
+const {
+  songPlayingNow,
+  timeRequest,
+  setSongAsPlay,
+} = require("../streamElements");
 const { getChessUser, getLastGame } = require("../chess");
 const { allWord, literalnieWord } = require("../literalnie");
 const {
@@ -88,21 +92,21 @@ const commands = () =>
           const NickNameAndServer = message
             ? message.split(", ")
             : [null, null];
-          
-          let matchesList
-          if(){}
-          else{
-            matchesList = await tftMatchList(
-            extra.channel,
-            NickNameAndServer[0],
-            NickNameAndServer[1] && NickNameAndServer[1].toUpperCase()
-          }
-          const respose = await getLolMatchStats(            extra.channel,
-            NickNameAndServer[0],
-            NickNameAndServer[1] && NickNameAndServer[1].toUpperCase())
 
-       
-          );
+          let matchesList;
+          if (data?.activeRiotAccount?.isLol) {
+            matchesList = await getLolMatchStats(
+              extra.channel,
+              NickNameAndServer[0],
+              NickNameAndServer[1] && NickNameAndServer[1].toUpperCase()
+            );
+          } else {
+            matchesList = await tftMatchList(
+              extra.channel,
+              NickNameAndServer[0],
+              NickNameAndServer[1] && NickNameAndServer[1].toUpperCase()
+            );
+          }
 
           ComfyJS.Say(`${matchesList}`, extra.channel);
         } catch (err) {
@@ -221,7 +225,9 @@ const commands = () =>
               ? ComfyJS.Say(
                   `@${user} Jest ${Math.round(
                     temp - 273
-                  )} °C, ${description} ${emote} wiatr wieje z prędkością ${speed} km/h (${changeBadWords(message)})`,
+                  )} °C, ${description} ${emote} wiatr wieje z prędkością ${speed} km/h (${changeBadWords(
+                    message
+                  )})`,
                   extra.channel
                 )
               : ComfyJS.Say(`@${user} Nie znaleziono`, extra.channel);
@@ -452,7 +458,10 @@ const commands = () =>
         try {
           const playerInfo = await getChessUser(message, extra.channel);
 
-          ComfyJS.Say(`@${changeBadWords(user)} ${changeBadWords(playerInfo)}`, extra.channel);
+          ComfyJS.Say(
+            `@${changeBadWords(user)} ${changeBadWords(playerInfo)}`,
+            extra.channel
+          );
         } catch (err) {
           console.log(`Error when use !user on twitch (${err})`);
         }
@@ -461,7 +470,10 @@ const commands = () =>
         try {
           const gameInfo = await getLastGame(message, extra.channel);
 
-          ComfyJS.Say(`@${changeBadWords(user)} ${changeBadWords(gameInfo)}`, extra.channel);
+          ComfyJS.Say(
+            `@${changeBadWords(user)} ${changeBadWords(gameInfo)}`,
+            extra.channel
+          );
         } catch (err) {
           console.log(`Error when use !user on twitch (${err})`);
         }
@@ -493,11 +505,12 @@ const commands = () =>
       ) {
         ComfyJS.Say("Bot works!", extra.channel);
       }
-      if (
-        command === "test" &&
-        (flags.mod || flags.broadcaster)
-      ) {
-        const respose = await getLolMatchStats("dynam1x1","pilllarmann","EUW")
+      if (command === "test" && (flags.mod || flags.broadcaster)) {
+        const respose = await getLolMatchStats(
+          "dynam1x1",
+          "pilllarmann",
+          "EUW"
+        );
         ComfyJS.Say(respose, extra.channel);
       }
 
@@ -506,7 +519,7 @@ const commands = () =>
       }
       if (command === "srplay" && user === "DynaM1X1") {
         setSongAsPlay(extra.channel, "play");
-      } 
+      }
       if (command === "srstop" && user === "DynaM1X1") {
         setSongAsPlay(extra.channel, "pause");
       }
