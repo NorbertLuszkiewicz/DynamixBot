@@ -49,7 +49,7 @@ const getLolMatchStats = async (streamer, nickname, server) => {
     
     puuid = response.puuid;
   }
-  await matchIdList.forEach(async x=> matchList.push((await apiLol.MatchV5.get(x, server ? region[serverNameToServerId[server]] : "EUROPE"))?.response?.info) )
+  matchIdList.forEach(async x=> matchList.push((await apiLol.MatchV5.get(x, server ? region[serverNameToServerId[server]] : "EUROPE"))?.response?.info) )
    
   
   const now = new Date();
