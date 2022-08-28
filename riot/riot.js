@@ -29,65 +29,82 @@ const getLolMatchStats = async (streamer, nickname, server) => {
       server ? serverNameToServerId[server] : "EUW1"
     );
 
-    matchIdList = (await apiLol.MatchV5.list(
-      response.puuid,
-      server ? region[serverNameToServerId[server]] : "EUROPE",
-      { count: 10 }
-    )).response;
+    matchIdList = (
+      await apiLol.MatchV5.list(
+        response.puuid,
+        server ? region[serverNameToServerId[server]] : "EUROPE",
+        { count: 10 }
+      )
+    ).response;
     puuid = response.puuid;
   } else {
     const { response } = await apiLol.Summoner.getByName(
       data.activeRiotAccount?.name,
       data.activeRiotAccount?.server ? data.activeRiotAccount.server : "EUW1"
     );
-    
-    matchIdList = (await apiLol.MatchV5.list(
-      response.puuid,
-      region[data.activeRiotAccount.server],
-      { count: 10 }
-    )).response;
-    
+
+    matchIdList = (
+      await apiLol.MatchV5.list(
+        response.puuid,
+        region[data.activeRiotAccount.server],
+        { count: 10 }
+      )
+    ).response;
+
     puuid = response.puuid;
   }
   // matchIdList.forEach(async x=> matchList.push((await apiLol.MatchV5.get(x, server ? region[serverNameToServerId[server]] : "EUROPE"))?.response?.info))
-  matchList = matchIdList.map(async x => {return (await apiLol.MatchV5.get(x, server ? region[serverNameToServerId[server]] : "EUROPE"))?.response?.info})
-   
-  
+  matchList = matchIdList.map(async (x) => {
+    return (
+      await apiLol.MatchV5.get(
+        x,
+        server ? region[serverNameToServerId[server]] : "EUROPE"
+      )
+    )?.response?.info;
+  });
+
+  Promise.all(matchList).then((values) => {
+    matchList = values;
+  });
+
   const now = new Date();
   const today = Date.parse(
     `${now.getMonth() + 1}, ${now.getDate()}, ${now.getFullYear()} UTC`
   );
-   console.log(today, "asdasddddd", await matchList[0], matchList.length)
-  const todayMatchList = matchList.filter((match) => {
+  console.log(today, "asdasddddd", await matchList[0], matchList.length);
+  const todayMatchList = await matchList.filter((match) => {
+    console.log(match.gameEndTimestamp, "ddddd");
     if (match.gameEndTimestamp > today) {
       return match;
     }
   });
 
-  console.log("asdddd", matchList, "asdadsdd", todayMatchList) ;
-  
+  console.log("asdddd", matchList, "asdadsdd", todayMatchList);
+
   //   1. [WIN]MID|VEX(12,4,5)-20212dmg|(duo)
 
-    if (todayMatchList.length > 0) {
-      let matchListTwitch = `dzisiejsze gierki: `;
+  if (todayMatchList.length > 0) {
+    let matchListTwitch = `dzisiejsze gierki: `;
 
-      todayMatchList.forEach((match, index) => {
-        const myBoard = match.participants.find((item) => {
-          return item.puuid === puuid;
-        });
-
-        const isWin = myBoard.win ? "WIN": "LOSE"
-        const position = myBoard.teamPosition
-        const totalDamageDealtToChampions = myBoard.totalDamageDealtToChampions
-        const championName = myBoard.championName
-        const stats = `(${myBoard.kills},${myBoard.deaths},${myBoard.assists})`
-        const role = myBoard.role
-
-        matchListTwitch = `${matchListTwitch} ${index+1}. [${isWin}]${position}|${championName}${stats}-${totalDamageDealtToChampions}dmg|(${role})`
+    todayMatchList.forEach((match, index) => {
+      const myBoard = match.participants.find((item) => {
+        return item.puuid === puuid;
       });
 
-      return matchListTwitch;
-    }
+      const isWin = myBoard.win ? "WIN" : "LOSE";
+      const position = myBoard.teamPosition;
+      const totalDamageDealtToChampions = myBoard.totalDamageDealtToChampions;
+      const championName = myBoard.championName;
+      const stats = `(${myBoard.kills},${myBoard.deaths},${myBoard.assists})`;
+      const role = myBoard.role;
+
+      matchListTwitch = `${matchListTwitch} ${
+        index + 1
+      }. [${isWin}]${position}|${championName}${stats}-${totalDamageDealtToChampions}dmg|(${role})`;
+    });
+
+    return matchListTwitch;
+  }
 
   return `${nickname ? nickname : streamer} nie zagrał dzisiaj żadnej gry`;
 };
