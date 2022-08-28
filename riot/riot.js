@@ -86,17 +86,21 @@ const getLolMatchStats = async (streamer, nickname, server) => {
         const myBoard = match.participants.find((item) => {
           return item.puuid === puuid;
         });
+        
+        console.log(myBoard)
 
         const isWin = myBoard.win ? "WIN" : "LOSE";
         const position = lolPosition[myBoard.teamPosition];
         const totalDamageDealtToChampions = myBoard.totalDamageDealtToChampions;
+        }[${isWin}]${position}|${championName}${stats} ${totalDamageDealtToChampions}dmg${teamDamagePercentage} | (${role})`;
+        const teamDamagePercentage = myBoard.teamDamagePercentage ? `(${myBoard.teamDamagePercentage.toFixed(2) %)` : "";
         const championName = myBoard.championName;
         const stats = `(${myBoard.kills},${myBoard.deaths},${myBoard.assists})`;
         const role = myBoard.role == "DUO" ? "duo" : "solo";
 
         matchListTwitch = `${matchListTwitch} ${
           index + 1
-        }[${isWin}]${position}|${championName}${stats} ${totalDamageDealtToChampions}dmg | (${role})`;
+        }[${isWin}]${position}|${championName}${stats} ${totalDamageDealtToChampions}dmg${teamDamagePercentage} | (${role})`;
       });
       return matchListTwitch;
     } else {
