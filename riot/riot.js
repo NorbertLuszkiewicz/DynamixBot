@@ -63,48 +63,48 @@ const getLolMatchStats = async (streamer, nickname, server) => {
     )?.response?.info;
   });
 
-  Promise.all(matchList).then((values) => {
-    matchList = values;
-  });
-
-  const now = new Date();
-  const today = Date.parse(
-    `${now.getMonth() + 1}, ${now.getDate()}, ${now.getFullYear()} UTC`
-  );
-  console.log(today, "asdasddddd", await matchList[0], matchList.length);
-  const todayMatchList = await matchList.filter((match) => {
-    console.log(match.gameEndTimestamp, "ddddd");
-    if (match.gameEndTimestamp > today) {
-      return match;
-    }
-  });
-
-  console.log("asdddd", matchList, "asdadsdd", todayMatchList);
-
-  //   1. [WIN]MID|VEX(12,4,5)-20212dmg|(duo)
-
-  if (todayMatchList.length > 0) {
-    let matchListTwitch = `dzisiejsze gierki: `;
-
-    todayMatchList.forEach((match, index) => {
-      const myBoard = match.participants.find((item) => {
-        return item.puuid === puuid;
-      });
-
-      const isWin = myBoard.win ? "WIN" : "LOSE";
-      const position = myBoard.teamPosition;
-      const totalDamageDealtToChampions = myBoard.totalDamageDealtToChampions;
-      const championName = myBoard.championName;
-      const stats = `(${myBoard.kills},${myBoard.deaths},${myBoard.assists})`;
-      const role = myBoard.role;
-
-      matchListTwitch = `${matchListTwitch} ${
-        index + 1
-      }. [${isWin}]${position}|${championName}${stats}-${totalDamageDealtToChampions}dmg|(${role})`;
+  await Promise.all(matchList).then((matchList) => {
+    const now = new Date();
+    const today = Date.parse(
+      `${now.getMonth() + 1}, ${now.getDate()}, ${now.getFullYear()} UTC`
+    );
+    console.log(today, "asdasddddd", matchList[0], matchList.length);
+    const todayMatchList = matchList.filter((match) => {
+      console.log(match.gameEndTimestamp, "ddddd");
+      if (match.gameEndTimestamp > today) {
+        return match;
+      }
     });
 
-    return matchListTwitch;
-  }
+    console.log("asdddd", matchList, "asdadsdd", todayMatchList);
+
+    //   1. [WIN]MID|VEX(12,4,5)-20212dmg|(duo)
+
+    if (todayMatchList.length > 0) {
+      let matchListTwitch = `dzisiejsze gierki: `;
+
+      todayMatchList.forEach((match, index) => {
+        const myBoard = match.participants.find((item) => {
+          return item.puuid === puuid;
+        });
+
+        const isWin = myBoard.win ? "WIN" : "LOSE";
+        const position = myBoard.teamPosition;
+        const totalDamageDealtToChampions = myBoard.totalDamageDealtToChampions;
+        const championName = myBoard.championName;
+        const stats = `(${myBoard.kills},${myBoard.deaths},${myBoard.assists})`;
+        const role = myBoard.role == "DUO" ? "duo" : "solo";
+        
+        console.log(stats)
+
+        matchListTwitch = `${matchListTwitch} ${
+          index + 1
+        }. [${isWin}]${position}|${championName}${stats}-${totalDamageDealtToChampions}dmg|(${role})`;
+      });
+     console.log(matchListTwitch, "gdzc")
+      return matchListTwitch;
+    }
+  });
 
   return `${nickname ? nickname : streamer} nie zagrał dzisiaj żadnej gry`;
 };
