@@ -68,7 +68,7 @@ const getLolMatchStats = async (streamer, nickname, server) => {
     const today = Date.parse(
       `${now.getMonth() + 1}, ${now.getDate()}, ${now.getFullYear()} UTC`
     );
-    console.log(today, "asdasddddd", matchList[0], matchList.length);
+ 
     const todayMatchList = matchList.filter((match) => {
       if (match.gameEndTimestamp > today) {
         return match;
@@ -94,7 +94,7 @@ const getLolMatchStats = async (streamer, nickname, server) => {
 
         matchListTwitch = `${matchListTwitch} ${
           index + 1
-        }nr[${isWin}]${position}|${championName}${stats} ${totalDamageDealtToChampions}dmg | (${role})`;
+        }[${isWin}]${position}|${championName}${stats} ${totalDamageDealtToChampions}dmg | (${role})`;
       });
       return matchListTwitch;
     } else {
@@ -374,20 +374,26 @@ const checkActiveRiotAccount = async () => {
               region[server],
               { count: 1 }
             );
-            // const summonerName = await apiLol.Summoner.getByName(
-            //   name,
-            //   server ? server : "EUW1"
-            // );
-            // const lastMatchLolId = await apiLol.MatchV5.list(
-            //   response.puuid,
-            //   region[server],
-            //   { count: 1 }
-            // );
-            // const lastMatchLol = await apiLol.MatchV5.get(
-            //   lastMatchLolId[0],
-            //   region[serverNameToServerId[server]]
-            // );
-            // console.log("asdasdasdasdasdasdasd", lastMatchLol, lastMatch);
+            let summonerName
+            
+            try{
+            summonerName = ( await apiLol.Summoner.getByName(
+              name,
+              server ? server : "EUW1"
+            )).response;
+            }catch(err){}
+
+             if{}
+            const lastMatchLolId = await apiLol.MatchV5.list(
+              summonerName.puuid,
+              region[server],
+              { count: 1 }
+            );
+            const lastMatchLol = await apiLol.MatchV5.get(
+              lastMatchLolId[0],
+              region[serverNameToServerId[server]]
+            );
+            console.log("asdasdasdasdasdasdasd", lastMatchLol, lastMatch);
 
             if (
               lastMatch[0].info.game_datetime >
