@@ -70,9 +70,13 @@ const getLolMatchStats = async (streamer, nickname, server) => {
         });
 
         const isWin = myBoard.win ? "WIN": "LOSE"
-        const position = myBoard.win
+        const position = myBoard.teamPosition
+        const totalDamageDealtToChampions = myBoard.totalDamageDealtToChampions
+        const championName = myBoard.championName
+        const stats = `(${myBoard.kills},${myBoard.deaths},${myBoard.assists})`
+        const role = myBoard.role
 
-
+        matchListTwitch = `${matchListTwitch} ${index+1}. [WIN]MID|VEX(12,4,5)-20212dmg|(duo)`
       });
 
       return matchListTwitch;
