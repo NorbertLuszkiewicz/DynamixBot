@@ -68,7 +68,7 @@ const getLolMatchStats = async (streamer, nickname, server) => {
     const today = Date.parse(
       `${now.getMonth() + 1}, ${now.getDate()}, ${now.getFullYear()} UTC`
     );
- 
+
     const todayMatchList = matchList.filter((match) => {
       if (match.gameEndTimestamp > today) {
         return match;
@@ -374,27 +374,28 @@ const checkActiveRiotAccount = async () => {
               region[server],
               { count: 1 }
             );
-            let summonerName
-            
-            try{
-            summonerName = ( await apiLol.Summoner.getByName(
-              name,
-              server ? server : "EUW1"
-            )).response;
-            }catch(err){}
+            let summonerName;
 
-             if{}
-            const lastMatchLolId = await apiLol.MatchV5.list(
-              summonerName.puuid,
-              region[server],
-              { count: 1 }
-            );
-            const lastMatchLol = await apiLol.MatchV5.get(
-              lastMatchLolId[0],
-              region[serverNameToServerId[server]]
-            );
-            console.log("asdasdasdasdasdasdasd", lastMatchLol, lastMatch);
+            try {
+              summonerName = (
+                await apiLol.Summoner.getByName(name, server ? server : "EUW1")
+              ).response;
+            } catch (err) {}
 
+            if (summonerName) {
+              const lastMatchLolId = (
+                await apiLol.MatchV5.list(summonerName.puuid, region[server], {
+                  count: 1,
+                })
+              ).response;
+              if (lastMatchLolId.length > 0) {
+                const lastMatchLol = await apiLol.MatchV5.get(
+                  lastMatchLolId[0],
+                  region[serverNameToServerId[server]]
+                );
+                console.log("asdasdasdasdasdasdasd", lastMatchLol, lastMatch);
+              }
+            }
             if (
               lastMatch[0].info.game_datetime >
               (streamer.activeRiotAccount ? streamer.activeRiotAccount.date : 0)
