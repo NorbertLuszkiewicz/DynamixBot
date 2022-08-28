@@ -58,7 +58,7 @@ const getLolMatchStats = async (streamer, nickname, server) => {
     return (
       await apiLol.MatchV5.get(
         x,
-        server ? region[serverNameToServerId[server]] : "EUROPE"
+        server ? region[serverNameToServerId[server]] : region[data.activeRiotAccount?.server]
       )
     )?.response?.info;
   });
@@ -389,11 +389,11 @@ const checkActiveRiotAccount = async () => {
                 })
               ).response;
               if (lastMatchLolId.length > 0) {
-                const lastMatchLol = await apiLol.MatchV5.get(
-                  lastMatchLolId[0],
-                  region[serverNameToServerId[server]]
-                );
-                console.log("asdasdasdasdasdasdasd", lastMatchLol, lastMatch);
+                // const lastMatchLol = await apiLol.MatchV5.get(
+                //   lastMatchLolId[0],
+                //   region[server]
+                // );
+                console.log("asdasdasdasdasdasdasd", lastMatchLolId[0], region[server], lastMatch);
               }
             }
             if (
