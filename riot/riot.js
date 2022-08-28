@@ -53,7 +53,7 @@ const getLolMatchStats = async (streamer, nickname, server) => {
 
     puuid = response.puuid;
   }
-  // matchIdList.forEach(async x=> matchList.push((await apiLol.MatchV5.get(x, server ? region[serverNameToServerId[server]] : "EUROPE"))?.response?.info))
+
   matchList = matchIdList.map(async (x) => {
     return (
       await apiLol.MatchV5.get(
@@ -70,13 +70,10 @@ const getLolMatchStats = async (streamer, nickname, server) => {
     );
     console.log(today, "asdasddddd", matchList[0], matchList.length);
     const todayMatchList = matchList.filter((match) => {
-      console.log(match.gameEndTimestamp, "ddddd");
       if (match.gameEndTimestamp > today) {
         return match;
       }
     });
-
-    console.log("asdddd", matchList, "asdadsdd", todayMatchList);
 
     //   1. [WIN]MID|VEX(12,4,5)-20212dmg|(duo)
 
@@ -95,13 +92,10 @@ const getLolMatchStats = async (streamer, nickname, server) => {
         const stats = `(${myBoard.kills},${myBoard.deaths},${myBoard.assists})`;
         const role = myBoard.role == "DUO" ? "duo" : "solo";
 
-        console.log(stats);
-
         matchListTwitch = `${matchListTwitch} ${
           index + 1
         }nr[${isWin}]${position}|${championName}${stats} ${totalDamageDealtToChampions}dmg | (${role})`;
       });
-      console.log(matchListTwitch, "gdzc");
       return matchListTwitch;
     } else {
       return `${nickname ? nickname : streamer} nie zagrał dzisiaj żadnej gry`;
@@ -379,7 +373,18 @@ const checkActiveRiotAccount = async () => {
               puuid,
               region[server],
               { count: 1 }
+            );   
+            const lastMatchLolId = await apiLol.Matchv5.list(
+              puuid,
+              region[server],
+              { count: 1 }
+            ); 
+            const lastMatchLol = await apiLol.Matchv5.get(
+              lastMatchLolId[0],
+              region[serverNameToServerId[server]],
             );
+            console.log("asdasdasdasdasdasdasd", lastMatchLol)
+            match.gameEndTimestamp
 
             if (
               lastMatch[0].info.game_datetime >
