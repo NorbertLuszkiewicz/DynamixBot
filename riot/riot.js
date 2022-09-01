@@ -84,24 +84,32 @@ const getLolMatchStats = async (streamer, nickname, server) => {
 
       todayMatchList.forEach((match, index) => {
         let personNrInTeam = 0;
-        let personNrInTeam = 0;
+        let teamDemageAll = 0;
         const myBoard = match.participants.find((item) => {
           personNrInTeam = personNrInTeam +1
           return item.puuid === puuid;
         });
-        const teamDemageAll=""
-        console.log(personNrInTeam - 1, todayMatchList,"aass")
+        match.participants.forEach((x, xIndex) => {
+          if(personNrInTeam<6 && xIndex < 5){
+            teamDemageAll = teamDemageAll + x.totalDamageDealtToChampions
+          }else if(personNrInTeam>=6 && xIndex >= 5){
+            teamDemageAll = teamDemageAll + x.totalDamageDealtToChampions
+          }
+        })
+        
+        
+        console.log(personNrInTeam - 1,teamDemageAll , todayMatchList,"aass")
         const isWin = myBoard.win ? "WIN" : "LOSE";
         const position = lolPosition[myBoard.teamPosition];
         const totalDamageDealtToChampions = myBoard.totalDamageDealtToChampions;
-        const teamDamagePercentage = myBoard?.teamDamagePercentage ? `(${myBoard.teamDamagePercentage.toFixed(2)}%)` : "";
+        const teamDamagePercentage = ((teamDemageAll/totalDamageDealtToChampions)*100).toFixed(0);
         const championName = myBoard.championName;
         const stats = `(${myBoard.kills},${myBoard.deaths},${myBoard.assists})`;
         const role = myBoard.role == "DUO" ? "duo" : "solo";
 
         matchListTwitch = `${matchListTwitch} ${
           index + 1
-        }[${isWin}]${position}|${championName}${stats} ${totalDamageDealtToChampions}dmg${teamDamagePercentage} | [${role}]`;
+        }[${isWin}]${position}|${championName}${stats} ${totalDamageDealtToChampions}dmg(${teamDamagePercentage}%) | [${role}]`;
       });
       return matchListTwitch;
     } else {
