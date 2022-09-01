@@ -83,13 +83,14 @@ const getLolMatchStats = async (streamer, nickname, server) => {
       let matchListTwitch = `dzisiejsze gierki: `;
 
       todayMatchList.forEach((match, index) => {
-        let personNrInTeam
+        let personNrInTeam = 0;
+        let personNrInTeam = 0;
         const myBoard = match.participants.find((item) => {
           personNrInTeam = personNrInTeam +1
           return item.puuid === puuid;
         });
         const teamDemageAll=""
-
+        console.log(personNrInTeam - 1, todayMatchList,"aass")
         const isWin = myBoard.win ? "WIN" : "LOSE";
         const position = lolPosition[myBoard.teamPosition];
         const totalDamageDealtToChampions = myBoard.totalDamageDealtToChampions;
