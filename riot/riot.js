@@ -77,13 +77,15 @@ const getLolMatchStats = async (streamer, nickname, server) => {
       }
     });
 
-    //   1. [WIN]MID|VEX(12,4,5)-20212dmg|(duo)
+    //   1. [WIN]MID|VEX(12,4,5)-20212dmg(30%)|[duo]
 
     if (todayMatchList.length > 0) {
       let matchListTwitch = `dzisiejsze gierki: `;
 
       todayMatchList.forEach((match, index) => {
+        let personNrInTeam
         const myBoard = match.participants.find((item) => {
+          personNrInTeam = personNrInTeam +1
           return item.puuid === puuid;
         });
         const teamDemageAll=""
@@ -98,7 +100,7 @@ const getLolMatchStats = async (streamer, nickname, server) => {
 
         matchListTwitch = `${matchListTwitch} ${
           index + 1
-        }[${isWin}]${position}|${championName}${stats} ${totalDamageDealtToChampions}dmg${teamDamagePercentage} | (${role})`;
+        }[${isWin}]${position}|${championName}${stats} ${totalDamageDealtToChampions}dmg${teamDamagePercentage} | [${role}]`;
       });
       return matchListTwitch;
     } else {
