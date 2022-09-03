@@ -5,8 +5,10 @@ const {
   updateUser,
   getAllUser,
 } = require("../controllers/UserController.js");
+require('../demonsbotfizowaty/index.js');
 
 const TOKEN = "https://id.twitch.tv/oauth2/token";
+
 
 const addNewUser = async (code) => {
   let accessToken;
