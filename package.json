@@ -25,7 +25,11 @@
     "spotify-web-api-node": "^5.0.2",
     "twisted": "^1.47.0",
     "xmlhttprequest": "^1.8.0",
-    "discord.js": "^13.7.0"
+    "discord.js": "^13.7.0",
+    "@kararty/dank-twitch-irc": "^4.6.0",
+    "auto-reload": "^0.1.0",
+    "chalk": "^4.1.0",
+    "edit-json-file": "^1.7.0"
   },
   "engines": {
     "node": "16.14.2"
