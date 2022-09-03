@@ -6,7 +6,7 @@
   ],
   "heist": 1,
   "prefix": "!",
-  "command": "testbota",
+  "command": "pozdrodlabota",
   "connect": "Połączono ;)",
   "bossBotName": "demonzzbot"
 }
