@@ -136,9 +136,14 @@ const changeBadWords = (message) => {
     .toLowerCase()
     .replace(/nigger/g, "ni**er")
     .replace(/niga/g, "n**a")
-    .replace("nigga/g, "n***a")
-    .replace("czarnuch/g, "cz***uch")
-    .replace(/cwel/g, "c++l");
+    .replace(/nigga/g, "n***a")
+    .replace(/czarnuch/g, "cz***uch")
+    .replace(/cwel/g, "c++l")
+    .replace("nigger", "ni**er")
+    .replace("niga", "n**a")
+    .replace("nigga", "n***a")
+    .replace("czarnuch", "cz***uch")
+    .replace("cwel", "c++l");
 
   return correctMessage == message.toLowerCase() ? message : correctMessage;
 };
