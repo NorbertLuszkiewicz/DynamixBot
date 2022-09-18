@@ -17,6 +17,8 @@ async function routes(fastify, options) {
   });
 
   fastify.get("/spotify", (req, res) => {
+      res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET");
     const scopes = [
       "ugc-image-upload",
       "user-read-playback-state",
