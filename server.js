@@ -42,7 +42,7 @@ client.connect(err => {
   }
 });
 
-// fastify.register(require("fastify-cors"));
+fastify.register(require('@fastify/cors'));
 fastify.register(require("./routes"));
 
 fastify.listen(process.env.PORT, function(err, address) {
