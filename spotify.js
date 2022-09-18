@@ -246,6 +246,7 @@ const currentlyPlaying = async (streamer) => {
         Authorization: `Bearer ${spotifyAccessToken}`,
       },
     });
+    console.log(data, "aasd")
 
     return data;
   } catch ({ response }) {
