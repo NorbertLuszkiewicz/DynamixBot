@@ -4,7 +4,7 @@
   "channels": [
     "demonzz1"
   ],
-  "heist": 10000,
+  "heist": 1,
   "prefix": "!",
   "command": "pozdrodlabota",
   "connect": "Połączono ;)",
