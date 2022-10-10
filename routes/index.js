@@ -61,13 +61,13 @@ async function routes(fastify, options) {
       const callback = await addSpotify(user, code);
 
       callback == "success"
-        ? res.redirect(`https://dynamix-bot.pl/dashboard`)
+        ? res.redirect(`https://dynamixbot.pl/dashboard`)
         : res.redirect(
-            `https://dynamix-bot.pl/?error${callback ? callback.status : 400}`
+            `https://dynamixbot.pl/?error${callback ? callback.status : 400}`
           );
     } catch {
       fastify.log.error("Error when redirect with spotify data");
-      res.redirect(`https://dynamix-bot.pl/?error${400}`);
+      res.redirect(`https://dynamixbot.pl/?error${400}`);
     }
   });
 
@@ -76,7 +76,7 @@ async function routes(fastify, options) {
     const state = req.query.state;
     const redirectUrl =
       state === "c3ab8aa609ea11e793ae92361f002671"
-        ? "https://dynamix-bot.pl/"
+        ? "https://dynamixbot.pl/"
         : "http://localhost:3000/";
 
     try {
@@ -122,7 +122,7 @@ async function routes(fastify, options) {
   });
 
   fastify.put("/streamelements", async (req, res) => {
-    res.header("Access-Control-Allow-Origin", "https://dynamix-bot.pl");
+    res.header("Access-Control-Allow-Origin", "https://dynamixbot.pl");
     res.header("Access-Control-Allow-Methods", "PUT");
 
     const clientID = req.body.clientID;
@@ -144,7 +144,7 @@ async function routes(fastify, options) {
   });
 
   fastify.put("/volumeaward", async (req, res) => {
-    res.header("Access-Control-Allow-Origin", "https://dynamix-bot.pl");
+    res.header("Access-Control-Allow-Origin", "https://dynamixbot.pl");
     res.header("Access-Control-Allow-Methods", "PUT");
 
     const min = req.body.min;
@@ -178,7 +178,7 @@ async function routes(fastify, options) {
   });
 
   fastify.put("/riot", async (req, res) => {
-    res.header("Access-Control-Allow-Origin", "https://dynamix-bot.pl");
+    res.header("Access-Control-Allow-Origin", "https://dynamixbot.pl");
     res.header("Access-Control-Allow-Methods", "PUT");
 
     const name = req.body.name;
@@ -195,7 +195,7 @@ async function routes(fastify, options) {
     }
   });
   fastify.put("/slots", async (req, res) => {
-    res.header("Access-Control-Allow-Origin", "https://dynamix-bot.pl");
+    res.header("Access-Control-Allow-Origin", "https://dynamixbot.pl");
     res.header("Access-Control-Allow-Methods", "PUT");
 
     
@@ -231,7 +231,7 @@ async function routes(fastify, options) {
   });
   
   fastify.put("/command_switch", async (req, res) => {
-    res.header("Access-Control-Allow-Origin", "https://dynamix-bot.pl");
+    res.header("Access-Control-Allow-Origin", "https://dynamixbot.pl");
     res.header("Access-Control-Allow-Methods", "PUT");
 
     const { user, body } = req.body;
@@ -252,7 +252,7 @@ async function routes(fastify, options) {
   });
   
     fastify.put("/slot_remove", async (req, res) => {
-    res.header("Access-Control-Allow-Origin", "https://dynamix-bot.pl");
+    res.header("Access-Control-Allow-Origin", "https://dynamixbot.pl");
     res.header("Access-Control-Allow-Methods", "PUT");
 
     const { id, streamer } = req.body;
