@@ -517,7 +517,7 @@ const commands = () =>
       if (command === "start" && user === "DynaM1X1") {
         startSong(extra.channel);
       }
-      if (command === "srplay" && user === "DynaM1X1") {
+      if (command === "srplay" && (flags.mod || flags.broadcaster)) {
         setSongAsPlay(extra.channel, "play");
       }
       if (command === "srstop" && user === "DynaM1X1") {
