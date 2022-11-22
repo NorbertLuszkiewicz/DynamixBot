@@ -503,7 +503,6 @@ const allWord = [
   "arfuj",
   "argon",
   "argot",
-  "as",
   "arhat",
   "arian",
   "ariel",
