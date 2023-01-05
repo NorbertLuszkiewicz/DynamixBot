@@ -9,7 +9,7 @@ const {
 } = require("./streamElements");
 const { refreshTwitchTokens } = require("./twitch/twitch.js");
 const { twitchCommands } = require("./twitch/index.js");
-const { tftMatchList, checkActiveRiotAccount,addTftUser } = require("./riot/riot.js");
+const { checkActiveRiotAccount } = require("./riot/riot.js");
 const {runner} = require("./tiktokDiscordBot")
 
 //Initial functions
@@ -19,7 +19,7 @@ setTimeoutVolume();
 setTimeoutVolumeStreamElements();
 
 setInterval(refreshAccessToken, 1800 * 1000);
-setInterval(checkActiveRiotAccount, 180 * 1000);
+// setInterval(checkActiveRiotAccount, 180 * 1000);
 setInterval(refreshTwitchTokens, 10000 * 1000);
 
 const client = new MongoClient(
@@ -38,7 +38,7 @@ client.connect(err => {
     console.log("Database connected!");
     refreshAccessToken();
     refreshTwitchTokens();
-    checkActiveRiotAccount();
+    // checkActiveRiotAccount();
   }
 });
 
