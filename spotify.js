@@ -246,12 +246,6 @@ const currentlyPlaying = async (streamer) => {
         Authorization: `Bearer ${spotifyAccessToken}`,
       },
     });
-    const asd = await axios.get(`https://api.spotify.com/v1/me/player/currently-playing`, {
-      headers: {
-        Authorization: `Bearer ${spotifyAccessToken}`,
-      },
-    });
-    console.log(data, asd.data, "aasd")
 
     return data;
   } catch ({ response }) {
