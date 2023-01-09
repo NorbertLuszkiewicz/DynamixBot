@@ -506,6 +506,8 @@ const commands = () =>
         ComfyJS.Say("Bot works!", extra.channel);
       }
       if (command === "test" && (flags.mod || flags.broadcaster)) {
+        console.log("test")
+        
         const respose = await getLolMatchStats(
           "dynam1x1",
           "pilllarmann",
