@@ -14,7 +14,7 @@ const {runner} = require("./tiktokDiscordBot")
 
 //Initial functions
 runner();
-// twitchCommands();  2x się robi jakby gdzieś jeszcze było odpalone
+twitchCommands(); 
 setTimeoutVolume();
 setTimeoutVolumeStreamElements();
 
