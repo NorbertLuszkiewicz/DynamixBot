@@ -230,6 +230,9 @@ const messages = () => {
           if (isSemiWin && maxNumber <= 3) {
             ComfyJS.Say(`/timeout ${user} 600`, extra.channel);
           }
+          if (isSemiWin && maxNumber > 3 && extra.channel.toLowerCase() === 'kezman22') {
+            ComfyJS.Say(`/timeout ${user} 600`, extra.channel);
+          }
         }
 
         let slitsIDChanged = slotsID.map((item) => {
