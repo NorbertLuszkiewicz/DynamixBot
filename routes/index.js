@@ -77,14 +77,14 @@ async function routes(fastify, options) {
     const redirectUrl =
       state === "c3ab8aa609ea11e793ae92361f002671"
         ? "https://dynamixbot.pl/"
-        : "http://localhost:3000/";
+        : "http://localhost:4200/";
 
     try {
       const callback = await addNewUser(code);
 
       callback.status == "success"
         ? res.redirect(
-            `${redirectUrl}dashboard?name=${callback.name}&token=${callback.token}`
+            `${redirectUrl}connections?name=${callback.name}&token=${callback.token}`
           )
         : res.send("Something went wrong");
     } catch {
