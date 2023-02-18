@@ -84,7 +84,7 @@ async function routes(fastify, options) {
 
       callback.status == "success"
         ? res.redirect(
-            `${redirectUrl}connections?name=${callback.name}&token=${callback.token}`
+            `${redirectUrl}information?name=${callback.name}&token=${callback.token}`
           )
         : res.send("Something went wrong");
     } catch {
