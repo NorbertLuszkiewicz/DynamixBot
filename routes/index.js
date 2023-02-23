@@ -11,14 +11,14 @@ const { getUser, updateUser } = require("../controllers/UserController.js");
 const { addNewUser, refreshTwitchTokens } = require("../twitch/twitch.js");
 const { addTftUser } = require("../riot/riot.js");
 
-async function routes(fastify, options) { 
+async function routes(fastify, options) {
   fastify.get("/", function (req, res) {
     res.send("");
   });
 
   fastify.get("/spotify", (req, res) => {
-      res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "GET");
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET");
     const scopes = [
       "ugc-image-upload",
       "user-read-playback-state",
@@ -122,7 +122,10 @@ async function routes(fastify, options) {
   });
 
   fastify.put("/streamelements", async (req, res) => {
-    res.header("Access-Control-Allow-Origin", ["https://dynamixbot.pl", 'http://localhost:4200']);
+    res.header("Access-Control-Allow-Origin", [
+      "https://dynamixbot.pl",
+      "http://localhost:4200",
+    ]);
     res.header("Access-Control-Allow-Methods", "PUT");
 
     const clientID = req.body.clientID;
@@ -135,6 +138,10 @@ async function routes(fastify, options) {
         clientSongRequestID: clientID,
         clientSongRequestSecret: token,
       });
+      
+           res.status(200).send({
+        message: "Successfully saved changes",
+      });
     } catch {
       fastify.log.error("Error when get account");
       res.status(400).send({
@@ -144,7 +151,10 @@ async function routes(fastify, options) {
   });
 
   fastify.put("/volumeaward", async (req, res) => {
-    res.header("Access-Control-Allow-Origin", ["https://dynamixbot.pl", 'http://localhost:4200']);
+    res.header("Access-Control-Allow-Origin", [
+      "https://dynamixbot.pl",
+      "http://localhost:4200",
+    ]);
     res.header("Access-Control-Allow-Methods", "PUT");
 
     const min = req.body.min;
@@ -153,6 +163,8 @@ async function routes(fastify, options) {
     const maxSR = req.body.maxSR;
     const time = req.body.time;
     const user = req.body.user;
+
+    console.log(req.body);
 
     try {
       const [data] = await getUser(user);
@@ -169,6 +181,10 @@ async function routes(fastify, options) {
           time,
         },
       });
+
+      res.status(200).send({
+        message: "Successfully saved changes",
+      });
     } catch {
       fastify.log.error("Error when get account");
       res.status(400).send({
@@ -178,7 +194,10 @@ async function routes(fastify, options) {
   });
 
   fastify.put("/riot", async (req, res) => {
-    res.header("Access-Control-Allow-Origin", ["https://dynamixbot.pl", 'http://localhost:4200']);
+    res.header("Access-Control-Allow-Origin", [
+      "https://dynamixbot.pl",
+      "http://localhost:4200",
+    ]);
     res.header("Access-Control-Allow-Methods", "PUT");
 
     const name = req.body.name;
@@ -187,6 +206,9 @@ async function routes(fastify, options) {
 
     try {
       addTftUser(name, server, user);
+      res.status(200).send({
+        message: "Successfully saved changes",
+      });
     } catch {
       fastify.log.error("Error when add riot account");
       res.status(400).send({
@@ -195,10 +217,12 @@ async function routes(fastify, options) {
     }
   });
   fastify.put("/slots", async (req, res) => {
-    res.header("Access-Control-Allow-Origin", ["https://dynamixbot.pl", 'http://localhost:4200']);
+    res.header("Access-Control-Allow-Origin", [
+      "https://dynamixbot.pl",
+      "http://localhost:4200",
+    ]);
     res.header("Access-Control-Allow-Methods", "PUT");
 
-    
     const { name, emotes, withBan, user } = req.body;
     const newSlots = {
       name,
@@ -222,6 +246,10 @@ async function routes(fastify, options) {
           slotsID: [newSlots],
         });
       }
+
+      res.status(200).send({
+        message: "Successfully saved changes",
+      });
     } catch (err) {
       fastify.log.error("Error when add slots award");
       res.status(400).send({
@@ -229,9 +257,12 @@ async function routes(fastify, options) {
       });
     }
   });
-  
+
   fastify.put("/command_switch", async (req, res) => {
-    res.header("Access-Control-Allow-Origin", ["https://dynamixbot.pl", 'http://localhost:4200']);
+    res.header("Access-Control-Allow-Origin", [
+      "https://dynamixbot.pl",
+      "http://localhost:4200",
+    ]);
     res.header("Access-Control-Allow-Methods", "PUT");
 
     const { user, body } = req.body;
@@ -243,6 +274,10 @@ async function routes(fastify, options) {
         streamer: user,
         commandSwitch: body,
       });
+
+      res.status(200).send({
+        message: "Successfully saved changes",
+      });
     } catch (err) {
       fastify.log.error("Error when change command switch award");
       res.status(400).send({
@@ -250,25 +285,30 @@ async function routes(fastify, options) {
       });
     }
   });
-  
-    fastify.put("/slot_remove", async (req, res) => {
-    res.header("Access-Control-Allow-Origin", ["https://dynamixbot.pl", 'http://localhost:4200']);
+
+  fastify.put("/slot_remove", async (req, res) => {
+    res.header("Access-Control-Allow-Origin", [
+      "https://dynamixbot.pl",
+      "http://localhost:4200",
+    ]);
     res.header("Access-Control-Allow-Methods", "PUT");
 
     const { id, streamer } = req.body;
 
-
     try {
       const [data] = await getUser(streamer);
-      
-      const newSlotsList = data.slotsID.filter(slot => {
-        return slot.name !== id
-      })
-     
+
+      const newSlotsList = data.slotsID.filter((slot) => {
+        return slot.name !== id;
+      });
 
       await updateUser({
         streamer: streamer,
         slotsID: newSlotsList,
+      });
+
+      res.status(200).send({
+        message: "Successfully saved changes",
       });
     } catch (err) {
       fastify.log.error("Error when delete slot");
