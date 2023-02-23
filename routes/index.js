@@ -151,10 +151,10 @@ async function routes(fastify, options) {
   });
 
   fastify.put("/volumeaward", async (req, res) => {
-    res.header("Access-Control-Allow-Origin", [
-      "https://dynamixbot.pl",
+    res.header("Access-Control-Allow-Origin", 
+     
       "http://localhost:4200",
-    ]);
+    );
     res.header("Access-Control-Allow-Methods", "PUT");
 
     const min = req.body.min;
@@ -293,17 +293,17 @@ async function routes(fastify, options) {
     ]);
     res.header("Access-Control-Allow-Methods", "PUT");
 
-    const { id, streamer } = req.body;
+    const { id, user } = req.body;
 
     try {
-      const [data] = await getUser(streamer);
+      const [data] = await getUser(user);
 
       const newSlotsList = data.slotsID.filter((slot) => {
         return slot.name !== id;
       });
 
       await updateUser({
-        streamer: streamer,
+        streamer: user,
         slotsID: newSlotsList,
       });
 
