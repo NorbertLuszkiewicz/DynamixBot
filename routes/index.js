@@ -122,7 +122,7 @@ async function routes(fastify, options) {
   });
 
   fastify.put("/streamelements", async (req, res) => {
-    res.header("Access-Control-Allow-Origin", "https://dynamixbot.pl");
+    res.header("Access-Control-Allow-Origin", ["https://dynamixbot.pl", 'http://localhost:4200']);
     res.header("Access-Control-Allow-Methods", "PUT");
 
     const clientID = req.body.clientID;
@@ -144,7 +144,7 @@ async function routes(fastify, options) {
   });
 
   fastify.put("/volumeaward", async (req, res) => {
-    res.header("Access-Control-Allow-Origin", "https://dynamixbot.pl");
+    res.header("Access-Control-Allow-Origin", ["https://dynamixbot.pl", 'http://localhost:4200']);
     res.header("Access-Control-Allow-Methods", "PUT");
 
     const min = req.body.min;
@@ -178,7 +178,7 @@ async function routes(fastify, options) {
   });
 
   fastify.put("/riot", async (req, res) => {
-    res.header("Access-Control-Allow-Origin", "https://dynamixbot.pl");
+    res.header("Access-Control-Allow-Origin", ["https://dynamixbot.pl", 'http://localhost:4200']);
     res.header("Access-Control-Allow-Methods", "PUT");
 
     const name = req.body.name;
@@ -195,7 +195,7 @@ async function routes(fastify, options) {
     }
   });
   fastify.put("/slots", async (req, res) => {
-    res.header("Access-Control-Allow-Origin", "https://dynamixbot.pl");
+    res.header("Access-Control-Allow-Origin", ["https://dynamixbot.pl", 'http://localhost:4200']);
     res.header("Access-Control-Allow-Methods", "PUT");
 
     
@@ -231,7 +231,7 @@ async function routes(fastify, options) {
   });
   
   fastify.put("/command_switch", async (req, res) => {
-    res.header("Access-Control-Allow-Origin", "https://dynamixbot.pl");
+    res.header("Access-Control-Allow-Origin", ["https://dynamixbot.pl", 'http://localhost:4200']);
     res.header("Access-Control-Allow-Methods", "PUT");
 
     const { user, body } = req.body;
@@ -252,7 +252,7 @@ async function routes(fastify, options) {
   });
   
     fastify.put("/slot_remove", async (req, res) => {
-    res.header("Access-Control-Allow-Origin", "https://dynamixbot.pl");
+    res.header("Access-Control-Allow-Origin", ["https://dynamixbot.pl", 'http://localhost:4200']);
     res.header("Access-Control-Allow-Methods", "PUT");
 
     const { id, streamer } = req.body;
