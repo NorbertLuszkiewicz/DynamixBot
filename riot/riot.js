@@ -142,6 +142,17 @@ const addTftUser = async (name, server, streamer) => {
   }
 };
 
+
+const removeTftUser = async (name, server, streamer) => {
+  const [data] = await getUser(streamer);
+
+  const account = data.riotAccountList.map(
+    (riotAccount) => riotAccount.name !== name && riotAccount.server !== server
+  );
+
+ 
+};
+
 const tftMatchList = async (streamer, nickname, server) => {
   const [data] = await getUser(streamer);
   let matchList = "";
@@ -515,6 +526,7 @@ const itemIdToName = {
 
 module.exports = {
   addTftUser,
+  removeTftUser,
   tftMatchList,
   getLolMatchStats,
   checkActiveRiotAccount,
