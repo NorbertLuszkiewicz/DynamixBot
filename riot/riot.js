@@ -146,11 +146,14 @@ const addTftUser = async (name, server, streamer) => {
 const removeTftUser = async (name, server, streamer) => {
   const [data] = await getUser(streamer);
 
-  const account = data.riotAccountList.filter(
-    (riotAccount) =>  riotAccount.name !== name && riotAccount.server !== server
+  const accounts = data.riotAccountList.filter(
+    (riotAccount) =>  !(riotAccount.name === name && riotAccount.server === server)
   );
 
-   console.log(name, server, streamer, account, data.riotAccountList)
+     await updateUser({
+      streamer,
+      riotAccountList: accounts,
+    });
 };
 
 const tftMatchList = async (streamer, nickname, server) => {
