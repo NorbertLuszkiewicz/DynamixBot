@@ -9,7 +9,7 @@ const {
 } = require("../spotify");
 const { getUser, updateUser } = require("../controllers/UserController.js");
 const { addNewUser, refreshTwitchTokens } = require("../twitch/twitch.js");
-const { addTftUser } = require("../riot/riot.js");
+const { addTftUser, removeTftUser } = require("../riot/riot.js");
 
 async function routes(fastify, options) {
   fastify.get("/", function (req, res) {
@@ -213,6 +213,31 @@ async function routes(fastify, options) {
       });
     }
   });
+  
+    fastify.put("/riot-remove", async (req, res) => {
+    res.header("Access-Control-Allow-Origin", 
+      "https://dynamixbot.pl",
+   );
+    res.header("Access-Control-Allow-Methods", "PUT");
+
+    const name = req.body.name;
+    const server = req.body.server;
+    const user = req.body.user;
+
+    try {
+      removeTftUser(name, server, user);
+      res.status(200).send({
+        message: "Successfully saved changes",
+      });
+    } catch {
+      fastify.log.error("Error when add riot account");
+      res.status(400).send({
+        message: "Something went wrong",
+      });
+    }
+  });
+  
+  
   fastify.put("/slots", async (req, res) => {
     res.header("Access-Control-Allow-Origin", 
       "https://dynamixbot.pl",
