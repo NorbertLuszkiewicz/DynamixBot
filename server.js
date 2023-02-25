@@ -13,7 +13,7 @@ const { checkActiveRiotAccount } = require("./riot/riot.js");
 const {runner} = require("./tiktokDiscordBot")
 
 //Initial functions
-runner();
+// runner(); off tiktokbot
 twitchCommands(); 
 setTimeoutVolume();
 setTimeoutVolumeStreamElements();
