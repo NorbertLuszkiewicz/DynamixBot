@@ -522,6 +522,10 @@ const commands = () =>
       if (command === "srplay" && (flags.mod || flags.broadcaster)) {
         setSongAsPlay(extra.channel, "play");
       }
+      if (command === "testban" && ( flags.broadcaster)) {
+        ComfyJS.Say('/timeout testowy 120', extra.channel);
+        ComfyJS.Say('timeout testowy 120', extra.channel);
+      }
       if (command === "srstop" && user === "DynaM1X1") {
         setSongAsPlay(extra.channel, "pause");
       }
