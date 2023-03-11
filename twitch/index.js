@@ -15,15 +15,11 @@ const twitchCommands = async () => {
     setTimeoutVolume();
    await setTwitchHelixToken()
     
-
     const allStreamers = await getAllUser();
-
     const TWITCHCHANNELS = allStreamers.map((streamer) => streamer.streamer);
-
     const TWITCHUSER = "dynam1x1";
     const OAUTH = process.env.OAUTH;
-    
-    console.log(TWITCHCHANNELS, "sss")
+
 
     ComfyJS.Init(TWITCHUSER, OAUTH, TWITCHCHANNELS);
   } catch (err) {

@@ -71,7 +71,7 @@ const refreshTwitchTokens = async () => {
             },
           });
           
-          console.log()
+       
 
           await updateUser({
             streamer: streamer.streamer,
@@ -80,7 +80,7 @@ const refreshTwitchTokens = async () => {
           });
         }
       } catch (err) {
-        console.log("tak to ten", streamer.streamer);
+        console.log("RefreshToken Twitch error", streamer.streamer);
       }
     });
 

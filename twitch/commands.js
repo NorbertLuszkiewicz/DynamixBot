@@ -523,6 +523,7 @@ const commands = () =>
         setSongAsPlay(extra.channel, "play");
       }
       if (command === "testban" && ( flags.broadcaster)) {
+        console.log(extra)
        
         ComfyJS.Say('timeout testowy 120', extra.channel);
          ComfyJS.Say('/timeout testowy 120', extra.channel);
