@@ -3,6 +3,7 @@ const axios = require("axios");
 const { messages, setTimeoutVolume } = require("./messages");
 const { events } = require("./events");
 const { commands } = require("./commands");
+const { setTwitchHelixToken } = require("./helix");
 const { getAllUser } = require("../controllers/UserController.js");
 
 
@@ -12,6 +13,7 @@ const twitchCommands = async () => {
     events();
     commands();
     setTimeoutVolume();
+   await setTwitchHelixToken()
     
 
     const allStreamers = await getAllUser();
