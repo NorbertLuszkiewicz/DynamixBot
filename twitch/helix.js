@@ -20,6 +20,13 @@ const setTwitchHelixToken = async () => {
   setTimeout(setTwitchHelixToken, data.expires_in - 4000);
 };
 
+const getUserId = async (name) => {
+  console.log(token, "ddasdasd")
+  const { data } = await axios.get(`https://api.twitch.tv/helix/users?login=${name}`, header);
+
+  console.log(data)
+};
+
 const timeout = async (userId, duration, reason, streamerId) => {
   const body = {
     user_id: userId,
@@ -39,5 +46,6 @@ const timeout = async (userId, duration, reason, streamerId) => {
 
 module.exports = {
   setTwitchHelixToken,
-  timeout
+  timeout,
+  getUserId
 };

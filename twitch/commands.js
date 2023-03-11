@@ -1,5 +1,6 @@
 const ComfyJS = require("comfy.js");
 const { getWeather, getHoroscope, changeBadWords } = require("./twitch");
+const { getUserId } = require("./helix");
 const {
   tftMatchList,
   getLolMatchStats,
@@ -523,8 +524,8 @@ const commands = () =>
         setSongAsPlay(extra.channel, "play");
       }
       if (command === "testban" && ( flags.broadcaster)) {
-        console.log(extra)
-       
+
+        getUserId('testowy')
         ComfyJS.Say('timeout testowy 120', extra.channel);
          ComfyJS.Say('/timeout testowy 120', extra.channel);
 
