@@ -70,6 +70,8 @@ const refreshTwitchTokens = async () => {
               "Content-Type": "application/x-www-form-urlencoded",
             },
           });
+          
+          console.log()
 
           await updateUser({
             streamer: streamer.streamer,
@@ -78,7 +80,7 @@ const refreshTwitchTokens = async () => {
           });
         }
       } catch (err) {
-        console.log(err);
+        console.log("tak to ten", streamer.streamer);
       }
     });
 

@@ -39,6 +39,7 @@ async function routes(fastify, options) {
       "user-read-recently-played",
       "user-follow-read",
       "user-follow-modify",
+      
     ];
 
     res.redirect(
