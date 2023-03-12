@@ -511,7 +511,7 @@ const commands = () =>
         
         const respose = await getLolMatchStats(
           "dynam1x1",
-          "pilllarmann",
+          "MIodyBoss",
           "EUW"
         );
         ComfyJS.Say(respose, extra.channel);

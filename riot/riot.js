@@ -96,9 +96,7 @@ const getLolMatchStats = async (streamer, nickname, server) => {
             teamDemageAll = teamDemageAll + x.totalDamageDealtToChampions
           }
         })
-        
-        
-        console.log(personNrInTeam - 1,teamDemageAll , todayMatchList,"aass")
+
         const isWin = myBoard.win ? "WIN" : "LOSE";
         const position = lolPosition[myBoard.teamPosition];
         const totalDamageDealtToChampions = myBoard.totalDamageDealtToChampions;
@@ -109,7 +107,7 @@ const getLolMatchStats = async (streamer, nickname, server) => {
 
         matchListTwitch = `${matchListTwitch} ${
           index + 1
-        }[${isWin}]${position}|${championName}${stats} ${totalDamageDealtToChampions}dmg(${teamDamagePercentage}%)`;
+        }[${isWin}]${position}|${championName}${stats}|${totalDamageDealtToChampions}dmg(${teamDamagePercentage}%)`;
       });
       return matchListTwitch;
     } else {
