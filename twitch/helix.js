@@ -72,7 +72,7 @@ const getPredition = async (streamer) => {
     const brodecasterId = await getUserId(streamer)
     const { data } = await axios.get(
       `${URL}predictions?broadcaster_id=${brodecasterId}`,
-      await getHeader()
+      await getHeader(streamer)
     );
     console.log(data, 'getPrediction')
     return data[0]
@@ -81,7 +81,7 @@ const getPredition = async (streamer) => {
   }
 };
 
-const resolvePredition = async (option, streamer) => {
+const resolvePrediction = async (option, streamer) => {
   try {
     const prediction = await getPredition(streamer)
     const winningPrediction = prediction.outcomes.filter(outcome => outcome.title.toLowerCase().trim() === option.toLowerCase().trim())
@@ -109,5 +109,5 @@ module.exports = {
   setTwitchHelixToken,
   timeout,
   getUserId,
-  resolvePredition,
+  resolvePrediction,
 };
