@@ -1,4 +1,7 @@
 const axios = require("axios");
+
+const TOKEN_URL = 'https://id.twitch.tv/oauth2/token'
+const URL = 'https://api.twitch.tv/helix/'
 let token;
 const header = {
   headers: {
@@ -10,7 +13,7 @@ const header = {
 
 const setTwitchHelixToken = async () => {
   try {
-    const { data } = await axios.post("https://id.twitch.tv/oauth2/token", {
+    const { data } = await axios.post(TOKEN_URL, {
       client_id: process.env.BOT_CLIENT_ID,
       client_secret: process.env.BOT_CLIENT_SECRET,
       grant_type: "client_credentials",
@@ -27,7 +30,7 @@ const setTwitchHelixToken = async () => {
 const getUserId = async (name) => {
   try {
     const { data } = await axios.get(
-      `https://api.twitch.tv/helix/users?login=${name}`,
+      `${URL}users?login=${name}`,
       header
     );
 
@@ -45,7 +48,7 @@ const timeout = async (userId, duration, reason, streamerId) => {
   };
   try {
     const { data } = await axios.post(
-      `https://api.twitch.tv/helix/moderation/bans?broadcaster_id=171103106&moderator_id=171103106`,
+      `${URL}moderation/bans?broadcaster_id=171103106&moderator_id=171103106`,
       body,
       header
     );
