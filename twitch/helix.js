@@ -45,9 +45,7 @@ const timeout = async (userName, duration, reason, streamerId) => {
     duration,
     reason,
   }};
-  console.log(      `${URL}moderation/bans?broadcaster_id=${await getUserId(streamerId)}&moderator_id=171103106`,
-      body,
-      getHeader())
+
   try {
     const { data } = await axios.post(
       `${URL}moderation/bans?broadcaster_id=${await getUserId(streamerId)}&moderator_id=171103106`,
