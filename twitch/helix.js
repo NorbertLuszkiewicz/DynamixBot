@@ -41,20 +41,21 @@ const getUserId = async (name) => {
 
 const timeout = async (userName, duration, reason, streamerId) => {
   const body = {
-    user_id: getUserId(userName),
+    user_id: await getUserId(userName),
     duration,
     reason,
   };
+
   try {
     const { data } = await axios.post(
-      `${URL}moderation/bans?broadcaster_id=${getUserId(streamerId)}&moderator_id=171103106`,
+      `${URL}moderation/bans?broadcaster_id=${await getUserId(streamerId)}&moderator_id=171103106`,
       body,
       getHeader()
     );
 
     console.log(data);
   } catch (err) {
-    console.log("Error timeout function in twitch/helix", err.data.status);
+    console.log("Error timeout function in twitch/helix", err);
   }
 };
 
