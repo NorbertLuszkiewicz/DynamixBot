@@ -6,7 +6,7 @@ let token;
 const getHeader = () => {
   return {
     headers: {
-      Authorization: `Bearer twkm0oi8vkmpxhnur1xwhura9sp20p`,
+      Authorization: `Bearer uwbto2zq7qhksfgr7f6tcjxolfr0ti`,
       "Client-Id": process.env.BOT_CLIENT_ID,
       "Content-Type": "application/json",
     },
