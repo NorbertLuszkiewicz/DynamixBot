@@ -1,14 +1,16 @@
 const axios = require("axios");
 
-const TOKEN_URL = 'https://id.twitch.tv/oauth2/token'
-const URL = 'https://api.twitch.tv/helix/'
+const TOKEN_URL = "https://id.twitch.tv/oauth2/token";
+const URL = "https://api.twitch.tv/helix/";
 let token;
-const header = {
-  headers: {
-    Authorization: `Bearer ${token}`,
-    "Client-Id": process.env.BOT_CLIENT_ID,
-    "Content-Type": "application/json",
-  },
+const getHeader = () => {
+  return {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Client-Id": process.env.BOT_CLIENT_ID,
+      "Content-Type": "application/json",
+    },
+  };
 };
 
 const setTwitchHelixToken = async () => {
@@ -23,20 +25,17 @@ const setTwitchHelixToken = async () => {
 
     setTimeout(setTwitchHelixToken, data.expires_in - 4000);
   } catch (err) {
-    console.log("Error setTwitchHelixToken", err.status);
+    console.log("Error setTwitchHelixToken", err.data.status);
   }
 };
 
 const getUserId = async (name) => {
   try {
-    const { data } = await axios.get(
-      `${URL}users?login=${name}`,
-      header
-    );
+    const { data } = await axios.get(`${URL}users?login=${name}`, getHeader());
 
     console.log(data);
   } catch (err) {
-    console.log("Error getUserId", err.status);
+    console.log("Error getUserId", err.data.status);
   }
 };
 
@@ -50,12 +49,12 @@ const timeout = async (userId, duration, reason, streamerId) => {
     const { data } = await axios.post(
       `${URL}moderation/bans?broadcaster_id=171103106&moderator_id=171103106`,
       body,
-      header
+      getH eader
     );
 
-    console.log(data)
+    console.log(data);
   } catch (err) {
-    console.log("Error timeout function in twitch/helix", err.status);
+    console.log("Error timeout function in twitch/helix", err.data.status);
   }
 };
 
