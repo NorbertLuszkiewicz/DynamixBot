@@ -11,7 +11,6 @@ const getHeader = async (streamer) => {
   if(streamer){
     const [data] = await getUser(streamer);
     token = data.twitchAccessToken
-    console.log(data.twitchAccessToken)
   }
   
   return {
@@ -40,7 +39,7 @@ const setTwitchHelixToken = async () => {
 };
 
 const getUserId = async (name) => {
-  console.log(await getHeader())
+
   try {
     const { data } = await axios.get(`${URL}users?login=${name}`,await getHeader());
 
@@ -63,8 +62,6 @@ const timeout = async (userName, duration, reason, streamer) => {
       body,
       await getHeader(streamer)
     );
-
-    console.log(data);
   } catch (err) {
     console.log("Error timeout function in twitch/helix", err.response?.data);
   }

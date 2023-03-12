@@ -19,9 +19,8 @@ const {
   removeBlockedSong,
 } = require("../streamElements");
 
-const {
-changeBadWords
-} = require("./twitch");
+const { changeBadWords } = require("./twitch");
+const { timeout } = require("./helix");
 
 const ComfyJS = require("comfy.js");
 
@@ -137,37 +136,35 @@ const messages = () => {
       if (flags.customReward && extra.customRewardId === banID) {
         let number = randomIntFromInterval(1, 100);
 
-        number == 1 && ComfyJS.Say(`/timeout ${user} 10`, extra.channel);
-        number == 1 &&
+        if (number == 1) {
+          timeout(user, 1, "t/o z nagrody kanału", extra.channel);
           ComfyJS.Say(
             `${user} brawo trafiłeś w 1% na 10s t/o OOOO`,
             extra.channel
           );
-        number > 1 &&
-          number < 89 &&
-          ComfyJS.Say(`/timeout ${user} 1800`, extra.channel);
-        number > 1 &&
-          number < 89 &&
+        }
+
+        if (number > 1 && number < 89) {
           ComfyJS.Say(
             `${user} brawo trafiłeś w 88% na 30min t/0 PeepoGlad`,
             extra.channel
           );
-        number > 88 &&
-          number < 100 &&
-          ComfyJS.Say(`/timeout ${user} 3600`, extra.channel);
-        number > 88 &&
-          number < 100 &&
+          timeout(user, 1800, "t/o z nagrody kanału", extra.channel);
+        }
+        if (number > 88 && number < 100) {
           ComfyJS.Say(
             `${user} brawo trafiłeś w 10% na 1h t/0 EZ`,
             extra.channel
           );
-        number == 100 &&
-          ComfyJS.Say(`/ban ${user} ruretka KEKW`, extra.channel);
-        number == 100 &&
+          timeout(user, 3600, "t/o z nagrody kanału", extra.channel);
+        }
+        if (number == 100) {
           ComfyJS.Say(
             `${user} brawo trafiłeś w 1% na perma KEKW`,
             extra.channel
           );
+          timeout(user, null, "t/o z nagrody kanału", extra.channel);
+        }
       }
 
       let reward = slotsID.find((slots) => slots.id === extra.customRewardId);
@@ -217,21 +214,25 @@ const messages = () => {
         ComfyJS.Say(`${result} @${user} ${winMessage}`, extra.channel);
 
         if (!isWin && reward.id == "2ac9a80d-9891-492a-b803-d55616873244") {
-          ComfyJS.Say(`/timeout ${user} 600`, extra.channel);
+          timeout(user, 600, "t/o z nagrody kanału", extra.channel);
         } else if (
           isWin &&
           reward.id == "2ac9a80d-9891-492a-b803-d55616873244"
         ) {
-          ComfyJS.Say(`/timeout ${message} 600`, extra.channel);
+          timeout(message, 600, "t/o z nagrody kanału", extra.channel);
         } else if (reward.withBan && !isWin) {
           if (!isSemiWin && maxNumber > 3) {
-            ComfyJS.Say(`/timeout ${user} 600`, extra.channel);
+            timeout(user, 600, "t/o z nagrody kanału", extra.channel);
           }
           if (isSemiWin && maxNumber <= 3) {
-            ComfyJS.Say(`/timeout ${user} 600`, extra.channel);
+            timeout(user, 600, "t/o z nagrody kanału", extra.channel);
           }
-          if (isSemiWin && maxNumber > 3 && extra.channel.toLowerCase() === 'kezman22') {
-            ComfyJS.Say(`/timeout ${user} 600`, extra.channel);
+          if (
+            isSemiWin &&
+            maxNumber > 3 &&
+            extra.channel.toLowerCase() === "kezman22"
+          ) {
+            timeout(user, 600, "t/o z nagrody kanału", extra.channel);
           }
         }
 
@@ -265,13 +266,18 @@ const messages = () => {
       ) {
         if (extra.channel !== "overpow") {
           pauseSong(extra.channel);
-        };
+        }
 
         const removedSongList = await removeBlockedSong(extra.channel);
 
         if (removedSongList.length > 0) {
           removedSongList.forEach((x) => {
-            ComfyJS.Say(`@${changeBadWords(x.user)} ${ changeBadWords(x.title)} | ${x.reason}`, extra.channel);
+            ComfyJS.Say(
+              `@${changeBadWords(x.user)} ${changeBadWords(x.title)} | ${
+                x.reason
+              }`,
+              extra.channel
+            );
           });
         }
       }
@@ -352,18 +358,18 @@ const messages = () => {
 
     //usuwa Xd
 
-//     if (extra.channel == "kezman22") {
-//       const splitMessage = message.split(" ");
+    //     if (extra.channel == "kezman22") {
+    //       const splitMessage = message.split(" ");
 
-//       splitMessage.forEach((x) => {
-//         if (
-//           (x.indexOf("Xd") !== -1 && x.length > 2) ||
-//           x.indexOf("X d") !== -1
-//         ) {
-//           ComfyJS.Say("/timeout " + user + " 1", extra.channel);
-//         }
-//       });
-//     }
+    //       splitMessage.forEach((x) => {
+    //         if (
+    //           (x.indexOf("Xd") !== -1 && x.length > 2) ||
+    //           x.indexOf("X d") !== -1
+    //         ) {
+    //           ComfyJS.Say("/timeout " + user + " 1", extra.channel);
+    //         }
+    //       });
+    //     }
 
     //cyferki
 
@@ -390,7 +396,7 @@ const messages = () => {
       user != "StreamElements"
     ) {
       ComfyJS.Say(`l2plelTosia overGun ${user}`, extra.channel);
-      ComfyJS.Say(`/timeout ${user} 60`, extra.channel);
+      timeout(user, 60, "strzelał do tosi", extra.channel);
     }
 
     ///META
