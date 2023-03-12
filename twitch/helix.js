@@ -25,7 +25,7 @@ const setTwitchHelixToken = async () => {
 
     setTimeout(setTwitchHelixToken, data.expires_in - 4000);
   } catch (err) {
-    console.log("Error setTwitchHelixToken", err.data.status);
+    console.log("Error setTwitchHelixToken", err.response?.data);
   }
 };
 
@@ -35,17 +35,19 @@ const getUserId = async (name) => {
 
     return data?.data[0]?.id
   } catch (err) {
-    console.log("Error getUserId", err.data.status);
+    console.log("Error getUserId", err.response?.data);
   }
 };
 
 const timeout = async (userName, duration, reason, streamerId) => {
-  const body = {
+  const body = { data :{
     user_id: await getUserId(userName),
     duration,
     reason,
-  };
-
+  }};
+  console.log(      `${URL}moderation/bans?broadcaster_id=${await getUserId(streamerId)}&moderator_id=171103106`,
+      body,
+      getHeader())
   try {
     const { data } = await axios.post(
       `${URL}moderation/bans?broadcaster_id=${await getUserId(streamerId)}&moderator_id=171103106`,
@@ -55,7 +57,7 @@ const timeout = async (userName, duration, reason, streamerId) => {
 
     console.log(data);
   } catch (err) {
-    console.log("Error timeout function in twitch/helix", err);
+    console.log("Error timeout function in twitch/helix", err.response?.data);
   }
 };
 
