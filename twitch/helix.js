@@ -67,8 +67,47 @@ const timeout = async (userName, duration, reason, streamer) => {
   }
 };
 
+const getPredition = async (streamer) => {
+  try {
+    const brodecasterId = await getUserId(streamer)
+    const { data } = await axios.get(
+      `${URL}predictions?broadcaster_id=${brodecasterId}`,
+      await getHeader()
+    );
+    console.log(data, 'getPrediction')
+    return data[0]
+  } catch (err) {
+    console.log("Error getPrediction", err.response?.data);
+  }
+};
+
+const resolvePredition = async (option, streamer) => {
+  try {
+    const prediction = await getPredition(streamer)
+    const winningPrediction = prediction.outcomes.filter(outcome => outcome.title.toLowerCase().trim() === option.toLowerCase().trim())
+    
+    const body = {
+    broadcaster_id: prediction.broadcaster_id,
+    id: prediction.id,
+    status: "RESOLVED",
+    winning_outcome_id: winningPrediction[0].id
+}
+
+    const { data } = await axios.path(
+      `${URL}predictions`,
+      body,
+      await getHeader(streamer)
+    );
+    
+    console.log(data, 'getPrediction')
+  } catch (err) {
+    console.log("Error getPrediction", err.response?.data);
+  }
+};
+
 module.exports = {
   setTwitchHelixToken,
   timeout,
   getUserId,
+  resolvePredition,
 };

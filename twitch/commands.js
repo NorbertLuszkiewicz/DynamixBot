@@ -1,6 +1,6 @@
 const ComfyJS = require("comfy.js");
 const { getWeather, getHoroscope, changeBadWords } = require("./twitch");
-const { getUserId, timeout } = require("./helix");
+const { getUserId, timeout, resolvePredition } = require("./helix");
 const {
   tftMatchList,
   getLolMatchStats,
@@ -531,6 +531,9 @@ const commands = () =>
       }
       if (command === "srstop" && user === "DynaM1X1") {
         setSongAsPlay(extra.channel, "pause");
+      }
+      if (command.toLowerCase() === "resolvepredition" && (flags.mod || flags.broadcaster)) {
+        resolvePredition(message, extra.channel,);
       }
 
       if (
