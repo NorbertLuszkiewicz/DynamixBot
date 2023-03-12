@@ -525,7 +525,7 @@ const commands = () =>
       }
       if (command === "testban" && ( flags.broadcaster)) {
 
-        timeout('testowy', null, null, extra.channel )
+        timeout('testowy', 120, null, extra.channel )
         ComfyJS.Say('timeout testowy 120', extra.channel);
 
       }
