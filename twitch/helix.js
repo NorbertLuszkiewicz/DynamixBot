@@ -33,23 +33,23 @@ const getUserId = async (name) => {
   try {
     const { data } = await axios.get(`${URL}users?login=${name}`, getHeader());
 
-    console.log(data);
+    return data?.data[0]?.id
   } catch (err) {
     console.log("Error getUserId", err.data.status);
   }
 };
 
-const timeout = async (userId, duration, reason, streamerId) => {
+const timeout = async (userName, duration, reason, streamerId) => {
   const body = {
-    user_id: userId,
+    user_id: getUserId(userName),
     duration,
     reason,
   };
   try {
     const { data } = await axios.post(
-      `${URL}moderation/bans?broadcaster_id=171103106&moderator_id=171103106`,
+      `${URL}moderation/bans?broadcaster_id=${getUserId(streamerId)}&moderator_id=171103106`,
       body,
-      getH eader
+      getHeader()
     );
 
     console.log(data);
