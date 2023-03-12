@@ -475,6 +475,7 @@ const lolPosition = {
   MIDDLE: "MID",
   BOTTOM: "ADC",
   SUPPORT: "SUP",
+  UTILITY: "SUP",
 };
 
 const itemIdToName = {
