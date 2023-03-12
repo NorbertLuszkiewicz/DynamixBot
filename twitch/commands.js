@@ -562,6 +562,7 @@ const commands = () =>
           message === "mecz" ||
           message === "rank" ||
           message === "match" ||
+          message === "riot" ||
           message === "matches"
         ) {
           newComandSwitch.tft = isOn;
