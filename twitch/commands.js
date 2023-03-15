@@ -176,7 +176,7 @@ const commands = () =>
 
       if (
         (command === "top" || command === "ranking" || command === "rank") &&
-        commandSwitch.tft
+        commandSwitch.tft && !data.activeRiotAccount.isLol
       ) {
         try {
           const stats = await getRank(extra.channel, message.toUpperCase());
@@ -573,7 +573,7 @@ const commands = () =>
         ) {
           newComandSwitch.tft = isOn;
           ComfyJS.Say(
-            `${onOffMessage} komendy tft: stats, ranking, mecze, mecz`,
+            `${onOffMessage} komendy riot: stats, ranking, mecze, mecz`,
             extra.channel
           );
         }
