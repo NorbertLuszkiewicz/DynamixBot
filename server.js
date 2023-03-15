@@ -12,6 +12,7 @@ const { twitchCommands } = require("./twitch/index.js");
 const { checkActiveRiotAccount } = require("./riot/riot.js");
 const {runner} = require("./tiktokDiscordBot")
 
+
 //Initial functions
 // runner(); off tiktokbot
 twitchCommands(); 
