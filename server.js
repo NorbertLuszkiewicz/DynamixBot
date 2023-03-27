@@ -13,7 +13,7 @@ const { checkActiveRiotAccount } = require("./riot/riot.js");
 const {runner} = require("./tiktokDiscordBot")
 
 
-//Initial functions
+//Initial functions;
 // runner(); off tiktokbot
 twitchCommands(); 
 setTimeoutVolume();
@@ -42,6 +42,7 @@ client.connect(err => {
     checkActiveRiotAccount();
   }
 });
+
 
 fastify.register(require('@fastify/cors'));
 fastify.register(require("./routes"));
