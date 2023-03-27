@@ -38,27 +38,27 @@ const setTwitchHelixToken = async () => {
   }
 };
 
-const getUserId = async (name) => {
+const getUserId = async (name, streamer) => {
 
   try {
-    const { data } = await axios.get(`${URL}users?login=${name}`,await getHeader(name));
+    const { data } = await axios.get(`${URL}users?login=${name}`,await getHeader(streamer));
 
     return data?.data[0]?.id
   } catch (err) {
-    console.log("Error getUserId", err.response?.data);
+    console.log("Error getUserId", err.response?.data)
   }
 };
 
 const timeout = async (userName, duration, reason, streamer) => {
   const body = { data :{
-    user_id: await getUserId(userName),
+    user_id: await getUserId(userName, streamer),
     duration,
     reason,
   }};
 
   try {
     const { data } = await axios.post(
-      `${URL}moderation/bans?broadcaster_id=${await getUserId(streamer)}&moderator_id=171103106`,
+      `${URL}moderation/bans?broadcaster_id=${await getUserId(streamer, streamer)}&moderator_id=171103106`,
       body,
       await getHeader(streamer)
     );
