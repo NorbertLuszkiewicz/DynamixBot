@@ -95,7 +95,7 @@ const getStreamerData = async (accessToken) => {
     const { data } = await axios.get("https://api.twitch.tv/helix/users", {
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        "Client-Id": "bhwlcwuvtg51226poslegrqdcm8naz",
+        "Client-Id": process.env.BOT_CLIENT_ID,
       },
     });
 
