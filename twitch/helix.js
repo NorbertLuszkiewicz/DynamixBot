@@ -15,7 +15,7 @@ const getHeader = async (streamer) => {
   
   return {
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer y5ea3fu7hbxmv9wi5z0rz5sj7fbi1a`,
       "Client-Id": process.env.BOT_CLIENT_ID,
       "Content-Type": "application/json",
     },
@@ -55,6 +55,8 @@ const timeout = async (userName, duration, reason, streamer) => {
     duration,
     reason,
   }};
+  
+  console.log(`${URL}moderation/bans?broadcaster_id=${await getUserId(streamer, streamer)}&moderator_id=171103106`, body,  await getHeader(streamer))
 
   try {
     const { data } = await axios.post(
