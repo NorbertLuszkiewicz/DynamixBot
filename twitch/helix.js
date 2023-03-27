@@ -41,7 +41,7 @@ const setTwitchHelixToken = async () => {
 const getUserId = async (name) => {
 
   try {
-    const { data } = await axios.get(`${URL}users?login=${name}`,await getHeader());
+    const { data } = await axios.get(`${URL}users?login=${name}`,await getHeader(name));
 
     return data?.data[0]?.id
   } catch (err) {
