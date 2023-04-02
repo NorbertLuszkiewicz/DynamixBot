@@ -68,20 +68,18 @@ const timeout = async (userName, duration, reason, streamer) => {
   }
 };
 
-const sendMessage = async (userName, duration, reason, streamer) => {
+const sendMessage = async (message, streamer) => {
   const body = {
     data: {
-      user_id: await getUserId(userName, streamer),
-      duration,
-      reason,
+      broadcaster_id: await getUserId(streamer, streamer),
+      message,
+      target: ["broadcast"],
     },
   };
 
   try {
-    const { data } = await axios.post(
-      `${URL}moderation/bans?broadcaster_id=${await getUserId(
-        streamer
-      )}&moderator_id=171103106`,
+     await axios.post(
+      `${URL}extensions/pubsub`,
       body,
       await getHeader()
     );

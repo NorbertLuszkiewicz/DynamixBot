@@ -1,6 +1,6 @@
 const ComfyJS = require("comfy.js");
 const { getWeather, getHoroscope, changeBadWords } = require("./twitch");
-const { getUserId, timeout, resolvePrediction } = require("./helix");
+const { getUserId, timeout, sendMessage, resolvePrediction } = require("./helix");
 const {
   tftMatchList,
   getLolMatchStats,
@@ -526,7 +526,7 @@ const commands = () =>
       if (command === "testban" &&( flags.mod || flags.broadcaster)) {
 
         timeout('testowy', 120, null, extra.channel )
-       
+         sendMessage("aaaaaa", 'dynam1x1')
 
       }
       if (command === "srstop" && user === "DynaM1X1") {
