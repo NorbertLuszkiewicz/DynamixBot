@@ -150,7 +150,7 @@ async function routes(fastify, options) {
 
   fastify.post("/sendmessage", async (req, res) => {
     res.header("Access-Control-Allow-Methods", "POST");
-
+    console.log(req.body)
     const message = req.body.message;
     const streamer = req.body.streamer;
 
