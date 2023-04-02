@@ -10,6 +10,7 @@ const {
 const { getUser, updateUser } = require("../controllers/UserController.js");
 const { addNewUser, refreshTwitchTokens } = require("../twitch/twitch.js");
 const { addTftUser, removeTftUser } = require("../riot/riot.js");
+const { sendMessage } = require("../twitch/helix.js");
 
 async function routes(fastify, options) {
   fastify.get("/", function (req, res) {
@@ -39,7 +40,6 @@ async function routes(fastify, options) {
       "user-read-recently-played",
       "user-follow-read",
       "user-follow-modify",
-      
     ];
 
     res.redirect(
@@ -123,9 +123,7 @@ async function routes(fastify, options) {
   });
 
   fastify.put("/streamelements", async (req, res) => {
-    res.header("Access-Control-Allow-Origin",
-      "https://dynamixbot.pl",
-    );
+    res.header("Access-Control-Allow-Origin", "https://dynamixbot.pl");
     res.header("Access-Control-Allow-Methods", "PUT");
 
     const clientID = req.body.clientID;
@@ -138,8 +136,8 @@ async function routes(fastify, options) {
         clientSongRequestID: clientID,
         clientSongRequestSecret: token,
       });
-      
-           res.status(200).send({
+
+      res.status(200).send({
         message: "Successfully saved changes",
       });
     } catch {
@@ -150,10 +148,28 @@ async function routes(fastify, options) {
     }
   });
 
+  fastify.post("/sendmessage", async (req, res) => {
+    res.header("Access-Control-Allow-Methods", "POST");
+
+    const message = req.body.message;
+    const streamer = req.body.streamer;
+
+    try {
+      await sendMessage(message, streamer);
+
+      res.status(200).send({
+        message: "Successfully send message",
+      });
+    } catch {
+      fastify.log.error("Error when send message");
+      res.status(400).send({
+        message: "Something went wrong",
+      });
+    }
+  });
+
   fastify.put("/volumeaward", async (req, res) => {
-    res.header("Access-Control-Allow-Origin", 
- "https://dynamixbot.pl",
-    );
+    res.header("Access-Control-Allow-Origin", "https://dynamixbot.pl");
     res.header("Access-Control-Allow-Methods", "PUT");
 
     const min = req.body.min;
@@ -193,9 +209,7 @@ async function routes(fastify, options) {
   });
 
   fastify.put("/riot", async (req, res) => {
-    res.header("Access-Control-Allow-Origin", 
-      "https://dynamixbot.pl",
-   );
+    res.header("Access-Control-Allow-Origin", "https://dynamixbot.pl");
     res.header("Access-Control-Allow-Methods", "PUT");
 
     const name = req.body.name;
@@ -214,11 +228,9 @@ async function routes(fastify, options) {
       });
     }
   });
-  
-    fastify.put("/riot-remove", async (req, res) => {
-    res.header("Access-Control-Allow-Origin", 
-      "https://dynamixbot.pl",
-   );
+
+  fastify.put("/riot-remove", async (req, res) => {
+    res.header("Access-Control-Allow-Origin", "https://dynamixbot.pl");
     res.header("Access-Control-Allow-Methods", "PUT");
 
     const name = req.body.name;
@@ -237,12 +249,9 @@ async function routes(fastify, options) {
       });
     }
   });
-  
-  
+
   fastify.put("/slots", async (req, res) => {
-    res.header("Access-Control-Allow-Origin", 
-      "https://dynamixbot.pl",
-      );
+    res.header("Access-Control-Allow-Origin", "https://dynamixbot.pl");
     res.header("Access-Control-Allow-Methods", "PUT");
 
     const { name, emotes, withBan, user } = req.body;
@@ -281,9 +290,7 @@ async function routes(fastify, options) {
   });
 
   fastify.put("/command_switch", async (req, res) => {
-    res.header("Access-Control-Allow-Origin",
-      "https://dynamixbot.pl",
-     );
+    res.header("Access-Control-Allow-Origin", "https://dynamixbot.pl");
     res.header("Access-Control-Allow-Methods", "PUT");
 
     const { user, body } = req.body;
@@ -308,9 +315,7 @@ async function routes(fastify, options) {
   });
 
   fastify.put("/slot_remove", async (req, res) => {
-    res.header("Access-Control-Allow-Origin", 
-      "https://dynamixbot.pl",
-    );
+    res.header("Access-Control-Allow-Origin", "https://dynamixbot.pl");
     res.header("Access-Control-Allow-Methods", "PUT");
 
     const { id, user } = req.body;

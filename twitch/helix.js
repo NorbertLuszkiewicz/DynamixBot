@@ -1,4 +1,5 @@
 const axios = require("axios");
+const ComfyJS = require("comfy.js");
 
 const { getUser } = require("../controllers/UserController.js");
 
@@ -69,24 +70,10 @@ const timeout = async (userName, duration, reason, streamer) => {
 };
 
 const sendMessage = async (message, streamer) => {
-  const body = {
-   
-      broadcaster_id: await getUserId(streamer, streamer),
-      message: message,
-      target: ["broadcast"],
-   
-  };
-
-  try {
-    const test = await axios.post(
-      `${URL}extensions/pubsub`,
-      body,
-      await getHeader()
-    );
-    test
-  } catch (err) {
-    console.log("Error timeout function in twitch/helix", err.response?.data);
-  }
+          ComfyJS.Say(
+          message,
+          streamer
+        );
 };
 
 const getPredition = async (streamer) => {
