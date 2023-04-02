@@ -70,19 +70,20 @@ const timeout = async (userName, duration, reason, streamer) => {
 
 const sendMessage = async (message, streamer) => {
   const body = {
-    data: {
+   
       broadcaster_id: await getUserId(streamer, streamer),
-      message,
+      message: message,
       target: ["broadcast"],
-    },
+   
   };
 
   try {
-     await axios.post(
+    const test = await axios.post(
       `${URL}extensions/pubsub`,
       body,
       await getHeader()
     );
+    test
   } catch (err) {
     console.log("Error timeout function in twitch/helix", err.response?.data);
   }
