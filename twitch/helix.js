@@ -1,15 +1,16 @@
 const axios = require("axios");
-const {
-  getUser,
-} = require("../controllers/UserController.js");
+
+const { getUser } = require("../controllers/UserController.js");
 
 const TOKEN_URL = "https://id.twitch.tv/oauth2/token";
 const URL = "https://api.twitch.tv/helix/";
 
-const getHeader =  () => {
+const getHeader = async () => {
+  const [data] = await getUser("dynam1x1");
+
   return {
     headers: {
-      Authorization: `Bearer ${process.env.DYNAMIX_TWITCH_ACCESS_TOKEN}`,
+      Authorization: `Bearer ${data.twitchAccessToken}`,
       "Client-Id": process.env.BOT_CLIENT_ID,
       "Content-Type": "application/json",
     },
@@ -33,28 +34,34 @@ const getHeader =  () => {
 // };
 
 const getUserId = async (name) => {
-
   try {
-    const { data } = await axios.get(`${URL}users?login=${name}`,await getHeader());
+    const { data } = await axios.get(
+      `${URL}users?login=${name}`,
+      await getHeader()
+    );
 
-    return data?.data[0]?.id
+    return data?.data[0]?.id;
   } catch (err) {
-    console.log("Error getUserId", err.response?.data)
+    console.log("Error getUserId", err.response?.data);
   }
 };
 
 const timeout = async (userName, duration, reason, streamer) => {
-  const body = { data :{
-    user_id: await getUserId(userName, streamer),
-    duration,
-    reason,
-  }};
+  const body = {
+    data: {
+      user_id: await getUserId(userName, streamer),
+      duration,
+      reason,
+    },
+  };
 
   try {
     const { data } = await axios.post(
-      `${URL}moderation/bans?broadcaster_id=${await getUserId(streamer)}&moderator_id=171103106`,
+      `${URL}moderation/bans?broadcaster_id=${await getUserId(
+        streamer
+      )}&moderator_id=171103106`,
       body,
-      getHeader()
+      await getHeader()
     );
   } catch (err) {
     console.log("Error timeout function in twitch/helix", err.response?.data);
@@ -63,13 +70,13 @@ const timeout = async (userName, duration, reason, streamer) => {
 
 const getPredition = async (streamer) => {
   try {
-    const brodecasterId = await getUserId(streamer)
+    const brodecasterId = await getUserId(streamer);
     const { data } = await axios.get(
       `${URL}predictions?broadcaster_id=${brodecasterId}`,
-     getHeader()
+      await getHeader()
     );
-    console.log(data, 'getPrediction')
-    return data[0]
+    console.log(data, "getPrediction");
+    return data[0];
   } catch (err) {
     console.log("Error getPrediction", err.response?.data);
   }
@@ -77,23 +84,26 @@ const getPredition = async (streamer) => {
 
 const resolvePrediction = async (option, streamer) => {
   try {
-    const prediction = await getPredition(streamer)
-    const winningPrediction = prediction.outcomes.filter(outcome => outcome.title.toLowerCase().trim() === option.toLowerCase().trim())
-    
+    const prediction = await getPredition(streamer);
+    const winningPrediction = prediction.outcomes.filter(
+      (outcome) =>
+        outcome.title.toLowerCase().trim() === option.toLowerCase().trim()
+    );
+
     const body = {
-    broadcaster_id: prediction.broadcaster_id,
-    id: prediction.id,
-    status: "RESOLVED",
-    winning_outcome_id: winningPrediction[0].id
-}
+      broadcaster_id: prediction.broadcaster_id,
+      id: prediction.id,
+      status: "RESOLVED",
+      winning_outcome_id: winningPrediction[0].id,
+    };
 
     const { data } = await axios.path(
       `${URL}predictions`,
       body,
-      getHeader()
+      await getHeader()
     );
-    
-    console.log(data, 'getPrediction')
+
+    console.log(data, "getPrediction");
   } catch (err) {
     console.log("Error getPrediction", err.response?.data);
   }
