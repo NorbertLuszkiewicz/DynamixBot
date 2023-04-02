@@ -68,6 +68,28 @@ const timeout = async (userName, duration, reason, streamer) => {
   }
 };
 
+const sendMessage = async (userName, duration, reason, streamer) => {
+  const body = {
+    data: {
+      user_id: await getUserId(userName, streamer),
+      duration,
+      reason,
+    },
+  };
+
+  try {
+    const { data } = await axios.post(
+      `${URL}moderation/bans?broadcaster_id=${await getUserId(
+        streamer
+      )}&moderator_id=171103106`,
+      body,
+      await getHeader()
+    );
+  } catch (err) {
+    console.log("Error timeout function in twitch/helix", err.response?.data);
+  }
+};
+
 const getPredition = async (streamer) => {
   try {
     const brodecasterId = await getUserId(streamer);
@@ -110,7 +132,7 @@ const resolvePrediction = async (option, streamer) => {
 };
 
 module.exports = {
-  // setTwitchHelixToken,
+  sendMessage,
   timeout,
   getUserId,
   resolvePrediction,
