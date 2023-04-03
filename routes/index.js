@@ -158,7 +158,7 @@ async function routes(fastify, options) {
       if (body.addwinner) {
         const [user] = await getUser(name);
         user.wheelwinners.length === 5 && user.wheelwinners.pop();
-        user.wheelwinners.unshift(body.message);
+        user.wheelwinners ? user.wheelwinners.unshift(body.message): [body.message];
         await updateUser({
           streamer: body.streamer,
           wheelwinners: user.wheelwinners,
