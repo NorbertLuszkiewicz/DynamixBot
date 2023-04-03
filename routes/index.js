@@ -155,6 +155,14 @@ async function routes(fastify, options) {
 
     try {
       sendMessage(body.message, body.streamer);
+      
+      const [user] = await getUser(name);
+      
+      await updateUser({
+        streamer:  body.streamer,
+        clientSongRequestID: body.message,
+
+      });
 
       res.status(200).send({
         message: "Successfully send message",
