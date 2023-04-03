@@ -151,18 +151,19 @@ async function routes(fastify, options) {
   fastify.post("/sendmessage", async (req, res) => {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Methods", "POST");
-    const body = JSON.parse(req.body) ;
+    const body = JSON.parse(req.body);
 
     try {
       sendMessage(body.message, body.streamer);
-      
-      const [user] = await getUser(name);
-      
-      await updateUser({
-        streamer:  body.streamer,
-        clientSongRequestID: body.message,
-
-      });
+      if (body.addwinner) {
+        const [user] = await getUser(name);
+        user.wheelwinners.length === 5 && user.wheelwinners.pop();
+        user.wheelwinners.unshift(body.message);
+        await updateUser({
+          streamer: body.streamer,
+          wheelwinners: user.wheelwinners,
+        });
+      }
 
       res.status(200).send({
         message: "Successfully send message",

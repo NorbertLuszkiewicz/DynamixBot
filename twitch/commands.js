@@ -268,6 +268,7 @@ const commands = () =>
           console.log(`Error when use !horoskop on twitch (${err})`);
         }
       }
+      
       if (command === "lastWinners" || command === "wins") {
         const slots = data.slotsID;
         let result = "";
@@ -281,10 +282,13 @@ const commands = () =>
                 : ""
             } |`;
         });
-
-        console.log(slots);
-
         ComfyJS.Say(changeBadWords(result), extra.channel);
+      }   
+      
+      if (command === "wheelWinners" || command === "wheelwinners") {
+        const wheelwinners = data.wheelwinners.toString();
+
+        ComfyJS.Say(wheelwinners, extra.channel);
       }
 
       if (command === "slots" && commandSwitch.slots) {
