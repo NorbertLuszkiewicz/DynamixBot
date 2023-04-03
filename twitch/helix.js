@@ -69,7 +69,7 @@ const timeout = async (userName, duration, reason, streamer) => {
   }
 };
 
-const sendMessage = async (message, streamer) => {
+const sendMessage =  (message, streamer) => {
           ComfyJS.Say(
           message,
           streamer
