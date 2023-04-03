@@ -151,7 +151,7 @@ async function routes(fastify, options) {
   fastify.post("/sendmessage", async (req, res) => {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Methods", "POST");
-    const body = JSON.parse(req.body);
+    const body = JSON.parse(req.body) ;
 
     try {
       sendMessage(body.message, body.streamer);
