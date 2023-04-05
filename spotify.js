@@ -185,6 +185,7 @@ const changeVolumeOnTime = async (streamer, min, max, time) => {
 };
 
 const setVolume = async (streamer, value) => {
+  console.log()
   try {
     const [user] = await getUser(streamer);
     const { spotifyAccessToken, device } = user;

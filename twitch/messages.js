@@ -467,6 +467,7 @@ const messages = () => {
     const volumeValue = message.substr(7);
 
     if (isVolumeCommand == 0 && (flags.mod || flags.broadcaster)) {
+      console.log(extra.channel, volumeValue)
       setVolume(extra.channel, volumeValue);
     }
 
