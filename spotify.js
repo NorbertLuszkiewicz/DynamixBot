@@ -179,7 +179,7 @@ const changeVolumeOnTime = async (streamer, min, max, time) => {
     );
   } catch ({ response }) {
     console.log(
-      `Error while volume changes to higher (${response.status} ${response.statusText})`
+      `Error while volume changes to higher (${response.data} )`
     );
   }
 };
