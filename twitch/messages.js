@@ -86,6 +86,7 @@ const messages = () => {
         (flags.mod || flags.broadcaster)
       ) {
         let newVolumeSongID = volumeSongID;
+        newVolumeSongID.id = extra.customRewardId;
 
         updateUser({
           streamer: extra.channel,
