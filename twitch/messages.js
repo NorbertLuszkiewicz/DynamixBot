@@ -85,7 +85,7 @@ const messages = () => {
         message === "change-volume-song-award" &&
         (flags.mod || flags.broadcaster)
       ) {
-        let newVolumeSongID = volumeSongID;
+        const newVolumeSongID = volumeSongID;
         newVolumeSongID.id = extra.customRewardId;
 
         updateUser({
