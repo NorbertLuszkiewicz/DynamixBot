@@ -26,25 +26,30 @@ const client = new MongoClient(`mongodb+srv://${process.env.MONGODB}&w=majority`
   useUnifiedTopology: true,
 });
 
-client.connect(err => {
-  if (err) {
-    console.log("Error with connect to database");
-    refreshAccessToken;
-  } else {
-    console.log("Database connected!");
+async function run() {
+  try {
+    // Connect the client to the server	(optional starting in v4.7)
+    await client.connect();
+    // Send a ping to confirm a successful connection
+    await client.db("admin").command({ ping: 1 });
+    console.log("Pinged your deployment. You successfully connected to MongoDB!");
     refreshAccessToken();
     refreshTwitchTokens();
     checkActiveRiotAccount();
+
+    fastify.listen(process.env.PORT, function (err, address) {
+      if (err) {
+        fastify.log.error(err);
+        process.exit(1);
+      }
+      fastify.log.info(`Server listening on ${address}`);
+    });
+  } finally {
+    // Ensures that the client will close when you finish/error
+    await client.close();
   }
-});
+}
+run().catch(console.dir);
 
 fastify.register(require("@fastify/cors"));
 fastify.register(require("./routes"));
-
-fastify.listen(process.env.PORT, function (err, address) {
-  if (err) {
-    fastify.log.error(err);
-    process.exit(1);
-  }
-  fastify.log.info(`Server listening on ${address}`);
-});
