@@ -35,16 +35,15 @@ client.connect(err => {
     refreshAccessToken();
     refreshTwitchTokens();
     checkActiveRiotAccount();
+    fastify.listen(process.env.PORT, function (err, address) {
+      if (err) {
+        fastify.log.error(err);
+        process.exit(1);
+      }
+      fastify.log.info(`Server listening on ${address}`);
+    });
   }
 });
 
 fastify.register(require("@fastify/cors"));
 fastify.register(require("./routes"));
-
-fastify.listen(process.env.PORT, function (err, address) {
-  if (err) {
-    fastify.log.error(err);
-    process.exit(1);
-  }
-  fastify.log.info(`Server listening on ${address}`);
-});
