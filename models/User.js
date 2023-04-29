@@ -1,16 +1,17 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+require("dotenv").config();
 
 mongoose.connect(`mongodb+srv://${process.env.MONGODB}&w=majority`, {
   useNewUrlParser: true,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
 });
 
 const UserSchema = new Schema({
   streamer: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
   },
   twitchAccessToken: {
     type: String,
@@ -22,35 +23,35 @@ const UserSchema = new Schema({
   },
   spotifyRefreshToken: {
     type: String,
-    default: null
+    default: null,
   },
   spotifyAccessToken: {
     type: String,
-    default: null
+    default: null,
   },
   device: {
     type: String,
-    default: null
+    default: null,
   },
   code: {
     type: String,
-    default: null
+    default: null,
   },
   clientSongRequestID: {
     type: String,
-    default: null
+    default: null,
   },
   clientSongRequestSecret: {
     type: String,
-    default: null
+    default: null,
   },
   addSongID: {
     type: String,
-    default: null
+    default: null,
   },
   skipSongID: {
     type: String,
-    default: null
+    default: null,
   },
   volumeSongID: {
     type: {
@@ -59,62 +60,62 @@ const UserSchema = new Schema({
       min: Number,
       maxSR: Number,
       minSR: Number,
-      time: Number
+      time: Number,
     },
-    default: null
+    default: null,
   },
   timeoutVolume: {
     type: Schema.Types.Mixed,
-    default: null
+    default: null,
   },
   maxVolumeTime: {
     type: Number,
-    default: null
+    default: null,
   },
   commentAfterSubs: {
     type: String,
-    default: null
+    default: null,
   },
   timeCooldownTravis: {
     type: Number,
     default: null,
-    unique: true
+    unique: true,
   },
   timeCooldownOg1ii: {
     type: String,
     default: null,
-    unique: true
+    unique: true,
   },
   endTime: {
     type: Number,
     default: null,
-    unique: true
-  } , 
+    unique: true,
+  },
   puuid: {
     type: String,
     default: null,
-    unique: true
-  },  
+    unique: true,
+  },
   riotAccountList: {
     type: Array,
     default: [],
   },
   activeRiotAccount: {
-    type: {name: String, server: String, date: Number, puuid: String, id: String, isLol: Boolean},
+    type: { name: String, server: String, date: Number, puuid: String, id: String, isLol: Boolean },
     default: null,
-  },  
+  },
   matchList: {
     type: Array,
     default: [],
-  }, 
+  },
   rollID: {
     type: String,
     default: null,
-  }, 
+  },
   banID: {
     type: String,
     default: null,
-  }, 
+  },
   slotsID: {
     type: Array,
     default: null,
@@ -123,9 +124,9 @@ const UserSchema = new Schema({
     type: Array,
     default: [],
   },
-    commandSwitch: {
-    type: {weather: Boolean, tft: Boolean, chess: Boolean, wordle: Boolean, slots: Boolean, song: Boolean},
-    default: {weather: true, tft: true, chess: true, wordle: true, slots: true, song: true},
+  commandSwitch: {
+    type: { weather: Boolean, tft: Boolean, chess: Boolean, wordle: Boolean, slots: Boolean, song: Boolean },
+    default: { weather: true, tft: true, chess: true, wordle: true, slots: true, song: true },
   },
 });
 
