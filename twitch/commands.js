@@ -1,26 +1,12 @@
 const ComfyJS = require("comfy.js");
 const { getWeather, getHoroscope, changeBadWords } = require("./twitch");
 const { getUserId, timeout, sendMessage, resolvePrediction } = require("./helix");
-const {
-  tftMatchList,
-  getLolMatchStats,
-  getMatch,
-  getStats,
-  getRank,
-} = require("../riot/riot.js");
+const { tftMatchList, getLolMatchStats, getMatch, getStats, getRank } = require("../riot/riot.js");
 const { currentlyPlaying, nextSong, startSong } = require("../spotify");
-const {
-  songPlayingNow,
-  timeRequest,
-  setSongAsPlay,
-} = require("../streamElements");
+const { songPlayingNow, timeRequest, setSongAsPlay } = require("../streamElements");
 const { getChessUser, getLastGame } = require("../chess");
 const { allWord, literalnieWord } = require("../literalnie");
-const {
-  getAllUser,
-  updateUser,
-  getUser,
-} = require("../controllers/UserController.js");
+const { getAllUser, updateUser, getUser } = require("../controllers/UserController.js");
 
 let users = {};
 let usersWordle = {};
@@ -34,55 +20,34 @@ const commands = () =>
       if ((command == "song" || command == "coleci") && commandSwitch.song) {
         try {
           const spotifyData = await currentlyPlaying(extra.channel);
-          const { isPlayingNow, title, link, userAdded } = await songPlayingNow(
-            extra.channel
-          );
+          const { isPlayingNow, title, link, userAdded } = await songPlayingNow(extra.channel);
 
           if (isPlayingNow) {
-            ComfyJS.Say(
-              `@${user} ${title} ${
-                userAdded && " | dodał/a " + userAdded + " "
-              } ${link} `,
-              extra.channel
-            );
+            ComfyJS.Say(`@${user} ${title} ${userAdded && " | dodał/a " + userAdded + " "} ${link} `, extra.channel);
           } else {
-            let url = spotifyData.item.external_urls.spotify
-              ? spotifyData.item.external_urls.spotify
-              : "";
-            let title = spotifyData.item.name
-              ? spotifyData.item.name
-              : "Nieznany tytuł utworu";
+            let url = spotifyData.item.external_urls.spotify ? spotifyData.item.external_urls.spotify : "";
+            let title = spotifyData.item.name ? spotifyData.item.name : "Nieznany tytuł utworu";
             let autor = "";
             if (spotifyData.item.artists.length > 0) {
-              spotifyData.item.artists.forEach((artist) => {
+              spotifyData.item.artists.forEach(artist => {
                 autor += artist.name + ", ";
               });
             }
 
-            spotifyData &&
-              ComfyJS.Say(`@${user} ${title} | ${autor} ${url}`, extra.channel);
+            spotifyData && ComfyJS.Say(`@${user} ${title} | ${autor} ${url}`, extra.channel);
           }
         } catch (err) {
           console.log(`Error when use !song on twitch (${err})`);
         }
       }
 
-      if (
-        (command == "playlist" || command == "playlista") &&
-        commandSwitch.song
-      ) {
+      if ((command == "playlist" || command == "playlista") && commandSwitch.song) {
         try {
           const spotifyData = await currentlyPlaying(extra.channel);
 
-          let url = spotifyData.context
-            ? spotifyData.context.external_urls.spotify
-            : "Nieznana Playlista";
+          let url = spotifyData.context ? spotifyData.context.external_urls.spotify : "Nieznana Playlista";
 
-          spotifyData &&
-            ComfyJS.Say(
-              `@${user} aktualnie leci ta playlista: ${url} catJAM `,
-              extra.channel
-            );
+          spotifyData && ComfyJS.Say(`@${user} aktualnie leci ta playlista: ${url} catJAM `, extra.channel);
         } catch (err) {
           console.log(`Error when use !playlist on twitch (${err})`);
         }
@@ -90,9 +55,7 @@ const commands = () =>
 
       if ((command == "matches" || command == "mecze") && commandSwitch.tft) {
         try {
-          const NickNameAndServer = message
-            ? message.split(", ")
-            : [null, null];
+          const NickNameAndServer = message ? message.split(", ") : [null, null];
 
           let matchesList;
           if (data?.activeRiotAccount?.isLol) {
@@ -136,11 +99,7 @@ const commands = () =>
           console.log(`Error when use !mecz on twitch (${err})`);
         }
       }
-      if (
-        (command == "match" || command == "mecz") &&
-        !message &&
-        commandSwitch.tft
-      ) {
+      if ((command == "match" || command == "mecz") && !message && commandSwitch.tft) {
         ComfyJS.Say(
           `@${user} komenda !mecze pokazuje liste meczy z dzisiaj (miejsca o raz synergie) !mecz [nr] gdzie [nr] oznacza numer meczu licząc od najnowszego czyli !mecz 1 pokaze ostatnią gre (wyświetla dokładny comp z itemami i synergiami)`,
           extra.channel
@@ -159,9 +118,7 @@ const commands = () =>
 
       if ((command == "stats" || command == "staty") && commandSwitch.tft) {
         try {
-          const NickNameAndServer = message
-            ? message.split(", ")
-            : [null, null];
+          const NickNameAndServer = message ? message.split(", ") : [null, null];
           const stats = await getStats(
             extra.channel,
             NickNameAndServer[0],
@@ -176,7 +133,8 @@ const commands = () =>
 
       if (
         (command === "top" || command === "ranking" || command === "rank") &&
-        commandSwitch.tft && !data.activeRiotAccount.isLol
+        commandSwitch.tft &&
+        !data.activeRiotAccount.isLol
       ) {
         try {
           const stats = await getRank(extra.channel, message.toUpperCase());
@@ -197,10 +155,7 @@ const commands = () =>
         }
       }
 
-      if (
-        (command === "weather" || command === "pogoda") &&
-        commandSwitch.weather
-      ) {
+      if ((command === "weather" || command === "pogoda") && commandSwitch.weather) {
         try {
           const { temp, speed, description } = await getWeather(toPl(message));
           let emote = "";
@@ -218,17 +173,12 @@ const commands = () =>
           description == "mgła" && (emote = "🌫️");
           description == "umiarkowane opady deszczu" && (emote = "🌧️");
 
-          if (
-            message.toLowerCase() != "niger" &&
-            message.toLowerCase() != "nigger"
-          ) {
+          if (message.toLowerCase() != "niger" && message.toLowerCase() != "nigger") {
             temp
               ? ComfyJS.Say(
                   `@${user} Jest ${Math.round(
                     temp - 273
-                  )} °C, ${description} ${emote} wiatr wieje z prędkością ${speed} km/h (${changeBadWords(
-                    message
-                  )})`,
+                  )} °C, ${description} ${emote} wiatr wieje z prędkością ${speed} km/h (${changeBadWords(message)})`,
                   extra.channel
                 )
               : ComfyJS.Say(`@${user} Nie znaleziono`, extra.channel);
@@ -238,10 +188,7 @@ const commands = () =>
         }
       }
 
-      if (
-        command === "horoscope" ||
-        (command === "horoskop" && commandSwitch.weather)
-      ) {
+      if (command === "horoscope" || (command === "horoskop" && commandSwitch.weather)) {
         try {
           const changeToEng = {
             baran: "aries",
@@ -268,23 +215,21 @@ const commands = () =>
           console.log(`Error when use !horoskop on twitch (${err})`);
         }
       }
-      
+
       if (command === "lastWinners" || command === "wins") {
         const slots = data.slotsID;
         let result = "";
 
-        slots.forEach((slot) => {
+        slots.forEach(slot => {
           result =
             result +
             ` nazwa: ${slot.name} wynik: (${slot.wins}/${slot.times}) ${
-              slot.lastWinners
-                ? "ostatnio wygrali: (" + slot.lastWinners + ")"
-                : ""
+              slot.lastWinners ? "ostatnio wygrali: (" + slot.lastWinners + ")" : ""
             } |`;
         });
         ComfyJS.Say(changeBadWords(result), extra.channel);
-      }   
-      
+      }
+
       if (command === "wheelWinners" || command === "wheelwinners") {
         const wheelwinners = data.wheelwinners.toString();
 
@@ -292,16 +237,7 @@ const commands = () =>
       }
 
       if (command === "slots" && commandSwitch.slots) {
-        const emotes = [
-          "",
-          "VisLaud",
-          "EZ",
-          "peepoGlad",
-          "Kappa",
-          "okok",
-          "BOOBA",
-          "kezmanStare",
-        ];
+        const emotes = ["", "VisLaud", "EZ", "peepoGlad", "Kappa", "okok", "BOOBA", "kezmanStare"];
 
         let number1 = randomInt(1, 7);
         let number2 = randomInt(1, 7);
@@ -313,8 +249,7 @@ const commands = () =>
       `;
 
         const isWin = number1 === number2 && number2 === number3;
-        const isSemiWin =
-          number1 === number2 || number1 === number3 || number2 === number3;
+        const isSemiWin = number1 === number2 || number1 === number3 || number2 === number3;
         let winMessage = "przegrałeś PepeLaugh";
         isSemiWin && (winMessage = "prawie prawie PauseChamp");
         isWin && (winMessage = "wygrałeś BRUHBRUH");
@@ -325,7 +260,7 @@ const commands = () =>
           ComfyJS.Say(`${result} @${user} ${winMessage}`, extra.channel);
         };
 
-        const checkDate = (time) => {
+        const checkDate = time => {
           if (time <= now) {
             users[user + extra.channel] = time + 60 * 1000 * 3;
 
@@ -337,9 +272,7 @@ const commands = () =>
         timeForUser ? checkDate(timeForUser) : checkDate(now);
       }
       const now = new Date().getTime();
-      const canWrite = usersWordle[user + extra.channel]
-        ? usersWordle[user + extra.channel].time <= now
-        : true;
+      const canWrite = usersWordle[user + extra.channel] ? usersWordle[user + extra.channel].time <= now : true;
 
       if (
         command === "wordle" &&
@@ -374,24 +307,18 @@ const commands = () =>
               colorResult.push("⬜");
             }
           }
-          isWin =
-            JSON.stringify(colorResult) ==
-            JSON.stringify(["🟩", "🟩", "🟩", "🟩", "🟩"]);
+          isWin = JSON.stringify(colorResult) == JSON.stringify(["🟩", "🟩", "🟩", "🟩", "🟩"]);
 
           return colorResult.join(" ");
         };
 
         usersWordle[user + extra.channel].messages.push(message);
-        usersWordle[user + extra.channel].colorRow.push(
-          wordleResult() + "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"
-        );
+        usersWordle[user + extra.channel].colorRow.push(wordleResult() + "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀");
         usersWordle[user + extra.channel].finalWord = finalWord;
 
         let result = `__________________________________________________
       ${usersWordle[user + extra.channel].colorRow.join(" ")} 
-      ${usersWordle[user + extra.channel].messages} @${user} ${
-          isWin ? "wygrałeś BRUHBRUH " : ""
-        }
+      ${usersWordle[user + extra.channel].messages} @${user} ${isWin ? "wygrałeś BRUHBRUH " : ""}
        ${
          !isWin && usersWordle[user + extra.channel].messages.length === 5
            ? "przegrałeś PepeLaugh to była ostatnia próba"
@@ -401,10 +328,7 @@ const commands = () =>
         const seySlots = () => {
           ComfyJS.Say(`${changeBadWords(result)}`, extra.channel);
 
-          if (
-            usersWordle[user + extra.channel].messages.length === 5 ||
-            isWin
-          ) {
+          if (usersWordle[user + extra.channel].messages.length === 5 || isWin) {
             usersWordle[user + extra.channel] = {
               time: now + 60 * 1000 * 10,
               finalWord: "",
@@ -414,7 +338,7 @@ const commands = () =>
           }
         };
 
-        const changeUserData = (time) => {
+        const changeUserData = time => {
           if (time <= now) {
             seySlots();
           }
@@ -422,9 +346,7 @@ const commands = () =>
 
         const timeForUser = usersWordle[user + extra.channel].time;
 
-        timeForUser
-          ? changeUserData(usersWordle[user + extra.channel].time)
-          : changeUserData(now);
+        timeForUser ? changeUserData(usersWordle[user + extra.channel].time) : changeUserData(now);
 
         console.log(user + " " + extra.channel, finalWord);
       }
@@ -435,12 +357,7 @@ const commands = () =>
           extra.channel
         );
       }
-      if (
-        command === "wordle" &&
-        message &&
-        !allWord.includes(message.toLowerCase()) &&
-        commandSwitch.wordle
-      ) {
+      if (command === "wordle" && message && !allWord.includes(message.toLowerCase()) && commandSwitch.wordle) {
         ComfyJS.Say(
           `@${user} Podałeś słowo, które nie zawiera 5 znaków albo nie znaleziono go w słowniku`,
           extra.channel
@@ -456,17 +373,11 @@ const commands = () =>
       //         );
       //       }
 
-      if (
-        (command === "chessuser" || command === "szachista") &&
-        commandSwitch.chess
-      ) {
+      if ((command === "chessuser" || command === "szachista") && commandSwitch.chess) {
         try {
           const playerInfo = await getChessUser(message, extra.channel);
 
-          ComfyJS.Say(
-            `@${changeBadWords(user)} ${changeBadWords(playerInfo)}`,
-            extra.channel
-          );
+          ComfyJS.Say(`@${changeBadWords(user)} ${changeBadWords(playerInfo)}`, extra.channel);
         } catch (err) {
           console.log(`Error when use !user on twitch (${err})`);
         }
@@ -475,10 +386,7 @@ const commands = () =>
         try {
           const gameInfo = await getLastGame(message, extra.channel);
 
-          ComfyJS.Say(
-            `@${changeBadWords(user)} ${changeBadWords(gameInfo)}`,
-            extra.channel
-          );
+          ComfyJS.Say(`@${changeBadWords(user)} ${changeBadWords(gameInfo)}`, extra.channel);
         } catch (err) {
           console.log(`Error when use !user on twitch (${err})`);
         }
@@ -496,28 +404,19 @@ const commands = () =>
           "rozpoczęto autodystrukcje świat skończy się za 10s",
         ];
 
-        const randomNumber = Math.floor(
-          Math.random() * (Math.floor(answer.length - 1) + 1)
-        );
+        const randomNumber = Math.floor(Math.random() * (Math.floor(answer.length - 1) + 1));
 
         ComfyJS.Say(answer[randomNumber], extra.channel);
       }
 
-      if (
-        command === "dynamix" &&
-        message !== "stop" &&
-        (flags.mod || flags.broadcaster)
-      ) {
+      if (command === "dynamix" && message !== "stop" && (flags.mod || flags.broadcaster)) {
+        console.log("Bot works!");
         ComfyJS.Say("Bot works!", extra.channel);
       }
       if (command === "test" && (flags.mod || flags.broadcaster)) {
-        console.log("test")
-        
-        const respose = await getLolMatchStats(
-          "dynam1x1",
-          "MIodyBoss",
-          "EUW"
-        );
+        console.log("test");
+
+        const respose = await getLolMatchStats("dynam1x1", "MIodyBoss", "EUW");
         ComfyJS.Say(respose, extra.channel);
       }
 
@@ -527,41 +426,29 @@ const commands = () =>
       if (command === "srplay" && (flags.mod || flags.broadcaster)) {
         setSongAsPlay(extra.channel, "play");
       }
-      if (command === "testban" &&( flags.mod || flags.broadcaster)) {
-
-        timeout('testowy', 120, null, extra.channel )
-         sendMessage("aaaaaa", 'dynam1x1')
-
+      if (command === "testban" && (flags.mod || flags.broadcaster)) {
+        timeout("testowy", 120, null, extra.channel);
+        sendMessage("aaaaaa", "dynam1x1");
       }
       if (command === "srstop" && user === "DynaM1X1") {
         setSongAsPlay(extra.channel, "pause");
       }
       if (command.toLowerCase() === "resolveprediction" && (flags.mod || flags.broadcaster)) {
-        resolvePrediction(message, extra.channel,);
-      }     
+        resolvePrediction(message, extra.channel);
+      }
       if (command === "testprediction" && (flags.mod || flags.broadcaster)) {
-        resolvePrediction(message, 'overpow');
+        resolvePrediction(message, "overpow");
       }
 
-      if (
-        (command === "on" || command === "off") &&
-        (flags.mod || flags.broadcaster)
-      ) {
+      if ((command === "on" || command === "off") && (flags.mod || flags.broadcaster)) {
         let newComandSwitch = commandSwitch;
 
         const isOn = command === "on";
         const onOffMessage = isOn ? "Włączono" : "Wyłączono";
 
-        if (
-          message === "weather" ||
-          message === "pogoda" ||
-          message === "horoskop"
-        ) {
+        if (message === "weather" || message === "pogoda" || message === "horoskop") {
           newComandSwitch.weather = isOn;
-          ComfyJS.Say(
-            `${changeBadWords(onOffMessage)} komendy pogoda i horoskop`,
-            extra.channel
-          );
+          ComfyJS.Say(`${changeBadWords(onOffMessage)} komendy pogoda i horoskop`, extra.channel);
         }
 
         if (
@@ -576,23 +463,12 @@ const commands = () =>
           message === "matches"
         ) {
           newComandSwitch.tft = isOn;
-          ComfyJS.Say(
-            `${onOffMessage} komendy riot: stats, ranking, mecze, mecz`,
-            extra.channel
-          );
+          ComfyJS.Say(`${onOffMessage} komendy riot: stats, ranking, mecze, mecz`, extra.channel);
         }
 
-        if (
-          message === "chess" ||
-          command === "chessuser" ||
-          command === "szachista" ||
-          command === "chesslast"
-        ) {
+        if (message === "chess" || command === "chessuser" || command === "szachista" || command === "chesslast") {
           newComandSwitch.chess = isOn;
-          ComfyJS.Say(
-            `${onOffMessage} komendy chess: chessuser, chesslast`,
-            extra.channel
-          );
+          ComfyJS.Say(`${onOffMessage} komendy chess: chessuser, chesslast`, extra.channel);
         }
 
         if (message === "wordle") {
@@ -605,11 +481,7 @@ const commands = () =>
           ComfyJS.Say(`${onOffMessage} komende slots`, extra.channel);
         }
 
-        if (
-          message === "song" ||
-          message === "playlist" ||
-          message === "playlista"
-        ) {
+        if (message === "song" || message === "playlist" || message === "playlista") {
           newComandSwitch.song = isOn;
           ComfyJS.Say(`${onOffMessage} komendy song, playlist`, extra.channel);
         }
@@ -629,7 +501,7 @@ function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-const toPl = (string) => {
+const toPl = string => {
   return string
     .replace(/ą/g, "a")
     .replace(/Ą/g, "A")
