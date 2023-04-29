@@ -37,7 +37,7 @@ async function run() {
     refreshTwitchTokens();
     checkActiveRiotAccount();
 
-    fastify.listen(process.env.PORT, function (err, address) {
+    fastify.listen(process.env.PORT || 80, function (err, address) {
       if (err) {
         fastify.log.error(err);
         process.exit(1);
