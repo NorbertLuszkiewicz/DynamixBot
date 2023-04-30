@@ -1,15 +1,19 @@
 const path = require("path");
 const { MongoClient } = require("mongodb");
-const fastify = require("fastify")({
-  logger: true,
-});
+const express = require("express");
+const { json, urlencoded } = require("express");
+const helmet = require("helmet");
+const cookieParser = require("cookie-parser");
+const cors = require("cors");
+
 const { refreshAccessToken, setTimeoutVolume } = require("./spotify");
 const { setTimeoutVolume: setTimeoutVolumeStreamElements } = require("./streamElements");
 const { refreshTwitchTokens } = require("./twitch/twitch.js");
 const { twitchCommands } = require("./twitch/index.js");
 const { checkActiveRiotAccount } = require("./riot/riot.js");
 const { runner } = require("./tiktokDiscordBot");
-
+const router = require("./routes");
+const app = express();
 require("dotenv").config();
 //Initial functions;
 // runner(); off tiktokbot
@@ -37,13 +41,7 @@ async function run() {
     refreshTwitchTokens();
     checkActiveRiotAccount();
 
-    fastify.listen(process.env.PORT || 80, function (err, address) {
-      if (err) {
-        fastify.log.error(err);
-        process.exit(1);
-      }
-      fastify.log.info(`Server listening on ${address}`);
-    });
+    app.listen(process.env.PORT || 80);
   } finally {
     // Ensures that the client will close when you finish/error
     await client.close();
@@ -51,5 +49,13 @@ async function run() {
 }
 run().catch(console.dir);
 
-fastify.register(require("@fastify/cors"));
-fastify.register(require("./routes"));
+app.use(helmet());
+app.use(cors());
+app.use(json());
+app.use(urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use("/", router);
+
+app.use((req, res, next) => {
+  next(createError.NotFound());
+});
