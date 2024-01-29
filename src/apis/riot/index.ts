@@ -241,7 +241,7 @@ export const getMatch = async (number, nickname, server, streamer) => {
       itemList = `[${items}]`;
     }
 
-    message = message + `${unit.tier}*${unit.character_id.substr(5)}${items}, `;
+    message = message + `${unit.tier}*${unit.character_id.substr(5)}${itemList}, `;
   });
 
   return message;
@@ -258,7 +258,7 @@ export const getStats = async (streamer, nickname, server) => {
 
     message = `statystyki gracza: ${response.name} | ${userInfo.tier}-${userInfo.rank} ${userInfo.leaguePoints}LP ${
       userInfo.wins
-    }wins ${userInfo.wins + userInfo.losses}games`;
+    }wins ${userInfo.wins + userInfo.loses}games`;
 
     return message;
   } else {
@@ -267,7 +267,7 @@ export const getStats = async (streamer, nickname, server) => {
 
     message = `statystyki gracza: ${data.activeRiotAccount.name} | ${userInfo.tier}-${userInfo.rank} ${
       userInfo.leaguePoints
-    }LP ${userInfo.wins}wins ${userInfo.wins + userInfo.losses}games`;
+    }LP ${userInfo.wins}wins ${userInfo.wins + userInfo.loses}games`;
     return message;
   }
 };
@@ -283,7 +283,7 @@ export const getLolStats = async (streamer, nickname, server) => {
 
     message = `statystyki gracza: ${response.name} | ${userInfo.tier}-${userInfo.rank} ${userInfo.leaguePoints}LP ${
       userInfo.wins
-    }wins ${userInfo.wins + userInfo.losses}games`;
+    }wins ${userInfo.wins + userInfo.loses}games`;
 
     return message;
   } else {
@@ -292,7 +292,7 @@ export const getLolStats = async (streamer, nickname, server) => {
 
     message = `statystyki gracza: ${data.activeRiotAccount.name} | ${userInfo.tier}-${userInfo.rank} ${
       userInfo.leaguePoints
-    }LP ${userInfo.wins}wins ${userInfo.wins + userInfo.losses}games`;
+    }LP ${userInfo.wins}wins ${userInfo.wins + userInfo.loses}games`;
     return message;
   }
 };

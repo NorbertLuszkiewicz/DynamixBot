@@ -7,7 +7,7 @@ import {
   currentlyPlaying,
   setTimeoutVolume,
 } from "../apis/spotify";
-import { getUser, updateUser } from "../controllers/UserController.js";
+import { getUser, updateUser } from "../controllers/UserController";
 import { addNewUser, refreshTwitchTokens } from "../apis/twitch/events/twitch";
 import { addTftUser, removeTftUser } from "../apis/riot";
 import { sendMessage } from "../apis/twitch/events/helix";
@@ -40,7 +40,7 @@ router.get("/spotify", (req, res) => {
   res.redirect(
     `https://accounts.spotify.com/authorize?response_type=code&client_id=${
       process.env.CLIENT_ID
-    }&scope=${encodeURIComponent(scopes)}&redirect_uri=${`https://dynamix-bot.glitch.me/callback`}&state=${
+    }&scope=${encodeURIComponent(scopes.join())}&redirect_uri=${`https://dynamix-bot.glitch.me/callback`}&state=${
       req.query.user
     }`
   );
@@ -77,7 +77,7 @@ router.get("/register", async (req, res) => {
   try {
     const callback = await addNewUser(code);
 
-    callback.status == "success"
+    callback.status === "success"
       ? res.redirect(`${redirectUrl}information?name=${callback.name}&token=${callback.token}`)
       : res.send("Something went wrong");
   } catch {

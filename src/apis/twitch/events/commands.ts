@@ -12,7 +12,7 @@ let users = {};
 let usersWordle = {};
 
 export const commands = () =>
-  (ComfyJS.onCommand = async (user, command, message, flags, extra) => {
+  (ComfyJS.onCommand = async (user, command: string, message, flags, extra) => {
     try {
       const [data] = await getUser(extra.channel);
       const { commandSwitch, addSongID } = await data;
@@ -183,6 +183,7 @@ export const commands = () =>
 
       if ((command === "weather" || command === "pogoda") && commandSwitch.weather) {
         try {
+          console.log("dddddasd");
           const { temp, speed, description } = await getWeather(toPl(message));
           let emote = "";
 
@@ -491,7 +492,7 @@ export const commands = () =>
           ComfyJS.Say(`${onOffMessage} komendy riot: stats, ranking, mecze, mecz`, extra.channel);
         }
 
-        if (message === "chess" || command === "chessuser" || command === "szachista" || command === "chesslast") {
+        if (message === "chess" || message === "chessuser" || message === "szachista" || message === "chesslast") {
           newComandSwitch.chess = isOn;
           ComfyJS.Say(`${onOffMessage} komendy chess: chessuser, chesslast`, extra.channel);
         }

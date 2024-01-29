@@ -1,6 +1,5 @@
 import axios from "axios";
 import { addUser, getUser, updateUser, getAllUser } from "../../../controllers/UserController";
-require("../demonsbotfizowaty/index.js.js");
 
 const TOKEN = "https://id.twitch.tv/oauth2/token";
 
@@ -40,7 +39,7 @@ export const addNewUser = async code => {
     };
   } catch (err) {
     console.log(`Error while getting first token (${err})`);
-    return "error";
+    return { status: "error" };
   }
 };
 

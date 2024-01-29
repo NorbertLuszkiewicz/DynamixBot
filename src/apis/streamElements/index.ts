@@ -1,7 +1,7 @@
 import axios from "axios";
 import { startSong } from "../spotify";
 import { isBlockedVideo } from "../youtube";
-import { getAllUser, updateUser, getUser } from "../../controllers/UserController.js";
+import { getAllUser, updateUser, getUser } from "../../controllers/UserController";
 
 const url = "https://api.streamelements.com/kappa/v2/";
 

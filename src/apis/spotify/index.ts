@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getAllUser, updateUser, getUser } from "../../controllers/UserController.js";
+import { getAllUser, updateUser, getUser } from "../../controllers/UserController";
 
 const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
