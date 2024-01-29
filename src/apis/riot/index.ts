@@ -1,5 +1,6 @@
-const { TftApi, Constants, LolApi } = require("twisted");
-const { updateUser, getUser, getAllUser } = require("../../controllers/UserController.js");
+import { TftApi, Constants, LolApi } from "twisted";
+import { MatchTFTDTO } from "twisted/dist/models-dto";
+import { updateUser, getUser, getAllUser } from "../../controllers/UserController";
 
 const api = new TftApi();
 const apiLol = new LolApi({
@@ -13,7 +14,7 @@ const region = {
   KR: "ASIA",
 };
 
-const getLolMatchStats = async (streamer, nickname, server) => {
+export const getLolMatchStats = async (streamer, nickname, server) => {
   const [data] = await getUser(streamer);
   let matchList = [];
   let matchIdList = [];
@@ -96,7 +97,7 @@ const getLolMatchStats = async (streamer, nickname, server) => {
   });
 };
 
-const addTftUser = async (name, server, streamer) => {
+export const addTftUser = async (name, server, streamer) => {
   const [data] = await getUser(streamer);
 
   const existThisAccount = data.riotAccountList.find(
@@ -117,7 +118,7 @@ const addTftUser = async (name, server, streamer) => {
   }
 };
 
-const removeTftUser = async (name, server, streamer) => {
+export const removeTftUser = async (name, server, streamer) => {
   const [data] = await getUser(streamer);
 
   const accounts = data.riotAccountList.filter(
@@ -130,9 +131,9 @@ const removeTftUser = async (name, server, streamer) => {
   });
 };
 
-const tftMatchList = async (streamer, nickname, server) => {
+export const tftMatchList = async (streamer, nickname, server) => {
   const [data] = await getUser(streamer);
-  let matchList = "";
+  let matchList: MatchTFTDTO[];
   let puuid = "";
 
   if (nickname) {
@@ -182,7 +183,7 @@ const tftMatchList = async (streamer, nickname, server) => {
   return `${nickname ? nickname : streamer} nie zagrał dzisiaj żadnej gry`;
 };
 
-const getMatch = async (number, nickname, server, streamer) => {
+export const getMatch = async (number, nickname, server, streamer) => {
   if (!number) {
     return "@${user} komenda !mecze pokazuje liste meczy z dzisiaj (miejsca o raz synergie) !mecz [nr] gdzie [nr] oznacza numer meczu licząc od najnowszego czyli !mecz 1 pokaze ostatnią gre (wyświetla dokładny com z itemami i synergiami)";
   }
@@ -202,7 +203,7 @@ const getMatch = async (number, nickname, server, streamer) => {
 
   const matchDetails = await api.Match.get(matchList[number - 1], gameRegion);
 
-  const myBoard = matchDetails.response.info.participants.find(item => {
+  const myBoard: any = matchDetails.response.info.participants.find(item => {
     return item.puuid === puuid;
   });
 
@@ -233,18 +234,11 @@ const getMatch = async (number, nickname, server, streamer) => {
   message = message + "___________________________________________________";
 
   correctUnits.forEach(unit => {
-    let items = "";
+    let itemList: string = "";
 
     if (unit.items.length > 0) {
-      items = [];
-
-      unit.items.forEach(item => {
-        if (itemIdToName[item]) {
-          items.push(itemIdToName[item]);
-        }
-      });
-
-      items.length === 0 ? (items = "") : (items = `[${items}]`);
+      const items = unit.items.map(x => itemIdToName[x]).filter(x => x);
+      itemList = `[${items}]`;
     }
 
     message = message + `${unit.tier}*${unit.character_id.substr(5)}${items}, `;
@@ -253,7 +247,7 @@ const getMatch = async (number, nickname, server, streamer) => {
   return message;
 };
 
-const getStats = async (streamer, nickname, server) => {
+export const getStats = async (streamer, nickname, server) => {
   const [data] = await getUser(streamer);
   let message = "";
 
@@ -278,7 +272,7 @@ const getStats = async (streamer, nickname, server) => {
   }
 };
 
-const getLolStats = async (streamer, nickname, server) => {
+export const getLolStats = async (streamer, nickname, server) => {
   const [data] = await getUser(streamer);
   let message = "";
 
@@ -303,7 +297,7 @@ const getLolStats = async (streamer, nickname, server) => {
   }
 };
 
-const getRank = async (streamer, server) => {
+export const getRank = async (streamer, server) => {
   const { response: chall } = await api.League.getChallengerLeague(server ? serverNameToServerId[server] : "EUW1");
   let message = "";
   let topRank = [];
@@ -346,7 +340,7 @@ const getRank = async (streamer, server) => {
   return message;
 };
 
-const checkActiveRiotAccount = async () => {
+export const checkActiveRiotAccount = async () => {
   try {
     const streamers = await getAllUser();
 
@@ -462,15 +456,4 @@ const itemIdToName = {
   17: "Zeke",
   67: "Zeph",
   27: "ZZR",
-};
-
-module.exports = {
-  addTftUser,
-  removeTftUser,
-  tftMatchList,
-  getLolMatchStats,
-  checkActiveRiotAccount,
-  getMatch,
-  getStats,
-  getRank,
 };

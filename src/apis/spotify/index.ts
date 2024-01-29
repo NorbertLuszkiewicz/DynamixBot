@@ -1,9 +1,5 @@
-const axios = require("axios");
-const {
-  getAllUser,
-  updateUser,
-  getUser,
-} = require("./controllers/UserController.js");
+import axios from "axios";
+import { getAllUser, updateUser, getUser } from "../../controllers/UserController.js";
 
 const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
@@ -18,19 +14,16 @@ const DEVICES = "https://api.spotify.com/v1/me/player/devices";
 
 let timeoutVolume = { kezman22: null, dynam1x1: null };
 
-const setTimeoutVolume = async () => {
+export const setTimeoutVolume = async () => {
   try {
     const allUsers = await getAllUser();
-    timeoutVolume = allUsers.reduce(
-      (acc, key) => ({ ...acc, [key.streamer]: null }),
-      {}
-    );
+    timeoutVolume = allUsers.reduce((acc, key) => ({ ...acc, [key.streamer]: null }), {});
   } catch {
     console.log("Error when call setTimeoutVolume");
   }
 };
 
-const addSpotify = async (streamer, code) => {
+export const addSpotify = async (streamer, code) => {
   let accessToken;
   let refreshToken;
   const body = `grant_type=authorization_code&code=${code}&redirect_uri=https://dynamix-bot.glitch.me/callback`;
@@ -39,9 +32,7 @@ const addSpotify = async (streamer, code) => {
     const { data } = await axios.post(`${TOKEN}`, body, {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
-        Authorization: `Basic ${Buffer.from(
-          clientId + ":" + clientSecret
-        ).toString("base64")}`,
+        Authorization: `Basic ${Buffer.from(clientId + ":" + clientSecret).toString("base64")}`,
       },
     });
     data.access_token && (accessToken = data.access_token);
@@ -60,7 +51,7 @@ const addSpotify = async (streamer, code) => {
   }
 };
 
-const startSong = async (streamer) => {
+export const startSong = async streamer => {
   const [user] = await getUser(streamer);
   const { spotifyAccessToken, device } = user;
 
@@ -76,13 +67,11 @@ const startSong = async (streamer) => {
       }
     );
   } catch ({ response }) {
-    console.log(
-      `Error while starting song (${response.status} ${response.statusText})`
-    );
+    console.log(`Error while starting song (${response.status} ${response.statusText})`);
   }
 };
 
-const pauseSong = async (streamer) => {
+export const pauseSong = async streamer => {
   try {
     const [user] = await getUser(streamer);
     const { spotifyAccessToken, device } = user;
@@ -97,13 +86,11 @@ const pauseSong = async (streamer) => {
       }
     );
   } catch ({ response }) {
-    console.log(
-      `Error while stopping song (${response.status} ${response.statusText})`
-    );
+    console.log(`Error while stopping song (${response.status} ${response.statusText})`);
   }
 };
 
-const nextSong = async (streamer) => {
+export const nextSong = async streamer => {
   try {
     const [user] = await getUser(streamer);
     const { spotifyAccessToken, device } = user;
@@ -117,14 +104,12 @@ const nextSong = async (streamer) => {
       }
     );
   } catch ({ response }) {
-    console.log(
-      `Error while skipping song (${response.status} ${response.statusText})`
-    );
+    console.log(`Error while skipping song (${response.status} ${response.statusText})`);
   }
 };
 
-const changeVolumeOnTime = async (streamer, min, max, time) => {
-  console.log(streamer, min, max, time)
+export const changeVolumeOnTime = async (streamer, min, max, time) => {
+  console.log(streamer, min, max, time);
   try {
     let [user] = await getUser(streamer);
     let { spotifyAccessToken, device, maxVolumeTime } = user;
@@ -169,23 +154,19 @@ const changeVolumeOnTime = async (streamer, min, max, time) => {
             }
           );
         } catch ({ response }) {
-          console.log(
-            `Error while volume changes to lower (${response.status} ${response.statusText})`
-          );
+          console.log(`Error while volume changes to lower (${response.status} ${response.statusText})`);
         }
       },
       newMaxVolumeTime - now,
       streamer
     );
   } catch ({ response }) {
-    console.log(
-      `Error while volume changes to higher (${response.data} )`
-    );
+    console.log(`Error while volume changes to higher (${response.data} )`);
   }
 };
 
-const setVolume = async (streamer, value) => {
-  console.log()
+export const setVolume = async (streamer, value) => {
+  console.log();
   try {
     const [user] = await getUser(streamer);
     const { spotifyAccessToken, device } = user;
@@ -200,26 +181,22 @@ const setVolume = async (streamer, value) => {
       }
     );
   } catch ({ response }) {
-    console.log(
-      `Error while volume changes (${response.status} ${response.statusText})`
-    );
+    console.log(`Error while volume changes (${response.status} ${response.statusText})`);
   }
 };
 
-const refreshAccessToken = async () => {
+export const refreshAccessToken = async () => {
   try {
     const streamers = await getAllUser();
 
-    streamers.forEach(async (streamer) => {
+    streamers.forEach(async streamer => {
       if (streamer.streamer != "og1ii" && streamer.spotifyRefreshToken) {
         const body = `grant_type=refresh_token&refresh_token=${streamer.spotifyRefreshToken}&client_id=${clientId}`;
 
         const { data } = await axios.post(`${TOKEN}`, body, {
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
-            Authorization: `Basic ${Buffer.from(
-              clientId + ":" + clientSecret
-            ).toString("base64")}`,
+            Authorization: `Basic ${Buffer.from(clientId + ":" + clientSecret).toString("base64")}`,
           },
         });
 
@@ -232,13 +209,11 @@ const refreshAccessToken = async () => {
     });
     console.log("reset spotify token");
   } catch ({ response }) {
-    console.log(
-      `Error while resetting Spotify token (${response.status} ${response.statusText})`
-    );
+    console.log(`Error while resetting Spotify token (${response.status} ${response.statusText})`);
   }
 };
 
-const currentlyPlaying = async (streamer) => {
+export const currentlyPlaying = async streamer => {
   try {
     const [user] = await getUser(streamer);
     const { spotifyAccessToken } = user;
@@ -251,14 +226,11 @@ const currentlyPlaying = async (streamer) => {
 
     return data;
   } catch ({ response }) {
-    console.log(
-      `Error while getting currently song (${response.status} ${response.statusText})`
-    );
+    console.log(`Error while getting currently song (${response.status} ${response.statusText})`);
   }
 };
 
-
-const lastPlaying = async (streamer) => {
+export const lastPlaying = async streamer => {
   try {
     const [user] = await getUser(streamer);
     const { spotifyAccessToken } = user;
@@ -271,13 +243,11 @@ const lastPlaying = async (streamer) => {
 
     return data?.items[0];
   } catch ({ response }) {
-    console.log(
-      `Error while getting last song (${response.status} ${response.statusText})`
-    );
+    console.log(`Error while getting last song (${response.status} ${response.statusText})`);
   }
 };
 
-const refreshDevices = async (streamer) => {
+export const refreshDevices = async streamer => {
   try {
     const [user] = await getUser(streamer);
     const { spotifyAccessToken } = user;
@@ -288,8 +258,8 @@ const refreshDevices = async (streamer) => {
       },
     });
     console.log("devices", data);
-    const device = data.devices.find((element) => element.is_active)
-      ? data.devices.find((element) => element.is_active)
+    const device = data.devices.find(element => element.is_active)
+      ? data.devices.find(element => element.is_active)
       : data.devices[0];
 
     await updateUser({
@@ -297,22 +267,6 @@ const refreshDevices = async (streamer) => {
       device: device.id,
     });
   } catch ({ response }) {
-    console.log(
-      `Error while getting devices (${response.status} ${response.statusText})`
-    );
+    console.log(`Error while getting devices (${response.status} ${response.statusText})`);
   }
-};
-
-module.exports = {
-  pauseSong,
-  startSong,
-  lastPlaying,
-  nextSong,
-  refreshAccessToken,
-  refreshDevices,
-  changeVolumeOnTime,
-  setVolume,
-  currentlyPlaying,
-  addSpotify,
-  setTimeoutVolume,
 };

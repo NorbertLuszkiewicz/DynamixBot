@@ -1,19 +1,18 @@
-const path = require("path");
-const express = require("express");
-const { MongoClient } = require("mongodb");
-const helmet = require("helmet");
-const cookieParser = require("cookie-parser");
-const cors = require("cors");
+import express from "express";
+import { MongoClient } from "mongodb";
+import helmet from "helmet";
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import "dotenv/config";
 
-// const { refreshAccessToken, setTimeoutVolume } = require("./spotify");
-// const { setTimeoutVolume: setTimeoutVolumeStreamElements } = require("./streamElements");
-// const { refreshTwitchTokens } = require("./twitch/twitch.js");
-// const { sendMessage } = require("./twitch/helix.js");
-// const { twitchCommands } = require("./twitch/index.js");
-// const { checkActiveRiotAccount } = require("./riot/riot.js");
-// const { runner } = require("./tiktokDiscordBot");
-const router = require("./routes");
-require("dotenv").config();
+import { refreshAccessToken, setTimeoutVolume } from "./apis/spotify";
+import { setTimeoutVolume as setTimeoutVolumeStreamElements } from "./apis/streamElements";
+import { refreshTwitchTokens } from "./apis/twitch/events/twitch";
+import { sendMessage } from "./apis/twitch/events/helix";
+import { twitchCommands } from "./apis/twitch";
+import { checkActiveRiotAccount } from "./apis/riot";
+
+import router from "./routes";
 
 const app = express();
 
@@ -32,9 +31,9 @@ async function run() {
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
-    // refreshAccessToken();
-    // refreshTwitchTokens();
-    // checkActiveRiotAccount();
+    refreshAccessToken();
+    refreshTwitchTokens();
+    checkActiveRiotAccount();
 
     app.listen(process.env.PORT || 80);
   } finally {
@@ -45,6 +44,7 @@ async function run() {
 run().catch(console.dir);
 
 function onInit() {
+  console.log("INIT");
   // twitchCommands();
   // setTimeoutVolume();
   // setTimeoutVolumeStreamElements();

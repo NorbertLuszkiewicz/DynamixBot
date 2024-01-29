@@ -1,52 +1,40 @@
-const axios = require("axios");
-const { startSong } = require("./spotify");
-const { isBlockedVideo } = require("./youtube");
-const {
-  getAllUser,
-  updateUser,
-  getUser,
-} = require("./controllers/UserController.js");
+import axios from "axios";
+import { startSong } from "../spotify";
+import { isBlockedVideo } from "../youtube";
+import { getAllUser, updateUser, getUser } from "../../controllers/UserController.js";
 
 const url = "https://api.streamelements.com/kappa/v2/";
 
 let timeoutVolume = {};
 
-const setTimeoutVolume = async () => {
+export const setTimeoutVolume = async () => {
   try {
     const allUsers = await getAllUser();
 
-    timeoutVolume = allUsers.reduce(
-      (acc, key) => ({ ...acc, [key.streamer]: null }),
-      {}
-    );
+    timeoutVolume = allUsers.reduce((acc, key) => ({ ...acc, [key.streamer]: null }), {});
   } catch {
     console.log("Error when call setTimeoutVolume");
   }
 };
 
-const getSpotifyAreaData = async (streamer, area) => {
+export const getSpotifyAreaData = async (streamer, area) => {
   try {
     const [user] = await getUser(streamer);
     const { clientSongRequestID, clientSongRequestSecret } = user;
 
-    const { data } = await axios.get(
-      `${url}songrequest/${clientSongRequestID}/${area}`,
-      {
-        headers: {
-          Authorization: `Bearer ${clientSongRequestSecret}`,
-        },
-      }
-    );
+    const { data } = await axios.get(`${url}songrequest/${clientSongRequestID}/${area}`, {
+      headers: {
+        Authorization: `Bearer ${clientSongRequestSecret}`,
+      },
+    });
 
     return data;
   } catch ({ response }) {
-    console.log(
-      `Error while getting ${area} (${response.status} ${response.statusText})`
-    );
+    console.log(`Error while getting ${area} (${response.status} ${response.statusText})`);
   }
 };
 
-const songPlayingNow = async (streamer) => {
+export const songPlayingNow = async streamer => {
   try {
     const player = await getSpotifyAreaData(streamer, "player");
     const playing = await getSpotifyAreaData(streamer, "playing");
@@ -55,8 +43,7 @@ const songPlayingNow = async (streamer) => {
     return {
       isPlayingNow: player.state == "playing" && playing != null,
       title: playing && playing.title,
-      link:
-        playing && `https://www.youtube.com/watch?v=${playing.videoId ? playing.videoId :  playing.song.videoId}`,
+      link: playing && `https://www.youtube.com/watch?v=${playing.videoId ? playing.videoId : playing.song.videoId}`,
       userAdded: playing?.user?.username,
     };
   } catch (err) {
@@ -64,24 +51,18 @@ const songPlayingNow = async (streamer) => {
   }
 };
 
-const lastSongPlaying = async (streamer) => {
+export const lastSongPlaying = async streamer => {
   try {
     const player = await getSpotifyAreaData(streamer, "player");
     const playing = await getSpotifyAreaData(streamer, "playing");
     const [user] = await getUser(streamer);
     const { clientSongRequestID, clientSongRequestSecret } = user;
-    const history = await getHistorySR(
-      clientSongRequestID,
-      clientSongRequestSecret,
-      1,
-      0
-    );
+    const history = await getHistorySR(clientSongRequestID, clientSongRequestSecret, 1, 0);
 
     return {
       isPlayingNow: player.state == "playing" && playing != null,
       title: history && history[0].song.title,
-      link:
-        history && `https://www.youtube.com/watch?v=${history[0].song.videoId}`,
+      link: history && `https://www.youtube.com/watch?v=${history[0].song.videoId}`,
       userAdded: history[0].song?.user?.username,
     };
   } catch (err) {
@@ -89,7 +70,7 @@ const lastSongPlaying = async (streamer) => {
   }
 };
 
-const setSongAsPlay = async (streamer, state) => {
+export const setSongAsPlay = async (streamer, state) => {
   try {
     const [user] = await getUser(streamer);
     const { clientSongRequestID, clientSongRequestSecret } = user;
@@ -105,18 +86,11 @@ const setSongAsPlay = async (streamer, state) => {
       }
     );
   } catch ({ response }) {
-    console.log(
-      `Error while setSongAsPlay (${response.status} ${response.statusText})`
-    );
+    console.log(`Error while setSongAsPlay (${response.status} ${response.statusText})`);
   }
 };
 
-const getHistorySR = async (
-  clientSongRequestID,
-  clientSongRequestSecret,
-  limit = 100,
-  offset = 0
-) => {
+export const getHistorySR = async (clientSongRequestID, clientSongRequestSecret, limit = 100, offset = 0) => {
   try {
     const { data } = await axios.get(
       `${url}songrequest/${clientSongRequestID}/history?limit=${limit}&offset=${offset}`,
@@ -128,13 +102,11 @@ const getHistorySR = async (
     );
     return data?.history;
   } catch ({ response }) {
-    console.log(
-      `Error while getHistorySR (${response.status} ${response.statusText})`
-    );
+    console.log(`Error while getHistorySR (${response.status} ${response.statusText})`);
   }
 };
 
-const timeRequest = async (streamer, action) => {
+export const timeRequest = async (streamer, action) => {
   try {
     let playing = await getSpotifyAreaData(streamer, "playing");
     const queue = await getSpotifyAreaData(streamer, "queue");
@@ -174,7 +146,7 @@ const timeRequest = async (streamer, action) => {
           });
         } else {
           let allQueueTimes = 0;
-          queue.forEach((song) => (allQueueTimes += song.duration));
+          queue.forEach(song => (allQueueTimes += song.duration));
 
           newEndTime = (allQueueTimes + playing.duration) * 1000;
 
@@ -196,9 +168,7 @@ const timeRequest = async (streamer, action) => {
     if (action === "skip") {
       if (playing) {
         let timeOfSongsInQueue = 0;
-        queue.length > 0
-          ? queue.forEach((song) => (timeOfSongsInQueue += song.duration))
-          : (timeOfSongsInQueue = 0);
+        queue.length > 0 ? queue.forEach(song => (timeOfSongsInQueue += song.duration)) : (timeOfSongsInQueue = 0);
 
         const timeOfAllSongs = (playing.duration + timeOfSongsInQueue) * 1000;
 
@@ -222,14 +192,14 @@ const timeRequest = async (streamer, action) => {
   }
 };
 
-const removeBlockedSong = async (streamer) => {
+export const removeBlockedSong = async streamer => {
   try {
     const removedSongList = [];
     const [user] = await getUser(streamer);
     const { clientSongRequestID, clientSongRequestSecret } = user;
     const queue = await getSpotifyAreaData(streamer, "queue");
     const playing = await getSpotifyAreaData(streamer, "playing");
-    const removeSong = (song) =>
+    const removeSong = song =>
       axios.delete(`${url}songrequest/${clientSongRequestID}/queue/${song}`, {
         headers: {
           Authorization: `Bearer ${clientSongRequestSecret}`,
@@ -237,7 +207,7 @@ const removeBlockedSong = async (streamer) => {
       });
 
     if (queue.length > 0) {
-      queue.forEach(async (song) => {
+      queue.forEach(async song => {
         const isBlocked = await isBlockedVideo(null, streamer, song.videoId);
         if (!isBlocked.isVideo || isBlocked.isBlocked) {
           removeSong(song._id);
@@ -264,30 +234,17 @@ const removeBlockedSong = async (streamer) => {
 
     //for overpow for now changed global in the future
 
-    if (
-      streamer.toLowerCase() === "overpow" ||
-      streamer.toLowerCase() === "dynam1x1"
-    ) {
+    if (streamer.toLowerCase() === "overpow" || streamer.toLowerCase() === "dynam1x1") {
       const historyList = [];
-      const fistPage = await getHistorySR(
-        clientSongRequestID,
-        clientSongRequestSecret,
-        100,
-        0
-      );
-      const secondPage = await getHistorySR(
-        clientSongRequestID,
-        clientSongRequestSecret,
-        100,
-        100
-      );
+      const fistPage = await getHistorySR(clientSongRequestID, clientSongRequestSecret, 100, 0);
+      const secondPage = await getHistorySR(clientSongRequestID, clientSongRequestSecret, 100, 100);
 
-      fistPage.forEach((x) => historyList.push(x.song.videoId));
-      secondPage.forEach((x) => historyList.push(x.song.videoId));
+      fistPage.forEach(x => historyList.push(x.song.videoId));
+      secondPage.forEach(x => historyList.push(x.song.videoId));
 
-      queue.slice(-2).forEach(async (song) => {
+      queue.slice(-2).forEach(async song => {
         if (song.source !== "tip") {
-          if (historyList.find((x) => x === song.videoId)) {
+          if (historyList.find(x => x === song.videoId)) {
             removeSong(song._id);
             removedSongList.push({
               user: song.user.username,
@@ -297,8 +254,8 @@ const removeBlockedSong = async (streamer) => {
           }
 
           if (queue.length > 2) {
-            const queueVideoIdList = queue.slice(0, -2).map((x) => x.videoId);
-            if (queueVideoIdList.find((x) => x === song.videoId)) {
+            const queueVideoIdList = queue.slice(0, -2).map(x => x.videoId);
+            if (queueVideoIdList.find(x => x === song.videoId)) {
               removeSong(song._id);
               removedSongList.push({
                 user: song.user.username,
@@ -315,13 +272,4 @@ const removeBlockedSong = async (streamer) => {
   } catch (err) {
     console.log(`Error while checking what song playing now delete usless songs ${err}`);
   }
-};
-
-module.exports = {
-  songPlayingNow,
-  lastSongPlaying,
-  timeRequest,
-  setTimeoutVolume,
-  removeBlockedSong,
-  setSongAsPlay,
 };

@@ -1,10 +1,10 @@
-const axios = require("axios");
-const { addUser, getUser, updateUser, getAllUser } = require("../../controllers/UserController.js.js");
+import axios from "axios";
+import { addUser, getUser, updateUser, getAllUser } from "../../../controllers/UserController";
 require("../demonsbotfizowaty/index.js.js");
 
 const TOKEN = "https://id.twitch.tv/oauth2/token";
 
-const addNewUser = async code => {
+export const addNewUser = async code => {
   let accessToken;
   let refreshToken;
   const body = `grant_type=authorization_code&code=${code}&redirect_uri=https://dynamix-bot.glitch.me/register&client_id=${process.env.BOT_CLIENT_ID}&client_secret=${process.env.BOT_CLIENT_SECRET}`;
@@ -44,7 +44,7 @@ const addNewUser = async code => {
   }
 };
 
-const refreshTwitchTokens = async () => {
+export const refreshTwitchTokens = async () => {
   try {
     const streamers = await getAllUser();
 
@@ -80,7 +80,7 @@ const refreshTwitchTokens = async () => {
   }
 };
 
-const getStreamerData = async accessToken => {
+export const getStreamerData = async accessToken => {
   try {
     const { data } = await axios.get("https://api.twitch.tv/helix/users", {
       headers: {
@@ -95,7 +95,7 @@ const getStreamerData = async accessToken => {
   }
 };
 
-const getWeather = async city => {
+export const getWeather = async city => {
   try {
     const { data } = await axios.get(
       `http://api.openweathermap.org/data/2.5/weather?q=${city}&lang=pl&appid=${process.env.WEATHER_TOKEN}`
@@ -111,7 +111,7 @@ const getWeather = async city => {
   }
 };
 
-const getHoroscope = async sign => {
+export const getHoroscope = async sign => {
   try {
     const { data } = await axios.post(`https://aztro.sameerkumar.website/?sign=${sign}&day=today`);
 
@@ -121,7 +121,7 @@ const getHoroscope = async sign => {
   }
 };
 
-const changeBadWords = message => {
+export const changeBadWords = message => {
   const correctMessage = message
     .toLowerCase()
     .replace(/nigger/g, "ni**er")
@@ -136,12 +136,4 @@ const changeBadWords = message => {
     .replace("cwel", "c++l");
 
   return correctMessage == message.toLowerCase() ? message : correctMessage;
-};
-
-module.exports = {
-  addNewUser,
-  refreshTwitchTokens,
-  getWeather,
-  getHoroscope,
-  changeBadWords,
 };

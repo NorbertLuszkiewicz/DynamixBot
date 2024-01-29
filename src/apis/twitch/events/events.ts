@@ -1,19 +1,12 @@
 const ComfyJS = require("comfy.js");
 
-const events = () => {
+export const events = () => {
   ComfyJS.onRaid = (user, viewers, extra) => {
-    viewers > 10 &&
-      ComfyJS.Say(
-        "/chant @" + user + "dzięki za raida peepoLove ",
-        extra.channel
-      );
+    viewers > 10 && ComfyJS.Say("/chant @" + user + "dzięki za raida peepoLove ", extra.channel);
   };
 
   ComfyJS.onHosted = (user, viewers, autohost, extra) => {
-    ComfyJS.Say(
-      "/chant @" + user + "dzięki za hosta peepoLove ",
-      extra.channel
-    );
+    ComfyJS.Say("/chant @" + user + "dzięki za hosta peepoLove ", extra.channel);
   };
 
   const thanks = [
@@ -56,23 +49,11 @@ const events = () => {
     "trzy lata z nami OOOO",
   ];
 
-  ComfyJS.onResub = (
-    user,
-    message,
-    streamMonths,
-    cumulativeMonths,
-    subTierInfo,
-    extra
-  ) => {
+  ComfyJS.onResub = (user, message, streamMonths, cumulativeMonths, subTierInfo, extra) => {
     if (extra.channel == "og1ii") {
       ComfyJS.Say("og1iiBusiness Yoink", extra.channel);
     } else {
-      ComfyJS.Say(
-        `${user} ${
-          thanks[cumulativeMonths] ? thanks[cumulativeMonths] : "VisLaud"
-        }`,
-        extra.channel
-      );
+      ComfyJS.Say(`${user} ${thanks[cumulativeMonths] ? thanks[cumulativeMonths] : "VisLaud"}`, extra.channel);
     }
   };
 
@@ -83,7 +64,4 @@ const events = () => {
       ComfyJS.Say(`${user} ${thanks[1]}`, extra.channel);
     }
   };
-};
-module.exports = {
-  events,
 };

@@ -1,17 +1,17 @@
-const ComfyJS = require("comfy.js");
-const { getWeather, getHoroscope, changeBadWords } = require("./twitch");
-const { getUserId, timeout, sendMessage, resolvePrediction } = require("./helix");
-const { tftMatchList, getLolMatchStats, getMatch, getStats, getRank } = require("../riot/riot.js.js");
-const { currentlyPlaying, nextSong, startSong, lastPlaying } = require("../../spotify");
-const { songPlayingNow, timeRequest, setSongAsPlay, lastSongPlaying } = require("../../streamElements");
-const { getChessUser, getLastGame } = require("../chess");
-const { allWord, literalnieWord } = require("../literalnie");
-const { getAllUser, updateUser, getUser } = require("../controllers/UserController.js.js");
+import ComfyJS from "comfy.js";
+import { getWeather, getHoroscope, changeBadWords } from "./twitch";
+import { getUserId, timeout, sendMessage, resolvePrediction } from "./helix";
+import { tftMatchList, getLolMatchStats, getMatch, getStats, getRank } from "../../riot";
+import { currentlyPlaying, nextSong, startSong, lastPlaying } from "../../spotify";
+import { songPlayingNow, timeRequest, setSongAsPlay, lastSongPlaying } from "../../streamElements";
+import { getChessUser, getLastGame } from "../../chess";
+import { allWord, literalnieWord } from "../../literalnie";
+import { getAllUser, updateUser, getUser } from "../../../controllers/UserController";
 
 let users = {};
 let usersWordle = {};
 
-const commands = () =>
+export const commands = () =>
   (ComfyJS.onCommand = async (user, command, message, flags, extra) => {
     try {
       const [data] = await getUser(extra.channel);
@@ -546,8 +546,4 @@ const toPl = string => {
     .replace(/Ż/g, "Z")
     .replace(/ź/g, "z")
     .replace(/Ź/g, "Z");
-};
-
-module.exports = {
-  commands,
 };

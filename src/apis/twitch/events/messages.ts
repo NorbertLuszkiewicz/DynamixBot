@@ -1,20 +1,14 @@
-const { nextSong, pauseSong, startSong, refreshDevices, changeVolumeOnTime, setVolume } = require("../spotify");
+import ComfyJS from "comfy.js";
 
-const { getAllUser, updateUser, getUser } = require("../controllers/UserController.js.js");
-
-const { songPlayingNow, timeRequest, removeBlockedSong } = require("../streamElements");
-
-const { changeBadWords } = require("./twitch");
-const { timeout } = require("./helix");
-
-const ComfyJS = require("comfy.js");
-
-let timeCooldownTravis = 0;
-let timeCooldownOgiii = 0;
+import { nextSong, pauseSong, startSong, refreshDevices, changeVolumeOnTime, setVolume } from "../../spotify";
+import { getAllUser, updateUser, getUser } from "../../../controllers/UserController";
+import { songPlayingNow, timeRequest, removeBlockedSong } from "../../streamElements";
+import { changeBadWords } from "./twitch";
+import { timeout } from "./helix";
 
 let timeoutVolume = { kezman22: null, dynam1x1: null };
 
-const setTimeoutVolume = async () => {
+export const setTimeoutVolume = async () => {
   try {
     const allUsers = await getAllUser();
     timeoutVolume = allUsers.reduce((acc, key) => ({ ...acc, [key.streamer]: null }), {});
@@ -23,7 +17,7 @@ const setTimeoutVolume = async () => {
   }
 };
 
-const messages = () => {
+export const messages = () => {
   ComfyJS.onChat = async (user, message, flags, self, extra) => {
     try {
       const [data] = await getUser(extra.channel);
@@ -283,37 +277,6 @@ const messages = () => {
       refreshDevices(extra.channel);
     }
 
-    //usuwa Xd
-
-    //     if (extra.channel == "kezman22") {
-    //       const splitMessage = message.split(" ");
-
-    //       splitMessage.forEach((x) => {
-    //         if (
-    //           (x.indexOf("Xd") !== -1 && x.length > 2) ||
-    //           x.indexOf("X d") !== -1
-    //         ) {
-    //           ComfyJS.Say("/timeout " + user + " 1", extra.channel);
-    //         }
-    //       });
-    //     }
-
-    //cyferki
-
-    // if (
-    //   (message.indexOf(" cyferki") !== -1 ||
-    //     message.indexOf(" numerki") !== -1 ||
-    //     message.indexOf(" liczby") !== -1) &&
-    //   user != "DynaM1X1" &&
-    //   user != "StreamElements"
-    // ) {
-    //   ComfyJS.Say(
-    //     user +
-    //       " to nakładka która pokazuje na kogo grałeś: https://www.metatft.com/download peepoGlad",
-    //     extra.channel
-    //   );
-    // }
-
     //strzelanie do tosi
 
     if (
@@ -324,69 +287,6 @@ const messages = () => {
       ComfyJS.Say(`l2plelTosia overGun ${user}`, extra.channel);
       timeout(user, 60, "strzelał do tosi", extra.channel);
     }
-
-    ///META
-
-    //     const usedCo = message.toLowerCase().indexOf("co") !== -1;
-    //     const usedMocne = message.toLowerCase().indexOf("mocne") !== -1;
-    //     const usedMecie = message.toLowerCase().indexOf("mecie") !== -1;
-    //     const usedDobre = message.toLowerCase().indexOf("dobre") !== -1;
-    //     const usedOP = message.toLowerCase().indexOf("op") !== -1;
-    //     const usedTeraz = message.toLowerCase().indexOf("teraz") !== -1;
-    //     const usedSilne = message.toLowerCase().indexOf("silne") !== -1;
-    //     const usedKaruzela =
-    //       message.toLowerCase().indexOf("karuzela") !== -1 ||
-    //       message.toLowerCase().indexOf("karuzeli") !== -1;
-    //     const usedItem = message.toLowerCase().indexOf("item") !== -1;
-    //     const usedcoMocne = message.toLowerCase().indexOf("co mocne") !== -1;
-    //     const usedGrac =
-    //       message.toLowerCase().indexOf("grac") !== -1 ||
-    //       message.toLowerCase().indexOf("grać") !== -1;
-
-    //     if (
-    //       usedCo &&
-    //       usedTeraz &&
-    //       usedGrac &&
-    //       (usedMocne || usedMecie || usedDobre || usedSilne|| usedOP) &&
-    //       !usedKaruzela &&
-    //       !usedItem
-    //       || usedcoMocne
-    //     ) {
-    //       const answer = [
-    //         `@${user} aktualnie meta się tworzy więc nie wiadomo`,
-    //         `@${user} nie dawno wyszedł patch więc jeszcze nie wiemy`,
-    //         `@${user} na razie można spekulować popatrz na metatft, oraz na to co grała topka`,
-    //       ];
-
-    //       const randomNumber = Math.floor(
-    //         Math.random() * (Math.floor(answer.length - 1) + 1)
-    //       );
-
-    //       ComfyJS.Say(answer[randomNumber], extra.channel);
-    //     }
-
-    ///JUŻ NA LIVE
-
-    //     const usedJuż = message.toLowerCase().indexOf("już") !== -1;
-    //     const usedJuz = message.toLowerCase().indexOf("juz") !== -1;
-    //     const usedLive = message.toLowerCase().indexOf("live") !== -1;
-    //     const usedPBE = message.toLowerCase().indexOf("pbe") !== -1;
-    //     const usedPath = message.toLowerCase().indexOf("path") !== -1;
-    //     const usedPatch = message.toLowerCase().indexOf("patch") !== -1;
-    //     const usedSet = message.toLowerCase().indexOf("set") !== -1;
-    //     const usedDalej = message.toLowerCase().indexOf("dalej") !== -1;
-    //     const usedtoJużLive = message.toLowerCase().indexOf("to już live") !== -1;
-    //     const usedtoJuzLive = message.toLowerCase().indexOf("to juz live") !== -1;
-
-    //     if (
-    //       ((usedJuż || usedDalej|| usedJuz) &&
-    //         (usedLive || usedPBE) &&
-    //         (usedPath || usedPath || usedSet)) ||
-    //       usedtoJużLive ||
-    //       usedtoJuzLive
-    //     ) {
-    //       ComfyJS.Say(`@${user} tak już na live`, extra.channel);
-    //     }
 
     // volume [value] command
     const isVolumeCommand = message.lastIndexOf("volume");
@@ -413,35 +313,6 @@ const messages = () => {
     }
 
     extra.customRewardId && console.log(extra.customRewardId, extra.channel);
-
-    //WOJTI SPAM NA IMIE
-
-    //     if (user == "traviscwat" && extra.channel == "simplywojtek") {
-    //       let now = Date.now();
-
-    //       if (timeCooldownTravis < now) {
-    //         timeCooldownTravis = 5 * 60 * 1000 + now;
-    //         ComfyJS.Say("Travis UPOUPO", extra.channel);
-    //       }
-    //     }
-
-    //     if (user == "traviscwat" && extra.channel == "l2plelouch") {
-    //       let now = Date.now();
-
-    //       if (timeCooldownTravis < now) {
-    //         timeCooldownTravis = 5 * 60 * 1000 + now;
-    //         ComfyJS.Say("^ Denciak", extra.channel);
-    //       }
-    //     }
-
-    //     if (user == "og1ii" && extra.channel == "l2plelouch") {
-    //       let now = Date.now();
-
-    //       if (timeCooldownOgiii < now) {
-    //         timeCooldownOgiii = 5 * 60 * 1000 + now;
-    //         ComfyJS.Say("^ Dyktator", extra.channel);
-    //       }
-    //     }
   };
 };
 
@@ -454,8 +325,3 @@ function randomIntFromInterval(min, max) {
   // min and max included
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
-
-module.exports = {
-  messages,
-  setTimeoutVolume,
-};

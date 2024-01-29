@@ -1,12 +1,12 @@
-const axios = require("axios");
-const ComfyJS = require("comfy.js");
+import axios from "axios";
+import ComfyJS from "comfy.js";
 
-const { getUser } = require("../controllers/UserController.js.js");
+import { getUser } from "../../../controllers/UserController";
 
 const TOKEN_URL = "https://id.twitch.tv/oauth2/token";
 const URL = "https://api.twitch.tv/helix/";
 
-const getHeader = async () => {
+export const getHeader = async () => {
   const [data] = await getUser("dynam1x1");
 
   return {
@@ -18,23 +18,7 @@ const getHeader = async () => {
   };
 };
 
-// const setTwitchHelixToken = async () => {
-//   try {
-//     const { data } = await axios.post(TOKEN_URL, {
-//       client_id: process.env.BOT_CLIENT_ID,
-//       client_secret: process.env.BOT_CLIENT_SECRET,
-//       grant_type: "client_credentials",
-//     });
-
-//     TOKEN = data.access_token;
-
-//     setTimeout(setTwitchHelixToken, data.expires_in - 4000);
-//   } catch (err) {
-//     console.log("Error setTwitchHelixToken", err.response?.data);
-//   }
-// };
-
-const getUserId = async name => {
+export const getUserId = async name => {
   try {
     const { data } = await axios.get(`${URL}users?login=${name}`, await getHeader());
 
@@ -44,10 +28,10 @@ const getUserId = async name => {
   }
 };
 
-const timeout = async (userName, duration, reason, streamer) => {
+export const timeout = async (userName, duration, reason, streamer) => {
   const body = {
     data: {
-      user_id: await getUserId(userName, streamer),
+      user_id: await getUserId(userName),
       duration,
       reason,
     },
@@ -64,11 +48,11 @@ const timeout = async (userName, duration, reason, streamer) => {
   }
 };
 
-const sendMessage = (message, streamer) => {
+export const sendMessage = (message, streamer) => {
   ComfyJS.Say(message, streamer);
 };
 
-const getPredition = async streamer => {
+export const getPredition = async streamer => {
   try {
     const brodecasterId = await getUserId(streamer);
     const { data } = await axios.get(`${URL}predictions?broadcaster_id=${brodecasterId}`, await getHeader());
@@ -79,7 +63,7 @@ const getPredition = async streamer => {
   }
 };
 
-const resolvePrediction = async (option, streamer) => {
+export const resolvePrediction = async (option, streamer) => {
   try {
     const prediction = await getPredition(streamer);
     const winningPrediction = prediction.outcomes.filter(
@@ -93,17 +77,10 @@ const resolvePrediction = async (option, streamer) => {
       winning_outcome_id: winningPrediction[0].id,
     };
 
-    const { data } = await axios.path(`${URL}predictions`, body, await getHeader());
+    const { data } = await axios.patch(`${URL}predictions`, body, await getHeader());
 
     console.log(data, "getPrediction");
   } catch (err) {
     console.log("Error getPrediction", err.response?.data);
   }
-};
-
-module.exports = {
-  sendMessage,
-  timeout,
-  getUserId,
-  resolvePrediction,
 };

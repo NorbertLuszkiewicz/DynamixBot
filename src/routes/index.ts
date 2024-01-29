@@ -1,16 +1,16 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
-const {
+import {
   addSpotify,
   refreshAccessToken,
   changeVolumeOnTime,
   currentlyPlaying,
   setTimeoutVolume,
-} = require("../apis/spotify");
-const { getUser, updateUser } = require("../controllers/UserController.js");
-const { addNewUser, refreshTwitchTokens } = require("../twitch");
-const { addTftUser, removeTftUser } = require("../apis/riot");
-const { sendMessage } = require("../twitch/apis/helix.js");
+} from "../apis/spotify";
+import { getUser, updateUser } from "../controllers/UserController.js";
+import { addNewUser, refreshTwitchTokens } from "../apis/twitch/events/twitch";
+import { addTftUser, removeTftUser } from "../apis/riot";
+import { sendMessage } from "../apis/twitch/events/helix";
 
 router.get("/spotify", (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
@@ -343,4 +343,4 @@ router.put("/slot_remove", async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;
