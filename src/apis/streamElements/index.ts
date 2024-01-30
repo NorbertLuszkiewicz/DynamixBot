@@ -7,6 +7,15 @@ const url = "https://api.streamelements.com/kappa/v2/";
 
 let timeoutVolume = {};
 
+const getSongRequestHeader = (clientSongRequestSecret, contentType?) => {
+  return {
+    headers: {
+      Authorization: `Bearer ${clientSongRequestSecret}`,
+      "Content-Type": contentType ? contentType : "application/json",
+    },
+  };
+};
+
 export const setTimeoutVolume = async () => {
   try {
     const allUsers = await getAllUser();
@@ -22,11 +31,10 @@ export const getSpotifyAreaData = async (streamer, area) => {
     const [user] = await getUser(streamer);
     const { clientSongRequestID, clientSongRequestSecret } = user;
 
-    const { data } = await axios.get(`${url}songrequest/${clientSongRequestID}/${area}`, {
-      headers: {
-        Authorization: `Bearer ${clientSongRequestSecret}`,
-      },
-    });
+    const { data } = await axios.get(
+      `${url}songrequest/${clientSongRequestID}/${area}`,
+      getSongRequestHeader(clientSongRequestSecret)
+    );
 
     return data;
   } catch ({ response }) {
@@ -78,12 +86,7 @@ export const setSongAsPlay = async (streamer, state) => {
     await axios.post(
       `${url}songrequest/${clientSongRequestID}/player/${state}`,
       {},
-      {
-        headers: {
-          Authorization: `Bearer ${clientSongRequestSecret}`,
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-      }
+      getSongRequestHeader(clientSongRequestSecret, "application/x-www-form-urlencoded")
     );
   } catch ({ response }) {
     console.log(`Error while setSongAsPlay (${response.status} ${response.statusText})`);
@@ -94,11 +97,7 @@ export const getHistorySR = async (clientSongRequestID, clientSongRequestSecret,
   try {
     const { data } = await axios.get(
       `${url}songrequest/${clientSongRequestID}/history?limit=${limit}&offset=${offset}`,
-      {
-        headers: {
-          Authorization: `Bearer ${clientSongRequestSecret}`,
-        },
-      }
+      getSongRequestHeader(clientSongRequestSecret)
     );
     return data?.history;
   } catch ({ response }) {
@@ -200,11 +199,10 @@ export const removeBlockedSong = async streamer => {
     const queue = await getSpotifyAreaData(streamer, "queue");
     const playing = await getSpotifyAreaData(streamer, "playing");
     const removeSong = song =>
-      axios.delete(`${url}songrequest/${clientSongRequestID}/queue/${song}`, {
-        headers: {
-          Authorization: `Bearer ${clientSongRequestSecret}`,
-        },
-      });
+      axios.delete(
+        `${url}songrequest/${clientSongRequestID}/queue/${song}`,
+        getSongRequestHeader(clientSongRequestSecret)
+      );
 
     if (queue.length > 0) {
       queue.forEach(async song => {

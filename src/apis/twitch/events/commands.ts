@@ -1,7 +1,8 @@
 import ComfyJS from "comfy.js";
 import { getWeather, getHoroscope, changeBadWords } from "./twitch";
 import { getUserId, timeout, sendMessage, resolvePrediction } from "./helix";
-import { tftMatchList, getLolMatchStats, getMatch, getStats, getRank } from "../../riot";
+import { getLolMatchStats } from "../../riot/lol";
+import { tftMatchList, getMatch, getStats, getRank } from "../../riot/tft";
 import { currentlyPlaying, nextSong, startSong, lastPlaying } from "../../spotify";
 import { songPlayingNow, timeRequest, setSongAsPlay, lastSongPlaying } from "../../streamElements";
 import { getChessUser, getLastGame } from "../../chess";
@@ -83,23 +84,35 @@ export const commands = () =>
         }
       }
 
-      if ((command == "matches" || command == "mecze") && commandSwitch.tft) {
+      if (
+        (command === "matches" || command === "mecze" || command === "meczelol" || command === "meczetft") &&
+        commandSwitch.tft
+      ) {
         try {
           const NickNameAndServer = message ? message.split(", ") : [null, null];
-
+          const props = [
+            extra.channel,
+            NickNameAndServer[0],
+            NickNameAndServer[1] && NickNameAndServer[1].toUpperCase(),
+          ];
           let matchesList;
-          if (data?.activeRiotAccount?.isLol) {
-            matchesList = await getLolMatchStats(
-              extra.channel,
-              NickNameAndServer[0],
-              NickNameAndServer[1] && NickNameAndServer[1].toUpperCase()
-            );
-          } else {
-            matchesList = await tftMatchList(
-              extra.channel,
-              NickNameAndServer[0],
-              NickNameAndServer[1] && NickNameAndServer[1].toUpperCase()
-            );
+          switch (command) {
+            case "meczelol": {
+              matchesList = await getLolMatchStats(props[0], props[1], props[2]);
+              break;
+            }
+            case "meczetft": {
+              matchesList = await tftMatchList(props[0], props[1], props[2]);
+              break;
+            }
+            default: {
+              if (data?.activeRiotAccount?.isLol) {
+                matchesList = await getLolMatchStats(props[0], props[1], props[2]);
+              } else {
+                matchesList = await tftMatchList(props[0], props[1], props[2]);
+              }
+              break;
+            }
           }
 
           ComfyJS.Say(`${matchesList}`, extra.channel);
@@ -163,7 +176,7 @@ export const commands = () =>
 
       if ((command === "top" || command === "ranking") && commandSwitch.tft && !data.activeRiotAccount.isLol) {
         try {
-          const stats = await getRank(extra.channel, message.toUpperCase());
+          const stats = await getRank(message.toUpperCase());
 
           ComfyJS.Say(changeBadWords(stats), extra.channel);
         } catch (err) {
@@ -402,7 +415,7 @@ export const commands = () =>
 
       if ((command === "chessuser" || command === "szachista") && commandSwitch.chess) {
         try {
-          const playerInfo = await getChessUser(message, extra.channel);
+          const playerInfo = await getChessUser(message);
 
           ComfyJS.Say(`@${changeBadWords(user)} ${changeBadWords(playerInfo)}`, extra.channel);
         } catch (err) {
@@ -411,7 +424,7 @@ export const commands = () =>
       }
       if (command === "chesslast" && commandSwitch.chess) {
         try {
-          const gameInfo = await getLastGame(message, extra.channel);
+          const gameInfo = await getLastGame(message);
 
           ComfyJS.Say(`@${changeBadWords(user)} ${changeBadWords(gameInfo)}`, extra.channel);
         } catch (err) {

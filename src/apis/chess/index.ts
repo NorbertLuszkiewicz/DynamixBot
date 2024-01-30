@@ -1,8 +1,7 @@
-import axios from "axios";
 import ChessWebAPI from "chess-web-api";
 let chessAPI = new ChessWebAPI();
 
-export const getChessUser = async (name, streamer) => {
+export const getChessUser = async (name: string): Promise<string> => {
   try {
     const { body } = await chessAPI.getPlayer(name);
     const userStatsAllData = await chessAPI.getPlayerStats(name);
@@ -26,7 +25,7 @@ export const getChessUser = async (name, streamer) => {
   }
 };
 
-export const getLastGame = async (name, streamer) => {
+export const getLastGame = async (name: string): Promise<string> => {
   try {
     const now = new Date();
 

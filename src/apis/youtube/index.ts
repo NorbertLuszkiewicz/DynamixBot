@@ -1,6 +1,12 @@
 import axios from "axios";
+import { YT_AGE_RESTRICTED } from "../../types/variables";
 
-export const isBlockedVideo = async (url, streamer, urlId) => {
+type VideoCredentials = {
+  isVideo: boolean;
+  isBlocked: boolean;
+};
+
+export const isBlockedVideo = async (url, streamer, urlId): Promise<VideoCredentials> => {
   try {
     let id = urlId;
     if (url) {
@@ -17,7 +23,7 @@ export const isBlockedVideo = async (url, streamer, urlId) => {
 
     if (
       data?.items[0]?.contentDetails?.regionRestriction?.blocked?.includes("PL") ||
-      data?.items[0]?.contentDetails?.contentRating?.ytRating === "ytAgeRestricted"
+      data?.items[0]?.contentDetails?.contentRating?.ytRating === YT_AGE_RESTRICTED
     ) {
       isBlocked = true;
     }

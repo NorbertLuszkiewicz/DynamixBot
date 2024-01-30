@@ -9,7 +9,7 @@ import {
 } from "../apis/spotify";
 import { getUser, updateUser } from "../controllers/UserController";
 import { addNewUser, refreshTwitchTokens } from "../apis/twitch/events/twitch";
-import { addTftUser, removeTftUser } from "../apis/riot";
+import { addTftUser, removeTftUser } from "../apis/riot/tft";
 import { sendMessage } from "../apis/twitch/events/helix";
 
 router.get("/spotify", (req, res) => {
@@ -54,7 +54,7 @@ router.get("/callback", async (req, res) => {
   try {
     const callback = await addSpotify(user, code);
 
-    callback == "success"
+    callback.status === "success"
       ? res.redirect(`https://dynamixbot.pl/dashboard`)
       : res.redirect(`https://dynamixbot.pl/?error${callback ? callback.status : 400}`);
   } catch {

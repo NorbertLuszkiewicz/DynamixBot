@@ -9,7 +9,7 @@ import { refreshAccessToken, setTimeoutVolume } from "./apis/spotify";
 import { setTimeoutVolume as setTimeoutVolumeStreamElements } from "./apis/streamElements";
 import { refreshTwitchTokens } from "./apis/twitch/events/twitch";
 import { twitchCommands } from "./apis/twitch";
-import { checkActiveRiotAccount } from "./apis/riot";
+import { checkActiveRiotAccount } from "./apis/riot/lol";
 
 import router from "./routes";
 
