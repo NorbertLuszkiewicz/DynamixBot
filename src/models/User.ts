@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 mongoose.connect(`mongodb+srv://${process.env.MONGODB}&w=majority`);
 
-const UserSchema = new Schema({
+export const UserSchema = new Schema({
   streamer: {
     type: String,
     required: true,
@@ -97,7 +97,16 @@ const UserSchema = new Schema({
     default: [],
   },
   activeRiotAccount: {
-    type: { name: String, server: String, date: Number, puuid: String, id: String, isLol: Boolean },
+    type: {
+      name: String,
+      server: String,
+      date: Number,
+      puuid: String,
+      id: String,
+      lol_puuid: String,
+      lol_id: String,
+      isLol: Boolean,
+    },
     default: null,
   },
   matchList: {

@@ -1,13 +1,13 @@
 import ComfyJS from "comfy.js";
 import { getWeather, getHoroscope, changeBadWords } from "./twitch";
 import { getUserId, timeout, sendMessage, resolvePrediction } from "./helix";
-import { getLolMatchStats } from "../../riot/lol";
-import { tftMatchList, getMatch, getStats, getRank } from "../../riot/tft";
+import { getLolMatchStats, getLolMatch, getLolUserStats } from "../../riot/lol";
+import { tftMatchList, getMatch, getStats, getRank, resetRiotName } from "../../riot/tft";
 import { currentlyPlaying, nextSong, startSong, lastPlaying } from "../../spotify";
 import { songPlayingNow, timeRequest, setSongAsPlay, lastSongPlaying } from "../../streamElements";
 import { getChessUser, getLastGame } from "../../chess";
 import { allWord, literalnieWord } from "../../literalnie";
-import { getAllUser, updateUser, getUser } from "../../../controllers/UserController";
+import { updateUser, getUser } from "../../../controllers/UserController";
 
 let users = {};
 let usersWordle = {};
@@ -121,32 +121,48 @@ export const commands = () =>
         }
       }
 
+      if (command.toLocaleLowerCase() === "resetriotname" && (flags.mod || flags.broadcaster)) {
+        resetRiotName(extra.channel);
+      }
+
       if (
-        (command == "match" || command == "mecz") &&
-        parseInt(message) > 0 &&
-        parseInt(message) < 21 &&
+        (command == "match" || command == "mecz" || command == "mecztft" || command == "meczlol") &&
+        message &&
         commandSwitch.tft
       ) {
         try {
-          const NickNameAndServer = message.split(", ");
+          const nickNameAndServer = message.split(", ");
+          const props = {
+            number: nickNameAndServer?.[0] ? parseInt(nickNameAndServer[0]) : 999,
+            nickname: nickNameAndServer?.[1],
+            server: nickNameAndServer?.[2] && nickNameAndServer[2].toUpperCase(),
+          };
+          let match;
 
-          const match = await getMatch(
-            NickNameAndServer[0] ? parseInt(NickNameAndServer[0]) : 999,
-            NickNameAndServer[1],
-            NickNameAndServer[2] && NickNameAndServer[2].toUpperCase(),
-            extra.channel
-          );
-
-          ComfyJS.Say(match, extra.channel);
+          if (props.number) {
+            switch (command) {
+              case "meczlol": {
+                match = await getLolMatch(props.number, props.nickname, props.server, extra.channel);
+                break;
+              }
+              case "mecztft": {
+                match = await getMatch(props.number, props.nickname, props.server, extra.channel);
+                break;
+              }
+              default: {
+                if (data?.activeRiotAccount?.isLol) {
+                  match = await getLolMatch(props.number, props.nickname, props.server, extra.channel);
+                } else {
+                  match = await getMatch(props.number, props.nickname, props.server, extra.channel);
+                }
+                break;
+              }
+            }
+          }
+          ComfyJS.Say(`@${user} ${match}`, extra.channel);
         } catch (err) {
           console.log(`Error when use !mecz on twitch (${err})`);
         }
-      }
-      if ((command == "match" || command == "mecz") && !message && commandSwitch.tft) {
-        ComfyJS.Say(
-          `@${user} komenda !mecze pokazuje liste meczy z dzisiaj (miejsca o raz synergie) !mecz [nr] gdzie [nr] oznacza numer meczu licząc od najnowszego czyli !mecz 1 pokaze ostatnią gre (wyświetla dokładny comp z itemami i synergiami)`,
-          extra.channel
-        );
       }
 
       if (command == "next" && (flags.mod || flags.broadcaster)) {
@@ -159,14 +175,32 @@ export const commands = () =>
         }
       }
 
-      if ((command == "stats" || command == "staty") && commandSwitch.tft) {
+      if (
+        (command === "stats" || command === "staty" || command === "statylol" || command === "statytft") &&
+        commandSwitch.tft
+      ) {
         try {
           const NickNameAndServer = message ? message.split(", ") : [null, null];
-          const stats = await getStats(
-            extra.channel,
-            NickNameAndServer[0],
-            NickNameAndServer[1] && NickNameAndServer[1].toUpperCase()
-          );
+          let stats;
+
+          switch (command) {
+            case "statylol": {
+              stats = await getLolUserStats(extra.channel, NickNameAndServer[0], NickNameAndServer[1]?.toUpperCase());
+              break;
+            }
+            case "statytft": {
+              stats = await getStats(extra.channel, NickNameAndServer[0], NickNameAndServer[1]?.toUpperCase());
+              break;
+            }
+            default: {
+              if (data?.activeRiotAccount?.isLol) {
+                stats = await getLolUserStats(extra.channel, NickNameAndServer[0], NickNameAndServer[1]?.toUpperCase());
+              } else {
+                stats = await getStats(extra.channel, NickNameAndServer[0], NickNameAndServer[1]?.toUpperCase());
+              }
+              break;
+            }
+          }
 
           ComfyJS.Say(changeBadWords(stats), extra.channel);
         } catch (err) {
@@ -196,7 +230,6 @@ export const commands = () =>
 
       if ((command === "weather" || command === "pogoda") && commandSwitch.weather) {
         try {
-          console.log("dddddasd");
           const { temp, speed, description } = await getWeather(toPl(message));
           let emote = "";
 
@@ -451,12 +484,6 @@ export const commands = () =>
 
       if (command === "dynamix" && message !== "stop" && (flags.mod || flags.broadcaster)) {
         ComfyJS.Say("Bot works!", extra.channel);
-      }
-      if (command === "test" && (flags.mod || flags.broadcaster)) {
-        console.log("test");
-
-        const respose = await getLolMatchStats("dynam1x1", "MIodyBoss", "EUW");
-        ComfyJS.Say(respose, extra.channel);
       }
 
       if (command === "start" && user === "DynaM1X1") {

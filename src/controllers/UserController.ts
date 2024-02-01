@@ -1,3 +1,5 @@
+import { User } from "../types/types";
+
 const mongoose = require("mongoose");
 require("../models/User");
 
@@ -98,12 +100,12 @@ const dynamixUser = [
   },
 ];
 
-export const addUser = newUserData => {
+export const addUser = (newUserData: User): void => {
   const newUser = new User(newUserData);
   newUser.save();
 };
 
-export const getAllUser = async () => {
+export const getAllUser = async (): Promise<User> => {
   const data = await dynamixUser;
 
   return data;
@@ -116,7 +118,7 @@ export const getAllUser = async () => {
   }
 };
 
-export const getUser = async user => {
+export const getUser = async (user: User): Promise<User> => {
   try {
     const data = await User.find({ streamer: user });
     return data;
@@ -125,7 +127,7 @@ export const getUser = async user => {
   }
 };
 
-export const updateUser = async user => {
+export const updateUser = async (user: User): Promise<User> => {
   try {
     return await User.findOneAndUpdate({ streamer: user.streamer }, user);
   } catch (err) {
@@ -133,6 +135,6 @@ export const updateUser = async user => {
   }
 };
 
-export const deleteUser = data => {
+export const deleteUser = (data: User) => {
   User.findByIdAndDelete({ streamer: data.streamer });
 };

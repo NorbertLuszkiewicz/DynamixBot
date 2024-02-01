@@ -1,18 +1,12 @@
 import express from "express";
 const router = express.Router();
-import {
-  addSpotify,
-  refreshAccessToken,
-  changeVolumeOnTime,
-  currentlyPlaying,
-  setTimeoutVolume,
-} from "../apis/spotify";
+import { addSpotify } from "../apis/spotify";
 import { getUser, updateUser } from "../controllers/UserController";
-import { addNewUser, refreshTwitchTokens } from "../apis/twitch/events/twitch";
+import { addNewUser } from "../apis/twitch/events/twitch";
 import { addTftUser, removeTftUser } from "../apis/riot/tft";
 import { sendMessage } from "../apis/twitch/events/helix";
 
-router.get("/spotify", (req, res) => {
+router.get("/spotify", (req, res): void => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "GET");
   const scopes = [
@@ -46,8 +40,7 @@ router.get("/spotify", (req, res) => {
   );
 });
 
-router.get("/callback", async (req, res) => {
-  const error = req.query.error;
+router.get("/callback", async (req, res): Promise<void> => {
   const code = req.query.code;
   const user = req.query.state;
 
@@ -62,13 +55,13 @@ router.get("/callback", async (req, res) => {
   }
 });
 
-router.get("/", async (req, res) => {
+router.get("/", async (req, res): Promise<void> => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "GET");
   res.send("work");
 });
 
-router.get("/register", async (req, res) => {
+router.get("/register", async (req, res): Promise<void> => {
   const code = req.query.code;
   const state = req.query.state;
   const redirectUrl =
@@ -85,7 +78,7 @@ router.get("/register", async (req, res) => {
   }
 });
 
-router.get("/account", async (req, res) => {
+router.get("/account", async (req, res): Promise<void> => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "GET");
 
@@ -114,7 +107,7 @@ router.get("/account", async (req, res) => {
   }
 });
 
-router.put("/streamelements", async (req, res) => {
+router.put("/streamelements", async (req, res): Promise<void> => {
   res.header("Access-Control-Allow-Origin", "https://dynamixbot.pl");
   res.header("Access-Control-Allow-Methods", "PUT");
 
@@ -140,7 +133,7 @@ router.put("/streamelements", async (req, res) => {
   }
 });
 
-router.post("/sendmessage", async (req, res) => {
+router.post("/sendmessage", async (req, res): Promise<void> => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "POST");
   const body = JSON.parse(req.body);
@@ -168,7 +161,7 @@ router.post("/sendmessage", async (req, res) => {
   }
 });
 
-router.put("/volumeaward", async (req, res) => {
+router.put("/volumeaward", async (req, res): Promise<void> => {
   res.header("Access-Control-Allow-Origin", "https://dynamixbot.pl");
   res.header("Access-Control-Allow-Methods", "PUT");
 
@@ -208,7 +201,7 @@ router.put("/volumeaward", async (req, res) => {
   }
 });
 
-router.put("/riot", async (req, res) => {
+router.put("/riot", async (req, res): Promise<void> => {
   res.header("Access-Control-Allow-Origin", "https://dynamixbot.pl");
   res.header("Access-Control-Allow-Methods", "PUT");
 
@@ -229,7 +222,7 @@ router.put("/riot", async (req, res) => {
   }
 });
 
-router.put("/riot-remove", async (req, res) => {
+router.put("/riot-remove", async (req, res): Promise<void> => {
   res.header("Access-Control-Allow-Origin", "https://dynamixbot.pl");
   res.header("Access-Control-Allow-Methods", "PUT");
 
@@ -250,7 +243,7 @@ router.put("/riot-remove", async (req, res) => {
   }
 });
 
-router.put("/slots", async (req, res) => {
+router.put("/slots", async (req, res): Promise<void> => {
   res.header("Access-Control-Allow-Origin", "https://dynamixbot.pl");
   res.header("Access-Control-Allow-Methods", "PUT");
 
@@ -289,7 +282,7 @@ router.put("/slots", async (req, res) => {
   }
 });
 
-router.put("/command_switch", async (req, res) => {
+router.put("/command_switch", async (req, res): Promise<void> => {
   res.header("Access-Control-Allow-Origin", "https://dynamixbot.pl");
   res.header("Access-Control-Allow-Methods", "PUT");
 
@@ -314,7 +307,7 @@ router.put("/command_switch", async (req, res) => {
   }
 });
 
-router.put("/slot_remove", async (req, res) => {
+router.put("/slot_remove", async (req, res): Promise<void> => {
   res.header("Access-Control-Allow-Origin", "https://dynamixbot.pl");
   res.header("Access-Control-Allow-Methods", "PUT");
 
