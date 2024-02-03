@@ -3,7 +3,6 @@ import ComfyJS from "comfy.js";
 
 import { getUser } from "../../../controllers/UserController";
 
-const TOKEN_URL = "https://id.twitch.tv/oauth2/token";
 const URL = "https://api.twitch.tv/helix/";
 
 export const getHeader = async () => {
@@ -18,7 +17,7 @@ export const getHeader = async () => {
   };
 };
 
-export const getUserId = async name => {
+export const getUserId = async (name: string): Promise<string> => {
   try {
     const { data } = await axios.get(`${URL}users?login=${name}`, await getHeader());
 
@@ -28,7 +27,7 @@ export const getUserId = async name => {
   }
 };
 
-export const timeout = async (userName, duration, reason, streamer) => {
+export const timeout = async (userName: string, duration: number, reason: string, streamer: string): Promise<void> => {
   const body = {
     data: {
       user_id: await getUserId(userName),
@@ -38,7 +37,7 @@ export const timeout = async (userName, duration, reason, streamer) => {
   };
 
   try {
-    const { data } = await axios.post(
+    await axios.post(
       `${URL}moderation/bans?broadcaster_id=${await getUserId(streamer)}&moderator_id=171103106`,
       body,
       await getHeader()
@@ -48,7 +47,7 @@ export const timeout = async (userName, duration, reason, streamer) => {
   }
 };
 
-export const sendMessage = (message, streamer) => {
+export const sendMessage = (message: string, streamer: string): void => {
   ComfyJS.Say(message, streamer);
 };
 
@@ -63,7 +62,7 @@ export const getPredition = async streamer => {
   }
 };
 
-export const resolvePrediction = async (option, streamer) => {
+export const resolvePrediction = async (option: string, streamer: string): Promise<void> => {
   try {
     const prediction = await getPredition(streamer);
     const winningPrediction = prediction.outcomes.filter(

@@ -1,6 +1,7 @@
 import ComfyJS from "comfy.js";
-import { getWeather, getHoroscope, changeBadWords } from "./twitch";
-import { getUserId, timeout, sendMessage, resolvePrediction } from "./helix";
+import { getWeather, getHoroscope } from "./twitch";
+import { changeBadWords } from "../../../helpers";
+import { resolvePrediction } from "./helix";
 import { getLolMatchStats, getLolMatch, getLolUserStats } from "../../riot/lol";
 import { tftMatchList, getMatch, getStats, getRank, resetRiotName } from "../../riot/tft";
 import { currentlyPlaying, nextSong, startSong, lastPlaying } from "../../spotify";
@@ -8,12 +9,13 @@ import { songPlayingNow, timeRequest, setSongAsPlay, lastSongPlaying } from "../
 import { getChessUser, getLastGame } from "../../chess";
 import { allWord, literalnieWord } from "../../literalnie";
 import { updateUser, getUser } from "../../../controllers/UserController";
+import { plToEnAlphabet, randomInt } from "../../../helpers";
 
 let users = {};
 let usersWordle = {};
 
 export const commands = () =>
-  (ComfyJS.onCommand = async (user, command: string, message, flags, extra) => {
+  (ComfyJS.onCommand = async (user: string, command: string, message: string, flags, extra) => {
     try {
       const [data] = await getUser(extra.channel);
       const { commandSwitch, addSongID } = await data;
@@ -21,16 +23,16 @@ export const commands = () =>
       if ((command == "song" || command == "coleci") && commandSwitch.song) {
         try {
           const spotifyData = await currentlyPlaying(extra.channel);
-          const { isPlayingNow, title, link, userAdded } = await songPlayingNow(extra.channel);
+          const { title, link, userAdded } = await songPlayingNow(extra.channel);
 
-          if (isPlayingNow) {
+          if (spotifyData?.is_playing) {
             ComfyJS.Say(`@${user} ${title} ${userAdded && " | dodał/a " + userAdded + " "} ${link} `, extra.channel);
           } else {
             let url = spotifyData?.item?.external_urls?.spotify ? spotifyData?.item?.external_urls?.spotify : "";
             let title = spotifyData?.item?.name ? spotifyData?.item?.name : "Nieznany tytuł utworu";
             let autor = "";
-            if (spotifyData.item.artists.length > 0) {
-              spotifyData.item.artists.forEach(artist => {
+            if (spotifyData.item?.artists?.length > 0) {
+              spotifyData.item?.artists?.forEach(artist => {
                 autor += artist.name + ", ";
               });
             }
@@ -166,12 +168,13 @@ export const commands = () =>
       }
 
       if (command == "next" && (flags.mod || flags.broadcaster)) {
-        const { isPlayingNow } = await songPlayingNow(extra.channel);
-        if (isPlayingNow) {
+        const spotifyData = await currentlyPlaying(extra.channel);
+
+        if (spotifyData?.is_playing) {
+          nextSong(extra.channel);
+        } else {
           ComfyJS.Say("!skip", extra.channel);
           timeRequest(extra.channel, "skip");
-        } else {
-          nextSong(extra.channel);
         }
       }
 
@@ -219,42 +222,40 @@ export const commands = () =>
       }
 
       if (command === "next" && (flags.mod || flags.broadcaster)) {
-        const { isPlayingNow } = await songPlayingNow(extra.channel);
-        if (isPlayingNow) {
+        const spotifyData = await currentlyPlaying(extra.channel);
+
+        if (spotifyData?.is_playing) {
+          nextSong(extra.channel);
+        } else {
           ComfyJS.Say("!skip", extra.channel);
           timeRequest(extra.channel, "skip");
-        } else {
-          nextSong(extra.channel);
         }
       }
 
       if ((command === "weather" || command === "pogoda") && commandSwitch.weather) {
         try {
-          const { temp, speed, description } = await getWeather(toPl(message));
-          let emote = "";
+          const { temp, speed, description } = await getWeather(plToEnAlphabet(message));
 
-          {
-            bezchmurnie: ":sunn:";
-            pochmurnie: "🌤️";
-          }
+          const weatherIcon = {
+            bezchmurnie: "☀️",
+            pochmurnie: "🌥️",
+            "zachmurzenie małe": "🌤️",
+            "zachmurzenie umiarkowane": "🌥️",
+            "zachmurzenie duże": "☁️",
+            mgła: "🌫️",
+            zamglenia: "🌫️",
+            "umiarkowane opady deszczu": "🌧️",
+          };
 
-          description == "bezchmurnie" && (emote = "☀️");
-          description == "pochmurnie" && (emote = "🌤️");
-          description == "zachmurzenie małe" && (emote = "🌤️");
-          description == "zachmurzenie umiarkowane" && (emote = "🌥️");
-          description == "zachmurzenie duże" && (emote = "☁️");
-          description == "mgła" && (emote = "🌫️");
-          description == "umiarkowane opady deszczu" && (emote = "🌧️");
-
-          if (message.toLowerCase() != "niger" && message.toLowerCase() != "nigger") {
-            temp
-              ? ComfyJS.Say(
-                  `@${user} Jest ${Math.round(
-                    temp - 273
-                  )} °C, ${description} ${emote} wiatr wieje z prędkością ${speed} km/h (${changeBadWords(message)})`,
-                  extra.channel
-                )
-              : ComfyJS.Say(`@${user} Nie znaleziono`, extra.channel);
+          if (temp) {
+            ComfyJS.Say(
+              `@${user} Jest ${Math.round(temp - 273)} °C, ${description} ${
+                weatherIcon[description]
+              } wiatr wieje z prędkością ${speed} km/h (${changeBadWords(message)})`,
+              extra.channel
+            );
+          } else {
+            ComfyJS.Say(`@${user} Nie znaleziono`, extra.channel);
           }
         } catch (err) {
           console.log(`Error when use !pogoda on twitch (${err})`);
@@ -279,7 +280,7 @@ export const commands = () =>
             ryba: "pisces",
           };
 
-          const description = await getHoroscope(changeToEng[toPl(message)]);
+          const description = await getHoroscope(changeToEng[plToEnAlphabet(message)]);
 
           description
             ? ComfyJS.Say(`@${user} ${description}`, extra.channel)
@@ -437,14 +438,11 @@ export const commands = () =>
         );
       }
 
-      //       if (command === "forma") {
-      //         let number = randomInt(1, 100);
+      if (command === "forma") {
+        let number = randomInt(1, 100);
 
-      //         ComfyJS.Say(
-      //           `@${user} aktualnie jesteś w ${number}% swojej szczytowej formy`,
-      //           extra.channel
-      //         );
-      //       }
+        ComfyJS.Say(`@${user} aktualnie jesteś w ${number}% swojej szczytowej formy`, extra.channel);
+      }
 
       if ((command === "chessuser" || command === "szachista") && commandSwitch.chess) {
         try {
@@ -464,8 +462,6 @@ export const commands = () =>
           console.log(`Error when use !user on twitch (${err})`);
         }
       }
-
-      ///PAULINKA STOP
 
       if (command === "dynamix" && message == "stop" && user == "paaulinnkaa") {
         const answer = [
@@ -491,10 +487,6 @@ export const commands = () =>
       }
       if (command === "srplay" && (flags.mod || flags.broadcaster)) {
         setSongAsPlay(extra.channel, "play");
-      }
-      if (command === "testban" && (flags.mod || flags.broadcaster)) {
-        timeout("testowy", 120, null, extra.channel);
-        sendMessage("aaaaaa", "dynam1x1");
       }
       if (command === "srstop" && (flags.mod || flags.broadcaster)) {
         setSongAsPlay(extra.channel, "pause");
@@ -561,30 +553,3 @@ export const commands = () =>
       console.log("Error when use commands" + err);
     }
   });
-
-function randomInt(min, max) {
-  // min and max included
-  return Math.floor(Math.random() * (max - min + 1) + min);
-}
-
-const toPl = string => {
-  return string
-    .replace(/ą/g, "a")
-    .replace(/Ą/g, "A")
-    .replace(/ć/g, "c")
-    .replace(/Ć/g, "C")
-    .replace(/ę/g, "e")
-    .replace(/Ę/g, "E")
-    .replace(/ł/g, "l")
-    .replace(/Ł/g, "L")
-    .replace(/ń/g, "n")
-    .replace(/Ń/g, "N")
-    .replace(/ó/g, "o")
-    .replace(/Ó/g, "O")
-    .replace(/ś/g, "s")
-    .replace(/Ś/g, "S")
-    .replace(/ż/g, "z")
-    .replace(/Ż/g, "Z")
-    .replace(/ź/g, "z")
-    .replace(/Ź/g, "Z");
-};

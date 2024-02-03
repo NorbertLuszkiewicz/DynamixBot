@@ -2,6 +2,7 @@ import axios from "axios";
 import { startSong } from "../spotify";
 import { isBlockedVideo } from "../youtube";
 import { getAllUser, updateUser, getUser } from "../../controllers/UserController";
+import { BlockedSong, PLayingSong } from "../../types/types";
 
 const url = "https://api.streamelements.com/kappa/v2/";
 
@@ -16,7 +17,7 @@ const getSongRequestHeader = (clientSongRequestSecret, contentType?) => {
   };
 };
 
-export const setTimeoutVolume = async () => {
+export const setTimeoutVolume = async (): Promise<void> => {
   try {
     const allUsers = await getAllUser();
 
@@ -26,7 +27,7 @@ export const setTimeoutVolume = async () => {
   }
 };
 
-export const getSpotifyAreaData = async (streamer, area) => {
+export const getSpotifyAreaData = async (streamer: String, area: string): Promise<any> => {
   try {
     const [user] = await getUser(streamer);
     const { clientSongRequestID, clientSongRequestSecret } = user;
@@ -42,11 +43,10 @@ export const getSpotifyAreaData = async (streamer, area) => {
   }
 };
 
-export const songPlayingNow = async streamer => {
+export const songPlayingNow = async (streamer: String): Promise<PLayingSong> => {
   try {
     const player = await getSpotifyAreaData(streamer, "player");
     const playing = await getSpotifyAreaData(streamer, "playing");
-    console.log(player, playing);
 
     return {
       isPlayingNow: player.state == "playing" && playing != null,
@@ -59,7 +59,7 @@ export const songPlayingNow = async streamer => {
   }
 };
 
-export const lastSongPlaying = async streamer => {
+export const lastSongPlaying = async (streamer: string): Promise<PLayingSong> => {
   try {
     const player = await getSpotifyAreaData(streamer, "player");
     const playing = await getSpotifyAreaData(streamer, "playing");
@@ -78,7 +78,7 @@ export const lastSongPlaying = async streamer => {
   }
 };
 
-export const setSongAsPlay = async (streamer, state) => {
+export const setSongAsPlay = async (streamer: string, state: string): Promise<any> => {
   try {
     const [user] = await getUser(streamer);
     const { clientSongRequestID, clientSongRequestSecret } = user;
@@ -93,7 +93,12 @@ export const setSongAsPlay = async (streamer, state) => {
   }
 };
 
-export const getHistorySR = async (clientSongRequestID, clientSongRequestSecret, limit = 100, offset = 0) => {
+export const getHistorySR = async (
+  clientSongRequestID: string,
+  clientSongRequestSecret: string,
+  limit = 100,
+  offset = 0
+): Promise<any> => {
   try {
     const { data } = await axios.get(
       `${url}songrequest/${clientSongRequestID}/history?limit=${limit}&offset=${offset}`,
@@ -105,7 +110,7 @@ export const getHistorySR = async (clientSongRequestID, clientSongRequestSecret,
   }
 };
 
-export const timeRequest = async (streamer, action) => {
+export const timeRequest = async (streamer: string, action: "add" | "skip"): Promise<void> => {
   try {
     let playing = await getSpotifyAreaData(streamer, "playing");
     const queue = await getSpotifyAreaData(streamer, "queue");
@@ -117,52 +122,31 @@ export const timeRequest = async (streamer, action) => {
     if (action === "add") {
       let newEndTime;
 
-      if (playing && playing.duration && queue.length == 0) {
+      if ((playing && playing.duration && queue.length == 0) || (!playing && queue.length == 1)) {
         newEndTime = playing.duration * 1000;
-
-        await updateUser({
-          streamer: streamer,
-          endTime: newEndTime + now,
-        });
-      }
-
-      if (!playing && queue.length == 1) {
-        newEndTime = queue[0].duration * 1000;
-
-        await updateUser({
-          streamer: streamer,
-          endTime: newEndTime + now,
-        });
       }
 
       if (playing && queue.length > 0) {
         if (endTime > now) {
           newEndTime = endTime - now + queue[queue.length - 1].duration * 1000;
-
-          await updateUser({
-            streamer: streamer,
-            endTime: newEndTime + now,
-          });
         } else {
           let allQueueTimes = 0;
           queue.forEach(song => (allQueueTimes += song.duration));
-
           newEndTime = (allQueueTimes + playing.duration) * 1000;
-
-          await updateUser({
-            streamer: streamer,
-            endTime: newEndTime + now,
-          });
         }
       }
+      await updateUser({
+        streamer: streamer,
+        endTime: newEndTime + now,
+      });
 
       clearTimeout(timeoutVolume[streamer]);
 
       timeoutVolume[streamer] = setTimeout(async () => {
         playing = await getSpotifyAreaData(streamer, "playing");
 
-        !playing && startSong(streamer);
-      }, newEndTime + 1450 * (queue.length + 3));
+        if (!playing) startSong(streamer);
+      }, newEndTime + 1 * (queue.length + 1));
     }
     if (action === "skip") {
       if (playing) {
@@ -191,7 +175,7 @@ export const timeRequest = async (streamer, action) => {
   }
 };
 
-export const removeBlockedSong = async streamer => {
+export const removeBlockedSong = async (streamer: string): Promise<BlockedSong[]> => {
   try {
     const removedSongList = [];
     const [user] = await getUser(streamer);
@@ -232,7 +216,7 @@ export const removeBlockedSong = async streamer => {
 
     //for overpow for now changed global in the future
 
-    if (streamer.toLowerCase() === "overpow" || streamer.toLowerCase() === "dynam1x1") {
+    if (streamer.toLowerCase() === "overpow") {
       const historyList = [];
       const fistPage = await getHistorySR(clientSongRequestID, clientSongRequestSecret, 100, 0);
       const secondPage = await getHistorySR(clientSongRequestID, clientSongRequestSecret, 100, 100);

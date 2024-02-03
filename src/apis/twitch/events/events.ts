@@ -1,14 +1,6 @@
 const ComfyJS = require("comfy.js");
 
 export const events = () => {
-  ComfyJS.onRaid = (user, viewers, extra) => {
-    viewers > 10 && ComfyJS.Say("/chant @" + user + "dzięki za raida peepoLove ", extra.channel);
-  };
-
-  ComfyJS.onHosted = (user, viewers, autohost, extra) => {
-    ComfyJS.Say("/chant @" + user + "dzięki za hosta peepoLove ", extra.channel);
-  };
-
   const thanks = [
     "",
     "pierwszy subik VisLaud mam nadzieje ze zostaniesz z nami na dłużej peepoLove",

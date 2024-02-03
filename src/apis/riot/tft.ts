@@ -3,7 +3,8 @@ import { Regions } from "twisted/dist/constants";
 import { MatchTFTDTO, TraitDto } from "twisted/dist/models-dto";
 
 import { updateUser, getUser } from "../../controllers/UserController";
-import { Participant, region, serverNameToServerId } from "../../types/riot";
+import { Participant } from "../../types/riot";
+import { region, serverNameToServerId } from "../../helpers";
 
 const api = new TftApi();
 const apiLol = new LolApi({

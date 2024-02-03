@@ -2,7 +2,7 @@ import axios from "axios";
 import { TftApi, LolApi } from "twisted";
 import { MatchV5DTOs } from "twisted/dist/models-dto";
 import { updateUser, getUser, getAllUser } from "../../controllers/UserController";
-import { lolPosition, region, serverNameToServerId } from "../../types/riot";
+import { lolPosition, region, serverNameToServerId } from "../../helpers";
 
 const api = new TftApi();
 const apiLol = new LolApi({
@@ -18,7 +18,7 @@ const convertChampionIdToName = (id: string): string => {
   }
 };
 
-const getMatchText = (data: MatchV5DTOs.InfoDto, puuid: string) => {
+const getMatchText = (data: MatchV5DTOs.InfoDto, puuid: string): string => {
   const me = data.participants.filter(x => x.puuid === puuid)[0];
   const myTeam = data.participants.filter(x => x.teamId === me.teamId);
   const myTeamWithoutMe = myTeam.filter(x => x.puuid !== puuid);

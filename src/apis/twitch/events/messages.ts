@@ -1,14 +1,14 @@
 import ComfyJS from "comfy.js";
 
-import { nextSong, pauseSong, startSong, refreshDevices, changeVolumeOnTime, setVolume } from "../../spotify";
+import { nextSong, pauseSong, refreshDevices, changeVolumeOnTime, setVolume, currentlyPlaying } from "../../spotify";
 import { getAllUser, updateUser, getUser } from "../../../controllers/UserController";
-import { songPlayingNow, timeRequest, removeBlockedSong } from "../../streamElements";
-import { changeBadWords } from "./twitch";
+import { timeRequest, removeBlockedSong } from "../../streamElements";
+import { changeBadWords } from "../../../helpers";
 import { timeout } from "./helix";
 
-let timeoutVolume = { kezman22: null, dynam1x1: null };
+let timeoutVolume = {};
 
-export const setTimeoutVolume = async () => {
+export const setTimeoutVolume = async (): Promise<void> => {
   try {
     const allUsers = await getAllUser();
     timeoutVolume = allUsers.reduce((acc, key) => ({ ...acc, [key.streamer]: null }), {});
@@ -204,13 +204,13 @@ export const messages = () => {
       }
 
       if (flags.customReward && extra.customRewardId === skipSongID) {
-        const { isPlayingNow } = await songPlayingNow(extra.channel);
+        const spotifyData = await currentlyPlaying(extra.channel);
 
-        if (isPlayingNow) {
+        if (spotifyData?.is_playing) {
+          nextSong(extra.channel);
+        } else {
           ComfyJS.Say("!skip", extra.channel);
           await timeRequest(extra.channel, "skip");
-        } else {
-          nextSong(extra.channel);
         }
       }
 
@@ -254,12 +254,13 @@ export const messages = () => {
 
       if (message == "skip" && user === "DynaM1X1") {
         try {
-          const { isPlayingNow } = await songPlayingNow(extra.channel);
-          if (isPlayingNow) {
+          const spotifyData = await currentlyPlaying(extra.channel);
+
+          if (spotifyData?.is_playing) {
+            nextSong(extra.channel);
+          } else {
             ComfyJS.Say("!skip", extra.channel);
             await timeRequest(extra.channel, "skip");
-          } else {
-            nextSong(extra.channel);
           }
         } catch (err) {
           console.log(`Error when skip song ${err}`);
@@ -276,8 +277,6 @@ export const messages = () => {
     if (message === "device" && user === "DynaM1X1") {
       refreshDevices(extra.channel);
     }
-
-    //strzelanie do tosi
 
     if (
       (message.indexOf("gun l2plelTosia") !== -1 || message.indexOf("Gun l2plelTosia") !== -1) &&

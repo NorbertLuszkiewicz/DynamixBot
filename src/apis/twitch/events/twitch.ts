@@ -3,19 +3,13 @@ import { addUser, getUser, updateUser, getAllUser } from "../../../controllers/U
 
 const TOKEN = "https://id.twitch.tv/oauth2/token";
 
-export const addNewUser = async code => {
-  let accessToken;
-  let refreshToken;
+export const addNewUser = async (code): Promise<{ status: string; name?: string; token?: string }> => {
   const body = `grant_type=authorization_code&code=${code}&redirect_uri=https://dynamix-bot.glitch.me/register&client_id=${process.env.BOT_CLIENT_ID}&client_secret=${process.env.BOT_CLIENT_SECRET}`;
 
   try {
     const { data } = await axios.post(`${TOKEN}`, body, {});
     const users = await getStreamerData(data.access_token);
-    const userName = users.data[0].login;
-
-    data.access_token && (accessToken = data.access_token);
-    data.refresh_token && (refreshToken = data.refresh_token);
-
+    const userName = users?.data?.[0]?.login;
     const userInDatabase = await getUser(userName);
 
     if (userInDatabase.length === 0) {
@@ -43,7 +37,7 @@ export const addNewUser = async code => {
   }
 };
 
-export const refreshTwitchTokens = async () => {
+export const refreshTwitchTokens = async (): Promise<void> => {
   try {
     const streamers = await getAllUser();
 
@@ -75,7 +69,7 @@ export const refreshTwitchTokens = async () => {
   }
 };
 
-export const getStreamerData = async accessToken => {
+export const getStreamerData = async (accessToken: string): Promise<any> => {
   try {
     const { data } = await axios.get("https://api.twitch.tv/helix/users", {
       headers: {
@@ -90,7 +84,7 @@ export const getStreamerData = async accessToken => {
   }
 };
 
-export const getWeather = async city => {
+export const getWeather = async (city: string): Promise<{ temp: number; speed: string; description: string }> => {
   try {
     const { data } = await axios.get(
       `http://api.openweathermap.org/data/2.5/weather?q=${city}&lang=pl&appid=${process.env.WEATHER_TOKEN}`
@@ -106,7 +100,7 @@ export const getWeather = async city => {
   }
 };
 
-export const getHoroscope = async sign => {
+export const getHoroscope = async (sign: string): Promise<string> => {
   try {
     const { data } = await axios.post(`https://aztro.sameerkumar.website/?sign=${sign}&day=today`);
 
@@ -114,21 +108,4 @@ export const getHoroscope = async sign => {
   } catch (err) {
     console.log(`Error while getting horoscope ${err}`);
   }
-};
-
-export const changeBadWords = message => {
-  const correctMessage = message
-    .toLowerCase()
-    .replace(/nigger/g, "ni**er")
-    .replace(/niga/g, "n**a")
-    .replace(/nigga/g, "n***a")
-    .replace(/czarnuch/g, "cz***uch")
-    .replace(/cwel/g, "c++l")
-    .replace("nigger", "ni**er")
-    .replace("niga", "n**a")
-    .replace("nigga", "n***a")
-    .replace("czarnuch", "cz***uch")
-    .replace("cwel", "c++l");
-
-  return correctMessage == message.toLowerCase() ? message : correctMessage;
 };

@@ -6,7 +6,7 @@ type VideoCredentials = {
   isBlocked: boolean;
 };
 
-export const isBlockedVideo = async (url, streamer, urlId): Promise<VideoCredentials> => {
+export const isBlockedVideo = async (url: string, streamer: string, urlId: string): Promise<VideoCredentials> => {
   try {
     let id = urlId;
     if (url) {
