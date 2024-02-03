@@ -25,7 +25,6 @@ const twitch_2 = require("./apis/twitch");
 const lol_1 = require("./apis/riot/lol");
 const routes_1 = __importDefault(require("./routes"));
 const app = (0, express_1.default)();
-//Initial functions;
 const client = new mongodb_1.MongoClient(`mongodb+srv://${process.env.MONGODB}&w=majority`);
 function onInit() {
     console.log("INIT");
@@ -39,7 +38,6 @@ function onInit() {
     setInterval(spotify_1.refreshAccessToken, 30 * 60 * 1000);
     setInterval(lol_1.checkActiveRiotAccount, 3 * 60 * 1000);
     setInterval(twitch_1.refreshTwitchTokens, 60 * 60 * 1000);
-    setInterval(lol_1.updateRiotItemsAndChampions, 60 * 60 * 1000);
 }
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
