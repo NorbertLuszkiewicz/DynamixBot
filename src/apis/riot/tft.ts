@@ -2,7 +2,7 @@ import { TftApi, LolApi } from "twisted";
 import { Regions } from "twisted/dist/constants";
 import { MatchTFTDTO, TraitDto } from "twisted/dist/models-dto";
 
-import { updateUser, getUser } from "../../controllers/UserController";
+import { updateRiot, getRiot } from "../../controllers/RiotController";
 import { Participant } from "../../types/riot";
 import { region, serverNameToServerId } from "../../helpers";
 
@@ -60,7 +60,7 @@ const createTftMatchText = (placement: number, level: number, augments: string[]
 };
 
 export const resetRiotName = async (streamer: string): Promise<void> => {
-  const [data] = await getUser(streamer);
+  const [data] = await getRiot(streamer);
   const riotAccountList = data.riotAccountList;
 
   const newRiotAccountList = await Promise.all(
@@ -72,14 +72,14 @@ export const resetRiotName = async (streamer: string): Promise<void> => {
       };
     })
   );
-  await updateUser({
+  await updateRiot({
     streamer: data.streamer,
     riotAccountList: newRiotAccountList,
   });
 };
 
 export const addTftUser = async (name: string, server: Regions, streamer: string): Promise<void> => {
-  const [data] = await getUser(streamer);
+  const [data] = await getRiot(streamer);
 
   const existThisAccount = data.riotAccountList.find(
     riotAccount => riotAccount.name === name && riotAccount.server === server
@@ -112,7 +112,7 @@ export const addTftUser = async (name: string, server: Regions, streamer: string
           },
         ];
 
-    await updateUser({
+    await updateRiot({
       streamer,
       riotAccountList: newRiotAccountList,
     });
@@ -120,20 +120,20 @@ export const addTftUser = async (name: string, server: Regions, streamer: string
 };
 
 export const removeTftUser = async (name: string, server: string, streamer: string): Promise<void> => {
-  const [data] = await getUser(streamer);
+  const [data] = await getRiot(streamer);
 
   const accounts = data.riotAccountList.filter(
     riotAccount => !(riotAccount.name === name && riotAccount.server === server)
   );
 
-  await updateUser({
+  await updateRiot({
     streamer,
     riotAccountList: accounts,
   });
 };
 
 export const tftMatchList = async (streamer: string, nickname: string, server: string): Promise<string> => {
-  const [data] = await getUser(streamer);
+  const [data] = await getRiot(streamer);
   let matchList: MatchTFTDTO[];
   let puuid = "";
   try {
@@ -196,7 +196,7 @@ export const getMatch = async (number: number, nickname: string, server: string,
     return "@${user} komenda !mecze pokazuje liste meczy z dzisiaj (miejsca o raz synergie) !mecz [nr] gdzie [nr] oznacza numer meczu licząc od najnowszego czyli !mecz 1 pokaze ostatnią gre (wyświetla dokładny com z itemami i synergiami)";
   }
   try {
-    const [data] = await getUser(streamer);
+    const [data] = await getRiot(streamer);
     let puuid = data.activeRiotAccount.puuid;
     let gameRegion = nickname ? "EUROPE" : region[data.activeRiotAccount.server];
 
@@ -233,7 +233,7 @@ export const getMatch = async (number: number, nickname: string, server: string,
 };
 
 export const getStats = async (streamer: string, nickname: string, server: string): Promise<string> => {
-  const [data] = await getUser(streamer);
+  const [data] = await getRiot(streamer);
   const tftRegion = server ? serverNameToServerId[server] : "EUW1";
   let message = "";
   try {
@@ -245,7 +245,8 @@ export const getStats = async (streamer: string, nickname: string, server: strin
       message = getTftUserStatsText(response.name, userInfo);
       return message;
     } else {
-      const userData = await api.League.get(data.activeRiotAccount.id, data.activeRiotAccount.server);
+      const server: any = data.activeRiotAccount.server;
+      const userData = await api.League.get(data.activeRiotAccount.id, server);
       const userInfo = userData.response[0];
 
       message = getTftUserStatsText(data.activeRiotAccount.name, userInfo);

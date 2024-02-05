@@ -1,7 +1,8 @@
 import axios from "axios";
 import { startSong } from "../spotify";
 import { isBlockedVideo } from "../youtube";
-import { getAllUser, updateUser, getUser } from "../../controllers/UserController";
+import { getAllCredentials, updateCredentials, getCredentials } from "../../controllers/CredentialsController";
+import { getAllSong, updateSong, getSong } from "../../controllers/SongController";
 import { BlockedSong, PLayingSong } from "../../types/types";
 
 const url = "https://api.streamelements.com/kappa/v2/";
@@ -19,7 +20,7 @@ const getSongRequestHeader = (clientSongRequestSecret, contentType?) => {
 
 export const setTimeoutVolume = async (): Promise<void> => {
   try {
-    const allUsers = await getAllUser();
+    const allUsers = await getAllCredentials();
 
     timeoutVolume = allUsers.reduce((acc, key) => ({ ...acc, [key.streamer]: null }), {});
   } catch {
@@ -27,10 +28,9 @@ export const setTimeoutVolume = async (): Promise<void> => {
   }
 };
 
-export const getSpotifyAreaData = async (streamer: String, area: string): Promise<any> => {
+export const getSpotifyAreaData = async (streamer: string, area: string): Promise<any> => {
   try {
-    const [user] = await getUser(streamer);
-    const { clientSongRequestID, clientSongRequestSecret } = user;
+    const [{ clientSongRequestID, clientSongRequestSecret }] = await getCredentials(streamer);
 
     const { data } = await axios.get(
       `${url}songrequest/${clientSongRequestID}/${area}`,
@@ -43,7 +43,7 @@ export const getSpotifyAreaData = async (streamer: String, area: string): Promis
   }
 };
 
-export const songPlayingNow = async (streamer: String): Promise<PLayingSong> => {
+export const songPlayingNow = async (streamer: string): Promise<PLayingSong> => {
   try {
     const player = await getSpotifyAreaData(streamer, "player");
     const playing = await getSpotifyAreaData(streamer, "playing");
@@ -63,8 +63,7 @@ export const lastSongPlaying = async (streamer: string): Promise<PLayingSong> =>
   try {
     const player = await getSpotifyAreaData(streamer, "player");
     const playing = await getSpotifyAreaData(streamer, "playing");
-    const [user] = await getUser(streamer);
-    const { clientSongRequestID, clientSongRequestSecret } = user;
+    const [{ clientSongRequestID, clientSongRequestSecret }] = await getCredentials(streamer);
     const history = await getHistorySR(clientSongRequestID, clientSongRequestSecret, 1, 0);
 
     return {
@@ -80,8 +79,7 @@ export const lastSongPlaying = async (streamer: string): Promise<PLayingSong> =>
 
 export const setSongAsPlay = async (streamer: string, state: string): Promise<any> => {
   try {
-    const [user] = await getUser(streamer);
-    const { clientSongRequestID, clientSongRequestSecret } = user;
+    const [{ clientSongRequestID, clientSongRequestSecret }] = await getCredentials(streamer);
 
     await axios.post(
       `${url}songrequest/${clientSongRequestID}/player/${state}`,
@@ -114,8 +112,7 @@ export const timeRequest = async (streamer: string, action: "add" | "skip"): Pro
   try {
     let playing = await getSpotifyAreaData(streamer, "playing");
     const queue = await getSpotifyAreaData(streamer, "queue");
-    const [user] = await getUser(streamer);
-    const { endTime } = user;
+    const [{ endTime }] = await getSong(streamer);
 
     let now = Date.now();
 
@@ -135,8 +132,8 @@ export const timeRequest = async (streamer: string, action: "add" | "skip"): Pro
           newEndTime = (allQueueTimes + playing.duration) * 1000;
         }
       }
-      await updateUser({
-        streamer: streamer,
+      await updateSong({
+        streamer,
         endTime: newEndTime + now,
       });
 
@@ -152,10 +149,9 @@ export const timeRequest = async (streamer: string, action: "add" | "skip"): Pro
       if (playing) {
         let timeOfSongsInQueue = 0;
         queue.length > 0 ? queue.forEach(song => (timeOfSongsInQueue += song.duration)) : (timeOfSongsInQueue = 0);
-
         const timeOfAllSongs = (playing.duration + timeOfSongsInQueue) * 1000;
 
-        await updateUser({
+        await updateSong({
           streamer: streamer,
           endTime: timeOfAllSongs + now,
         });
@@ -178,8 +174,7 @@ export const timeRequest = async (streamer: string, action: "add" | "skip"): Pro
 export const removeBlockedSong = async (streamer: string): Promise<BlockedSong[]> => {
   try {
     const removedSongList = [];
-    const [user] = await getUser(streamer);
-    const { clientSongRequestID, clientSongRequestSecret } = user;
+    const [{ clientSongRequestID, clientSongRequestSecret }] = await getCredentials(streamer);
     const queue = await getSpotifyAreaData(streamer, "queue");
     const playing = await getSpotifyAreaData(streamer, "playing");
     const removeSong = song =>

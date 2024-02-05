@@ -1,25 +1,36 @@
 import axios from "axios";
-import { addUser, getUser, updateUser, getAllUser } from "../../../controllers/UserController";
+import { addCommand } from "../../../controllers/CommandController";
+import {
+  addCredentials,
+  getCredentials,
+  updateCredentials,
+  getAllCredentials,
+} from "../../../controllers/CredentialsController";
+import { addRiot } from "../../../controllers/RiotController";
+import { addSong } from "../../../controllers/SongController";
 
 const TOKEN = "https://id.twitch.tv/oauth2/token";
 
 export const addNewUser = async (code): Promise<{ status: string; name?: string; token?: string }> => {
-  const body = `grant_type=authorization_code&code=${code}&redirect_uri=https://dynamix-bot.glitch.me/register&client_id=${process.env.BOT_CLIENT_ID}&client_secret=${process.env.BOT_CLIENT_SECRET}`;
+  const body = `grant_type=authorization_code&code=${code}&redirect_uri=${process.env.BE_URL}register&client_id=${process.env.BOT_CLIENT_ID}&client_secret=${process.env.BOT_CLIENT_SECRET}`;
 
   try {
     const { data } = await axios.post(`${TOKEN}`, body, {});
     const users = await getStreamerData(data.access_token);
-    const userName = users?.data?.[0]?.login;
-    const userInDatabase = await getUser(userName);
+    const userName: string = users?.data?.[0]?.login;
+    const userInDatabase = await getCredentials(userName);
 
     if (userInDatabase.length === 0) {
-      await addUser({
+      await addCredentials({
         streamer: userName,
         twitchAccessToken: data.access_token,
         twitchRefreshToken: data.refresh_token,
       });
+      await addRiot({ streamer: userName });
+      await addSong({ streamer: userName });
+      await addCommand({ streamer: userName });
     } else {
-      await updateUser({
+      await updateCredentials({
         streamer: userName,
         twitchAccessToken: data.access_token,
         twitchRefreshToken: data.refresh_token,
@@ -39,7 +50,7 @@ export const addNewUser = async (code): Promise<{ status: string; name?: string;
 
 export const refreshTwitchTokens = async (): Promise<void> => {
   try {
-    const streamers = await getAllUser();
+    const streamers = await getAllCredentials();
 
     streamers.forEach(async streamer => {
       try {
@@ -52,7 +63,7 @@ export const refreshTwitchTokens = async (): Promise<void> => {
               "Content-Type": "application/x-www-form-urlencoded",
             },
           });
-          await updateUser({
+          await updateCredentials({
             streamer: streamer.streamer,
             twitchAccessToken: data.access_token,
             twitchRefreshToken: data.refresh_token,

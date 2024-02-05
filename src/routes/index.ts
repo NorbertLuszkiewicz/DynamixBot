@@ -1,10 +1,13 @@
 import express from "express";
 const router = express.Router();
 import { addSpotify } from "../apis/spotify";
-import { getUser, updateUser } from "../controllers/UserController";
+import { getCredentials, updateCredentials } from "../controllers/CredentialsController";
 import { addNewUser } from "../apis/twitch/events/twitch";
 import { addTftUser, removeTftUser } from "../apis/riot/tft";
 import { sendMessage } from "../apis/twitch/events/helix";
+import { getCommand, updateCommand } from "../controllers/CommandController";
+import { getSong, updateSong } from "../controllers/SongController";
+import { getRiot } from "../controllers/RiotController";
 
 router.get("/spotify", (req, res): void => {
   res.header("Access-Control-Allow-Origin", "*");
@@ -34,7 +37,7 @@ router.get("/spotify", (req, res): void => {
   res.redirect(
     `https://accounts.spotify.com/authorize?response_type=code&client_id=${
       process.env.CLIENT_ID
-    }&scope=${encodeURIComponent(scopes.join())}&redirect_uri=${`https://dynamix-bot.glitch.me/callback`}&state=${
+    }&scope=${encodeURIComponent(scopes.join())}&redirect_uri=${process.env.BE_URL + `callback`}&state=${
       req.query.user
     }`
   );
@@ -48,10 +51,10 @@ router.get("/callback", async (req, res): Promise<void> => {
     const callback = await addSpotify(user, code);
 
     callback.status === "success"
-      ? res.redirect(`https://dynamixbot.pl/dashboard`)
-      : res.redirect(`https://dynamixbot.pl/?error${callback ? callback.status : 400}`);
+      ? res.redirect(`${process.env.FE_URL}dashboard`)
+      : res.redirect(`${process.env.FE_URL}?error${callback ? callback.status : 400}`);
   } catch {
-    res.redirect(`https://dynamixbot.pl/?error${400}`);
+    res.redirect(`${process.env.FE_URL}?error${400}`);
   }
 });
 
@@ -64,8 +67,7 @@ router.get("/", async (req, res): Promise<void> => {
 router.get("/register", async (req, res): Promise<void> => {
   const code = req.query.code;
   const state = req.query.state;
-  const redirectUrl =
-    state === "c3ab8aa609ea11e793ae92361f002671" ? "https://dynamixbot.pl/" : "http://localhost:4200/";
+  const redirectUrl = state === "c3ab8aa609ea11e793ae92361f002671" ? process.env.FE_URL : "http://localhost:4200/";
 
   try {
     const callback = await addNewUser(code);
@@ -82,54 +84,119 @@ router.get("/account", async (req, res): Promise<void> => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "GET");
 
-  const name = req.query.name;
+  const name = req.query.name.toString();
   const token = req.query.token;
-
   try {
-    const [user] = await getUser(name);
+    const [
+      {
+        clientSongRequestID,
+        clientSongRequestSecret,
+        device,
+        spotifyAccessToken,
+        spotifyRefreshToken,
+        streamer,
+        twitchAccessToken,
+        twitchRefreshToken,
+      },
+    ] = await getCredentials(name);
+    const isSpotifyConnected = spotifyAccessToken && spotifyRefreshToken;
+    const isStreamElementsConnected = clientSongRequestID && clientSongRequestSecret;
+    const creddentials = {
+      streamer,
+      twitchAccessToken,
+      twitchRefreshToken,
+      isSpotifyConnected,
+      isStreamElementsConnected,
+    };
 
-    if (user) {
-      user.twitchAccessToken === token
-        ? res.send(user)
-        : res.status(401).send({
-            message: "Unauthorized",
-          });
+    if (streamer) {
+      twitchAccessToken === token ? res.send(creddentials) : res.status(401).send({ message: "Unauthorized" });
     } else {
-      res.status(404).send({
-        message: "This user dosn't exist",
-      });
+      res.status(404).send({ message: "This user doesn't exist" });
     }
   } catch {
     console.log("Error when get account");
-    res.status(400).send({
-      message: "Not Found",
-    });
+    res.status(400).send({ message: "Not Found" });
+  }
+});
+
+router.get("/riot", async (req, res): Promise<void> => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET");
+
+  const { name, token } = req.query;
+  try {
+    const [{ twitchAccessToken }] = await getCredentials(name.toString());
+    const [data] = await getRiot(name.toString());
+
+    if (data) {
+      twitchAccessToken === token ? res.send(data) : res.status(401).send({ message: "Unauthorized" });
+    } else {
+      res.status(404).send({ message: "This riot data doesn't exist" });
+    }
+  } catch {
+    console.log("Error when get riot data");
+    res.status(400).send({ message: "Not Found" });
+  }
+});
+
+router.get("/song", async (req, res): Promise<void> => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET");
+
+  const { name, token } = req.query;
+  try {
+    const [{ twitchAccessToken }] = await getCredentials(name.toString());
+    const [data] = await getSong(name.toString());
+
+    if (data) {
+      twitchAccessToken === token ? res.send(data) : res.status(401).send({ message: "Unauthorized" });
+    } else {
+      res.status(404).send({ message: "This song data doesn't exist" });
+    }
+  } catch {
+    console.log("Error when get song data");
+    res.status(400).send({ message: "Not Found" });
+  }
+});
+
+router.get("/commands", async (req, res): Promise<void> => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET");
+
+  const { name, token } = req.query;
+  try {
+    const [{ twitchAccessToken }] = await getCredentials(name.toString());
+    const [data] = await getCommand(name.toString());
+
+    if (data) {
+      twitchAccessToken === token ? res.send(data) : res.status(401).send({ message: "Unauthorized" });
+    } else {
+      res.status(404).send({ message: "This user doesn't exist" });
+    }
+  } catch {
+    console.log("Error when get command data");
+    res.status(400).send({ message: "Not Found" });
   }
 });
 
 router.put("/streamelements", async (req, res): Promise<void> => {
-  res.header("Access-Control-Allow-Origin", "https://dynamixbot.pl");
+  res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "PUT");
 
-  const clientID = req.body.clientID;
-  const token = req.body.token;
-  const user = req.body.user;
+  const { clientID, token, user } = req.body;
 
   try {
-    await updateUser({
+    await updateCredentials({
       streamer: user,
       clientSongRequestID: clientID,
       clientSongRequestSecret: token,
     });
 
-    res.status(200).send({
-      message: "Successfully saved changes",
-    });
+    res.status(200).send({ message: "Successfully saved changes" });
   } catch {
     console.log("Error when get account");
-    res.status(400).send({
-      message: "Something went wrong",
-    });
+    res.status(400).send({ message: "Something went wrong" });
   }
 });
 
@@ -141,44 +208,32 @@ router.post("/sendmessage", async (req, res): Promise<void> => {
   try {
     sendMessage(body.message, body.streamer);
     if (body.addwinner) {
-      const [user] = await getUser(body.streamer);
-      user.wheelwinners.length === 5 && user.wheelwinners.pop();
-      user.wheelwinners ? user.wheelwinners.unshift(body.message) : (user.wheelwinners = [body.message]);
-      await updateUser({
+      const [{ wheelwinners }] = await getCommand(body.streamer);
+      wheelwinners.length === 5 && wheelwinners.pop();
+      const wheel = wheelwinners?.length ? [...wheelwinners, body.message] : [body.message];
+      await updateCommand({
         streamer: body.streamer,
-        wheelwinners: user.wheelwinners,
+        wheelwinners: wheel,
       });
     }
 
-    res.status(200).send({
-      message: "Successfully send message",
-    });
+    res.status(200).send({ message: "Successfully send message" });
   } catch {
     console.log("Error when send message");
-    res.status(400).send({
-      message: "Something went wrong",
-    });
+    res.status(400).send({ message: "Something went wrong" });
   }
 });
 
 router.put("/volumeaward", async (req, res): Promise<void> => {
-  res.header("Access-Control-Allow-Origin", "https://dynamixbot.pl");
+  res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "PUT");
-
-  const min = req.body.min;
-  const max = req.body.max;
-  const minSR = req.body.minSR;
-  const maxSR = req.body.maxSR;
-  const time = req.body.time;
-  const user = req.body.user;
-
-  console.log(req.body);
+  const { min, max, minSR, maxSR, time, user } = req.body;
 
   try {
-    const [data] = await getUser(user);
+    const [data] = await getSong(user);
     const id = data.volumeSongID ? data.volumeSongID.id : "";
 
-    await updateUser({
+    await updateSong({
       streamer: user,
       volumeSongID: {
         id,
@@ -202,7 +257,7 @@ router.put("/volumeaward", async (req, res): Promise<void> => {
 });
 
 router.put("/riot", async (req, res): Promise<void> => {
-  res.header("Access-Control-Allow-Origin", "https://dynamixbot.pl");
+  res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "PUT");
 
   const name = req.body.name;
@@ -223,7 +278,7 @@ router.put("/riot", async (req, res): Promise<void> => {
 });
 
 router.put("/riot-remove", async (req, res): Promise<void> => {
-  res.header("Access-Control-Allow-Origin", "https://dynamixbot.pl");
+  res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "PUT");
 
   const name = req.body.name;
@@ -244,7 +299,7 @@ router.put("/riot-remove", async (req, res): Promise<void> => {
 });
 
 router.put("/slots", async (req, res): Promise<void> => {
-  res.header("Access-Control-Allow-Origin", "https://dynamixbot.pl");
+  res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "PUT");
 
   const { name, emotes, withBan, user } = req.body;
@@ -257,15 +312,15 @@ router.put("/slots", async (req, res): Promise<void> => {
     wins: 0,
   };
   try {
-    const [data] = await getUser(user);
+    const [data] = await getCommand(user);
 
     if (data.slotsID && data.slotsID.length > 0) {
-      await updateUser({
+      await updateCommand({
         streamer: user,
         slotsID: [...data.slotsID, newSlots],
       });
     } else {
-      await updateUser({
+      await updateCommand({
         streamer: user,
         slotsID: [newSlots],
       });
@@ -283,15 +338,13 @@ router.put("/slots", async (req, res): Promise<void> => {
 });
 
 router.put("/command_switch", async (req, res): Promise<void> => {
-  res.header("Access-Control-Allow-Origin", "https://dynamixbot.pl");
+  res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "PUT");
 
   const { user, body } = req.body;
 
   try {
-    const [data] = await getUser(user);
-
-    await updateUser({
+    await updateCommand({
       streamer: user,
       commandSwitch: body,
     });
@@ -308,19 +361,18 @@ router.put("/command_switch", async (req, res): Promise<void> => {
 });
 
 router.put("/slot_remove", async (req, res): Promise<void> => {
-  res.header("Access-Control-Allow-Origin", "https://dynamixbot.pl");
+  res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "PUT");
 
   const { id, user } = req.body;
 
   try {
-    const [data] = await getUser(user);
-
+    const [data] = await getCommand(user);
     const newSlotsList = data.slotsID.filter(slot => {
       return slot.name !== id;
     });
 
-    await updateUser({
+    await updateCommand({
       streamer: user,
       slotsID: newSlotsList,
     });

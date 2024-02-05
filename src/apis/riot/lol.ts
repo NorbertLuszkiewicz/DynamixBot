@@ -1,7 +1,7 @@
 import axios from "axios";
 import { TftApi, LolApi } from "twisted";
 import { MatchV5DTOs } from "twisted/dist/models-dto";
-import { updateUser, getUser, getAllUser } from "../../controllers/UserController";
+import { updateRiot, getRiot, getAllRiot } from "../../controllers/RiotController";
 import { lolPosition, region, serverNameToServerId } from "../../helpers";
 
 const api = new TftApi();
@@ -130,14 +130,17 @@ const getLolUserStatsText = (name: string, userInfo, mastery): string => {
     .map(m => `${convertChampionIdToName(m.championId)} (${m.championPoints.toLocaleString()} pkt)`)
     .filter(x => x)
     .join(" | ");
-  const wr = ((userInfo.wins / (userInfo.wins + userInfo.losses)) * 100).toFixed(1);
+  const wins = userInfo?.wins || 0;
+  const losses = userInfo?.losses || 0;
+
+  const wr = ((wins / (wins + losses)) * 100).toFixed(1);
   return `statystyki LOL dla gracza: ${name} | ${userInfo?.tier}${"-" + userInfo?.rank} ${userInfo.leaguePoints}LP ${
     userInfo.wins
-  }wins ${userInfo.wins + userInfo.losses}games ( ${wr}% wr) | Mastery (${masteryToText})`;
+  }wins ${wins + losses}games ( ${wr}% wr) | Mastery (${masteryToText})`;
 };
 
 export const getLolMatchStats = async (streamer: string, nickname: string, server: string): Promise<string> => {
-  const [data] = await getUser(streamer);
+  const [data] = await getRiot(streamer);
   let matchList = [];
   try {
     const { puuid, matchIdList } = await getMatchList(data, nickname, server);
@@ -175,7 +178,7 @@ export const getLolMatchStats = async (streamer: string, nickname: string, serve
 };
 
 export const getLolUserStats = async (streamer: string, nickname: string, server: string): Promise<string> => {
-  const [data] = await getUser(streamer);
+  const [data] = await getRiot(streamer);
   const lolRegion = server ? serverNameToServerId[server] : "EUW1";
   let puuid = data.activeRiotAccount.lol_puuid;
   let message = "";
@@ -192,7 +195,8 @@ export const getLolUserStats = async (streamer: string, nickname: string, server
 
       message = getLolUserStatsText(response.name, userInfo, userDetails?.data.slice(0, 3));
     } else {
-      const userData = await apiLol.League.bySummoner(data.activeRiotAccount.lol_id, data.activeRiotAccount.server);
+      const server: any = data.activeRiotAccount.server;
+      const userData = await apiLol.League.bySummoner(data.activeRiotAccount.lol_id, server);
       const userInfo = userData.response.filter(x => x.queueType === "RANKED_SOLO_5x5")[0];
 
       const userDetails = await axios.get(
@@ -221,7 +225,7 @@ export const getLolMatch = async (
     return "@${user} komenda !mecze pokazuje liste meczy z dzisiaj (miejsca o raz synergie) !mecz [nr] gdzie [nr] oznacza numer meczu licząc od najnowszego czyli !mecz 1 pokaze ostatnią gre (wyświetla dokładny com z itemami i synergiami)";
   }
   try {
-    const [data] = await getUser(streamer);
+    const [data] = await getRiot(streamer);
     let puuid = data.activeRiotAccount.lol_puuid;
     let gameRegion = nickname ? "EUROPE" : region[data.activeRiotAccount.server];
 
@@ -250,7 +254,7 @@ export const updateRiotItemsAndChampions = async (): Promise<void> => {
 
 export const checkActiveRiotAccount = async (): Promise<void> => {
   try {
-    const streamers = await getAllUser();
+    const streamers = await getAllRiot();
     streamers.forEach(async streamer => {
       if (streamer.riotAccountList && streamer.riotAccountList.length > 0) {
         streamer.riotAccountList.forEach(async ({ puuid, server, name, id, lol_puuid, lol_id }) => {
@@ -274,7 +278,7 @@ export const checkActiveRiotAccount = async (): Promise<void> => {
             lastMatch[0]?.info?.game_datetime > (streamer.activeRiotAccount ? streamer.activeRiotAccount.date : 0) ||
             lastMatchLol?.info?.gameEndTimestamp > (streamer.activeRiotAccount ? streamer.activeRiotAccount.date : 0)
           ) {
-            await updateUser({
+            await updateRiot({
               streamer: streamer.streamer,
               activeRiotAccount: {
                 name,

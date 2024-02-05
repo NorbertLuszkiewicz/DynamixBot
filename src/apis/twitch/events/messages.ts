@@ -1,16 +1,18 @@
 import ComfyJS from "comfy.js";
 
 import { nextSong, pauseSong, refreshDevices, changeVolumeOnTime, setVolume, currentlyPlaying } from "../../spotify";
-import { getAllUser, updateUser, getUser } from "../../../controllers/UserController";
+import { getSong, updateSong } from "../../../controllers/SongController";
+import { getCommand, updateCommand } from "../../../controllers/CommandController";
 import { timeRequest, removeBlockedSong } from "../../streamElements";
 import { changeBadWords } from "../../../helpers";
 import { timeout } from "./helix";
+import { getAllCredentials } from "../../../controllers/CredentialsController";
 
 let timeoutVolume = {};
 
 export const setTimeoutVolume = async (): Promise<void> => {
   try {
-    const allUsers = await getAllUser();
+    const allUsers = await getAllCredentials();
     timeoutVolume = allUsers.reduce((acc, key) => ({ ...acc, [key.streamer]: null }), {});
   } catch {
     console.log("Error when call setTimeoutVolume");
@@ -20,11 +22,11 @@ export const setTimeoutVolume = async (): Promise<void> => {
 export const messages = () => {
   ComfyJS.onChat = async (user, message, flags, self, extra) => {
     try {
-      const [data] = await getUser(extra.channel);
-      const { addSongID, skipSongID, volumeSongID, rollID, banID, slotsID } = await data;
+      const [{ addSongID, skipSongID, volumeSongID }] = await getSong(extra.channel);
+      const [{ rollID, banID, slotsID }] = await getCommand(extra.channel);
 
       if (flags.customReward && message === "add-song-award" && (flags.mod || flags.broadcaster)) {
-        updateUser({
+        updateSong({
           streamer: extra.channel,
           addSongID: extra.customRewardId,
         });
@@ -33,7 +35,7 @@ export const messages = () => {
       }
 
       if (flags.customReward && message === "skip-song-award" && (flags.mod || flags.broadcaster)) {
-        updateUser({
+        updateSong({
           streamer: extra.channel,
           skipSongID: extra.customRewardId,
         });
@@ -45,7 +47,7 @@ export const messages = () => {
         const newVolumeSongID = volumeSongID;
         newVolumeSongID.id = extra.customRewardId;
 
-        updateUser({
+        updateSong({
           streamer: extra.channel,
           volumeSongID: newVolumeSongID,
         });
@@ -64,7 +66,7 @@ export const messages = () => {
           return item;
         });
 
-        updateUser({
+        updateCommand({
           streamer: extra.channel,
           slotsID: updateSlots,
         });
@@ -180,7 +182,7 @@ export const messages = () => {
           return item;
         });
 
-        updateUser({
+        updateCommand({
           streamer: extra.channel,
           slotsID: slitsIDChanged,
         });
@@ -228,20 +230,20 @@ export const messages = () => {
       if (volumeSongID && flags.customReward && extra.customRewardId === id) {
         ComfyJS.Say("!volume " + maxSR, extra.channel);
         changeVolumeOnTime(extra.channel, min, max, time);
-        let [user] = await getUser(extra.channel);
+        let [{ maxVolumeTime }] = await getSong(extra.channel);
 
         let newMaxVolumeTime = 0;
         let now = Date.now();
 
-        if (user.maxVolumeTime > now) {
-          newMaxVolumeTime = user.maxVolumeTime + time;
+        if (maxVolumeTime > now) {
+          newMaxVolumeTime = maxVolumeTime + time;
         }
 
-        if (!user.maxVolumeTime || user.maxVolumeTime < now) {
+        if (!maxVolumeTime || maxVolumeTime < now) {
           newMaxVolumeTime = now + time;
         }
 
-        await updateUser({
+        await updateSong({
           streamer: extra.channel,
           maxVolumeTime: newMaxVolumeTime,
         });

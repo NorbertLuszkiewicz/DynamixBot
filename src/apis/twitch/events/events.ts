@@ -1,4 +1,4 @@
-const ComfyJS = require("comfy.js");
+import ComfyJS from "comfy.js";
 
 export const events = () => {
   const thanks = [

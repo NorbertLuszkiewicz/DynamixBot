@@ -2,7 +2,7 @@ import ComfyJS from "comfy.js";
 import { messages, setTimeoutVolume } from "./events/messages";
 import { events } from "./events/events";
 import { commands } from "./events/commands";
-import { getAllUser } from "../../controllers/UserController";
+import { getAllCredentials } from "../../controllers/CredentialsController";
 
 export const twitchCommands = async (): Promise<void> => {
   try {
@@ -11,7 +11,7 @@ export const twitchCommands = async (): Promise<void> => {
     commands();
     setTimeoutVolume();
 
-    const allStreamers = await getAllUser();
+    const allStreamers = await getAllCredentials();
     const TWITCHCHANNELS = allStreamers.map(streamer => streamer.streamer);
     const TWITCHUSER = "dynam1x1";
     const OAUTH = process.env.OAUTH;

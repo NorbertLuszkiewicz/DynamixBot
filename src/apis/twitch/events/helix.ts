@@ -1,16 +1,16 @@
 import axios from "axios";
 import ComfyJS from "comfy.js";
 
-import { getUser } from "../../../controllers/UserController";
+import { getCredentials } from "../../../controllers/CredentialsController";
 
 const URL = "https://api.twitch.tv/helix/";
 
 export const getHeader = async () => {
-  const [data] = await getUser("dynam1x1");
+  const [{ twitchAccessToken }] = await getCredentials("dynam1x1");
 
   return {
     headers: {
-      Authorization: `Bearer ${data.twitchAccessToken}`,
+      Authorization: `Bearer ${twitchAccessToken}`,
       "Client-Id": process.env.BOT_CLIENT_ID,
       "Content-Type": "application/json",
     },

@@ -8,8 +8,10 @@ import { currentlyPlaying, nextSong, startSong, lastPlaying } from "../../spotif
 import { songPlayingNow, timeRequest, setSongAsPlay, lastSongPlaying } from "../../streamElements";
 import { getChessUser, getLastGame } from "../../chess";
 import { allWord, literalnieWord } from "../../literalnie";
-import { updateUser, getUser } from "../../../controllers/UserController";
+import { getCommand, updateCommand } from "../../../controllers/CommandController";
+import { getSong } from "../../../controllers/SongController";
 import { plToEnAlphabet, randomInt } from "../../../helpers";
+import { getRiot } from "../../../controllers/RiotController";
 
 let users = {};
 let usersWordle = {};
@@ -17,8 +19,9 @@ let usersWordle = {};
 export const commands = () =>
   (ComfyJS.onCommand = async (user: string, command: string, message: string, flags, extra) => {
     try {
-      const [data] = await getUser(extra.channel);
-      const { commandSwitch, addSongID } = await data;
+      const [{ commandSwitch, wheelwinners, slotsID }] = await getCommand(extra.channel);
+      const [{ activeRiotAccount }] = await getRiot(extra.channel);
+      const [{ addSongID }] = await getSong(extra.channel);
 
       if ((command == "song" || command == "coleci") && commandSwitch.song) {
         try {
@@ -108,7 +111,7 @@ export const commands = () =>
               break;
             }
             default: {
-              if (data?.activeRiotAccount?.isLol) {
+              if (activeRiotAccount?.isLol) {
                 matchesList = await getLolMatchStats(props[0], props[1], props[2]);
               } else {
                 matchesList = await tftMatchList(props[0], props[1], props[2]);
@@ -152,7 +155,7 @@ export const commands = () =>
                 break;
               }
               default: {
-                if (data?.activeRiotAccount?.isLol) {
+                if (activeRiotAccount?.isLol) {
                   match = await getLolMatch(props.number, props.nickname, props.server, extra.channel);
                 } else {
                   match = await getMatch(props.number, props.nickname, props.server, extra.channel);
@@ -196,7 +199,7 @@ export const commands = () =>
               break;
             }
             default: {
-              if (data?.activeRiotAccount?.isLol) {
+              if (activeRiotAccount?.isLol) {
                 stats = await getLolUserStats(extra.channel, NickNameAndServer[0], NickNameAndServer[1]?.toUpperCase());
               } else {
                 stats = await getStats(extra.channel, NickNameAndServer[0], NickNameAndServer[1]?.toUpperCase());
@@ -211,7 +214,7 @@ export const commands = () =>
         }
       }
 
-      if ((command === "top" || command === "ranking") && commandSwitch.tft && !data.activeRiotAccount.isLol) {
+      if ((command === "top" || command === "ranking") && commandSwitch.tft && !activeRiotAccount.isLol) {
         try {
           const stats = await getRank(message.toUpperCase());
 
@@ -291,7 +294,7 @@ export const commands = () =>
       }
 
       if (command === "lastWinners" || command === "wins") {
-        const slots = data.slotsID;
+        const slots = slotsID;
         let result = "";
 
         slots.forEach(slot => {
@@ -304,10 +307,10 @@ export const commands = () =>
         ComfyJS.Say(changeBadWords(result), extra.channel);
       }
 
-      if (command === "wheelWinners" || command === "wheelwinners") {
-        const wheelwinners = data.wheelwinners.toString();
+      if (command.toString() === "wheelwinners") {
+        const winners = wheelwinners.toString();
 
-        ComfyJS.Say(wheelwinners, extra.channel);
+        ComfyJS.Say(winners, extra.channel);
       }
 
       if (command === "slots" && commandSwitch.slots) {
@@ -544,7 +547,7 @@ export const commands = () =>
           ComfyJS.Say(`${onOffMessage} komendy song, playlist`, extra.channel);
         }
 
-        updateUser({
+        updateCommand({
           streamer: extra.channel,
           commandSwitch: newComandSwitch,
         });

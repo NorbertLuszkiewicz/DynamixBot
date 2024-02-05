@@ -1,7 +1,13 @@
 import { InferSchemaType } from "mongoose";
-import { UserSchema } from "../models/User";
+import { CommandSchema } from "../models/Command";
+import { CredentialsSchema } from "../models/Credentials";
+import { RiotSchema } from "../models/Riot";
+import { SongSchema } from "../models/Song";
 
-export type User = InferSchemaType<typeof UserSchema>;
+export type Command = InferSchemaType<typeof CommandSchema>;
+export type Credentials = InferSchemaType<typeof CredentialsSchema>;
+export type Riot = InferSchemaType<typeof RiotSchema>;
+export type Song = InferSchemaType<typeof SongSchema>;
 
 type Image = {
   url: string;

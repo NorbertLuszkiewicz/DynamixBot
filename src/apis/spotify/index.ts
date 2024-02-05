@@ -1,5 +1,6 @@
 import axios, { AxiosRequestConfig } from "axios";
-import { getAllUser, updateUser, getUser } from "../../controllers/UserController";
+import { getAllSong, updateSong, getSong } from "../../controllers/SongController";
+import { getAllCredentials, updateCredentials, getCredentials } from "../../controllers/CredentialsController";
 
 const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
@@ -11,7 +12,7 @@ const VOLUME = "https://api.spotify.com/v1/me/player/volume";
 const PLAYER = "https://api.spotify.com/v1/me/player";
 const DEVICES = "https://api.spotify.com/v1/me/player/devices";
 
-let timeoutVolume = { kezman22: null, dynam1x1: null };
+let timeoutVolume = {};
 
 const getSpotifyHeader = (spotifyAccessToken: string): AxiosRequestConfig<{}> => {
   return {
@@ -24,7 +25,7 @@ const getSpotifyHeader = (spotifyAccessToken: string): AxiosRequestConfig<{}> =>
 
 export const setTimeoutVolume = async (): Promise<void> => {
   try {
-    const allUsers = await getAllUser();
+    const allUsers = await getAllSong();
     timeoutVolume = allUsers.reduce((acc, key) => ({ ...acc, [key.streamer]: null }), {});
   } catch {
     console.log("Error when call setTimeoutVolume");
@@ -32,7 +33,7 @@ export const setTimeoutVolume = async (): Promise<void> => {
 };
 
 export const addSpotify = async (streamer, code): Promise<{ status: string }> => {
-  const body = `grant_type=authorization_code&code=${code}&redirect_uri=https://dynamix-bot.glitch.me/callback`;
+  const body = `grant_type=authorization_code&code=${code}&redirect_uri=${process.env.BE_URL}callback`;
 
   try {
     const { data } = await axios.post(`${TOKEN}`, body, {
@@ -42,7 +43,7 @@ export const addSpotify = async (streamer, code): Promise<{ status: string }> =>
       },
     });
 
-    await updateUser({
+    await updateCredentials({
       streamer: streamer,
       spotifyAccessToken: data.access_token,
       spotifyRefreshToken: data.refresh_token,
@@ -56,8 +57,7 @@ export const addSpotify = async (streamer, code): Promise<{ status: string }> =>
 };
 
 export const startSong = async (streamer: string): Promise<any> => {
-  const [user] = await getUser(streamer);
-  const { spotifyAccessToken, device } = user;
+  const [{ spotifyAccessToken, device }] = await getCredentials(streamer);
 
   try {
     return await axios.put(`${PLAY}?device_id=${device}`, {}, getSpotifyHeader(spotifyAccessToken));
@@ -68,8 +68,7 @@ export const startSong = async (streamer: string): Promise<any> => {
 
 export const pauseSong = async (streamer: string): Promise<any> => {
   try {
-    const [user] = await getUser(streamer);
-    const { spotifyAccessToken, device } = user;
+    const [{ spotifyAccessToken, device }] = await getCredentials(streamer);
 
     return await axios.put(`${PAUSE}?device_id=${device}`, {}, getSpotifyHeader(spotifyAccessToken));
   } catch ({ response }) {
@@ -79,7 +78,7 @@ export const pauseSong = async (streamer: string): Promise<any> => {
 
 export const nextSong = async (streamer: string): Promise<void> => {
   try {
-    const [user] = await getUser(streamer);
+    const [user] = await getCredentials(streamer);
     const { spotifyAccessToken, device } = user;
     return await axios.post(`${NEXT}?device_id=${device}`, {}, getSpotifyHeader(spotifyAccessToken));
   } catch ({ response }) {
@@ -89,8 +88,8 @@ export const nextSong = async (streamer: string): Promise<void> => {
 
 export const changeVolumeOnTime = async (streamer: string, min: number, max: number, time: number): Promise<void> => {
   try {
-    let [user] = await getUser(streamer);
-    let { spotifyAccessToken, device, maxVolumeTime } = user;
+    let [{ spotifyAccessToken, device }] = await getCredentials(streamer);
+    let [{ maxVolumeTime }] = await getSong(streamer);
     let newMaxVolumeTime = 0;
 
     await axios.put(`${VOLUME}?volume_percent=${max}&device_id=${device}`, {}, getSpotifyHeader(spotifyAccessToken));
@@ -103,7 +102,7 @@ export const changeVolumeOnTime = async (streamer: string, min: number, max: num
       newMaxVolumeTime = now + time;
     }
 
-    await updateUser({
+    await updateSong({
       streamer: streamer,
       maxVolumeTime: newMaxVolumeTime,
     });
@@ -131,8 +130,7 @@ export const changeVolumeOnTime = async (streamer: string, min: number, max: num
 
 export const setVolume = async (streamer: string, value: string): Promise<any> => {
   try {
-    const [user] = await getUser(streamer);
-    const { spotifyAccessToken, device } = user;
+    const [{ spotifyAccessToken, device }] = await getCredentials(streamer);
 
     return await axios.put(
       `${VOLUME}?volume_percent=${value}&device_id=${device}`,
@@ -146,11 +144,11 @@ export const setVolume = async (streamer: string, value: string): Promise<any> =
 
 export const refreshAccessToken = async (): Promise<void> => {
   try {
-    const streamers = await getAllUser();
+    const streamers = await getAllCredentials();
 
-    streamers.forEach(async streamer => {
-      if (streamer.streamer != "og1ii" && streamer.spotifyRefreshToken) {
-        const body = `grant_type=refresh_token&refresh_token=${streamer.spotifyRefreshToken}&client_id=${clientId}`;
+    streamers.forEach(async ({ streamer, spotifyRefreshToken }) => {
+      if (streamer != "og1ii" && spotifyRefreshToken) {
+        const body = `grant_type=refresh_token&refresh_token=${spotifyRefreshToken}&client_id=${clientId}`;
 
         const { data } = await axios.post(`${TOKEN}`, body, {
           headers: {
@@ -159,8 +157,8 @@ export const refreshAccessToken = async (): Promise<void> => {
           },
         });
 
-        await updateUser({
-          streamer: streamer.streamer,
+        await updateCredentials({
+          streamer,
           spotifyAccessToken: data.access_token,
           spotifyRefreshToken: data.refresh_token,
         });
@@ -173,8 +171,7 @@ export const refreshAccessToken = async (): Promise<void> => {
 
 export const currentlyPlaying = async (streamer: string) => {
   try {
-    const [user] = await getUser(streamer);
-    const { spotifyAccessToken } = user;
+    const [{ spotifyAccessToken }] = await getCredentials(streamer);
     const { data } = await axios.get(`${PLAYER}?market=US`, getSpotifyHeader(spotifyAccessToken));
 
     return data;
@@ -185,9 +182,7 @@ export const currentlyPlaying = async (streamer: string) => {
 
 export const lastPlaying = async (streamer: string): Promise<SpotifyApi.PlayHistoryObject> => {
   try {
-    const [user] = await getUser(streamer);
-    const { spotifyAccessToken } = user;
-
+    const [{ spotifyAccessToken }] = await getCredentials(streamer);
     const { data } = await axios.get(`${PLAYER}/recently-played?limit=1`, getSpotifyHeader(spotifyAccessToken));
 
     return data?.items[0];
@@ -198,8 +193,7 @@ export const lastPlaying = async (streamer: string): Promise<SpotifyApi.PlayHist
 
 export const refreshDevices = async (streamer: string): Promise<void> => {
   try {
-    const [user] = await getUser(streamer);
-    const { spotifyAccessToken } = user;
+    const [{ spotifyAccessToken }] = await getCredentials(streamer);
 
     const { data }: { data: SpotifyApi.UserDevicesResponse } = await axios.get(
       DEVICES,
@@ -210,7 +204,7 @@ export const refreshDevices = async (streamer: string): Promise<void> => {
       ? data.devices.find(element => element.is_active)
       : data.devices[0];
 
-    await updateUser({
+    await updateCredentials({
       streamer: streamer,
       device: device.id,
     });
