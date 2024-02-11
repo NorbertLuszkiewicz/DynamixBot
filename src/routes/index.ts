@@ -232,11 +232,11 @@ router.put("/volumeaward", async (req, res): Promise<void> => {
 
   try {
     const [data] = await getSong(user);
-    const id = data?.volumeSongID?.id || "";
+    const id = data?.volumeChanger?.id || "";
 
     await updateSong({
       streamer: user,
-      volumeSongID: {
+      volumeChanger: {
         id,
         min,
         max,

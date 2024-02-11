@@ -17,7 +17,7 @@ export const SongSchema = new Schema({
     type: String,
     default: null,
   },
-  volumeSongID: {
+  volumeChanger: {
     type: {
       id: String,
       max: Number,
@@ -39,6 +39,18 @@ export const SongSchema = new Schema({
   endTime: {
     type: Number,
     default: null,
+  },
+  skipSongs: {
+    type: {
+      isActive: Boolean,
+      size: Number,
+      pauseAfterRequest: Boolean,
+    },
+    default: {
+      isActive: false,
+      size: 0,
+      pauseAfterRequest: false,
+    },
   },
 });
 

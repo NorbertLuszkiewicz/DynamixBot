@@ -171,7 +171,11 @@ export const timeRequest = async (streamer: string, action: "add" | "skip"): Pro
   }
 };
 
-export const removeBlockedSong = async (streamer: string): Promise<BlockedSong[]> => {
+export const removeBlockedSong = async (
+  streamer: string,
+  isActive?: boolean,
+  size?: number
+): Promise<BlockedSong[]> => {
   try {
     const removedSongList = [];
     const [{ clientSongRequestID, clientSongRequestSecret }] = await getCredentials(streamer);
@@ -209,9 +213,7 @@ export const removeBlockedSong = async (streamer: string): Promise<BlockedSong[]
       }
     }
 
-    //for overpow for now changed global in the future
-
-    if (streamer.toLowerCase() === "overpow") {
+    if (isActive) {
       const historyList = [];
       const fistPage = await getHistorySR(clientSongRequestID, clientSongRequestSecret, 100, 0);
       const secondPage = await getHistorySR(clientSongRequestID, clientSongRequestSecret, 100, 100);
@@ -219,14 +221,14 @@ export const removeBlockedSong = async (streamer: string): Promise<BlockedSong[]
       fistPage.forEach(x => historyList.push(x.song.videoId));
       secondPage.forEach(x => historyList.push(x.song.videoId));
 
-      queue.slice(-2).forEach(async song => {
+      queue.slice(-2).forEach(async (song, i) => {
         if (song.source !== "tip") {
           if (historyList.find(x => x === song.videoId)) {
             removeSong(song._id);
             removedSongList.push({
               user: song.user.username,
               title: song.title,
-              reason: "usunięto z kolejki: ten utwór był niedawno puszczany",
+              reason: `usunięto z kolejki: ten utwór leciał ${i} piosenek temu | ban na ostanie ${size} piosenki`,
             });
           }
 

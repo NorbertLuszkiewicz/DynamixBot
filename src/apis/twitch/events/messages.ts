@@ -22,7 +22,7 @@ export const setTimeoutVolume = async (): Promise<void> => {
 export const messages = () => {
   ComfyJS.onChat = async (user, message, flags, self, extra) => {
     try {
-      const [{ addSongID, skipSongID, volumeSongID }] = await getSong(extra.channel);
+      const [{ addSongID, skipSongID, skipSongs, volumeChanger }] = await getSong(extra.channel);
       const [{ rollID, banID, slotsID }] = await getCommand(extra.channel);
 
       if (flags.customReward && message === "add-song-award" && (flags.mod || flags.broadcaster)) {
@@ -44,12 +44,12 @@ export const messages = () => {
       }
 
       if (flags.customReward && message === "change-volume-song-award" && (flags.mod || flags.broadcaster)) {
-        const newVolumeSongID = volumeSongID;
-        newVolumeSongID.id = extra.customRewardId;
+        const newVolumeChanger = volumeChanger;
+        newVolumeChanger.id = extra.customRewardId;
 
         updateSong({
           streamer: extra.channel,
-          volumeSongID: newVolumeSongID,
+          volumeChanger: newVolumeChanger,
         });
 
         ComfyJS.Say("Włączono automatyczą zmiane głosności przy zakupie tej nagrody", extra.channel);
@@ -192,7 +192,7 @@ export const messages = () => {
         user === "StreamElements" &&
         (message.lastIndexOf("to the queue") != -1 || message.lastIndexOf("do kolejki") != -1)
       ) {
-        if (extra.channel !== "overpow") {
+        if (skipSongs.pauseAfterRequest) {
           pauseSong(extra.channel);
         }
 
@@ -216,8 +216,8 @@ export const messages = () => {
         }
       }
 
-      const { id, min, max, minSR, maxSR, time } = volumeSongID
-        ? volumeSongID
+      const { id, min, max, minSR, maxSR, time } = volumeChanger
+        ? volumeChanger
         : {
             id: null,
             min: null,
@@ -227,7 +227,7 @@ export const messages = () => {
             time: null,
           };
 
-      if (volumeSongID && flags.customReward && extra.customRewardId === id) {
+      if (volumeChanger && flags.customReward && extra.customRewardId === id) {
         ComfyJS.Say("!volume " + maxSR, extra.channel);
         changeVolumeOnTime(extra.channel, min, max, time);
         let [{ maxVolumeTime }] = await getSong(extra.channel);
