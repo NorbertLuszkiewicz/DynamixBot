@@ -145,6 +145,7 @@ router.get("/song", async (req, res): Promise<void> => {
   res.header("Access-Control-Allow-Methods", "GET");
 
   const { name, token } = req.query;
+
   try {
     const [{ twitchAccessToken }] = await getCredentials(name.toString());
     const [data] = await getSong(name.toString());
@@ -231,7 +232,7 @@ router.put("/volumeaward", async (req, res): Promise<void> => {
 
   try {
     const [data] = await getSong(user);
-    const id = data.volumeSongID ? data.volumeSongID.id : "";
+    const id = data?.volumeSongID?.id || "";
 
     await updateSong({
       streamer: user,
@@ -265,7 +266,7 @@ router.put("/riot", async (req, res): Promise<void> => {
   const user = req.body.user;
 
   try {
-    addTftUser(name, server, user);
+    await addTftUser(name, server, user);
     res.status(200).send({
       message: "Successfully saved changes",
     });

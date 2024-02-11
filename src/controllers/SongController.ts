@@ -31,7 +31,7 @@ export const getSong = async (streamer: string): Promise<Song[]> => {
 
 export const updateSong = async (user: Partial<Song>): Promise<Song> => {
   try {
-    return await Song.findOneAndUpdate({ streamer: user.streamer }, Song);
+    return await Song.findOneAndUpdate({ streamer: user.streamer }, user);
   } catch (err) {
     console.log(`Error while updating Song ${err}`);
   }

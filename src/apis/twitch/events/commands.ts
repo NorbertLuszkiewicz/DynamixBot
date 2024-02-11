@@ -23,12 +23,12 @@ export const commands = () =>
       const [{ activeRiotAccount }] = await getRiot(extra.channel);
       const [{ addSongID }] = await getSong(extra.channel);
 
-      if ((command == "song" || command == "coleci") && commandSwitch.song) {
+      if ((command === "song" || command === "coleci") && commandSwitch.song) {
         try {
           const spotifyData = await currentlyPlaying(extra.channel);
           const { title, link, userAdded } = await songPlayingNow(extra.channel);
 
-          if (spotifyData?.is_playing) {
+          if (!spotifyData?.is_playing) {
             ComfyJS.Say(`@${user} ${title} ${userAdded && " | dodał/a " + userAdded + " "} ${link} `, extra.channel);
           } else {
             let url = spotifyData?.item?.external_urls?.spotify ? spotifyData?.item?.external_urls?.spotify : "";

@@ -39,7 +39,6 @@ export const SongSchema = new Schema({
   endTime: {
     type: Number,
     default: null,
-    unique: true,
   },
 });
 

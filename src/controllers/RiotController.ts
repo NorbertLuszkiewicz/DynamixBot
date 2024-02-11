@@ -31,7 +31,7 @@ export const getRiot = async (streamer: string): Promise<Riot[]> => {
 
 export const updateRiot = async (riot: Partial<Riot>): Promise<Riot> => {
   try {
-    return await Riot.findOneAndUpdate({ streamer: riot.streamer }, Riot);
+    return await Riot.findOneAndUpdate({ streamer: riot.streamer }, riot);
   } catch (err) {
     console.log(`Error while updating Riot ${err}`);
   }
