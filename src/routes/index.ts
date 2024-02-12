@@ -246,14 +246,32 @@ router.put("/volumeaward", async (req, res): Promise<void> => {
       },
     });
 
-    res.status(200).send({
-      message: "Successfully saved changes",
-    });
+    res.status(200).send({ message: "Successfully saved changes" });
   } catch {
-    console.log("Error when get account");
-    res.status(400).send({
-      message: "Something went wrong",
+    console.log("Error when set volumeChanger");
+    res.status(400).send({ message: "Something went wrong" });
+  }
+});
+
+router.put("/songqueue", async (req, res): Promise<void> => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "PUT");
+  const { isActive, size, pauseAfterRequest, user } = req.body;
+
+  try {
+    await updateSong({
+      streamer: user,
+      skipSongs: {
+        isActive,
+        size,
+        pauseAfterRequest,
+      },
     });
+
+    res.status(200).send({ message: "Successfully saved changes" });
+  } catch {
+    console.log("Error when set song queue");
+    res.status(400).send({ message: "Something went wrong" });
   }
 });
 
