@@ -8,36 +8,16 @@ import { sendMessage } from "../apis/twitch/events/helix";
 import { getCommand, updateCommand } from "../controllers/CommandController";
 import { getSong, updateSong } from "../controllers/SongController";
 import { getRiot } from "../controllers/RiotController";
+import { twitchScopes } from "../helpers";
 
 router.get("/spotify", (req, res): void => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "GET");
-  const scopes = [
-    "ugc-image-upload",
-    "user-read-playback-state",
-    "user-modify-playback-state",
-    "user-read-currently-playing",
-    "streaming",
-    "app-remote-control",
-    "user-read-email",
-    "user-read-private",
-    "playlist-read-collaborative",
-    "playlist-modify-public",
-    "playlist-read-private",
-    "playlist-modify-private",
-    "user-library-modify",
-    "user-library-read",
-    "user-top-read",
-    "user-read-playback-position",
-    "user-read-recently-played",
-    "user-follow-read",
-    "user-follow-modify",
-  ];
 
   res.redirect(
     `https://accounts.spotify.com/authorize?response_type=code&client_id=${
       process.env.CLIENT_ID
-    }&scope=${encodeURIComponent(scopes.join())}&redirect_uri=${process.env.BE_URL + `callback`}&state=${
+    }&scope=${encodeURIComponent(twitchScopes.join())}&redirect_uri=${process.env.BE_URL + `callback`}&state=${
       req.query.user
     }`
   );
