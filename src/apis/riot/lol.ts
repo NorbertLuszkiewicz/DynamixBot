@@ -1,10 +1,11 @@
 import axios from "axios";
-import { TftApi, LolApi } from "twisted";
+import { TftApi, LolApi, RiotApi } from "twisted";
 import { MatchV5DTOs } from "twisted/dist/models-dto";
 import { updateRiot, getRiot, getAllRiot } from "../../controllers/RiotController";
-import { lolPosition, region, serverNameToServerId } from "../../helpers";
+import { getByRiotName, lolPosition, region, serverNameToServerId } from "../../helpers";
 
 const api = new TftApi();
+const apiRiot = new RiotApi({ key: process.env.RIOT_API_KEY_LOL });
 const apiLol = new LolApi({
   key: process.env.RIOT_API_KEY_LOL,
 });
@@ -18,7 +19,7 @@ const convertChampionIdToName = (id: string): string => {
   }
 };
 
-const getMatchText = (data: MatchV5DTOs.InfoDto, puuid: string): string => {
+const getMatchText = (data, puuid: string): string => {
   const me = data.participants.filter(x => x.puuid === puuid)[0];
   const myTeam = data.participants.filter(x => x.teamId === me.teamId);
   const myTeamWithoutMe = myTeam.filter(x => x.puuid !== puuid);
@@ -99,24 +100,26 @@ const getMatchList = async (data, nickname: string, server: string): Promise<{ p
   let matchIdList = [];
   try {
     if (nickname) {
-      const { response } = await apiLol.Summoner.getByName(nickname, server ? serverNameToServerId[server] : "EUW1");
+      const summoner = await getByRiotName(nickname, server ? serverNameToServerId[server] : "EUW1", apiLol, apiRiot);
 
       matchIdList = (
-        await apiLol.MatchV5.list(response.puuid, server ? region[serverNameToServerId[server]] : "EUROPE", {
+        await apiLol.MatchV5.list(summoner.puuid, server ? region[serverNameToServerId[server]] : "EUROPE", {
           count: 10,
         })
       ).response;
-      puuid = response.puuid;
+      puuid = summoner.puuid;
     } else {
-      const { response } = await apiLol.Summoner.getByName(
+      const summoner = await getByRiotName(
         data.activeRiotAccount?.name,
-        data.activeRiotAccount?.server ? data.activeRiotAccount.server : "EUW1"
+        data.activeRiotAccount?.server ? data.activeRiotAccount.server : "EUW1",
+        apiLol,
+        apiRiot
       );
 
-      matchIdList = (await apiLol.MatchV5.list(response.puuid, region[data.activeRiotAccount.server], { count: 10 }))
+      matchIdList = (await apiLol.MatchV5.list(summoner.puuid, region[data.activeRiotAccount.server], { count: 10 }))
         .response;
 
-      puuid = response.puuid;
+      puuid = summoner.puuid;
     }
 
     return { puuid, matchIdList };
@@ -182,18 +185,19 @@ export const getLolUserStats = async (streamer: string, nickname: string, server
   const lolRegion = server ? serverNameToServerId[server] : "EUW1";
   let puuid = data.activeRiotAccount.lol_puuid;
   let message = "";
+
   try {
     if (nickname) {
-      const { response } = await apiLol.Summoner.getByName(nickname, lolRegion);
-      const userData = await apiLol.League.bySummoner(response.id, lolRegion);
+      const summoner = await getByRiotName(nickname, lolRegion, apiLol, apiRiot);
+      const userData = await apiLol.League.bySummoner(summoner.id, lolRegion);
       const userInfo = userData.response.filter(x => x.queueType === "RANKED_SOLO_5x5")[0];
 
-      puuid = response.puuid;
+      puuid = summoner.puuid;
       const userDetails = await axios.get(
         `https://${lolRegion}.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-puuid/${puuid}?api_key=${process.env.RIOT_API_KEY_LOL}`
       );
 
-      message = getLolUserStatsText(response.name, userInfo, userDetails?.data.slice(0, 3));
+      message = getLolUserStatsText(summoner.gameName, userInfo, userDetails?.data.slice(0, 3));
     } else {
       const server: any = data.activeRiotAccount.server;
       const userData = await apiLol.League.bySummoner(data.activeRiotAccount.lol_id, server);
@@ -230,9 +234,9 @@ export const getLolMatch = async (
     let gameRegion = nickname ? "EUROPE" : region[data.activeRiotAccount.server];
 
     if (nickname) {
-      const summoner = await apiLol.Summoner.getByName(nickname, server ? serverNameToServerId[server] : "EUW1");
+      const summoner = await getByRiotName(nickname, server ? serverNameToServerId[server] : "EUW1", apiLol, apiRiot);
       gameRegion = server ? region[serverNameToServerId[server]] : "EUROPE";
-      puuid = summoner.response.puuid;
+      puuid = summoner.puuid;
     }
     const matchList = await apiLol.MatchV5.list(puuid, gameRegion, { count: number });
     const matchDetails = await apiLol.MatchV5.get(matchList.response.at(-1), gameRegion);
@@ -259,17 +263,20 @@ export const checkActiveRiotAccount = async (): Promise<void> => {
       if (streamer.riotAccountList && streamer.riotAccountList.length > 0) {
         streamer.riotAccountList.forEach(async ({ puuid, server, name, id, lol_puuid, lol_id }) => {
           const lastMatch = await api.Match.listWithDetails(puuid, region[server], { count: 1 });
-          let summonerName = (await apiLol.Summoner.getByName(name, server ? server : "EUW1")).response;
           let lastMatchLol;
 
-          if (summonerName) {
+          if (lol_puuid) {
             const lastMatchLolId = (
-              await apiLol.MatchV5.list(summonerName.puuid, region[server], {
+              await apiLol.MatchV5.list(lol_puuid, region[server], {
                 count: 1,
               })
             ).response;
             const OUTDATED_MATCH_ID = "EUW1_5273890293";
-            if (lastMatchLolId.length > 0 && lastMatchLolId[0] !== OUTDATED_MATCH_ID) {
+            if (
+              lastMatchLolId.length > 0 &&
+              lastMatchLolId[0] !== OUTDATED_MATCH_ID &&
+              lastMatchLolId[0] !== "EUN1_3252759263"
+            ) {
               lastMatchLol = (await apiLol.MatchV5.get(lastMatchLolId[0], region[server]))?.response || "";
             }
           }

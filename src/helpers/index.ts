@@ -1,3 +1,5 @@
+import { Summoner } from "../types/riot";
+
 export const serverNameToServerId = {
   EUW: "EUW1",
   EUNE: "EUN1",
@@ -14,7 +16,7 @@ export const lolPosition = {
   UTILITY: "SUP",
 };
 
-export const twitchScopes = [
+export const spotifyScopes = [
   "ugc-image-upload",
   "user-read-playback-state",
   "user-modify-playback-state",
@@ -84,4 +86,18 @@ export const changeBadWords = (message: string): string => {
     .replace("cwel", "c++l");
 
   return correctMessage == message.toLowerCase() ? message : correctMessage;
+};
+
+export const getByRiotName = async (fullName: string, server, api, apiRiot): Promise<Summoner> => {
+  try {
+    const serverAsRegion: any = region[server];
+    const [name, tagLine = server] = fullName.split("#");
+    const userCredentials = await apiRiot.Account.getByRiotId(name, tagLine, serverAsRegion);
+    const summoner = await api.Summoner.getByPUUID(userCredentials?.response?.puuid, server);
+    const data = { ...summoner?.response, ...userCredentials?.response };
+
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
 };

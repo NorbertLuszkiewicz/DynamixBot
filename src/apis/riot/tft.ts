@@ -1,12 +1,13 @@
-import { TftApi, LolApi } from "twisted";
+import { TftApi, LolApi, RiotApi } from "twisted";
 import { Regions } from "twisted/dist/constants";
 import { MatchTFTDTO, TraitDto } from "twisted/dist/models-dto";
 
 import { updateRiot, getRiot } from "../../controllers/RiotController";
-import { Participant } from "../../types/riot";
-import { region, serverNameToServerId } from "../../helpers";
+import { Participant, Summoner } from "../../types/riot";
+import { getByRiotName, region, serverNameToServerId } from "../../helpers";
 
 const api = new TftApi();
+const apiRiot = new RiotApi();
 const apiLol = new LolApi({
   key: process.env.RIOT_API_KEY_LOL,
 });
@@ -15,6 +16,14 @@ const getTftUserStatsText = (name: string, userInfo): string => {
   return `statystyki TFT dla gracza: ${name} | ${userInfo.tier}-${userInfo.rank} ${userInfo.leaguePoints}LP ${
     userInfo.wins
   }wins ${userInfo.wins + userInfo.losses}games`;
+};
+
+const getUserNameFromSummonerId = async (summonerId: string, server: Regions): Promise<string> => {
+  const serverAsRegion: any = region[server];
+  const summoner = await api.Summoner.getById(summonerId, server);
+  const user = await apiRiot.Account.getByPUUID(summoner?.response?.puuid, serverAsRegion);
+
+  return user?.response?.gameName;
 };
 
 const getSortedTftMatchData = (traits: TraitDto[], units) => {
@@ -65,7 +74,7 @@ export const resetRiotName = async (streamer: string): Promise<void> => {
 
   const newRiotAccountList = await Promise.all(
     riotAccountList.map(async account => {
-      const { response } = await api.Summoner.getByName(account.puuid, account.server);
+      const { response } = await api.Summoner.getByPUUID(account.puuid, account.server);
       return {
         ...account,
         name: response.name,
@@ -86,8 +95,8 @@ export const addTftUser = async (name: string, server: Regions, streamer: string
   );
 
   if (!existThisAccount) {
-    const { response } = await api.Summoner.getByName(name, server);
-    const lol = await apiLol.Summoner.getByName(name, server);
+    const summoner = await getByRiotName(name, server, api, apiRiot);
+    const summonerLol = await getByRiotName(name, server, apiLol, apiRiot);
 
     const newRiotAccountList = data.riotAccountList
       ? [
@@ -95,20 +104,20 @@ export const addTftUser = async (name: string, server: Regions, streamer: string
           {
             name,
             server,
-            puuid: response.puuid,
-            id: response.id,
-            lol_puuid: lol.response.puuid,
-            lol_id: lol.response.id,
+            puuid: summoner.puuid,
+            id: summoner.id,
+            lol_puuid: summonerLol.puuid,
+            lol_id: summonerLol.id,
           },
         ]
       : [
           {
             name,
             server,
-            puuid: response.puuid,
-            id: response.id,
-            lol_puuid: lol.response.puuid,
-            lol_id: lol.response.id,
+            puuid: summoner.puuid,
+            id: summoner.id,
+            lol_puuid: summonerLol.puuid,
+            lol_id: summonerLol.id,
           },
         ];
 
@@ -138,14 +147,14 @@ export const tftMatchList = async (streamer: string, nickname: string, server: s
   let puuid = "";
   try {
     if (nickname) {
-      const { response } = await api.Summoner.getByName(nickname, server ? serverNameToServerId[server] : "EUW1");
+      const summoner = await getByRiotName(nickname, server ? serverNameToServerId[server] : "EUW1", api, apiRiot);
 
       matchList = await api.Match.listWithDetails(
-        response.puuid,
+        summoner.puuid,
         server ? region[serverNameToServerId[server]] : "EUROPE",
         { count: 10 }
       );
-      puuid = response.puuid;
+      puuid = summoner.puuid;
     } else {
       matchList = await api.Match.listWithDetails(data.activeRiotAccount.puuid, region[data.activeRiotAccount.server], {
         count: 10,
@@ -201,9 +210,9 @@ export const getMatch = async (number: number, nickname: string, server: string,
     let gameRegion = nickname ? "EUROPE" : region[data.activeRiotAccount.server];
 
     if (nickname) {
-      const summoner = await api.Summoner.getByName(nickname, server ? serverNameToServerId[server] : "EUW1");
+      const summoner = await getByRiotName(nickname, server ? serverNameToServerId[server] : "EUW1", api, apiRiot);
       gameRegion = server ? region[serverNameToServerId[server]] : "EUROPE";
-      puuid = summoner.response.puuid;
+      puuid = summoner.puuid;
     }
 
     const { response } = await api.Match.list(puuid, gameRegion);
@@ -238,11 +247,11 @@ export const getStats = async (streamer: string, nickname: string, server: strin
   let message = "";
   try {
     if (nickname) {
-      const { response } = await api.Summoner.getByName(nickname, tftRegion);
-      const userData = await api.League.get(response.id, tftRegion);
+      const summoner = await getByRiotName(nickname, tftRegion, api, apiRiot);
+      const userData = await api.League.get(summoner.id, tftRegion);
       const userInfo = userData.response[0];
 
-      message = getTftUserStatsText(response.name, userInfo);
+      message = getTftUserStatsText(summoner.gameName, userInfo);
       return message;
     } else {
       const server: any = data.activeRiotAccount.server;
@@ -260,7 +269,8 @@ export const getStats = async (streamer: string, nickname: string, server: strin
 };
 
 export const getRank = async (server: string): Promise<string> => {
-  const { response: chall } = await api.League.getChallengerLeague(server ? serverNameToServerId[server] : "EUW1");
+  const serverName = server ? serverNameToServerId[server] : "EUW1";
+  const { response: chall } = await api.League.getChallengerLeague(serverName);
   let message = "";
   let topRank = [];
 
@@ -271,7 +281,7 @@ export const getRank = async (server: string): Promise<string> => {
   }
 
   if (topRank.length !== 10) {
-    const { response: grand } = await api.League.getGrandMasterLeague(server ? serverNameToServerId[server] : "EUW1");
+    const { response: grand } = await api.League.getGrandMasterLeague(serverName);
     if (grand.entries.length > 10 - topRank.length) {
       topRank = [
         ...topRank,
@@ -283,7 +293,7 @@ export const getRank = async (server: string): Promise<string> => {
   }
 
   if (topRank.length !== 10) {
-    const { response: master } = await api.League.getMasterLeague(server ? serverNameToServerId[server] : "EUW1");
+    const { response: master } = await api.League.getMasterLeague(serverName);
     if (master.entries.length > 10 - topRank.length) {
       topRank = [
         ...topRank,
@@ -296,8 +306,13 @@ export const getRank = async (server: string): Promise<string> => {
 
   const sortedTopRank = topRank.sort((a, b) => b.leaguePoints - a.leaguePoints);
 
-  sortedTopRank.forEach((user, index) => {
-    message = `${message} TOP${index + 1} ${user.summonerName} ${user.leaguePoints} LP, `;
-  });
-  return message;
+  const topRankToText = await Promise.all(
+    sortedTopRank.map(async (user, index) => {
+      const name = await getUserNameFromSummonerId(user.summonerId, serverName);
+
+      return `TOP${index + 1} ${name} ${user.leaguePoints}LP, `;
+    })
+  );
+
+  return topRankToText.join("");
 };

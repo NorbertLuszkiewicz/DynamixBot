@@ -8,16 +8,16 @@ import { sendMessage } from "../apis/twitch/events/helix";
 import { getCommand, updateCommand } from "../controllers/CommandController";
 import { getSong, updateSong } from "../controllers/SongController";
 import { getRiot } from "../controllers/RiotController";
-import { twitchScopes } from "../helpers";
+import { spotifyScopes } from "../helpers";
 
 router.get("/spotify", (req, res): void => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "GET");
 
   res.redirect(
-    `https://accounts.spotify.com/authorize?response_type=code&client_id=${
+    `https://accounts.spotify.com/authorize?response_type=code&clienft_id=${
       process.env.CLIENT_ID
-    }&scope=${encodeURIComponent(twitchScopes.join())}&redirect_uri=${process.env.BE_URL + `callback`}&state=${
+    }&scope=${encodeURIComponent(spotifyScopes.join())}&redirect_uri=${process.env.BE_URL + `callback`}&state=${
       req.query.user
     }`
   );

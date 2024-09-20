@@ -196,7 +196,7 @@ export const messages = () => {
           pauseSong(extra.channel);
         }
 
-        const removedSongList = await removeBlockedSong(extra.channel);
+        const removedSongList = await removeBlockedSong(extra.channel, skipSongs?.isActive, skipSongs?.size);
 
         if (removedSongList.length > 0) {
           removedSongList.forEach(x => {
