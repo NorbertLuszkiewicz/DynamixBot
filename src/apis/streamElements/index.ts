@@ -190,7 +190,7 @@ export const removeBlockedSong = async (
     if (queue.length > 0) {
       queue.forEach(async song => {
         const isBlocked = await isBlockedVideo(null, streamer, song.videoId);
-        if (!isBlocked.isVideo || isBlocked.isBlocked) {
+        if (!isBlocked?.isVideo || isBlocked?.isBlocked) {
           removeSong(song._id);
           removedSongList.push({
             user: song.user.username,
@@ -203,7 +203,7 @@ export const removeBlockedSong = async (
 
     if (playing) {
       const isBlocked = await isBlockedVideo(null, streamer, playing.videoId);
-      if (!isBlocked.isVideo || isBlocked.isBlocked) {
+      if (!isBlocked?.isVideo || isBlocked?.isBlocked) {
         removeSong(playing._id);
         removedSongList.push({
           user: playing.user.username,
@@ -217,18 +217,19 @@ export const removeBlockedSong = async (
       const historyList = [];
       const fistPage = await getHistorySR(clientSongRequestID, clientSongRequestSecret, 100, 0);
       const secondPage = await getHistorySR(clientSongRequestID, clientSongRequestSecret, 100, 100);
+      let index = 0
 
       fistPage.forEach(x => historyList.push(x.song.videoId));
       secondPage.forEach(x => historyList.push(x.song.videoId));
 
       queue.slice(-2).forEach(async (song, i) => {
         if (song.source !== "tip") {
-          if (historyList.find(x => x === song.videoId)) {
+          if (historyList.find((x,inx) => {index = inx ;return x === song.videoId})) {
             removeSong(song._id);
             removedSongList.push({
               user: song.user.username,
               title: song.title,
-              reason: `usunięto z kolejki: ten utwór leciał ${i} piosenek temu | ban na ostanie ${size} piosenki`,
+              reason: `usunięto z kolejki: ten utwór leciał ${index} piosenek temu | ban na ostanie ${size} piosenki`,
             });
           }
 

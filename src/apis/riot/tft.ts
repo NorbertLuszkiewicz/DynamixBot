@@ -3,8 +3,8 @@ import { Regions } from "twisted/dist/constants";
 import { MatchTFTDTO, TraitDto } from "twisted/dist/models-dto";
 
 import { updateRiot, getRiot } from "../../controllers/RiotController";
-import { Participant, Summoner } from "../../types/riot";
-import { getByRiotName, region, serverNameToServerId } from "../../helpers";
+import { Participant } from "../../types/riot";
+import { region, serverNameToServerId, getByRiotName } from "../../helpers";
 
 const api = new TftApi();
 const apiRiot = new RiotApi();

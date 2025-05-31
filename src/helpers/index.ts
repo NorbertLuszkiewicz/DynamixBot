@@ -1,5 +1,19 @@
 import { Summoner } from "../types/riot";
 
+export const getByRiotName = async (fullName: string, server, api, apiRiot): Promise<Summoner> => {
+  try {
+    const serverAsRegion: any = region[server];
+    const [name, tagLine = server] = fullName.split("#");
+    const userCredentials = await apiRiot.Account.getByRiotId(name, tagLine, serverAsRegion);
+    const summoner = await api.Summoner.getByPUUID(userCredentials?.response?.puuid, server);
+    const data = { ...summoner?.response, ...userCredentials?.response };
+
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 export const serverNameToServerId = {
   EUW: "EUW1",
   EUNE: "EUN1",
@@ -16,27 +30,53 @@ export const lolPosition = {
   UTILITY: "SUP",
 };
 
-export const spotifyScopes = [
-  "ugc-image-upload",
-  "user-read-playback-state",
-  "user-modify-playback-state",
-  "user-read-currently-playing",
-  "streaming",
-  "app-remote-control",
-  "user-read-email",
-  "user-read-private",
-  "playlist-read-collaborative",
-  "playlist-modify-public",
-  "playlist-read-private",
-  "playlist-modify-private",
-  "user-library-modify",
-  "user-library-read",
-  "user-top-read",
-  "user-read-playback-position",
-  "user-read-recently-played",
-  "user-follow-read",
-  "user-follow-modify",
-];
+export const itemIdToName = {
+  601: "AcE",
+  604: "ArE",
+  612: "AsE",
+  626: "ChalE",
+  630: "ChemE",
+  675: "ImE",
+  658: "ME",
+  726: "SE",
+  34: "AS",
+  79: "BC",
+  16: "BT",
+  44: "Blue",
+  55: "BV",
+  46: "COP",
+  11: "DB",
+  66: "DC",
+  45: "FH",
+  56: "Garg",
+  12: "GS",
+  15: "GA",
+  23: "GR",
+  49: "HoJ",
+  13: "Hex",
+  19: "IE",
+  36: "IS",
+  39: "JG",
+  29: "LW",
+  35: "Lokt",
+  37: "Mor",
+  69: "QS",
+  33: "Rab",
+  22: "RFC",
+  47: "Rdmp",
+  26: "RH",
+  59: "SoS",
+  14: "Shoj",
+  24: "SS",
+  57: "Sun",
+  88: "FoN",
+  99: "TG",
+  25: "TR",
+  77: "WM",
+  17: "Zeke",
+  67: "Zeph",
+  27: "ZZR",
+};
 
 export const region = {
   EUW1: "EUROPE",
@@ -86,18 +126,4 @@ export const changeBadWords = (message: string): string => {
     .replace("cwel", "c++l");
 
   return correctMessage == message.toLowerCase() ? message : correctMessage;
-};
-
-export const getByRiotName = async (fullName: string, server, api, apiRiot): Promise<Summoner> => {
-  try {
-    const serverAsRegion: any = region[server];
-    const [name, tagLine = server] = fullName.split("#");
-    const userCredentials = await apiRiot.Account.getByRiotId(name, tagLine, serverAsRegion);
-    const summoner = await api.Summoner.getByPUUID(userCredentials?.response?.puuid, server);
-    const data = { ...summoner?.response, ...userCredentials?.response };
-
-    return data;
-  } catch (err) {
-    console.log(err);
-  }
 };

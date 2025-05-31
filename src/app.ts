@@ -17,6 +17,14 @@ const app = express();
 
 const client = new MongoClient(`mongodb+srv://${process.env.MONGODB}&w=majority`);
 
+process.on("unhandledRejection", (reason, promise) => {
+  console.error("Nieobsłużone odrzucenie obietnicy:", reason);
+});
+
+process.on("uncaughtException", error => {
+  console.error("Nieobsłużony wyjątek:", error);
+});
+
 function onInit(): void {
   console.log("INIT");
   twitchCommands();

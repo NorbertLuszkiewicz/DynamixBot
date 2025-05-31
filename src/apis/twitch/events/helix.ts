@@ -27,10 +27,11 @@ export const getUserId = async (name: string): Promise<string> => {
   }
 };
 
-export const timeout = async (userName: string, duration: number, reason: string, streamer: string): Promise<void> => {
+export const timeout = async (userName: string, duration: number, reason: string, streamer: string, userId?:string): Promise<void> => {
+  const user_id = userId ? userId : await getUserId(userName);
   const body = {
     data: {
-      user_id: await getUserId(userName),
+      user_id,
       duration,
       reason,
     },

@@ -2,7 +2,7 @@ import axios from "axios";
 import { TftApi, LolApi, RiotApi } from "twisted";
 import { MatchV5DTOs } from "twisted/dist/models-dto";
 import { updateRiot, getRiot, getAllRiot } from "../../controllers/RiotController";
-import { getByRiotName, lolPosition, region, serverNameToServerId } from "../../helpers";
+import { lolPosition, region, serverNameToServerId, getByRiotName } from "../../helpers";
 
 const api = new TftApi();
 const apiRiot = new RiotApi({ key: process.env.RIOT_API_KEY_LOL });
@@ -64,7 +64,8 @@ const getMatchText = (data, puuid: string): string => {
 
 const getMatchListText = (todayMatchList, puuid: string): string => {
   //   1. [WIN]MID|VEX(12,4,5)-20212dmg(30%)...
-  let matchListTwitch = `dzisiejsze gierki: `;
+  let matchListTwitch = `dzisiejsze gierki(%wr): `;
+  let winsToday = 0
 
   todayMatchList.forEach((match, index) => {
     let personNrInTeam = 0;
@@ -80,7 +81,8 @@ const getMatchListText = (todayMatchList, puuid: string): string => {
         teamDemageAll = teamDemageAll + x.totalDamageDealtToChampions;
       }
     });
-
+    if(myBoard?.win) winsToday = (winsToday + 1);
+      
     const isWin = myBoard.win ? "WIN" : "LOSE";
     const position = lolPosition[myBoard.teamPosition];
     const totalDamageDealtToChampions = myBoard.totalDamageDealtToChampions;
@@ -92,6 +94,9 @@ const getMatchListText = (todayMatchList, puuid: string): string => {
       index + 1
     }[${isWin}]${position}|${championName}${stats}|${totalDamageDealtToChampions}dmg(${teamDamagePercentage}%)`;
   });
+    const wrToday = ((winsToday / todayMatchList.length) * 100).toFixed(0)
+    matchListTwitch = matchListTwitch + ` dzisiejsze WR ${wrToday}%`
+  
   return matchListTwitch;
 };
 
@@ -115,7 +120,7 @@ const getMatchList = async (data, nickname: string, server: string): Promise<{ p
         apiLol,
         apiRiot
       );
-
+      
       matchIdList = (await apiLol.MatchV5.list(summoner.puuid, region[data.activeRiotAccount.server], { count: 10 }))
         .response;
 
@@ -185,7 +190,6 @@ export const getLolUserStats = async (streamer: string, nickname: string, server
   const lolRegion = server ? serverNameToServerId[server] : "EUW1";
   let puuid = data.activeRiotAccount.lol_puuid;
   let message = "";
-
   try {
     if (nickname) {
       const summoner = await getByRiotName(nickname, lolRegion, apiLol, apiRiot);
@@ -272,11 +276,7 @@ export const checkActiveRiotAccount = async (): Promise<void> => {
               })
             ).response;
             const OUTDATED_MATCH_ID = "EUW1_5273890293";
-            if (
-              lastMatchLolId.length > 0 &&
-              lastMatchLolId[0] !== OUTDATED_MATCH_ID &&
-              lastMatchLolId[0] !== "EUN1_3252759263"
-            ) {
+            if (lastMatchLolId.length > 0 && lastMatchLolId[0] !== OUTDATED_MATCH_ID && lastMatchLolId[0] !== 'EUN1_3252759263') {
               lastMatchLol = (await apiLol.MatchV5.get(lastMatchLolId[0], region[server]))?.response || "";
             }
           }

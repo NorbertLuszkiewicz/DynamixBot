@@ -15,6 +15,11 @@ import { getRiot } from "../../../controllers/RiotController";
 
 let users = {};
 let usersWordle = {};
+let reminder = {
+  kezman22: { message: "MAGICZNE SŁOWO DLA INSTREAMLY POLICE", isActive: false },
+  dynam1x1: { message: "PTAKI LATAJĄ KLUCZEM POLICE", isActive: false },
+};
+let internal = {};
 
 export const commands = () =>
   (ComfyJS.onCommand = async (user: string, command: string, message: string, flags, extra) => {
@@ -53,10 +58,11 @@ export const commands = () =>
 
       if (command == "lastsong" && commandSwitch.song) {
         try {
+          const spotifyData = await currentlyPlaying(extra.channel);
           const lastPlayingSpotify = await lastPlaying(extra.channel);
-          const { isPlayingNow, title, link, userAdded } = await lastSongPlaying(extra.channel);
+          const { title, link, userAdded } = await lastSongPlaying(extra.channel);
 
-          if (isPlayingNow) {
+          if (!spotifyData?.is_playing) {
             ComfyJS.Say(`@${user} ${title} ${userAdded && " | dodał/a " + userAdded + " "} ${link} `, extra.channel);
           } else {
             let url = lastPlayingSpotify.track.external_urls.spotify
@@ -235,6 +241,27 @@ export const commands = () =>
         }
       }
 
+      if ((command === "przypominacz" || command === "reminder") && (flags.mod || flags.broadcaster)) {
+        clearInterval(internal[extra.channel]);
+        clearInterval(internal[extra.channel]);
+        if (message.toLowerCase() === "on") {
+          reminder[extra.channel].isActive = true;
+        } else if (message.toLowerCase() === "off") {
+          reminder[extra.channel].isActive = false;
+        } else {
+          reminder[extra.channel].message = message;
+        }
+
+        if (reminder[extra.channel].isActive) {
+          internal[extra.channel] = setInterval(
+            () => ComfyJS.Say(reminder[extra.channel].message, extra.channel),
+            16 * 1000 * 60
+          );
+        } else {
+          clearInterval(internal[extra.channel]);
+        }
+      }
+
       if ((command === "weather" || command === "pogoda") && commandSwitch.weather) {
         try {
           const { temp, speed, description } = await getWeather(plToEnAlphabet(message));
@@ -248,12 +275,13 @@ export const commands = () =>
             mgła: "🌫️",
             zamglenia: "🌫️",
             "umiarkowane opady deszczu": "🌧️",
+            "słabe opady deszczu": "🌧️",
           };
 
           if (temp) {
             ComfyJS.Say(
               `@${user} Jest ${Math.round(temp - 273)} °C, ${description} ${
-                weatherIcon[description]
+                weatherIcon[description] || ""
               } wiatr wieje z prędkością ${speed} km/h (${changeBadWords(message)})`,
               extra.channel
             );
