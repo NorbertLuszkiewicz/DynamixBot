@@ -47,9 +47,9 @@ const getMatchText = (data, puuid: string): string => {
   let message = `[${isWin}] ${position} | ${championName}${stats} | ${totalDamageDealtToChampions}dmg(${teamDamagePercentage}%) | trwała ${Math.ceil(
     data.gameDuration / 60
   )}min ${gameEndTimestamp}`;
-  message += ` ___________________________________________________ `;
+  message += ` __________________________________________________ `;
   message += ` [${itemList.join(" | ")}]`;
-  message += ` ___________________________________________________ `;
+  message += ` __________________________________________________ `;
   message += myTeamStats
     .map(stats => {
       return `[${stats.accountName}]${stats.position}|${stats.championName}${stats.stats}|dmg(${(
@@ -65,7 +65,7 @@ const getMatchText = (data, puuid: string): string => {
 const getMatchListText = (todayMatchList, puuid: string): string => {
   //   1. [WIN]MID|VEX(12,4,5)-20212dmg(30%)...
   let matchListTwitch = `dzisiejsze gierki(%wr): `;
-  let winsToday = 0
+  let winsToday = 0;
 
   todayMatchList.forEach((match, index) => {
     let personNrInTeam = 0;
@@ -81,8 +81,8 @@ const getMatchListText = (todayMatchList, puuid: string): string => {
         teamDemageAll = teamDemageAll + x.totalDamageDealtToChampions;
       }
     });
-    if(myBoard?.win) winsToday = (winsToday + 1);
-      
+    if (myBoard?.win) winsToday = winsToday + 1;
+
     const isWin = myBoard.win ? "WIN" : "LOSE";
     const position = lolPosition[myBoard.teamPosition];
     const totalDamageDealtToChampions = myBoard.totalDamageDealtToChampions;
@@ -94,9 +94,9 @@ const getMatchListText = (todayMatchList, puuid: string): string => {
       index + 1
     }[${isWin}]${position}|${championName}${stats}|${totalDamageDealtToChampions}dmg(${teamDamagePercentage}%)`;
   });
-    const wrToday = ((winsToday / todayMatchList.length) * 100).toFixed(0)
-    matchListTwitch = matchListTwitch + ` dzisiejsze WR ${wrToday}%`
-  
+  const wrToday = ((winsToday / todayMatchList.length) * 100).toFixed(0);
+  matchListTwitch = matchListTwitch + ` dzisiejsze WR ${wrToday}%`;
+
   return matchListTwitch;
 };
 
@@ -120,7 +120,7 @@ const getMatchList = async (data, nickname: string, server: string): Promise<{ p
         apiLol,
         apiRiot
       );
-      
+
       matchIdList = (await apiLol.MatchV5.list(summoner.puuid, region[data.activeRiotAccount.server], { count: 10 }))
         .response;
 
@@ -193,10 +193,12 @@ export const getLolUserStats = async (streamer: string, nickname: string, server
   try {
     if (nickname) {
       const summoner = await getByRiotName(nickname, lolRegion, apiLol, apiRiot);
-      const userData = await apiLol.League.bySummoner(summoner.id, lolRegion);
-      const userInfo = userData.response.filter(x => x.queueType === "RANKED_SOLO_5x5")[0];
-
       puuid = summoner.puuid;
+      const userData = await axios.get(
+        `https://${lolRegion}.api.riotgames.com/lol/league/v4/entries/by-puuid/${puuid}?api_key=${process.env.RIOT_API_KEY_LOL}`
+      );
+      const userInfo = userData.data[0];
+
       const userDetails = await axios.get(
         `https://${lolRegion}.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-puuid/${puuid}?api_key=${process.env.RIOT_API_KEY_LOL}`
       );
@@ -204,11 +206,13 @@ export const getLolUserStats = async (streamer: string, nickname: string, server
       message = getLolUserStatsText(summoner.gameName, userInfo, userDetails?.data.slice(0, 3));
     } else {
       const server: any = data.activeRiotAccount.server;
-      const userData = await apiLol.League.bySummoner(data.activeRiotAccount.lol_id, server);
-      const userInfo = userData.response.filter(x => x.queueType === "RANKED_SOLO_5x5")[0];
+      const userData = await axios.get(
+        `https://${server}.api.riotgames.com/lol/league/v4/entries/by-puuid/${puuid}?api_key=${process.env.RIOT_API_KEY_LOL}`
+      );
+      const userInfo = userData.data[0];
 
       const userDetails = await axios.get(
-        `https://${lolRegion}.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-puuid/${puuid}?api_key=${process.env.RIOT_API_KEY_LOL}`
+        `https://${server}.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-puuid/${puuid}?api_key=${process.env.RIOT_API_KEY_LOL}`
       );
 
       message = getLolUserStatsText(data.activeRiotAccount.name, userInfo, userDetails?.data?.slice(0, 3));
@@ -276,7 +280,7 @@ export const checkActiveRiotAccount = async (): Promise<void> => {
               })
             ).response;
             const OUTDATED_MATCH_ID = "EUW1_5273890293";
-            if (lastMatchLolId.length > 0 && lastMatchLolId[0] !== OUTDATED_MATCH_ID && lastMatchLolId[0] !== 'EUN1_3252759263') {
+            if (lastMatchLolId.length > 0 && lastMatchLolId[0] !== OUTDATED_MATCH_ID) {
               lastMatchLol = (await apiLol.MatchV5.get(lastMatchLolId[0], region[server]))?.response || "";
             }
           }

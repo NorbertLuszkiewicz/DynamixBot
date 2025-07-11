@@ -418,7 +418,7 @@ export const commands = () =>
         };
 
         usersWordle[user + extra.channel].messages.push(message);
-        usersWordle[user + extra.channel].colorRow.push(wordleResult() + "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀");
+        usersWordle[user + extra.channel].colorRow.push(wordleResult() + "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀");
         usersWordle[user + extra.channel].finalWord = finalWord;
 
         let result = `__________________________________________________

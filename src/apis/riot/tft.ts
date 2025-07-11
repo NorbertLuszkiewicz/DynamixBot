@@ -5,6 +5,7 @@ import { MatchTFTDTO, TraitDto } from "twisted/dist/models-dto";
 import { updateRiot, getRiot } from "../../controllers/RiotController";
 import { Participant } from "../../types/riot";
 import { region, serverNameToServerId, getByRiotName } from "../../helpers";
+import axios from "axios";
 
 const api = new TftApi();
 const apiRiot = new RiotApi();
@@ -16,14 +17,6 @@ const getTftUserStatsText = (name: string, userInfo): string => {
   return `statystyki TFT dla gracza: ${name} | ${userInfo.tier}-${userInfo.rank} ${userInfo.leaguePoints}LP ${
     userInfo.wins
   }wins ${userInfo.wins + userInfo.losses}games`;
-};
-
-const getUserNameFromSummonerId = async (summonerId: string, server: Regions): Promise<string> => {
-  const serverAsRegion: any = region[server];
-  const summoner = await api.Summoner.getById(summonerId, server);
-  const user = await apiRiot.Account.getByPUUID(summoner?.response?.puuid, serverAsRegion);
-
-  return user?.response?.gameName;
 };
 
 const getSortedTftMatchData = (traits: TraitDto[], units) => {
@@ -248,15 +241,19 @@ export const getStats = async (streamer: string, nickname: string, server: strin
   try {
     if (nickname) {
       const summoner = await getByRiotName(nickname, tftRegion, api, apiRiot);
-      const userData = await api.League.get(summoner.id, tftRegion);
-      const userInfo = userData.response[0];
-
+      const userData = await axios.get(
+        `https://${tftRegion}.api.riotgames.com/tft/league/v1/by-puuid/${summoner.puuid}?api_key=${process.env.RIOT_API_KEY}`
+      );
+      const userInfo = userData.data[0];
       message = getTftUserStatsText(summoner.gameName, userInfo);
       return message;
     } else {
       const server: any = data.activeRiotAccount.server;
-      const userData = await api.League.get(data.activeRiotAccount.id, server);
-      const userInfo = userData.response[0];
+      const puuid = data.activeRiotAccount.puuid;
+      const userData = await axios.get(
+        `https://${server}.api.riotgames.com/tft/league/v1/by-puuid/${puuid}?api_key=${process.env.RIOT_API_KEY}`
+      );
+      const userInfo = userData.data[0];
 
       message = getTftUserStatsText(data.activeRiotAccount.name, userInfo);
       return message;
@@ -268,7 +265,7 @@ export const getStats = async (streamer: string, nickname: string, server: strin
   }
 };
 
-export const getRank = async (server: string): Promise<string> => {
+export const getRank = async (server?: string): Promise<string> => {
   const serverName = server ? serverNameToServerId[server] : "EUW1";
   const { response: chall } = await api.League.getChallengerLeague(serverName);
   let message = "";
@@ -308,7 +305,8 @@ export const getRank = async (server: string): Promise<string> => {
 
   const topRankToText = await Promise.all(
     sortedTopRank.map(async (user, index) => {
-      const name = await getUserNameFromSummonerId(user.summonerId, serverName);
+      const userData = await apiRiot.Account.getByPUUID(user.puuid, region[serverName]);
+      const name = userData?.response?.gameName;
 
       return `TOP${index + 1} ${name} ${user.leaguePoints}LP, `;
     })
