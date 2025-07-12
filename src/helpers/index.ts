@@ -120,12 +120,14 @@ export const changeBadWords = (message: string): string => {
     .replace(/żyd/g, "rzymian")
     .replace(/czarnuch/g, "cz***uch")
     .replace(/cwel/g, "c**l")
+    .replace(/pedał/g, "p***ł")
     .replace("nigger", "ni**er")
     .replace("niga", "n**a")
     .replace("nigga", "n***a")
     .replace(/żyd/g, "rzymian")
     .replace("czarnuch", "cz***uch")
-    .replace("cwel", "c**l");
+    .replace("cwel", "c**l")
+    .replace("pedał", "p***ł");
 
   return correctMessage == message.toLowerCase() ? message : correctMessage;
 };
