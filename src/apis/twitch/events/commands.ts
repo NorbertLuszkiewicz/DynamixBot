@@ -421,7 +421,7 @@ export const commands = () =>
         usersWordle[user + extra.channel].colorRow.push(wordleResult() + "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀");
         usersWordle[user + extra.channel].finalWord = finalWord;
 
-        let result = `__________________________________________________
+        let result = `_________________________________________________
       ${usersWordle[user + extra.channel].colorRow.join(" ")} 
       ${usersWordle[user + extra.channel].messages} @${user} ${isWin ? "wygrałeś BRUHBRUH " : ""}
        ${
