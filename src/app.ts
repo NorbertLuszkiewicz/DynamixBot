@@ -12,6 +12,7 @@ import { twitchCommands } from "./apis/twitch";
 import { checkActiveRiotAccount, updateRiotItemsAndChampions } from "./apis/riot/lol";
 
 import router from "./routes";
+import { refreshKickTokens } from "./apis/twitch/events/kick";
 
 const app = express();
 
@@ -32,11 +33,13 @@ function onInit(): void {
   setTimeoutVolumeStreamElements();
   refreshAccessToken();
   refreshTwitchTokens();
+  refreshKickTokens();
   checkActiveRiotAccount();
   updateRiotItemsAndChampions();
   setInterval(refreshAccessToken, 30 * 60 * 1000);
   setInterval(checkActiveRiotAccount, 3 * 60 * 1000);
   setInterval(refreshTwitchTokens, 60 * 60 * 1000);
+  setInterval(refreshKickTokens, 60 * 60 * 1000);
 }
 
 async function run(): Promise<any> {

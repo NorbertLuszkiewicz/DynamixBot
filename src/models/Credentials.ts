@@ -17,6 +17,18 @@ export const CredentialsSchema = new Schema({
     type: String,
     required: true,
   },
+  kickAccessToken: {
+    type: String,
+    default: null,
+  },
+  kickRefreshToken: {
+    type: String,
+    default: null,
+  },
+  kickNick: {
+    type: String,
+    default: null,
+  },
   spotifyRefreshToken: {
     type: String,
     default: null,

@@ -8,6 +8,7 @@ import { sendMessage, timeout } from "../apis/twitch/events/helix";
 import { getCommand, updateCommand } from "../controllers/CommandController";
 import { getSong, updateSong } from "../controllers/SongController";
 import { getRiot } from "../controllers/RiotController";
+import { addKickAccess } from "../apis/twitch/events/kick";
 
 router.get("/spotify", (req, res): void => {
   res.header("Access-Control-Allow-Origin", "*");
@@ -80,6 +81,21 @@ router.get("/register", async (req, res): Promise<void> => {
   }
 });
 
+router.get("/kickRedirect", async (req, res): Promise<void> => {
+  const code = req.query.code;
+  const state = req.query.state;
+  const nick = req.query.nick;
+  const redirectUrl = state === "c3ab8aa609ea11e793ae92361f002671" ? process.env.FE_URL : "http://localhost:4200/";
+
+  try {
+    const callback = await addKickAccess(code, nick);
+
+    callback.status === "success" ? res.redirect(`${redirectUrl}information`) : res.send("Something went wrong");
+  } catch {
+    console.log("Error when redirect with kick data");
+  }
+});
+
 router.get("/account", async (req, res): Promise<void> => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "GET");
@@ -97,6 +113,7 @@ router.get("/account", async (req, res): Promise<void> => {
         streamer,
         twitchAccessToken,
         twitchRefreshToken,
+        kickAccessToken,
       },
     ] = await getCredentials(name);
     const isSpotifyConnected = spotifyAccessToken && spotifyRefreshToken;
@@ -107,6 +124,7 @@ router.get("/account", async (req, res): Promise<void> => {
       twitchRefreshToken,
       isSpotifyConnected,
       isStreamElementsConnected,
+      kickAccessToken,
     };
 
     if (streamer) {
@@ -407,15 +425,14 @@ router.put("/slot_remove", async (req, res): Promise<void> => {
   }
 });
 
-
 router.post("/timeout", async (req, res): Promise<void> => {
-  res.header("Access-Control-Allow-Origin", ['https://kacperacy.ovh/', 'kacperacy.ovh']);
+  res.header("Access-Control-Allow-Origin", ["https://kacperacy.ovh/", "kacperacy.ovh"]);
   res.header("Access-Control-Allow-Methods", "POST");
 
   const { nick, streamer, time, message, userId } = req.body;
 
   try {
-  timeout(nick, time, message, streamer, userId)
+    timeout(nick, time, message, streamer, userId);
 
     res.status(200).send({
       message: "Successfully saved changes",
