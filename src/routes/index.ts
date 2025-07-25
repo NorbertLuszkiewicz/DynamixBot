@@ -1,4 +1,6 @@
 import express from "express";
+import crypto from "crypto";
+import bodyParser from "body-parser";
 const router = express.Router();
 import { addSpotify } from "../apis/spotify";
 import { getCredentials, updateCredentials } from "../controllers/CredentialsController";
@@ -84,8 +86,11 @@ router.get("/register", async (req, res): Promise<void> => {
 router.get("/kickRedirect", async (req, res): Promise<void> => {
   const code = req.query.code;
   const state = req.query.state;
-  const nick = req.query.nick;
-  const redirectUrl = state === "c3ab8aa609ea11e793ae92361f002671" ? process.env.FE_URL : "http://localhost:4200/";
+
+  const stateToString = state as string;
+  const isLocal = stateToString.startsWith("local");
+  const nick = isLocal ? stateToString.slice("local".length) : stateToString;
+  const redirectUrl = isLocal ? "http://localhost:4200/" : process.env.FE_URL;
 
   try {
     const callback = await addKickAccess(code, nick);
@@ -442,6 +447,44 @@ router.post("/timeout", async (req, res): Promise<void> => {
     res.status(400).send({
       message: "Something went wrong",
     });
+  }
+});
+
+const kickPublicKeyPEM = `
+-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAq/+l1WnlRrGSolDMA+A8
+6rAhMbQGmQ2SapVcGM3zq8ANXjnhDWocMqfWcTd95btDydITa10kDvHzw9WQOqp2
+MZI7ZyrfzJuz5nhTPCiJwTwnEtWft7nV14BYRDHvlfqPUaZ+1KR4OCaO/wWIk/rQ
+L/TjY0M70gse8rlBkbo2a8rKhu69RQTRsoaf4DVhDPEeSeI5jVrRDGAMGL3cGuyY
+6CLKGdjVEM78g3JfYOvDU/RvfqD7L89TZ3iN94jrmWdGz34JNlEI5hqK8dd7C5EF
+BEbZ5jgB8s8ReQV8H+MkuffjdAj3ajDDX3DOJMIut1lBrUVD1AaSrGCKHooWoL2e
+twIDAQAB
+-----END PUBLIC KEY-----`;
+
+function verifyKickSignature(req) {
+  const messageId = req.headers["kick-event-message-id"];
+  const timestamp = req.headers["kick-event-message-timestamp"];
+  const signatureBase64 = Array.isArray(req.headers["kick-event-signature"])
+    ? req.headers["kick-event-signature"][0]
+    : req.headers["kick-event-signature"];
+
+  if (!messageId || !timestamp || !signatureBase64) return false;
+
+  const payload = `${messageId}.${timestamp}.${req.body.toString()}`;
+  const verifier = crypto.createVerify("RSA-SHA256");
+  verifier.update(payload);
+  verifier.end();
+
+  return verifier.verify(kickPublicKeyPEM, signatureBase64, "base64");
+}
+
+router.post("/webhook", bodyParser.raw({ type: "*/*" }), (req, res) => {
+  const eventType = req?.headers?.["kick-event-type"];
+  console.log("Received event type:", eventType);
+  if (eventType === "chat.message.sent") {
+    console.log("✅ Otrzymano chat.message.sent", req.body?.content);
+  } else {
+    console.log(`ℹ️ Inny event type: ${eventType}`);
   }
 });
 

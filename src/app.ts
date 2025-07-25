@@ -8,7 +8,7 @@ import "dotenv/config";
 import { refreshAccessToken, setTimeoutVolume } from "./apis/spotify";
 import { setTimeoutVolume as setTimeoutVolumeStreamElements } from "./apis/streamElements";
 import { refreshTwitchTokens } from "./apis/twitch/events/twitch";
-import { twitchCommands } from "./apis/twitch";
+import { kickCommands, twitchCommands } from "./apis/twitch";
 import { checkActiveRiotAccount, updateRiotItemsAndChampions } from "./apis/riot/lol";
 
 import router from "./routes";
@@ -26,9 +26,10 @@ process.on("uncaughtException", error => {
   console.error("Nieobsłużony wyjątek:", error);
 });
 
-function onInit(): void {
+async function onInit(): Promise<void> {
   console.log("INIT");
   twitchCommands();
+  await kickCommands();
   setTimeoutVolume();
   setTimeoutVolumeStreamElements();
   refreshAccessToken();
@@ -47,7 +48,7 @@ async function run(): Promise<any> {
     await client.connect();
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
-    onInit();
+    await onInit();
 
     app.listen(process.env.PORT || 80);
   } finally {

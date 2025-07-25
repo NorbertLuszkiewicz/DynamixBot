@@ -29,6 +29,10 @@ export const CredentialsSchema = new Schema({
     type: String,
     default: null,
   },
+  kickID: {
+    type: String,
+    default: null,
+  },
   spotifyRefreshToken: {
     type: String,
     default: null,

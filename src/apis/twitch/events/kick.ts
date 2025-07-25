@@ -6,7 +6,6 @@ import {
   updateCredentials,
   getAllCredentials,
 } from "../../../controllers/CredentialsController";
-import { addRiot } from "../../../controllers/RiotController";
 import { addSong } from "../../../controllers/SongController";
 
 const TOKEN = "https://id.kick.com/oauth/token";
@@ -15,30 +14,48 @@ export const addKickAccess = async (
   code,
   streamerNick = null
 ): Promise<{ status: string; name?: string; token?: string; kickName?: string }> => {
-  const body = `grant_type=authorization_code&code=${code}&redirect_uri=${process.env.BE_URL}kickRedirect?nick=${streamerNick}&client_id=${process.env.KICK_CLIENT_ID}&client_secret=${process.env.KICK_SECRET}&code_verifier=code_verifier`;
+  const params = new URLSearchParams();
+  params.append("grant_type", "authorization_code");
+  params.append("code", code);
+  // params.append("redirect_uri", `https://non-studied-essentials-implications.trycloudflare.com/kickRedirect`);
+  params.append("redirect_uri", `${process.env.BE_URL}/kickRedirect`);
+  params.append("client_id", process.env.KICK_CLIENT_ID);
+  params.append("client_secret", process.env.KICK_SECRET);
+  params.append("code_verifier", "code_verifier");
 
   try {
-    const { data } = await axios.post(`${TOKEN}`, body, {});
+    const { data } = await axios.post(`${TOKEN}`, params, {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    });
     const users = await getStreamerData(data.access_token);
     const userName: string = users?.data?.[0]?.name;
+    const userID: string = users?.data?.[0]?.user_id;
+    console.log("Kick user data:", users?.data?.[0]);
     const userInDatabase = await getCredentials(streamerNick || userName);
 
     if (userInDatabase.length === 0) {
       await addCredentials({
         streamer: userName,
+        kickID: userID,
+        kickNick: userName,
         kickAccessToken: data.access_token,
         kickRefreshToken: data.refresh_token,
       });
-      await addRiot({ streamer: userName });
       await addSong({ streamer: userName });
       await addCommand({ streamer: userName });
     } else {
       await updateCredentials({
         streamer: streamerNick || userName,
         kickNick: userName,
+        kickID: userID,
         kickAccessToken: data.access_token,
         kickRefreshToken: data.refresh_token,
       });
+
+      await subscribeKickWebhook(data.access_token, users.data[0].id);
+      await getSubscribeKickWebhook(data.access_token);
     }
 
     return {
@@ -48,6 +65,8 @@ export const addKickAccess = async (
       token: data.access_token,
     };
   } catch (err) {
+    if (err.response) console.error("Kick token response data:", JSON.stringify(err.response.data, null, 2));
+
     console.log(`Error while getting first kick token (${err})`);
     return { status: "error" };
   }
@@ -104,28 +123,71 @@ export const getStreamerData = async (accessToken: string): Promise<any> => {
   }
 };
 
-export const getWeather = async (city: string): Promise<{ temp: number; speed: string; description: string }> => {
+export const getSubscribeKickWebhook = async (accessToken: string): Promise<any> => {
   try {
-    const { data } = await axios.get(
-      `http://api.openweathermap.org/data/2.5/weather?q=${city}&lang=pl&appid=${process.env.WEATHER_TOKEN}`
-    );
+    const response = await axios.get("https://api.kick.com/public/v1/events/subscriptions", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Client-Id": process.env.BOT_CLIENT_ID,
+      },
+    });
 
-    return {
-      temp: data.main.temp,
-      speed: data.wind.speed,
-      description: data.weather[0].description,
-    };
+    return response.data;
   } catch (err) {
-    console.log(`Error while getting weather ${err}`);
+    console.log(`Error while get subscribing to kick webhook ${err}`);
   }
 };
 
-export const getHoroscope = async (sign: string): Promise<string> => {
-  try {
-    const { data } = await axios.post(`https://aztro.sameerkumar.website/?sign=${sign}&day=today`);
+export const subscribeKickWebhook = async (accessToken: string, broadcasterUserId: string): Promise<any> => {
+  const events = [
+    {
+      name: "chat.message.sent",
+      version: 1,
+    },
+    {
+      name: "channel.followed",
+      version: 1,
+    },
+    {
+      name: "channel.subscription.renewal",
+      version: 1,
+    },
+    {
+      name: "channel.subscription.gifts",
+      version: 1,
+    },
+    {
+      name: "channel.subscription.new",
+      version: 1,
+    },
+    {
+      name: "livestream.status.updated",
+      version: 1,
+    },
+    {
+      name: "moderation.banned",
+      version: 1,
+    },
+  ];
 
-    return data.description;
+  try {
+    const response = await axios.post(
+      "https://api.kick.com/public/v1/events/subscriptions",
+      {
+        method: "webhook",
+        broadcaster_user_id: Number(broadcasterUserId),
+        events,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    return response.data;
   } catch (err) {
-    console.log(`Error while getting horoscope ${err}`);
+    console.log(`Error while subscribing to kick webhook ${err}`, err.response?.data || err?.message);
   }
 };
