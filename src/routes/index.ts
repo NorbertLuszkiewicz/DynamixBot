@@ -486,6 +486,7 @@ router.post("/webhook", bodyParser.raw({ type: "*/*" }), (req, res) => {
   } else {
     console.log(`ℹ️ Inny event type: ${eventType}`);
   }
+  res.sendStatus(200);
 });
 
 export default router;
