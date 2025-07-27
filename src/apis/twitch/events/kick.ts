@@ -201,10 +201,10 @@ export const kickMessageEvent = async (data: KickMessageData): Promise<void> => 
     const message = data.content;
     const flags = {
       customReward: false,
-      isBroadcaster: data.sender.identity.badges.find(x => x.type === "broadcaster") !== undefined,
-      isModerator: data.sender.identity.badges.find(x => x.type === "moderator") !== undefined,
-      isSubscriber: data.sender.identity.badges.find(x => x.type === "subscriber") !== undefined,
-      isVip: data.sender.identity.badges.find(x => x.type === "vip") !== undefined,
+      broadcaster: data.sender.identity.badges.find(x => x.type === "broadcaster") !== undefined,
+      mod: data.sender.identity.badges.find(x => x.type === "moderator") !== undefined,
+      subscriber: data.sender.identity.badges.find(x => x.type === "subscriber") !== undefined,
+      vip: data.sender.identity.badges.find(x => x.type === "vip") !== undefined,
     };
     const extra = {
       channel: credentials[0]?.streamer,
@@ -217,7 +217,7 @@ export const kickMessageEvent = async (data: KickMessageData): Promise<void> => 
 
       await handleChatCommand({
         user,
-        command,
+        command: command.slice(1),
         message: rest.join(" "),
         flags,
         extra,

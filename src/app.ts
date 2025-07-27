@@ -37,10 +37,10 @@ async function onInit(): Promise<void> {
   refreshKickTokens();
   checkActiveRiotAccount();
   updateRiotItemsAndChampions();
+  setInterval(refreshKickTokens, 10 * 60 * 1000);
   setInterval(refreshAccessToken, 30 * 60 * 1000);
   setInterval(checkActiveRiotAccount, 3 * 60 * 1000);
   setInterval(refreshTwitchTokens, 60 * 60 * 1000);
-  setInterval(refreshKickTokens, 60 * 60 * 1000);
 }
 
 async function run(): Promise<any> {
