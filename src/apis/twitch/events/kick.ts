@@ -5,8 +5,12 @@ import {
   getCredentials,
   updateCredentials,
   getAllCredentials,
+  getCredentialsByKickID,
 } from "../../../controllers/CredentialsController";
 import { addSong } from "../../../controllers/SongController";
+import { KickMessageData } from "../../../types/types";
+import { handleChatMessage } from "./messages";
+import { handleChatCommand } from "./commands";
 
 const TOKEN = "https://id.kick.com/oauth/token";
 
@@ -17,8 +21,8 @@ export const addKickAccess = async (
   const params = new URLSearchParams();
   params.append("grant_type", "authorization_code");
   params.append("code", code);
-  // params.append("redirect_uri", `https://non-studied-essentials-implications.trycloudflare.com/kickRedirect`);
-  params.append("redirect_uri", `${process.env.BE_URL}/kickRedirect`);
+  // params.append("redirect_uri", `https://pain-band-lost-instances.trycloudflare.com/kickRedirect`);
+  params.append("redirect_uri", `${process.env.BE_URL}kickRedirect`);
   params.append("client_id", process.env.KICK_CLIENT_ID);
   params.append("client_secret", process.env.KICK_SECRET);
   params.append("code_verifier", "code_verifier");
@@ -32,7 +36,6 @@ export const addKickAccess = async (
     const users = await getStreamerData(data.access_token);
     const userName: string = users?.data?.[0]?.name;
     const userID: string = users?.data?.[0]?.user_id;
-    console.log("Kick user data:", users?.data?.[0]);
     const userInDatabase = await getCredentials(streamerNick || userName);
 
     if (userInDatabase.length === 0) {
@@ -55,7 +58,6 @@ export const addKickAccess = async (
       });
 
       await subscribeKickWebhook(data.access_token, users.data[0].id);
-      await getSubscribeKickWebhook(data.access_token);
     }
 
     return {
@@ -189,5 +191,49 @@ export const subscribeKickWebhook = async (accessToken: string, broadcasterUserI
     return response.data;
   } catch (err) {
     console.log(`Error while subscribing to kick webhook ${err}`, err.response?.data || err?.message);
+  }
+};
+
+export const kickMessageEvent = async (data: KickMessageData): Promise<void> => {
+  try {
+    const credentials = await getCredentialsByKickID(data.sender.user_id);
+    const user = credentials[0]?.streamer;
+    const message = data.content;
+    const flags = {
+      customReward: false,
+      isBroadcaster: data.sender.identity.badges.find(x => x.type === "broadcaster") !== undefined,
+      isModerator: data.sender.identity.badges.find(x => x.type === "moderator") !== undefined,
+      isSubscriber: data.sender.identity.badges.find(x => x.type === "subscriber") !== undefined,
+      isVip: data.sender.identity.badges.find(x => x.type === "vip") !== undefined,
+    };
+    const extra = {
+      channel: data.sender.user_id.toString(),
+      // customRewardId: "",
+    };
+
+    if (message.startsWith("!")) {
+      const [command, ...rest] = message.split(" ");
+
+      await handleChatCommand({
+        user,
+        command,
+        message: rest.join(" "),
+        flags,
+        extra,
+        isKick: true,
+        kickAccessToken: credentials[0]?.kickAccessToken,
+      });
+    } else {
+      await handleChatMessage({
+        user,
+        message,
+        flags,
+        extra,
+        isKick: true,
+        kickAccessToken: credentials[0]?.kickAccessToken,
+      });
+    }
+  } catch (err) {
+    console.error("Error processing kick message event:", err);
   }
 };

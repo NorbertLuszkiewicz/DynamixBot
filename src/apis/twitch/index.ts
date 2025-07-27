@@ -1,15 +1,32 @@
 import ComfyJS from "comfy.js";
-import { messages, setTimeoutVolume } from "./events/messages";
+import { handleChatMessage, setTimeoutVolume } from "./events/messages";
 import { events } from "./events/events";
-import { commands } from "./events/commands";
+import { handleChatCommand } from "./events/commands";
 import { getAllCredentials } from "../../controllers/CredentialsController";
 import { getSubscribeKickWebhook, subscribeKickWebhook } from "./events/kick";
 
 export const twitchCommands = async (): Promise<void> => {
   try {
-    messages();
+    ComfyJS.onChat = async (user, message, flags, self, extra) => {
+      await handleChatMessage({
+        user,
+        message,
+        flags,
+        extra,
+      });
+    };
+
+    ComfyJS.onCommand = async (user, command, message, flags, extra) => {
+      await handleChatCommand({
+        user,
+        command,
+        message,
+        flags,
+        extra,
+      });
+    };
+
     events();
-    commands();
     setTimeoutVolume();
 
     const allStreamers = await getAllCredentials();

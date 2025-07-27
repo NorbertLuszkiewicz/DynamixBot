@@ -1,4 +1,6 @@
+import ComfyJS from "comfy.js";
 import { Summoner } from "../types/riot";
+import axios from "axios";
 
 export const getByRiotName = async (fullName: string, server, api, apiRiot): Promise<Summoner> => {
   try {
@@ -11,6 +13,39 @@ export const getByRiotName = async (fullName: string, server, api, apiRiot): Pro
     return data;
   } catch (err) {
     console.log(err);
+  }
+};
+
+export const sendMessageToChannel = async (
+  message: string,
+  streamerNickOrID: string,
+  isKick: boolean = false,
+  accessToken?: string
+): Promise<void> => {
+  try {
+    if (isKick) {
+      await axios.post(
+        "https://api.kick.com/public/v1/chat",
+        {
+          content: message,
+          broadcaster_user_id: Number(streamerNickOrID),
+          type: "user",
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+    } else {
+      ComfyJS.Say(message, streamerNickOrID);
+    }
+  } catch (err) {
+    console.log(
+      `Error get while sending message with "sendMessage": ${err}`,
+      "accessToken: " + accessToken + " streamerNickOrID: " + streamerNickOrID + " isKick: " + isKick
+    );
   }
 };
 

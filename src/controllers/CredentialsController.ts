@@ -29,6 +29,15 @@ export const getCredentials = async (streamer: string): Promise<Credentials[]> =
   }
 };
 
+export const getCredentialsByKickID = async (kickID: number): Promise<Credentials[]> => {
+  try {
+    const data = await Credentials.find({ kickID });
+    return data;
+  } catch (err) {
+    console.log(`Error while getting user ${err}`);
+  }
+};
+
 export const updateCredentials = async (user: Partial<Credentials>): Promise<Credentials> => {
   try {
     return await Credentials.findOneAndUpdate({ streamer: user.streamer }, user);

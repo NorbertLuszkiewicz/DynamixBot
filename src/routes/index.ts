@@ -10,7 +10,7 @@ import { sendMessage, timeout } from "../apis/twitch/events/helix";
 import { getCommand, updateCommand } from "../controllers/CommandController";
 import { getSong, updateSong } from "../controllers/SongController";
 import { getRiot } from "../controllers/RiotController";
-import { addKickAccess } from "../apis/twitch/events/kick";
+import { addKickAccess, kickMessageEvent } from "../apis/twitch/events/kick";
 
 router.get("/spotify", (req, res): void => {
   res.header("Access-Control-Allow-Origin", "*");
@@ -483,6 +483,7 @@ router.post("/webhook", bodyParser.raw({ type: "*/*" }), (req, res) => {
   console.log("Received event type:", eventType);
   if (eventType === "chat.message.sent") {
     console.log("✅ Otrzymano chat.message.sent", req.body?.content);
+    kickMessageEvent(req.body);
   } else {
     console.log(`ℹ️ Inny event type: ${eventType}`);
   }
