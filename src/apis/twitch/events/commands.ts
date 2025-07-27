@@ -31,6 +31,7 @@ export const handleChatCommand = async ({
   isKick = false,
   kickAccessToken = null,
 }: ChatCommand) => {
+  const streamerNickOrKickID = isKick ? extra.userId : extra.channel;
   try {
     const [{ commandSwitch, wheelwinners, slotsID }] = await getCommand(extra.channel);
     const [{ activeRiotAccount }] = await getRiot(extra.channel);
@@ -44,7 +45,7 @@ export const handleChatCommand = async ({
         if (!spotifyData?.is_playing) {
           sendMessageToChannel(
             `@${user} ${title} ${userAdded && " | dodał/a " + userAdded + " "} ${link} `,
-            extra.channel,
+            streamerNickOrKickID,
             isKick,
             kickAccessToken
           );
@@ -59,7 +60,7 @@ export const handleChatCommand = async ({
           }
 
           spotifyData &&
-            sendMessageToChannel(`@${user} ${title} | ${autor} ${url}`, extra.channel, isKick, kickAccessToken);
+            sendMessageToChannel(`@${user} ${title} | ${autor} ${url}`, streamerNickOrKickID, isKick, kickAccessToken);
         }
       } catch (err) {
         console.log(`Error when use !song on twitch (${err})`);
@@ -67,7 +68,7 @@ export const handleChatCommand = async ({
     }
 
     if (flags.customReward && extra.customRewardId === addSongID) {
-      sendMessageToChannel("!sr " + changeBadWords(message), extra.channel, isKick, kickAccessToken);
+      sendMessageToChannel("!sr " + changeBadWords(message), streamerNickOrKickID, isKick, kickAccessToken);
     }
 
     if (command == "lastsong" && commandSwitch.song) {
@@ -79,7 +80,7 @@ export const handleChatCommand = async ({
         if (!spotifyData?.is_playing) {
           sendMessageToChannel(
             `@${user} ${title} ${userAdded && " | dodał/a " + userAdded + " "} ${link} `,
-            extra.channel,
+            streamerNickOrKickID,
             isKick,
             kickAccessToken
           );
@@ -96,7 +97,7 @@ export const handleChatCommand = async ({
           }
 
           lastPlayingSpotify &&
-            sendMessageToChannel(`@${user} ${title} | ${autor} ${url}`, extra.channel, isKick, kickAccessToken);
+            sendMessageToChannel(`@${user} ${title} | ${autor} ${url}`, streamerNickOrKickID, isKick, kickAccessToken);
         }
       } catch (err) {
         console.log(`Error when use !lastsong on twitch (${err})`);
@@ -112,7 +113,7 @@ export const handleChatCommand = async ({
         spotifyData &&
           sendMessageToChannel(
             `@${user} aktualnie leci ta playlista: ${url} catJAM `,
-            extra.channel,
+            streamerNickOrKickID,
             isKick,
             kickAccessToken
           );
@@ -148,7 +149,7 @@ export const handleChatCommand = async ({
           }
         }
 
-        sendMessageToChannel(`${matchesList}`, extra.channel, isKick, kickAccessToken);
+        sendMessageToChannel(`${matchesList}`, streamerNickOrKickID, isKick, kickAccessToken);
       } catch (err) {
         console.log(`Error when use !mecze on twitch (${err})`);
       }
@@ -192,7 +193,7 @@ export const handleChatCommand = async ({
             }
           }
         }
-        sendMessageToChannel(`@${user} ${match}`, extra.channel, isKick, kickAccessToken);
+        sendMessageToChannel(`@${user} ${match}`, streamerNickOrKickID, isKick, kickAccessToken);
       } catch (err) {
         console.log(`Error when use !mecz on twitch (${err})`);
       }
@@ -204,7 +205,7 @@ export const handleChatCommand = async ({
       if (spotifyData?.is_playing) {
         nextSong(extra.channel);
       } else {
-        sendMessageToChannel("!skip", extra.channel, isKick, kickAccessToken);
+        sendMessageToChannel("!skip", streamerNickOrKickID, isKick, kickAccessToken);
         timeRequest(extra.channel, "skip");
       }
     }
@@ -236,7 +237,7 @@ export const handleChatCommand = async ({
           }
         }
 
-        sendMessageToChannel(changeBadWords(stats), extra.channel, isKick, kickAccessToken);
+        sendMessageToChannel(changeBadWords(stats), streamerNickOrKickID, isKick, kickAccessToken);
       } catch (err) {
         console.log(`Error when use !staty on twitch (${err})`);
       }
@@ -246,7 +247,7 @@ export const handleChatCommand = async ({
       try {
         const stats = await getRank(message.toUpperCase());
 
-        sendMessageToChannel(changeBadWords(stats), extra.channel, isKick, kickAccessToken);
+        sendMessageToChannel(changeBadWords(stats), streamerNickOrKickID, isKick, kickAccessToken);
       } catch (err) {
         console.log(`Error when use !top on twitch (${err})`);
       }
@@ -258,7 +259,7 @@ export const handleChatCommand = async ({
       if (spotifyData?.is_playing) {
         nextSong(extra.channel);
       } else {
-        sendMessageToChannel("!skip", extra.channel, isKick, kickAccessToken);
+        sendMessageToChannel("!skip", streamerNickOrKickID, isKick, kickAccessToken);
         timeRequest(extra.channel, "skip");
       }
     }
@@ -276,7 +277,7 @@ export const handleChatCommand = async ({
 
       if (reminder[extra.channel].isActive) {
         internal[extra.channel] = setInterval(
-          () => sendMessageToChannel(reminder[extra.channel].message, extra.channel, isKick, kickAccessToken),
+          () => sendMessageToChannel(reminder[extra.channel].message, streamerNickOrKickID, isKick, kickAccessToken),
           16 * 1000 * 60
         );
       } else {
@@ -305,12 +306,12 @@ export const handleChatCommand = async ({
             `@${user} Jest ${Math.round(temp - 273)} °C, ${description} ${
               weatherIcon[description] || ""
             } wiatr wieje z prędkością ${speed} km/h (${changeBadWords(message)})`,
-            extra.channel,
+            streamerNickOrKickID,
             isKick,
             kickAccessToken
           );
         } else {
-          sendMessageToChannel(`@${user} Nie znaleziono`, extra.channel, isKick, kickAccessToken);
+          sendMessageToChannel(`@${user} Nie znaleziono`, streamerNickOrKickID, isKick, kickAccessToken);
         }
       } catch (err) {
         console.log(`Error when use !pogoda on twitch (${err})`);
@@ -338,8 +339,8 @@ export const handleChatCommand = async ({
         const description = await getHoroscope(changeToEng[plToEnAlphabet(message)]);
 
         description
-          ? sendMessageToChannel(`@${user} ${description}`, extra.channel, isKick, kickAccessToken)
-          : sendMessageToChannel(`@${user} Nie znaleziono`, extra.channel, isKick, kickAccessToken);
+          ? sendMessageToChannel(`@${user} ${description}`, streamerNickOrKickID, isKick, kickAccessToken)
+          : sendMessageToChannel(`@${user} Nie znaleziono`, streamerNickOrKickID, isKick, kickAccessToken);
       } catch (err) {
         console.log(`Error when use !horoskop on twitch (${err})`);
       }
@@ -356,13 +357,13 @@ export const handleChatCommand = async ({
             slot.lastWinners ? "ostatnio wygrali: (" + slot.lastWinners + ")" : ""
           } |`;
       });
-      sendMessageToChannel(changeBadWords(result), extra.channel, isKick, kickAccessToken);
+      sendMessageToChannel(changeBadWords(result), streamerNickOrKickID, isKick, kickAccessToken);
     }
 
     if (command.toString() === "wheelwinners") {
       const winners = wheelwinners.toString();
 
-      sendMessageToChannel(winners, extra.channel, isKick, kickAccessToken);
+      sendMessageToChannel(winners, streamerNickOrKickID, isKick, kickAccessToken);
     }
 
     if (command === "slots" && commandSwitch.slots) {
@@ -386,7 +387,7 @@ export const handleChatCommand = async ({
       const now = new Date().getTime();
 
       const seySlots = () => {
-        sendMessageToChannel(`${result} @${user} ${winMessage}`, extra.channel, isKick, kickAccessToken);
+        sendMessageToChannel(`${result} @${user} ${winMessage}`, streamerNickOrKickID, isKick, kickAccessToken);
       };
 
       const checkDate = time => {
@@ -455,7 +456,7 @@ export const handleChatCommand = async ({
        }`;
 
       const seySlots = () => {
-        sendMessageToChannel(`${changeBadWords(result)}`, extra.channel, isKick, kickAccessToken);
+        sendMessageToChannel(`${changeBadWords(result)}`, streamerNickOrKickID, isKick, kickAccessToken);
 
         if (usersWordle[user + extra.channel].messages.length === 5 || isWin) {
           usersWordle[user + extra.channel] = {
@@ -483,7 +484,7 @@ export const handleChatCommand = async ({
     if (command === "wordle" && !message && commandSwitch.wordle) {
       sendMessageToChannel(
         `@${user} Musisz znaleźć ukryte 5 literowe słowo, żółte oznacza, że litera znajduje się w haśle, ale na innej pozycji, a zielone, że litera znajduje się na tej pozycji`,
-        extra.channel,
+        streamerNickOrKickID,
         isKick,
         kickAccessToken
       );
@@ -491,7 +492,7 @@ export const handleChatCommand = async ({
     if (command === "wordle" && message && !allWord.includes(message.toLowerCase()) && commandSwitch.wordle) {
       sendMessageToChannel(
         `@${user} Podałeś słowo, które nie zawiera 5 znaków albo nie znaleziono go w słowniku`,
-        extra.channel,
+        streamerNickOrKickID,
         isKick,
         kickAccessToken
       );
@@ -502,7 +503,7 @@ export const handleChatCommand = async ({
 
       sendMessageToChannel(
         `@${user} aktualnie jesteś w ${number}% swojej szczytowej formy`,
-        extra.channel,
+        streamerNickOrKickID,
         isKick,
         kickAccessToken
       );
@@ -514,7 +515,7 @@ export const handleChatCommand = async ({
 
         sendMessageToChannel(
           `@${changeBadWords(user)} ${changeBadWords(playerInfo)}`,
-          extra.channel,
+          streamerNickOrKickID,
           isKick,
           kickAccessToken
         );
@@ -528,7 +529,7 @@ export const handleChatCommand = async ({
 
         sendMessageToChannel(
           `@${changeBadWords(user)} ${changeBadWords(gameInfo)}`,
-          extra.channel,
+          streamerNickOrKickID,
           isKick,
           kickAccessToken
         );
@@ -549,11 +550,11 @@ export const handleChatCommand = async ({
 
       const randomNumber = Math.floor(Math.random() * (Math.floor(answer.length - 1) + 1));
 
-      sendMessageToChannel(answer[randomNumber], extra.channel, isKick, kickAccessToken);
+      sendMessageToChannel(answer[randomNumber], streamerNickOrKickID, isKick, kickAccessToken);
     }
 
     if (command === "dynamix" && message !== "stop" && (flags.mod || flags.broadcaster)) {
-      sendMessageToChannel("Bot works!", extra.channel, isKick, kickAccessToken);
+      sendMessageToChannel("Bot works!", streamerNickOrKickID, isKick, kickAccessToken);
     }
 
     if (command === "start" && user === "DynaM1X1") {
@@ -582,7 +583,7 @@ export const handleChatCommand = async ({
         newComandSwitch.weather = isOn;
         sendMessageToChannel(
           `${changeBadWords(onOffMessage)} komendy pogoda i horoskop`,
-          extra.channel,
+          streamerNickOrKickID,
           isKick,
           kickAccessToken
         );
@@ -602,7 +603,7 @@ export const handleChatCommand = async ({
         newComandSwitch.tft = isOn;
         sendMessageToChannel(
           `${onOffMessage} komendy riot: stats, ranking, mecze, mecz`,
-          extra.channel,
+          streamerNickOrKickID,
           isKick,
           kickAccessToken
         );
@@ -612,7 +613,7 @@ export const handleChatCommand = async ({
         newComandSwitch.chess = isOn;
         sendMessageToChannel(
           `${onOffMessage} komendy chess: chessuser, chesslast`,
-          extra.channel,
+          streamerNickOrKickID,
           isKick,
           kickAccessToken
         );
@@ -620,17 +621,17 @@ export const handleChatCommand = async ({
 
       if (message === "wordle") {
         newComandSwitch.wordle = isOn;
-        sendMessageToChannel(`${onOffMessage} komende wordle`, extra.channel, isKick, kickAccessToken);
+        sendMessageToChannel(`${onOffMessage} komende wordle`, streamerNickOrKickID, isKick, kickAccessToken);
       }
 
       if (message === "slots") {
         newComandSwitch.slots = isOn;
-        sendMessageToChannel(`${onOffMessage} komende slots`, extra.channel, isKick, kickAccessToken);
+        sendMessageToChannel(`${onOffMessage} komende slots`, streamerNickOrKickID, isKick, kickAccessToken);
       }
 
       if (message === "song" || message === "playlist" || message === "playlista") {
         newComandSwitch.song = isOn;
-        sendMessageToChannel(`${onOffMessage} komendy song, playlist`, extra.channel, isKick, kickAccessToken);
+        sendMessageToChannel(`${onOffMessage} komendy song, playlist`, streamerNickOrKickID, isKick, kickAccessToken);
       }
 
       updateCommand({

@@ -197,7 +197,7 @@ export const subscribeKickWebhook = async (accessToken: string, broadcasterUserI
 export const kickMessageEvent = async (data: KickMessageData): Promise<void> => {
   try {
     const credentials = await getCredentialsByKickID(data.sender.user_id);
-    const user = credentials[0]?.streamer;
+    const user = data.sender.username;
     const message = data.content;
     const flags = {
       customReward: false,
@@ -207,7 +207,8 @@ export const kickMessageEvent = async (data: KickMessageData): Promise<void> => 
       isVip: data.sender.identity.badges.find(x => x.type === "vip") !== undefined,
     };
     const extra = {
-      channel: data.sender.user_id.toString(),
+      channel: credentials[0]?.streamer,
+      userId: data.sender.user_id.toString(),
       // customRewardId: "",
     };
 

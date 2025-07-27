@@ -26,6 +26,7 @@ export const handleChatMessage = async ({
   isKick = false,
   kickAccessToken = null,
 }: ChatMessage) => {
+  const streamerNickOrKickID = isKick ? extra.userId : extra.channel;
   try {
     const [{ addSongID, skipSongID, skipSongs, volumeChanger }] = await getSong(extra.channel);
     const [{ rollID, banID, slotsID }] = await getCommand(extra.channel);
@@ -37,7 +38,7 @@ export const handleChatMessage = async ({
       });
       sendMessageToChannel(
         "Włączono automatyczne dodawanie piosenki przy zakupie tej nagrody",
-        extra.channel,
+        streamerNickOrKickID,
         isKick,
         kickAccessToken
       );
@@ -51,7 +52,7 @@ export const handleChatMessage = async ({
 
       sendMessageToChannel(
         "Włączono automatyczne pomijanie piosenki przy zakupie tej nagrody",
-        extra.channel,
+        streamerNickOrKickID,
         isKick,
         kickAccessToken
       );
@@ -68,7 +69,7 @@ export const handleChatMessage = async ({
 
       sendMessageToChannel(
         "Włączono automatyczną zmianę głośności przy zakupie tej nagrody",
-        extra.channel,
+        streamerNickOrKickID,
         isKick,
         kickAccessToken
       );
@@ -90,17 +91,17 @@ export const handleChatMessage = async ({
         slotsID: updateSlots,
       });
 
-      sendMessageToChannel(`Włączono Slots dla nagrody "${slots.name}"`, extra.channel, isKick, kickAccessToken);
+      sendMessageToChannel(`Włączono Slots dla nagrody "${slots.name}"`, streamerNickOrKickID, isKick, kickAccessToken);
     }
 
     if (flags.customReward && extra.customRewardId === addSongID) {
-      sendMessageToChannel("!sr " + changeBadWords(message), extra.channel, isKick, kickAccessToken);
+      sendMessageToChannel("!sr " + changeBadWords(message), streamerNickOrKickID, isKick, kickAccessToken);
     }
 
     if (flags.customReward && extra.customRewardId === rollID) {
       sendMessageToChannel(
         `${user} rolls the dice and gets a ${randomIntFromInterval(1, 420)}!`,
-        extra.channel,
+        streamerNickOrKickID,
         isKick,
         kickAccessToken
       );
@@ -111,24 +112,39 @@ export const handleChatMessage = async ({
 
       if (number == 1) {
         timeout(user, 1, "t/o z nagrody kanału", extra.channel);
-        sendMessageToChannel(`${user} brawo trafiłeś w 1% na 10s t/o OOOO`, extra.channel, isKick, kickAccessToken);
+        sendMessageToChannel(
+          `${user} brawo trafiłeś w 1% na 10s t/o OOOO`,
+          streamerNickOrKickID,
+          isKick,
+          kickAccessToken
+        );
       }
 
       if (number > 1 && number < 89) {
         sendMessageToChannel(
           `${user} brawo trafiłeś w 88% na 30min t/0 PeepoGlad`,
-          extra.channel,
+          streamerNickOrKickID,
           isKick,
           kickAccessToken
         );
         timeout(user, 1800, "t/o z nagrody kanału", extra.channel);
       }
       if (number > 88 && number < 100) {
-        sendMessageToChannel(`${user} brawo trafiłeś w 10% na 1h t/0 EZ`, extra.channel, isKick, kickAccessToken);
+        sendMessageToChannel(
+          `${user} brawo trafiłeś w 10% na 1h t/0 EZ`,
+          streamerNickOrKickID,
+          isKick,
+          kickAccessToken
+        );
         timeout(user, 3600, "t/o z nagrody kanału", extra.channel);
       }
       if (number == 100) {
-        sendMessageToChannel(`${user} brawo trafiłeś w 1% na perma KEKW`, extra.channel, isKick, kickAccessToken);
+        sendMessageToChannel(
+          `${user} brawo trafiłeś w 1% na perma KEKW`,
+          streamerNickOrKickID,
+          isKick,
+          kickAccessToken
+        );
         timeout(user, null, "t/o z nagrody kanału", extra.channel);
       }
     }
@@ -176,7 +192,7 @@ export const handleChatMessage = async ({
       isSemiWin && (winMessage = "prawie prawie PauseChamp");
       isWin && (winMessage = "wygrałeś BRUHBRUH @" + extra.channel);
 
-      sendMessageToChannel(`${result} @${user} ${winMessage}`, extra.channel, isKick, kickAccessToken);
+      sendMessageToChannel(`${result} @${user} ${winMessage}`, streamerNickOrKickID, isKick, kickAccessToken);
 
       if (!isWin && reward.id == "2ac9a80d-9891-492a-b803-d55616873244") {
         timeout(user, 600, "t/o z nagrody kanału", extra.channel);
@@ -231,7 +247,7 @@ export const handleChatMessage = async ({
         removedSongList.forEach(x => {
           sendMessageToChannel(
             `@${changeBadWords(x.user)} ${changeBadWords(x.title)} | ${x.reason}`,
-            extra.channel,
+            streamerNickOrKickID,
             isKick,
             kickAccessToken
           );
@@ -245,7 +261,7 @@ export const handleChatMessage = async ({
       if (spotifyData?.is_playing) {
         nextSong(extra.channel);
       } else {
-        sendMessageToChannel("!skip", extra.channel, isKick, kickAccessToken);
+        sendMessageToChannel("!skip", streamerNickOrKickID, isKick, kickAccessToken);
         await timeRequest(extra.channel, "skip");
       }
     }
@@ -262,7 +278,7 @@ export const handleChatMessage = async ({
         };
 
     if (volumeChanger && flags.customReward && extra.customRewardId === id) {
-      sendMessageToChannel("!volume " + maxSR, extra.channel, isKick, kickAccessToken);
+      sendMessageToChannel("!volume " + maxSR, streamerNickOrKickID, isKick, kickAccessToken);
       changeVolumeOnTime(extra.channel, min, max, time);
       let [{ maxVolumeTime }] = await getSong(extra.channel);
 
@@ -284,7 +300,7 @@ export const handleChatMessage = async ({
 
       clearTimeout(timeoutVolume[extra.channel]);
       timeoutVolume[extra.channel] = setTimeout(() => {
-        sendMessageToChannel("!volume " + minSR, extra.channel, isKick, kickAccessToken);
+        sendMessageToChannel("!volume " + minSR, streamerNickOrKickID, isKick, kickAccessToken);
       }, newMaxVolumeTime - now);
     }
 
@@ -295,7 +311,7 @@ export const handleChatMessage = async ({
         if (spotifyData?.is_playing) {
           nextSong(extra.channel);
         } else {
-          sendMessageToChannel("!skip", extra.channel, isKick, kickAccessToken);
+          sendMessageToChannel("!skip", streamerNickOrKickID, isKick, kickAccessToken);
           await timeRequest(extra.channel, "skip");
         }
       } catch (err) {
@@ -319,7 +335,7 @@ export const handleChatMessage = async ({
     user != "DynaM1X1" &&
     user != "StreamElements"
   ) {
-    sendMessageToChannel(`l2plelTosia overGun ${user}`, extra.channel, isKick, kickAccessToken);
+    sendMessageToChannel(`l2plelTosia overGun ${user}`, streamerNickOrKickID, isKick, kickAccessToken);
     timeout(user, 60, "strzelał do tosi", extra.channel);
   }
 
@@ -338,13 +354,18 @@ export const handleChatMessage = async ({
   let emote = message.substr(9);
   !emote && (emote = "catJAM ");
   if (isPriamidka == 0 && message.length < 30 && (flags.mod || flags.broadcaster)) {
-    sendMessageToChannel(emote + " ", extra.channel, isKick, kickAccessToken);
-    sendMessageToChannel(emote + " " + emote + " ", extra.channel, isKick, kickAccessToken);
-    sendMessageToChannel(emote + " " + emote + " " + emote + " ", extra.channel, isKick, kickAccessToken);
-    sendMessageToChannel(emote + " " + emote + " " + emote + " " + emote + " ", extra.channel, isKick, kickAccessToken);
-    sendMessageToChannel(emote + " " + emote + " " + emote + " ", extra.channel, isKick, kickAccessToken);
-    sendMessageToChannel(emote + " " + emote + " ", extra.channel, isKick, kickAccessToken);
-    sendMessageToChannel(emote + " ", extra.channel, isKick, kickAccessToken);
+    sendMessageToChannel(emote + " ", streamerNickOrKickID, isKick, kickAccessToken);
+    sendMessageToChannel(emote + " " + emote + " ", streamerNickOrKickID, isKick, kickAccessToken);
+    sendMessageToChannel(emote + " " + emote + " " + emote + " ", streamerNickOrKickID, isKick, kickAccessToken);
+    sendMessageToChannel(
+      emote + " " + emote + " " + emote + " " + emote + " ",
+      streamerNickOrKickID,
+      isKick,
+      kickAccessToken
+    );
+    sendMessageToChannel(emote + " " + emote + " " + emote + " ", streamerNickOrKickID, isKick, kickAccessToken);
+    sendMessageToChannel(emote + " " + emote + " ", streamerNickOrKickID, isKick, kickAccessToken);
+    sendMessageToChannel(emote + " ", streamerNickOrKickID, isKick, kickAccessToken);
   }
 
   extra.customRewardId && console.log(extra.customRewardId, extra.channel);
