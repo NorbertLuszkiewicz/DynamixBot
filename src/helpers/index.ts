@@ -28,8 +28,8 @@ export const sendMessageToChannel = async (
         "https://api.kick.com/public/v1/chat",
         {
           content: message,
-          broadcaster_user_id: Number(streamerNickOrID),
-          type: "user",
+          // broadcaster_user_id: Number(streamerNickOrID),
+          type: "bot",
         },
         {
           headers: {
