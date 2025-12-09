@@ -29,15 +29,15 @@ process.on("uncaughtException", error => {
 async function onInit(): Promise<void> {
   console.log("INIT");
   twitchCommands();
-  await kickCommands();
+  // await kickCommands();
   setTimeoutVolume();
   setTimeoutVolumeStreamElements();
   refreshAccessToken();
   refreshTwitchTokens();
-  refreshKickTokens();
+  // refreshKickTokens();
   checkActiveRiotAccount();
   updateRiotItemsAndChampions();
-  setInterval(refreshKickTokens, 10 * 60 * 1000);
+  // setInterval(refreshKickTokens, 10 * 60 * 1000);
   setInterval(refreshAccessToken, 30 * 60 * 1000);
   setInterval(checkActiveRiotAccount, 3 * 60 * 1000);
   setInterval(refreshTwitchTokens, 60 * 60 * 1000);

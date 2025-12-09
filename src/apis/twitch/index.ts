@@ -30,8 +30,9 @@ export const twitchCommands = async (): Promise<void> => {
     setTimeoutVolume();
 
     const allStreamers = await getAllCredentials();
-    const TWITCHCHANNELS = allStreamers.map(streamer => streamer.streamer);
     const TWITCHUSER = "dynam1x1";
+    const TWITCHCHANNELS =
+      process.env.IS_PROD === "true" ? allStreamers.map(streamer => streamer.streamer) : TWITCHUSER;
     const OAUTH = allStreamers.find(s => s.streamer === TWITCHUSER)?.twitchAccessToken || process.env.OAUTH;
 
     ComfyJS.Init(TWITCHUSER, `oauth:${OAUTH}`, TWITCHCHANNELS);
