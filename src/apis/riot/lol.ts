@@ -284,7 +284,7 @@ export const checkActiveRiotAccount = async (): Promise<void> => {
               lastMatchLol = (await apiLol.MatchV5.get(lastMatchLolId[0], region[server]))?.response || "";
             }
           }
-          const isLol = lastMatchLol?.info?.gameEndTimestamp > lastMatch[0]?.info?.game_datetime;
+          const isLol = (lastMatchLol?.info?.gameEndTimestamp || 0) > (lastMatch[0]?.info?.game_datetime || 0);
           if (
             lastMatch[0]?.info?.game_datetime > (streamer.activeRiotAccount ? streamer.activeRiotAccount.date : 0) ||
             lastMatchLol?.info?.gameEndTimestamp > (streamer.activeRiotAccount ? streamer.activeRiotAccount.date : 0)
