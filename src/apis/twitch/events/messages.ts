@@ -181,9 +181,9 @@ export const handleChatMessage = async ({
         number3 = number2;
       }
 
-      let result = `____________________PREMIUM____________________
+      let result = `____________________PREMIUM___________________
       ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[ ${emotes[number1]} | ${emotes[number2]} | ${emotes[number3]} ]/
-      __________________________________________________
+      _________________________________________________
       `;
 
       const isWin = number1 === number2 && number2 === number3;

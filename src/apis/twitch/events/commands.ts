@@ -439,14 +439,14 @@ export const handleChatCommand = async ({
         }
         isWin = JSON.stringify(colorResult) == JSON.stringify(["🟩", "🟩", "🟩", "🟩", "🟩"]);
 
-        return colorResult.join(" ");
+        return colorResult.join("");
       };
 
       usersWordle[user + extra.channel].messages.push(message);
-      usersWordle[user + extra.channel].colorRow.push(wordleResult() + "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀");
+      usersWordle[user + extra.channel].colorRow.push("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀" + wordleResult() + "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀");
       usersWordle[user + extra.channel].finalWord = finalWord;
 
-      let result = `_________________________________________________
+      let result = `______________________________________________
       ${usersWordle[user + extra.channel].colorRow.join(" ")} 
       ${usersWordle[user + extra.channel].messages} @${user} ${isWin ? "wygrałeś BRUHBRUH " : ""}
        ${
